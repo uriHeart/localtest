@@ -1,2 +1,2 @@
-# argo
+# Argo
 Argo
