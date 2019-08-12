@@ -1,0 +1,70 @@
+buildscript {
+	ext {
+		springBootVersion = '2.1.2.RELEASE'
+		querydslPluginVersion = '1.0.10'
+	}
+	repositories {
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+
+	dependencies {
+		classpath 'postgresql:postgresql:9.1-901-1.jdbc4'
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVersion}")
+	}
+
+}
+
+plugins {
+	id "org.flywaydb.flyway" version "5.2.4"
+	id 'org.springframework.boot' version '2.1.2.RELEASE'
+}
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'idea'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	group = 'com.aitify'
+	version = '0.0.1-SNAPSHOT'
+	sourceCompatibility = '1.8'
+
+	compileJava.dependsOn(processResources)
+	[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+	bootJar.enabled = false
+
+	repositories {
+		mavenCentral()
+	}
+
+
+	dependencies {
+		compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.6', ext: 'pom'
+		compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.4.1.Final'
+		compile group: 'joda-time', name: 'joda-time', version: '2.10.1'
+
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+		implementation 'org.flywaydb:flyway-core'
+		runtimeOnly 'org.postgresql:postgresql'
+		compileOnly 'org.projectlombok:lombok'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	}
+}
+
+flyway {
+	println "Flyway: "
+	driver = 'org.postgresql.Driver'
+	url = 'jdbc:postgresql://localhost:5432/wms'
+	user = 'wms_admin'
+	password = 'new1234!'
+	schemas = ['public']
+	table = 'db_migration_history'
+	baselineOnMigrate = true
+	locations = ["filesystem:${project.projectDir}/migrations/sql"]
+	println "Flyway: $locations"
+}
