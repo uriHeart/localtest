@@ -1,34 +1,18 @@
 package com.argo.common.configuration;
 
-import com.argo.common.ArgoCommon;
-import com.argo.common.configuration.database.ArgoPostgreSqlConfig;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.data.transaction.ChainedTransactionManager;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.TransactionManagementConfigurer;
-
-import javax.annotation.Resource;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.AsyncConfigurer;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @Configuration
-@ComponentScan(basePackageClasses = {ArgoCommon.class})
-@Import({
-        ArgoPostgreSqlConfig.class
-})
-public class ArgoCommonConfig implements TransactionManagementConfigurer {
-
-    @Resource
-    private PlatformTransactionManager transactionManager;
-
-    @Bean
-    public PlatformTransactionManager chainedTransactionManager() {
-        return new ChainedTransactionManager(transactionManager);
-    }
-
-    @Override
-    public PlatformTransactionManager annotationDrivenTransactionManager() {
-        return chainedTransactionManager();
-    }
+@EnableJpaRepositories(basePackages = "com.argo.common.domain")
+@EnableJpaAuditing
+@EntityScan(basePackages = "com.argo.common")
+@EnableAsync(proxyTargetClass = true)
+@ComponentScan(basePackages = {"com.argo"})
+public class ArgoCommonConfig implements AsyncConfigurer {
 }

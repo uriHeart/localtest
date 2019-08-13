@@ -1,70 +1,73 @@
 buildscript {
-	ext {
-		springBootVersion = '2.1.2.RELEASE'
-		querydslPluginVersion = '1.0.10'
-	}
 	repositories {
 		maven {
 			url "https://plugins.gradle.org/m2/"
 		}
 	}
 
+	ext {
+		javaVersion='1.8'
+		javaEncoding='UTF-8'
+		flywayGradleVersion='5.2.4'
+		springBootVersion='2.1.6.RELEASE'
+		dependencyManagementVersion='1.0.8.RELEASE'
+		queryDslPluginVersion='1.0.10'
+		queryDslVersion='4.2.1'
+		swaggerVersion='2.9.2'
+	}
+
 	dependencies {
-		classpath 'postgresql:postgresql:9.1-901-1.jdbc4'
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVersion}")
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+		classpath "io.spring.gradle:dependency-management-plugin:${dependencyManagementVersion}"
+
+		classpath "org.flywaydb:flyway-gradle-plugin:${flywayGradleVersion}"
+		classpath "gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${queryDslPluginVersion}"
 	}
 
 }
 
-plugins {
-	id "org.flywaydb.flyway" version "5.2.4"
-	id 'org.springframework.boot' version '2.1.2.RELEASE'
-}
-
 subprojects {
 	apply plugin: 'java'
+	apply plugin: 'groovy'
+	apply plugin: 'eclipse'
 	apply plugin: 'idea'
 	apply plugin: 'org.springframework.boot'
-	apply plugin: 'io.spring.dependency-management'
-
-	group = 'com.aitify'
-	version = '0.0.1-SNAPSHOT'
-	sourceCompatibility = '1.8'
-
-	compileJava.dependsOn(processResources)
-	[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
-	bootJar.enabled = false
 
 	repositories {
 		mavenCentral()
 	}
 
+	project.group = 'com.aitify'
+	project.version = '0.0.1-SNAPSHOT'
+
+	sourceCompatibility = javaVersion
+	targetCompatibility = javaVersion
+
+	compileJava.dependsOn(processResources)
+	[compileJava, compileTestJava]*.options*.encoding = javaEncoding
+
+	task initSourceFolders {
+		sourceSets*.java.srcDirs*.each {
+			if( !it.exists() ) {
+				it.mkdirs()
+			}
+		}
+
+		sourceSets*.resources.srcDirs*.each {
+			if( !it.exists() ) {
+				it.mkdirs()
+			}
+		}
+	}
 
 	dependencies {
-		compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.6', ext: 'pom'
-		compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.4.1.Final'
-		compile group: 'joda-time', name: 'joda-time', version: '2.10.1'
+		compile 'org.codehaus.groovy:groovy-all:2.5.7'
+		compile 'cglib:cglib-nodep:3.2.4'
+		compile "org.projectlombok:lombok:1.18.8"
 
-		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-		implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-		implementation 'org.flywaydb:flyway-core'
-		runtimeOnly 'org.postgresql:postgresql'
-		compileOnly 'org.projectlombok:lombok'
-		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//		testCompile 'org.gradle:gradle-tooling-api:4.3'
+		testCompile 'junit:junit:4.12'
+		testCompile 'org.spockframework:spock-core:1.3-groovy-2.5'
+		testCompile 'org.spockframework:spock-spring:1.3-groovy-2.5'
 	}
-}
-
-flyway {
-	println "Flyway: "
-	driver = 'org.postgresql.Driver'
-	url = 'jdbc:postgresql://localhost:5432/wms'
-	user = 'wms_admin'
-	password = 'new1234!'
-	schemas = ['public']
-	table = 'db_migration_history'
-	baselineOnMigrate = true
-	locations = ["filesystem:${project.projectDir}/migrations/sql"]
-	println "Flyway: $locations"
 }

@@ -1,10 +1,11 @@
-server:
-  port: 10002
-
 spring:
-  profiles:
-    active: local
+  datasource:
+    url: jdbc:postgresql://localhost:5432/argo
+    username: argo_admin
+    password: new1234!
+
   jpa:
+    database: postgresql
     show-sql: true
     properties:
       hibernate:
@@ -17,16 +18,25 @@ spring:
           use_jdbc_metadata_defaults: false
         hibernate:
           default_schema: public
-    database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
-    hibernate:
-      ddl-auto: update
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    hibernate.ddl-auto: update
+    hibernate.naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
-datasource:
-  wms:
-    jdbc-url: 'jdbc:postgresql://localhost:5432/argo'
-    username: 'argo_admin'
-    password: 'new1234!'
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+
+---
+spring:
+  profiles:
+    active: local
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/argo
+    username: argo_admin
+    password: new1234!
     driver-class-name: 'org.postgresql.Driver'
+
+server:
+  port: 10001
