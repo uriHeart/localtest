@@ -21,6 +21,12 @@ spring:
     hibernate.ddl-auto: update
     hibernate.naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
+  data:
+    cassandra:
+      keyspaceName: argo
+      contactPoints: localhost
+      port: 9042
+      schemaAction: CREATE_IF_NOT_EXISTS
 
   jackson:
     serialization:
@@ -37,6 +43,13 @@ spring:
     username: argo_admin
     password: new1234!
     driver-class-name: 'org.postgresql.Driver'
+
+  data:
+    cassandra:
+      keyspaceName: argo
+      contactPoints: localhost
+      port: 9042
+      schemaAction: CREATE_IF_NOT_EXISTS
 
 server:
   port: 10001
