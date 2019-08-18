@@ -4,25 +4,19 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.core.ApplicationContext;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.ServletContext;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.*;
 import java.util.function.Function;
@@ -241,7 +235,7 @@ public class WebCrawler {
                 )
                 .collect(Collectors.toList());
 
-        //FIXME 추출 시 리스트의 값이 없는 문제 확인 필요(ASP 문제인듯?)
+        //FIXME 추출 시 리스트의 값이 없는 문제 확인 필요(handlebars?)
         WebCrawlerSourceTree branch1 = WebCrawlerSourceTree.builder()
                 .url("www.interpark.com")
                 .path("/display/sellerAllProduct.do")
