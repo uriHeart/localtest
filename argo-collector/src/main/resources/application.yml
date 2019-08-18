@@ -32,6 +32,9 @@ spring:
     serialization:
       fail-on-empty-beans: false
 
+webdriver:
+  chrome:
+    driver: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome
 
 ---
 spring:

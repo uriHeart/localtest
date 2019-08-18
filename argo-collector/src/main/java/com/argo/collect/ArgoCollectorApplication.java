@@ -4,6 +4,8 @@ import com.argo.collect.configuration.ArgoCollectorApiConfig;
 import com.argo.collect.configuration.ArgoCollectorWebConfig;
 import com.argo.common.configuration.ArgoCommonConfig;
 import com.argo.common.configuration.ArgoServletRegistrationBean;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
@@ -26,6 +28,5 @@ public class ArgoCollectorApplication {
     public ArgoServletRegistrationBean api() {
         return new ArgoServletRegistrationBean("apiServlet", ArgoCollectorApiConfig.class, "/api/*");
     }
-
 
 }
