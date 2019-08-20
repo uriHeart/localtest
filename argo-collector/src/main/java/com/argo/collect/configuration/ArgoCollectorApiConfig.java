@@ -4,10 +4,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+//import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-@EnableSwagger2
+//@EnableSwagger2
 @ComponentScan(basePackages = "com.argo.collect.api")
 public class ArgoCollectorApiConfig extends WebMvcConfigurationSupport {
     @Override

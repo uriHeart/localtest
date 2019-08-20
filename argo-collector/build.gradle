@@ -1,8 +1,8 @@
 apply plugin: "java"
 
-bootJar {
-    archiveFileName = 'app.jar'
-}
+//bootJar {
+//    archiveFileName = 'app.jar'
+//}
 
 dependencies {
     compile project(':argo-common')

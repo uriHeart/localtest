@@ -42,9 +42,9 @@ spring:
     active: local
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/argo
-    username: argo_admin
-    password: new1234!
+    url: jdbc:postgresql://argo-db.cnkxzmhdcjyk.ap-northeast-2.rds.amazonaws.com:5432/argo
+    username: argo
+    password: argo2020
     driver-class-name: 'org.postgresql.Driver'
 
   data:
