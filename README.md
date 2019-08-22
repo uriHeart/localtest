@@ -2,7 +2,7 @@
 Argo
 
 AWS RDS Connection Info
-Name: argo-db
+Name: argo-db\n
 Host: argo-db.cnkxzmhdcjyk.ap-northeast-2.rds.amazonaws.com
 User: argo
 Password: argo2020
