@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/argo
-    username: argo_admin
-    password: new1234!
+    url: jdbc:postgresql://argo-db.cnkxzmhdcjyk.ap-northeast-2.rds.amazonaws.com:5432/argo
+    username: argo
+    password: argo2020
 
   jpa:
     database: postgresql
@@ -23,10 +23,11 @@ spring:
 
   data:
     cassandra:
-      keyspaceName: argo
-      contactPoints: localhost
       port: 9042
-      schemaAction: CREATE_IF_NOT_EXISTS
+      schema-action: CREATE_IF_NOT_EXISTS
+      consistency-level: quorum
+      contact-points: 54.180.151.82
+      keyspace-name: argo
 
   jackson:
     serialization:
@@ -36,23 +37,8 @@ webdriver:
   chrome:
     driver: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome
 
----
 spring:
   profiles:
     active: local
-
-  datasource:
-    url: jdbc:postgresql://argo-db.cnkxzmhdcjyk.ap-northeast-2.rds.amazonaws.com:5432/argo
-    username: argo
-    password: argo2020
-    driver-class-name: 'org.postgresql.Driver'
-
-  data:
-    cassandra:
-      keyspaceName: argo
-      contactPoints: localhost
-      port: 9042
-      schemaAction: CREATE_IF_NOT_EXISTS
-
 server:
   port: 10001
