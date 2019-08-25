@@ -1,4 +1,4 @@
-package com.argo.common.domain.vendor;
+package com.argo.common.domain.channel;
 
 import com.argo.common.domain.common.jpa.CreatedAtListener;
 import com.argo.common.domain.common.jpa.SystemMetadata;

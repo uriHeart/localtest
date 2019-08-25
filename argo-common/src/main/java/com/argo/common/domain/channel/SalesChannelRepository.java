@@ -1,4 +1,4 @@
-package com.argo.common.domain.vendor;
+package com.argo.common.domain.channel;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SalesChannelRepository extends JpaRepository<SalesChannel, Long> {
     SalesChannel findBySalesChannelId(Long salesChannelId);
-    SalesChannel findByCode(String code);
 }
