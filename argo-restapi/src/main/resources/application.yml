@@ -1,0 +1,51 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:3306/argo
+    username: argo_admin
+    password: new1234!
+
+  jpa:
+    database: postgresql
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        show-sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        temp:
+          use_jdbc_metadata_defaults: false
+        hibernate:
+          default_schema: public
+    hibernate.ddl-auto: update
+    hibernate.naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+---
+spring:
+  profiles:
+    active: local
+
+  datasource:
+#    url: jdbc:postgresql://argo-db.cnkxzmhdcjyk.ap-northeast-2.rds.amazonaws.com:5432/argo
+    url: jdbc:mysql://localhost:3306/argo?characterEncoding=UTF-8&serverTimezone=UTC
+    username: argo
+    password: argo2020
+#    driver-class-name: 'org.postgresql.Driver'
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    data: classpath:schema-mysql.sql
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database: mysql
+    hibernate.ddl-auto: create
+
+  data:
+    cassandra:
+      keyspaceName: argo
+      contactPoints: localhost
+      port: 9042
+      schemaAction: CREATE_IF_NOT_EXISTS
+
+server:
+  port: 10002
