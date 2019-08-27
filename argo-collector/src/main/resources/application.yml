@@ -28,6 +28,8 @@ spring:
       consistency-level: quorum
       contact-points: 54.180.151.82
       keyspace-name: argo
+      username: argo
+      password: argo2020
 
   jackson:
     serialization:
@@ -37,8 +39,9 @@ webdriver:
   chrome:
     driver: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome
 
-spring:
   profiles:
     active: local
+
+spring.main.allow-bean-definition-overriding: true
 server:
   port: 10001
