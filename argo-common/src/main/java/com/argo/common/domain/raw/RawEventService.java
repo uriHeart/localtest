@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RawEventService {
-//    @Autowired
+    @Autowired
     private RawEventRepository rawEventRepository;
 
     public void save(RawEvent rawEvent) {
