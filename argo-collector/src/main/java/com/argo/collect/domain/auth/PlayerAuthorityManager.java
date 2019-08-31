@@ -2,12 +2,11 @@ package com.argo.collect.domain.auth;
 
 import com.argo.collect.domain.enums.SalesChannel;
 import com.argo.collect.domain.util.ArgoScriptEngineManager;
+import com.argo.common.domain.vendor.VendorChannel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -16,14 +15,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.*;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class PlayerAuthorityManager implements AuthorityManager {
+public class PlayerAuthorityManager extends AbstractAuthorityManager {
     @Autowired
     private ArgoScriptEngineManager scriptEngineManager;
+
 
     @Override
     public boolean isTargetChannel(SalesChannel channel) {
@@ -31,7 +34,8 @@ public class PlayerAuthorityManager implements AuthorityManager {
     }
 
     @Override
-    public String requestAuth(AuthorityParam param) {
+    public String requestAuth(VendorChannel channel) {
+        AuthorityParam param = super.getParam(channel);
         String loginUrl = param.getBaseUrl() + "/po/login/make_login";
         String token = this.getToken(param);
         String encodePassword = this.getEncodePassword(token, param.getPassword());
@@ -61,7 +65,7 @@ public class PlayerAuthorityManager implements AuthorityManager {
                 result = mapper.readValue(new String(out.toByteArray(), "UTF-8"), Map.class);
             }
 
-            if (result == null || !"1".equals(result.get("code").toString())) {
+            if (result == null || !"1".equals(result.get("cd").toString())) {
                 return null;
             }
 
@@ -94,7 +98,7 @@ public class PlayerAuthorityManager implements AuthorityManager {
 
     private String getEncodePassword(String token, String password) {
         try {
-            return scriptEngineManager.getScriptEngine().eval("var temp = cryptDes.des(" + token + "," + password + ", 1, 0); cryptDes.stringToHex(temp);").toString();
+            return scriptEngineManager.getScriptEngine().eval("var temp = cryptDes.des('" + token + "','" + password + "', 1, 0); cryptDes.stringToHex(temp);").toString();
         } catch (ScriptException e) {
             e.printStackTrace();
         }

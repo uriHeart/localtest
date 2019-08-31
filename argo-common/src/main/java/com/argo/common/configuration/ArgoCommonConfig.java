@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.transaction.ChainedTransactionManager;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
@@ -20,6 +21,7 @@ import javax.annotation.Resource;
 @EnableJpaRepositories(basePackages = "com.argo")
 @EnableCassandraRepositories(basePackages = "com.argo.common.domain")
 @EnableJpaAuditing
+@EnableScheduling
 @Import({ArgoPostgreSqlConfig.class, CassandraConnectionConfiguration.class})
 @EntityScan(basePackages = "com.argo")
 @EnableAsync(proxyTargetClass = true)

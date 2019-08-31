@@ -1,10 +1,10 @@
-package com.argo.common.domain.channel;
+package com.argo.common.domain.vendor;
 
 import com.argo.common.domain.channel.SalesChannel;
+import com.argo.common.domain.common.enums.YesOrNo;
 import com.argo.common.domain.common.jpa.CreatedAtListener;
 import com.argo.common.domain.common.jpa.SystemMetadata;
 import com.argo.common.domain.common.jpa.UpdatedAtListener;
-import com.argo.common.domain.vendor.Vendor;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,26 +13,28 @@ import java.util.Date;
 @Data
 @Builder
 @Entity
-@Table(name = "channel_collect_info", schema = "public")
+@Table(name = "vendor_channels", schema = "public")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @EntityListeners( { CreatedAtListener.class, UpdatedAtListener.class } )
-public class ChannelCollectInfo implements SystemMetadata {
+public class VendorChannel implements SystemMetadata {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="channel_collect_info_seq")
-    @SequenceGenerator(name="channel_collect_info_seq", sequenceName="channel_collect_info_seq", allocationSize=1)
-    @Column(name = "channel_collect_info_id", nullable = false)
-    private Long channelCollectInfoId;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="vendor_channel_seq")
+    @SequenceGenerator(name="vendor_channel_seq", sequenceName="vendor_channel_seq", allocationSize=1)
+    @Column(name = "vendor_channel_id", nullable = false)
+    private Long vendorChannelId;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="vendor_id")
+    private Vendor vendor;
 
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="sales_channel_id")
     private SalesChannel salesChannel;
 
-    @Column(name = "collect_uri")
-    private String collectUri;
-
-    @Column(name = "collect_param")
-    private String collectParam;
+    @Column(name = "enabled")
+    @Enumerated(EnumType.STRING)
+    private YesOrNo enabled;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)

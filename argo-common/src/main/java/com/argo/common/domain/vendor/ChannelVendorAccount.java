@@ -23,11 +23,11 @@ public class ChannelVendorAccount implements SystemMetadata {
     @Column(name = "channel_vendor_account_id", nullable = false)
     private Long channelVendorAccountId;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="sales_channel_id")
     private SalesChannel salesChannel;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="vendor_id")
     private Vendor vendor;
 

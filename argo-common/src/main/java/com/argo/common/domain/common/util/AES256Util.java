@@ -16,7 +16,7 @@ public class AES256Util {
     final static String key = "argo2020jackpot#@!";
     private static AES256Util aes256Util = null;
 
-    public static AES256Util getInstance() {
+    public static AES256Util get() {
         if (aes256Util == null) {
             try {
                 aes256Util = new AES256Util();
@@ -43,6 +43,9 @@ public class AES256Util {
 
     public String encrypt(String str) throws NoSuchAlgorithmException,
             GeneralSecurityException, UnsupportedEncodingException {
+        if (str == null) {
+            return null;
+        }
         Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
         c.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes()));
         byte[] encrypted = c.doFinal(str.getBytes("UTF-8"));
@@ -52,6 +55,9 @@ public class AES256Util {
 
     public String decrypt(String str) throws NoSuchAlgorithmException,
             GeneralSecurityException, UnsupportedEncodingException {
+        if (str == null) {
+            return null;
+        }
         Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
         c.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes()));
         byte[] byteStr = Base64.decodeBase64(str.getBytes());

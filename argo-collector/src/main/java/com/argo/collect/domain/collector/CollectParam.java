@@ -1,0 +1,16 @@
+package com.argo.collect.domain.collector;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.util.LinkedMultiValueMap;
+
+import java.util.Map;
+
+@Builder
+@Setter
+@Getter
+public class CollectParam {
+    private String collectUrl;
+    private Map collectParam;
+}

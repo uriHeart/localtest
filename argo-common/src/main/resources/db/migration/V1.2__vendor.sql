@@ -32,19 +32,33 @@ INSERT INTO sales_channels (code, name, base_uri, token_uri, login_uri) VALUES
 ('PLAYER', '플레이어', 'http://biz.player.co.kr', '/po/login/set_token', '/po/login/make_login');
 
 
+CREATE TABLE vendor_channels (
+  vendor_channel_id SERIAL,
+  vendor_id SERIAL,
+  sales_channel_id SERIAL,
+  enabled VARCHAR(1),
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT vendor_channels_pk PRIMARY KEY (vendor_channel_id),
+  CONSTRAINT vendor_channels_uk01 UNIQUE (vendor_id, sales_channel_id)
+);
+
+INSERT INTO vendor_channels (vendor_id, sales_channel_id, enabled) VALUES
+(1, 1, 'Y');
+
+
 CREATE TABLE channel_collect_info (
   channel_collect_info_id SERIAL,
-  vendor_id SERIAL,
   sales_channel_id SERIAL,
   collect_uri VARCHAR(100),
   collect_param TEXT,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT channel_collect_info_pk PRIMARY KEY (channel_collect_info)
+  CONSTRAINT channel_collect_info_pk PRIMARY KEY (channel_collect_info_id)
 );
 
-INSERT INTO channel_collect_info (vendor_id, sales_channel_id, collect_uri, collect_param) VALUES
-(1, 1, '/po/order/ord01/search', '{"S_SDATE":"S_SDATE","S_EDATE":"S_EDATE"}');
+INSERT INTO channel_collect_info (sales_channel_id, collect_uri, collect_param) VALUES
+(1, '/po/order/ord01/search', '{"S_SDATE":"S_SDATE","S_EDATE":"S_EDATE"}');
 
 
 CREATE TABLE channel_vendor_accounts (

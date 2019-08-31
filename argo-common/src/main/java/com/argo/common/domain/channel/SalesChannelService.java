@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class SaleChannelService {
+public class SalesChannelService {
     @Autowired
     private SalesChannelRepository salesChannelRepository;
 
@@ -15,5 +15,9 @@ public class SaleChannelService {
 
     public List<SalesChannel> listAll() {
         return salesChannelRepository.findAll();
+    }
+
+    public ChannelCollectInfo getChannelCollectInfo(SalesChannel salesChannel) {
+        return channelCollectInfoRepository.findBySalesChannel(salesChannel);
     }
 }
