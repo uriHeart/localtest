@@ -28,7 +28,7 @@ spring:
       port: 9042
       schema-action: CREATE_IF_NOT_EXISTS
       consistency-level: one
-      contact-points: localhost
+      contact-points: 15.164.111.122
       keyspace-name: argo
       username: argo
       password: argo2020
