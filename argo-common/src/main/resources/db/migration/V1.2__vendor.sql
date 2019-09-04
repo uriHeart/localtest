@@ -29,7 +29,8 @@ CREATE TABLE sales_channels (
 );
 
 INSERT INTO sales_channels (code, name, base_uri, token_uri, login_uri) VALUES
-('PLAYER', '플레이어', 'http://biz.player.co.kr', '/po/login/set_token', '/po/login/make_login');
+('PLAYER', '플레이어', 'http://biz.player.co.kr', '/po/login/set_token', '/po/login/make_login'),
+('EZ_ADMIN', '이지어드민', 'https://www.ezadmin.co.kr', null, '/login_process2.php');
 
 
 CREATE TABLE vendor_channels (
@@ -44,7 +45,8 @@ CREATE TABLE vendor_channels (
 );
 
 INSERT INTO vendor_channels (vendor_id, sales_channel_id, enabled) VALUES
-(1, 1, 'Y');
+(1, 1, 'Y'),
+(1, 2, 'Y');
 
 
 CREATE TABLE channel_collect_info (
@@ -58,7 +60,8 @@ CREATE TABLE channel_collect_info (
 );
 
 INSERT INTO channel_collect_info (sales_channel_id, collect_uri, collect_param) VALUES
-(1, '/po/order/ord01/search', '{"S_SDATE":"S_SDATE","S_EDATE":"S_EDATE"}');
+(1, '/po/order/ord01/search', '{"S_SDATE":"S_SDATE","S_EDATE":"S_EDATE"}'),
+(2, '/function.htm', '');
 
 
 CREATE TABLE channel_vendor_accounts (
@@ -74,5 +77,6 @@ CREATE TABLE channel_vendor_accounts (
 );
 
 INSERT INTO channel_vendor_accounts (vendor_id, sales_channel_id, credential_id, credential_password) VALUES
-(1, 1, '/dYXT/o6bVw0anv8hg5YWg==', '/EjrfGgL4AMixXEZxvqRSQ==');
+(1, 1, '/dYXT/o6bVw0anv8hg5YWg==', '/EjrfGgL4AMixXEZxvqRSQ=='),
+(1, 2, 'MmEFpXSLYkDpmzKSwkE3Jg==','BqzHi4A7eW1G0RD1whEKRA==');
 

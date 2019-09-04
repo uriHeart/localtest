@@ -111,7 +111,10 @@ public class PlayerAuthorityManagerTest {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
         String dataResult = restTemplate.postForObject(dataUrl, request , String.class);
-
-        log.info("data : {}", dataResult);
+        if (dataResult != null) {
+           ObjectMapper objectMapper = new ObjectMapper();
+           Map data = objectMapper.readValue(dataResult, Map.class);
+           log.info("data : {}", dataResult);
+        }
     }
 }

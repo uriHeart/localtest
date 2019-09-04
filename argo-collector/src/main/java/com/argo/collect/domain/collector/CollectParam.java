@@ -12,5 +12,6 @@ import java.util.Map;
 @Getter
 public class CollectParam {
     private String collectUrl;
+    private String collectDetailUrl;
     private Map collectParam;
 }

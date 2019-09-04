@@ -20,6 +20,8 @@ public abstract class AbstractAuthorityManager implements AuthorityManager {
                     .id(AES256Util.get().decrypt(account.getCredentialId()))
                     .password(AES256Util.get().decrypt(account.getCredentialPassword()))
                     .baseUrl(account.getSalesChannel().getBaseUrl())
+                    .tokenUrl(account.getSalesChannel().getTokenUrl())
+                    .loginUrl(account.getSalesChannel().getLoginUrl())
                     .build();
         } catch (GeneralSecurityException | UnsupportedEncodingException e) {
             e.printStackTrace();

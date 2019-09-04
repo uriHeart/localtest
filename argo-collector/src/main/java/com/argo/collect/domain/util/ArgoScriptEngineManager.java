@@ -19,10 +19,17 @@ public class ArgoScriptEngineManager {
     public void init() {
         ScriptEngineManager sem = new ScriptEngineManager();
         se = sem.getEngineByName("JavaScript");
-        File js = new File("/Users/ags0688/git/argo/cryptDes.js");
+        File jsDir = new File("/Users/ags0688/git/argo/argo-collector/src/main/resources/js");
+
         try {
-            FileReader reader = new FileReader(js);
-            se.eval(reader);
+            if (jsDir.listFiles() == null) {
+                return;
+            }
+
+            for (File js : jsDir.listFiles()) {
+                FileReader reader = new FileReader(js);
+                se.eval(reader);
+            }
         } catch (FileNotFoundException | ScriptException e) {
             e.printStackTrace();
         }

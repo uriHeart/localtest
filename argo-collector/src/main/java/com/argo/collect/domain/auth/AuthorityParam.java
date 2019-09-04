@@ -12,4 +12,6 @@ public class AuthorityParam {
     private String id;
     private String password;
     private String baseUrl;
+    private String tokenUrl;
+    private String loginUrl;
 }
