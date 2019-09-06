@@ -23,6 +23,7 @@ spring:
     hibernate.ddl-auto: update
     hibernate.naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
+
   data:
     cassandra:
       port: 9042
@@ -47,3 +48,7 @@ webdriver:
 spring.main.allow-bean-definition-overriding: true
 server:
   port: 10001
+
+file:
+  upload:
+    default-path: C:\attachments
