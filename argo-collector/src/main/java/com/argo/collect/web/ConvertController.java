@@ -41,12 +41,6 @@ public class ConvertController {
 
 
         return new ResponseEntity<String>("upload success", HttpStatus.OK);
-
-        //TO_DO
-        //excel => json 변환
-        //json data => 카산드라 , 엘라스틱서치
-        //파일명 DB저장
-
     }
 
 }
