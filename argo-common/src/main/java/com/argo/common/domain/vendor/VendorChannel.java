@@ -34,7 +34,7 @@ public class VendorChannel implements SystemMetadata {
 
     @Column(name = "enabled")
     @Enumerated(EnumType.STRING)
-    private YesOrNo enabled;
+    private YesOrNo enabled; //boolean 으로 변경
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)

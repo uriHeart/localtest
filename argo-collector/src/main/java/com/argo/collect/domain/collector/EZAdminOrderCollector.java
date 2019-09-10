@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.testng.collections.Lists;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -74,7 +75,8 @@ public class EZAdminOrderCollector extends AbstractOrderCollector {
                     this.setItem(url, headers, order);
                     try {
                         log.info("order - {}", objectMapper.writeValueAsString(order));
-                        Map dataRow = (Map) order.get("dataRow");
+                        List<Map> dataRows = (List<Map>) order.get("dataRows");
+                        Map dataRow = dataRows.get(0);
                         String collectDate = dataRow.get("collect_date").toString() + " " + dataRow.get("collect_time").toString();
                         String orderDate = dataRow.get("order_date").toString() + " " + dataRow.get("order_time").toString();
 
@@ -101,18 +103,24 @@ public class EZAdminOrderCollector extends AbstractOrderCollector {
         ObjectMapper objectMapper = new ObjectMapper();
         Map result = this.getData(url, headers, 0, MAX_ROW, "packlist_json", null, order.get("pack").toString());
         List<Map> items = (List<Map>) result.get("rows");
+        List<Map> vendorItems = Lists.newArrayList();
+        List<Map> dataRows = Lists.newArrayList();
         items.forEach(
                 i -> {
                     Map item = (Map) i.get("cell");
-                    order.put("vendorItem", item);
+                    vendorItems.add(item);
+//                    order.put("vendorItem", item);
                     try {
-                        order.put("dataRow", objectMapper.readValue(item.get("data_row").toString(), Map.class));
+//                        order.put("dataRow", objectMapper.readValue(item.get("data_row").toString(), Map.class));
+                        dataRows.add(objectMapper.readValue(item.get("data_row").toString(), Map.class));
                         item.remove("data_row");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
         );
+        order.put("vendorItems", vendorItems);
+        order.put("dataRows", dataRows);
     }
 
     private Map getData(String url, HttpHeaders headers, int page, int rows,
