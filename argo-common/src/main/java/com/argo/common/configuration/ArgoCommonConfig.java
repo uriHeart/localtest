@@ -22,7 +22,7 @@ import javax.annotation.Resource;
 @EnableCassandraRepositories(basePackages = "com.argo.common.domain")
 @EnableJpaAuditing
 @EnableScheduling
-@Import({ArgoPostgreSqlConfig.class, CassandraConnectionConfiguration.class})
+@Import({ArgoPostgreSqlConfig.class, CassandraConnectionConfiguration.class, ArgoElasticConfiguration.class})
 @EntityScan(basePackages = "com.argo")
 @EnableAsync(proxyTargetClass = true)
 @ComponentScan(basePackages = {"com.argo"})
