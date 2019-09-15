@@ -24,13 +24,9 @@ public class ChannelCollectInfo implements SystemMetadata {
     @Column(name = "channel_collect_info_id", nullable = false)
     private Long channelCollectInfoId;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="sales_channel_id")
     private SalesChannel salesChannel;
-
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="vendor_id")
-    private Vendor vendor;
 
     @Column(name = "collect_uri")
     private String collectUri;

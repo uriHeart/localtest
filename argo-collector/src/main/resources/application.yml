@@ -1,9 +1,11 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://argo-db.cnkxzmhdcjyk.ap-northeast-2.rds.amazonaws.com:5432/argo
-    username: argo
-    password: argo2020
+datasource:
+  argo:
+    jdbc-url: 'jdbc:postgresql://argo-db.cnkxzmhdcjyk.ap-northeast-2.rds.amazonaws.com:5432/argo'
+    username: 'argo'
+    password: 'argo2020'
+    driver-class-name: 'org.postgresql.Driver'
 
+spring:
   jpa:
     database: postgresql
     show-sql: true
@@ -21,13 +23,16 @@ spring:
     hibernate.ddl-auto: update
     hibernate.naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
+
   data:
     cassandra:
       port: 9042
       schema-action: CREATE_IF_NOT_EXISTS
-      consistency-level: quorum
-      contact-points: 54.180.151.82
+      consistency-level: one
+      contact-points: 15.164.111.122
       keyspace-name: argo
+      username: argo
+      password: argo2020
 
   jackson:
     serialization:
@@ -37,8 +42,13 @@ webdriver:
   chrome:
     driver: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome
 
-spring:
   profiles:
     active: local
+
+spring.main.allow-bean-definition-overriding: true
 server:
   port: 10001
+
+file:
+  upload:
+    default-path: C:\attachments

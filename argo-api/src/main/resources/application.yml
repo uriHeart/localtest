@@ -1,0 +1,57 @@
+datasource:
+  argo:
+    jdbc-url: 'jdbc:postgresql://argo-db.cnkxzmhdcjyk.ap-northeast-2.rds.amazonaws.com:5432/argo'
+    username: 'argo'
+    password: 'argo2020'
+    driver-class-name: 'org.postgresql.Driver'
+
+spring:
+  jpa:
+    database: postgresql
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        show-sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        temp:
+          use_jdbc_metadata_defaults: false
+        hibernate:
+          default_schema: public
+    hibernate.ddl-auto: update
+    hibernate.naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+
+  data:
+    cassandra:
+      port: 9042
+      schema-action: CREATE_IF_NOT_EXISTS
+      consistency-level: one
+      contact-points: 15.164.111.122
+      keyspace-name: argo
+      username: argo
+      password: argo2020
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+webdriver:
+  chrome:
+    driver: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome
+
+  profiles:
+    active: local
+
+spring.main.allow-bean-definition-overriding: true
+server:
+  port: 10001
+
+file:
+  upload:
+    default-path: C:\attachments
+
+elasticsearch:
+  hosts: http://localhost:9200
