@@ -1,4 +1,4 @@
-package com.argo.restapi.auth;
+package com.argo.api.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

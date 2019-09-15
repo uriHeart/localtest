@@ -1,4 +1,4 @@
-package com.argo.restapi.user;
+package com.argo.common.domain.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

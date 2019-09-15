@@ -1,9 +1,8 @@
-package com.argo.restapi.controller;
+package com.argo.api.controller;
 
-import com.argo.restapi.auth.LoginParams;
-import com.argo.restapi.user.AddUserForm;
-import com.argo.restapi.user.UserService;
-import javax.servlet.http.HttpSession;
+import com.argo.api.auth.LoginParams;
+import com.argo.common.domain.user.AddUserForm;
+import com.argo.common.domain.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +13,8 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
 
 @RestController
 public class AuthController {

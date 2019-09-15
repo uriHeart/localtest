@@ -1,6 +1,6 @@
-package com.argo.restapi.user;
+package com.argo.common.domain.user;
 
-import com.argo.restapi.exception.AlreadyUserRegisteredException;
+import com.argo.common.exception.AlreadyUserRegisteredException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

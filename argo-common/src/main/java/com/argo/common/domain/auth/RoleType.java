@@ -1,4 +1,4 @@
-package com.argo.restapi.auth;
+package com.argo.common.domain.auth;
 
 public enum RoleType {
     ADMIN, SELLER;

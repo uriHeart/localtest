@@ -1,7 +1,7 @@
-package com.argo.restapi.auth;
+package com.argo.api.auth;
 
-import com.argo.restapi.user.ArgoUser;
-import com.argo.restapi.user.UserService;
+import com.argo.common.domain.user.ArgoUser;
+import com.argo.common.domain.user.UserService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -25,7 +25,7 @@ public class AuthProvider implements AuthenticationProvider {
         if (user == null || !password.equals(user.getPassword())) {
             return null;
         }
-        return new UsernamePasswordAuthenticationToken(id, password, Lists.newArrayList(user));
+        return new UsernamePasswordAuthenticationToken(id, password, Lists.newArrayList(user.getRoles()));
     }
 
     @Override
