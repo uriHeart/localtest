@@ -12,11 +12,13 @@ import org.springframework.context.annotation.Import;
 @SpringBootApplication(exclude = { FlywayAutoConfiguration.class })
 @Import({ArgoCommonConfig.class})
 public class ArgoApiApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(ArgoApiApplication.class, args);
     }
-    @Bean(name = "api")
-    public ArgoServletRegistrationBean api() {
-        return new ArgoServletRegistrationBean("apiServlet", ArgoApiConfig.class, "/api/*");
+
+    @Bean(name = "extApi")
+    public ArgoServletRegistrationBean extApi() {
+        return new ArgoServletRegistrationBean("apiServlet", ArgoApiConfig.class, "/ext-api/*");
     }
 }

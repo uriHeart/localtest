@@ -1,4 +1,4 @@
-package com.argo.restapi.user;
+package com.argo.common.domain.user;
 
 import com.argo.restapi.auth.RsaDecrypter;
 import com.argo.restapi.exception.AlreadyUserRegisteredException;

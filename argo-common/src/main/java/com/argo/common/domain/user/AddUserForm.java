@@ -1,4 +1,4 @@
-package com.argo.restapi.user;
+package com.argo.common.domain.user;
 
 import lombok.Data;
 
@@ -12,6 +12,7 @@ public class AddUserForm {
         Seller newSeller = new Seller();
         newSeller.setLoginId(this.loginId);
         newSeller.setPassword(this.password);
+        newSeller.setUserName(this.loginId);
         return newSeller;
     }
 }

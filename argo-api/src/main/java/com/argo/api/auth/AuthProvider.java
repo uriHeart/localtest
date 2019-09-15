@@ -1,8 +1,7 @@
-package com.argo.restapi.auth;
+package com.argo.api.auth;
 
-import com.argo.restapi.user.ArgoUser;
-import com.argo.restapi.user.UserService;
-import com.argo.restapi.util.HashUtil;
+import com.argo.common.domain.user.ArgoUser;
+import com.argo.common.domain.user.UserService;
 import com.google.common.collect.Lists;
 import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
