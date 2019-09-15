@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -28,8 +29,6 @@ public class OrderService {
     }
 
     public Mono<Void> addOrder(OrderDoc orderDoc){
-        UUID uuid = UUID.randomUUID();
-        orderDoc.setId(uuid.toString());
         String json;
         try {
             json = objectMapper.writeValueAsString(orderDoc);
@@ -37,9 +36,8 @@ public class OrderService {
             json = "";
         }
 
-        IndexRequest indexRequest = new IndexRequest("order_doc");
+        IndexRequest indexRequest = new IndexRequest("order_doc").id(orderDoc.getId());
         indexRequest.source(json, XContentType.JSON);
-        indexRequest.id(orderDoc.getId());
 
         return Mono.create(sink -> {  //1
             client.indexAsync(indexRequest, RequestOptions.DEFAULT, new ActionListener<IndexResponse>() {  //2
