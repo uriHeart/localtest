@@ -1,17 +1,29 @@
 package com.argo.common.domain.user;
 
-import com.argo.common.domain.auth.RoleType;
 import com.argo.common.domain.common.jpa.CreatedAtListener;
 import com.argo.common.domain.common.jpa.SystemMetadata;
 import com.argo.common.domain.common.jpa.UpdatedAtListener;
-import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -24,7 +36,7 @@ public class ArgoUser implements SystemMetadata {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="argo_users_seq")
     @SequenceGenerator(name="argo_users_seq", sequenceName="argo_users_seq", allocationSize=1)
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "argo_user_id", nullable = false)
     private Long argoUserId;
 
     @Column(name = "login_id")
