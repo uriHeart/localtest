@@ -2,6 +2,7 @@ package com.argo.api.configuration;
 
 import com.argo.api.auth.RoleType;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
@@ -15,6 +16,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalAuthentication
+@ComponentScan("com.argo.api")
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
@@ -24,7 +26,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .cors()
             .and()
                 .authorizeRequests()
-                .antMatchers("/error**", "/api/auth/login", "/api/auth/seller-register", "/api/auth/key").permitAll()
+                .antMatchers("/error**", "/api/auth/login", "/api/auth/seller-register", "/api/auth/key", "/ext-api/**").permitAll()
                 .antMatchers("/**").authenticated()
                 .antMatchers("/admin/**").access(RoleType.ADMIN.name())
             .and()
