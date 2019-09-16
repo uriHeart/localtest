@@ -1,4 +1,4 @@
-package com.argo.restapi.exception;
+package com.argo.common.exception;
 
 public class HashingFailException extends RuntimeException {
 

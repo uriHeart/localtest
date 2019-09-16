@@ -1,6 +1,6 @@
-package com.argo.restapi.auth;
+package com.argo.common.domain.auth;
 
-import com.argo.restapi.exception.DecryptFailException;
+import com.argo.common.exception.DecryptFailException;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;

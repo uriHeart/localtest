@@ -1,10 +1,13 @@
 package com.argo.api.auth;
 
+import com.argo.common.domain.auth.HashUtil;
+import com.argo.common.domain.auth.RsaDecrypter;
 import com.argo.common.domain.user.ArgoUser;
 import com.argo.common.domain.user.UserService;
 import com.google.common.collect.Lists;
 import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,6 +17,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class AuthProvider implements AuthenticationProvider {
+
+    private ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     private UserService userService;
@@ -30,10 +35,11 @@ public class AuthProvider implements AuthenticationProvider {
             String loginId = authentication.getName();
             String password = rsaDecrypter.decryptRsa(authentication.getCredentials().toString(), httpSession.getAttribute("_RSA_WEB_Key_").toString());
             ArgoUser user = userService.getUserByLoginId(loginId);
-            if (user == null || !HashUtil.sha256(password).equals(user.getPassword())) {
+            AuthUser authUser = modelMapper.map(user, AuthUser.class);
+            if (authUser == null || !HashUtil.sha256(password).equals(user.getPassword())) {
                 return null;
             }
-            return new UsernamePasswordAuthenticationToken(loginId, password, Lists.newArrayList(user));
+            return new UsernamePasswordAuthenticationToken(loginId, password, Lists.newArrayList(authUser));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

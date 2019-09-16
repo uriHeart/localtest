@@ -1,4 +1,4 @@
-package com.argo.restapi.auth;
+package com.argo.api.auth;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -16,7 +16,7 @@ public class RsaKeyGenerator {
     @Autowired
     private HttpSession httpSession;
 
-    public PublicKeyDto getPublicKey() throws NoSuchAlgorithmException {
+    public String getPublicKey() throws NoSuchAlgorithmException {
         KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
         generator.initialize(1024);
         KeyPair keyPair = generator.genKeyPair();
@@ -28,8 +28,7 @@ public class RsaKeyGenerator {
         String rsaPrivateKeyBase64 = new String(Base64.getEncoder().encode(privateKey));
         httpSession.setAttribute("_RSA_WEB_Key_", rsaPrivateKeyBase64);
 
-        return PublicKeyDto.builder()
-                   .publicKey(rsaPublicKeyBase64)
-                   .build();
+        return rsaPublicKeyBase64;
+
     }
 }

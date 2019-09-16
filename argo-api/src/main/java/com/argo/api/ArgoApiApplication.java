@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
-@SpringBootApplication(exclude = { FlywayAutoConfiguration.class })
+@SpringBootApplication(exclude = {FlywayAutoConfiguration.class})
 @Import({ArgoCommonConfig.class})
 public class ArgoApiApplication {
 

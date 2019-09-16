@@ -1,13 +1,12 @@
 package com.argo.common.domain.user;
 
 import com.argo.common.domain.auth.RoleType;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.testng.collections.Lists;
-
+import com.google.common.collect.Lists;
+import java.util.List;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity

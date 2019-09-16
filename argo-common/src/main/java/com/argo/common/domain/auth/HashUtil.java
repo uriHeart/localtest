@@ -1,6 +1,6 @@
-package com.argo.restapi.util;
+package com.argo.common.domain.auth;
 
-import com.argo.restapi.exception.HashingFailException;
+import com.argo.common.exception.HashingFailException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import lombok.extern.slf4j.Slf4j;
