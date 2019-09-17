@@ -1,4 +1,4 @@
-package com.argo.api.controller.vendor;
+package com.argo.common.domain.vendor;
 
 import lombok.*;
 

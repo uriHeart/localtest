@@ -1,4 +1,4 @@
-package com.argo.api.controller.order;
+package com.argo.common.domain.order;
 
 import lombok.*;
 

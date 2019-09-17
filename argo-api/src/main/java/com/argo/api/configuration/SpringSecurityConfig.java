@@ -26,7 +26,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .cors()
             .and()
                 .authorizeRequests()
-                .antMatchers("/error**", "/api/auth/login", "/api/auth/seller-register", "/api/auth/key", "/ext-api/**").permitAll()
+                .antMatchers("/error**", "/api/auth/login", "/api/auth/seller-register", "/api/auth/key", "/order*").permitAll()
                 .antMatchers("/**").authenticated()
                 .antMatchers("/admin/**").access(RoleType.ADMIN.name())
             .and()

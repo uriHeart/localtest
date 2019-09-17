@@ -1,7 +1,8 @@
-package com.argo.api.controller.order;
+package com.argo.common.domain.order;
 
-import com.argo.api.controller.channel.SalesChannelDto;
-import com.argo.api.controller.vendor.VendorDto;
+
+import com.argo.common.domain.channel.SalesChannelDto;
+import com.argo.common.domain.vendor.VendorDto;
 import lombok.*;
 
 import java.util.Date;

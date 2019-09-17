@@ -1,4 +1,4 @@
-package com.argo.api.controller.channel;
+package com.argo.common.domain.channel;
 
 import lombok.*;
 

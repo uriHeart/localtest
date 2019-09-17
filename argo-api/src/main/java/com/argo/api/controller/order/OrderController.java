@@ -1,18 +1,21 @@
 package com.argo.api.controller.order;
 
-import com.argo.api.controller.channel.SalesChannelDto;
-import com.argo.api.controller.vendor.VendorDto;
-import com.argo.common.domain.order.OrderDoc;
-import com.argo.common.domain.order.OrderService;
+import com.argo.common.domain.channel.SalesChannelDto;
+import com.argo.common.domain.vendor.VendorDto;
+import com.argo.common.domain.order.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.testng.collections.Lists;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
+import java.time.Duration;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -32,6 +35,8 @@ public class OrderController {
                     .id(orderId)
                     .orderId(orderId)
                     .orderedAt(new Date()).build())
+                .subscribeOn(Schedulers.elastic())
+                .timeout(Duration.ofMillis(500)).retry(3)
                 .onErrorResume(error -> {
                     log.error("index error ", error);
                     return Mono.empty();
@@ -39,18 +44,14 @@ public class OrderController {
     }
 
     @PostMapping("/orders")
-    public Mono<OrderResultDto> getOrders(@RequestBody OrderSearchParam param) {
-        return Mono.just(OrderResultDto.builder()
-                .vendor(VendorDto.builder().build())
-                .salesChannel(SalesChannelDto.builder().build())
-                .orderProduct(OrderProductDto.builder().productPrice(ProductPriceDto.builder().build()).build())
-                .orderAddress(OrderAddressDto.builder()
-                        .originalAddress(OriginalAddressDto.builder().build())
-                        .refinedAddress(RefinedAddressDto.builder().build())
-                        .recipient(RecipientDto.builder().build())
-                        .orderer(OrdererDto.builder().build())
-                        .deliveryRequest(DeliveryRequestDto.builder().build())
-                        .build())
-                .build());
+    public Mono<List<OrderResultDto>> getOrders(@RequestBody OrderSearchParam param) {
+        return orderService.getOrders(param)
+                .subscribeOn(Schedulers.elastic())
+                .timeout(Duration.ofMillis(500))
+                .retry(3)
+                .onErrorResume(error -> {
+                    log.error("search error ", error);
+                    return Mono.empty();
+                });
     }
 }
