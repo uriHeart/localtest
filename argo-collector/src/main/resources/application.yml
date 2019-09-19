@@ -52,3 +52,7 @@ server:
 file:
   upload:
     default-path: C:\attachments
+    index: test
+
+elasticsearch:
+  hosts: localhost:9200
