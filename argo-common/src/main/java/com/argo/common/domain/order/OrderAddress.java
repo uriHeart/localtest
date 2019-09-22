@@ -62,4 +62,5 @@ public class OrderAddress {
     @Column("created_at")
     @CassandraType(type = DataType.Name.TIMESTAMP)
     private Date createdAt;
+
 }
