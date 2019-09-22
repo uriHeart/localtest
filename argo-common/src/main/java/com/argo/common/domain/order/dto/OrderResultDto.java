@@ -2,6 +2,10 @@ package com.argo.common.domain.order.dto;
 
 
 import com.argo.common.domain.channel.SalesChannelDto;
+import com.argo.common.domain.order.ArgoOrder;
+import com.argo.common.domain.order.OrderAddress;
+import com.argo.common.domain.order.doc.OrderDoc;
+import com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle;
 import com.argo.common.domain.vendor.VendorDto;
 import lombok.*;
 
@@ -26,4 +30,72 @@ public class OrderResultDto {
     private OrderProductDto orderProduct; //주문 상품정보
 
     private OrderAddressDto orderAddress; //주문 주소
+
+    public static OrderResultDto from(OrderDoc doc, ArgoOrder order, OrderAddress address, OrderVendorItemLifecycle vendorItem) {
+        return OrderResultDto.builder()
+                .orderId(order.getOrderId())
+                .orderedAt(order.getMetadata().getOrderedAt())
+                .collectedAt(order.getMetadata().getCollectedAt())
+                .paidAt(order.getPaidAt())
+                .totalQuantity(order.getMetadata().getTotalQuantity())
+                .orderState(order.getState())
+                .vendor(VendorDto.builder()
+                        .vendorId(order.getVendorId())
+                        .vendorName(null)
+                        .build())
+                .salesChannel(SalesChannelDto.builder()
+                        .salesChannelId(order.getChannelId())
+                        .salesChannelCode(doc.getSalesChannelCode())
+                        .salesChannelName(null)
+                        .build())
+                .orderAddress(OrderAddressDto.builder()
+                        .originalAddress(OriginalAddressDto.builder()
+                                .postalCode(address.getOriginalPostalCode())
+                                .address1(address.getOriginalAddress().getAddress1())
+                                .address2(address.getOriginalAddress().getAddress2())
+                                .fullAddress(address.getOriginalAddress().getFullAddress())
+                                .build())
+                        .refinedAddress(RefinedAddressDto.builder()
+                                .postalCode5(address.getRefinedPostalCode())
+                                .jibunAddress(address.getRefinedAddress().getJibunAddress())
+                                .roadAddress(address.getRefinedAddress().getRoadAddress())
+                                .roadName(address.getRefinedAddress().getRoadName())
+                                .postalCode6(address.getRefinedAddress().getPostalCode6())
+                                .buildingMainNumber(address.getRefinedAddress().getBuildingMainNumber())
+                                .buildingSubNumber(address.getRefinedAddress().getBuildingSubNumber())
+                                .buildingName(address.getRefinedAddress().getBuildingName())
+                                .buildingDong(address.getRefinedAddress().getBuildingDong())
+                                .buildingHo(address.getRefinedAddress().getBuildingHo())
+                                .latitude(address.getRefinedAddress().getLatitude())
+                                .longitude(address.getRefinedAddress().getLongitude())
+                                .build())
+                        .orderer(OrdererDto.builder()
+                                .name(address.getOrderer().getName())
+                                .phoneNumber1(address.getOrderer().getPhoneNumber1())
+                                .phoneNumber2(address.getOrderer().getPhoneNumber2())
+                                .build())
+                        .recipient(RecipientDto.builder()
+                                .name(address.getRecipient().getName())
+                                .phoneNumber1(address.getRecipient().getPhoneNumber1())
+                                .phoneNumber2(address.getRecipient().getPhoneNumber2())
+                                .build())
+                        .deliveryRequest(DeliveryRequestDto.builder()
+                                .deliveryRequest(address.getDeliveryRequest().getDeliveryRequest())
+                                .build())
+                        .build())
+                .orderProduct(OrderProductDto.builder()
+                        .vendorItemId(vendorItem.getVendorItemId().toString())
+                        .productId(vendorItem.getSourceItemId())
+                        .productName(vendorItem.getSourceItemName())
+                        .productDesc(vendorItem.getSourceItemOption())
+                        .quantity(vendorItem.getQuantity())
+                        .productPrice(ProductPriceDto.builder()
+                                .originalPrice(vendorItem.getOrderVendorItemMatadata().getOriginalPrice())
+                                .salesPrice(vendorItem.getOrderVendorItemMatadata().getSalesPrice())
+                                .paymentMethod(vendorItem.getOrderVendorItemMatadata().getPaymentMethod())
+                                .paymentAmount(vendorItem.getOrderVendorItemMatadata().getPaymentAmount())
+                                .build())
+                        .build())
+                .build();
+    }
 }

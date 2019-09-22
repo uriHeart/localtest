@@ -1,5 +1,6 @@
 package com.argo.common.domain.order.vendoritem;
 
+import com.argo.common.domain.common.util.JsonUtil;
 import com.datastax.driver.core.DataType;
 import lombok.Builder;
 import lombok.Data;
@@ -66,7 +67,7 @@ public class OrderVendorItemLifecycle {
 
     @Column("quantity")
     @CassandraType(type = DataType.Name.INT)
-    private Integer quantity;
+    private Long quantity;
 
     @Column("replay_count")
     @CassandraType(type = DataType.Name.INT)
@@ -75,4 +76,16 @@ public class OrderVendorItemLifecycle {
     @Column("created_at")
     @CassandraType(type = DataType.Name.TIMESTAMP)
     private Date createdAt;
+
+    public OrderVendorItemMetadata getOrderVendorItemMatadata() {
+        if (this.metadata == null) {
+            return OrderVendorItemMetadata.builder().build();
+        }
+
+        return JsonUtil.read(this.metadata, OrderVendorItemMetadata.class);
+    }
+
+    public void setOrderVendorItemMetadata(OrderVendorItemMetadata orderVendorItemMetadata) {
+        this.metadata = JsonUtil.write(orderVendorItemMetadata);
+    }
 }

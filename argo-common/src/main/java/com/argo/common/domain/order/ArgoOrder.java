@@ -2,8 +2,6 @@ package com.argo.common.domain.order;
 
 import com.argo.common.domain.common.util.JsonUtil;
 import com.datastax.driver.core.DataType;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
@@ -12,7 +10,6 @@ import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
-import java.io.IOException;
 import java.util.Date;
 
 @Data
@@ -67,10 +64,10 @@ public class ArgoOrder {
         if (this.metadata == null) {
             return OrderMetadata.builder().build();
         }
-        return JsonUtil.readValue(this.metadata, OrderMetadata.class);
+        return JsonUtil.read(this.metadata, OrderMetadata.class);
     }
 
     public void setMetadata(OrderMetadata metadata) {
-        this.metadata = JsonUtil.writeValueAsString(metadata);
+        this.metadata = JsonUtil.write(metadata);
     }
 }

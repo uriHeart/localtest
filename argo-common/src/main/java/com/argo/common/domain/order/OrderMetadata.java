@@ -18,4 +18,5 @@ public class OrderMetadata {
     private Long cancelPrice;
     private Long cancelDeliveryPrice;
     private Date collectedAt;
+    private Date orderedAt;
 }

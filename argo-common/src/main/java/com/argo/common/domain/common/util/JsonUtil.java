@@ -19,7 +19,7 @@ public final class JsonUtil {
         return mapper;
     }
 
-    public static <T>T readValue(final String json, final Class<T> clazz) {
+    public static <T>T read(final String json, final Class<T> clazz) {
         try {
             return getMapper().readValue(json, clazz);
         } catch (IOException e) {
@@ -27,7 +27,7 @@ public final class JsonUtil {
         }
     }
 
-    public static String writeValueAsString(Object value) {
+    public static String write(Object value) {
         try {
             return getMapper().writeValueAsString(value);
         } catch (JsonProcessingException e) {

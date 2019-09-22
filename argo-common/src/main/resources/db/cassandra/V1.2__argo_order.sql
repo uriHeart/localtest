@@ -94,6 +94,8 @@ CREATE TABLE argo.order_vendor_item_lifecycle (
   replay_count int,
   quantity int,
   event text,
+  state text,
+  sku_mappings text,
   created_at timestamp,
   published_at timestamp,
   PRIMARY KEY ((vendor_id, channel_id, order_id, vendor_item_id), published_at)

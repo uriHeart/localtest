@@ -44,9 +44,9 @@ public class OrderController {
 
     @PostMapping("/orders")
     public Mono<List<OrderResultDto>> getOrders(@RequestBody OrderSearchParam param) {
-        return orderService.getOrders(param)
+        return orderService.getOrderData(param)
                 .subscribeOn(Schedulers.elastic())
-                .timeout(Duration.ofMillis(500))
+                .timeout(Duration.ofMillis(10000))
                 .retry(3)
                 .onErrorResume(error -> {
                     log.error("search error ", error);

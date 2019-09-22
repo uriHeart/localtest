@@ -1,5 +1,6 @@
 package com.argo.common.domain.order;
 
+import com.argo.common.domain.common.util.JsonUtil;
 import com.datastax.driver.core.DataType;
 import lombok.Builder;
 import lombok.Data;
@@ -63,4 +64,64 @@ public class OrderAddress {
     @CassandraType(type = DataType.Name.TIMESTAMP)
     private Date createdAt;
 
+    public OriginalAddress getOriginalAddress() {
+        if (this.originalAddress == null) {
+            return OriginalAddress.builder().build();
+        }
+
+        return JsonUtil.read(this.originalAddress, OriginalAddress.class);
+    }
+
+    public void setOriginalAddress(OriginalAddress originalAddress) {
+        this.originalAddress = JsonUtil.write(originalAddress);
+    }
+
+    public RefinedAddress getRefinedAddress() {
+        if (this.refinedAddress == null) {
+            return RefinedAddress.builder().build();
+        }
+
+        return JsonUtil.read(this.refinedAddress, RefinedAddress.class);
+    }
+
+    public void setRefinedAddress(RefinedAddress refinedAddress) {
+        this.refinedAddress = JsonUtil.write(refinedAddress);
+    }
+
+
+    public Orderer getOrderer() {
+        if (this.orderer == null) {
+            return Orderer.builder().build();
+        }
+
+        return JsonUtil.read(this.orderer, Orderer.class);
+    }
+
+    public void setOrderer(Orderer orderer) {
+        this.orderer = JsonUtil.write(orderer);
+    }
+
+    public Recipient getRecipient() {
+        if (this.recipient == null) {
+            return Recipient.builder().build();
+        }
+
+        return JsonUtil.read(this.recipient, Recipient.class);
+    }
+
+    public void setRecipient(Recipient recipient) {
+        this.recipient = JsonUtil.write(recipient);
+    }
+
+    public DeliveryRequest getDeliveryRequest() {
+        if (this.deliveryRequest == null) {
+            return DeliveryRequest.builder().build();
+        }
+
+        return JsonUtil.read(this.deliveryRequest, DeliveryRequest.class);
+    }
+
+    public void setDeliveryRequest(DeliveryRequest deliveryRequest) {
+        this.deliveryRequest = JsonUtil.write(deliveryRequest);
+    }
 }
