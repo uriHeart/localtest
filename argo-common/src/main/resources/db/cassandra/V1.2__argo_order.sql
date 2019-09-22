@@ -33,7 +33,9 @@ CREATE TABLE argo.order_address (
   order_id text,
   published_at timestamp,
   original_address text,
+  oroginal_postalcode text,
   refined_address text,
+  refined_postalcode text,
   recipient text,
   orderer text,
   delivery_request text,
@@ -80,10 +82,10 @@ CREATE TABLE argo.vendor_item_mapping (
  AND read_repair_chance = 0.0
  AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE argo.argo_vendor_item (
+CREATE TABLE argo.order_vendor_item_lifecycle (
   vendor_id bigint,
   channel_id bigint,
-  order_id bigint,
+  order_id text,
   vendor_item_id uuid,
   source_item_id text,
   source_item_name text,

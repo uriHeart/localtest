@@ -1,4 +1,4 @@
-package com.argo.common.domain.order;
+package com.argo.common.domain.order.doc;
 
 import lombok.*;
 
@@ -12,5 +12,7 @@ import java.util.Date;
 public class OrderDoc {
     private String id;
     private String orderId;
+    private Long vendorId;
+    private String salesChannelCode;
     private Date orderedAt;
 }

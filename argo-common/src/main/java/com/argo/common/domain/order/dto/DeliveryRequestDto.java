@@ -1,4 +1,4 @@
-package com.argo.common.domain.order;
+package com.argo.common.domain.order.dto;
 
 import lombok.*;
 
