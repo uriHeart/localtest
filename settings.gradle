@@ -1,3 +1,4 @@
 rootProject.name = 'argo'
 include "argo-collector", "argo-common"
 include 'argo-api'
+include 'argo-data'

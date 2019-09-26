@@ -1,5 +1,6 @@
 package com.argo.common.domain.raw;
 
+import com.argo.common.domain.common.data.ConvertibleData;
 import com.datastax.driver.core.DataType;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +15,7 @@ import java.util.Date;
 @Data
 @Builder
 @Table("raw_event")
-public class RawEvent {
+public class RawEvent implements ConvertibleData {
     @PrimaryKeyColumn(ordinal = 0, type = PrimaryKeyType.PARTITIONED, name = "vendor_id")
     @CassandraType(type = DataType.Name.BIGINT)
     private Long vendorId;
@@ -33,6 +34,10 @@ public class RawEvent {
 
     @Column
     @CassandraType(type = DataType.Name.TEXT)
+    private String type;
+
+    @Column
+    @CassandraType(type = DataType.Name.TEXT)
     private String data;
 
     @Column
@@ -46,4 +51,8 @@ public class RawEvent {
     @Column("created_at")
     @CassandraType(type = DataType.Name.TIMESTAMP)
     private Date createdAt;
+
+    public String sourceKey() {
+        return channelId.toString() + type;
+    }
 }
