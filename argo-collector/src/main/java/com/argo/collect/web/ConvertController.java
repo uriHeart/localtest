@@ -28,31 +28,22 @@ public class ConvertController {
     @RequestMapping(value="/excelUpload",
             method = RequestMethod.POST,
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> excelUpload(@RequestParam("file")MultipartFile parts,
+    public @ResponseBody String excelUpload(@RequestParam("file")MultipartFile parts,
                                               @RequestParam("channelId")Long channelId,
-                                              @RequestParam("vendorId")Long vendorId){
-        String resultMessage = "";
-        HttpStatus status = HttpStatus.OK;
+                                              @RequestParam("vendorId")Long vendorId) throws IOException {
+        //엑셀저장
+        File excel = convertService.excelUpload(parts);
 
-        try {
-            //엑셀저장
-            File excel = convertService.excelUpload(parts);
+        //엑셀데이터 json변환  List<엑셀sheet List<레코드 >
+        List<HashMap<String, Object>> jsonData = convertService.excelToJson(excel);
 
-            //엑셀데이터 json변환  List<엑셀sheet List<레코드 >
-            List<HashMap<String, Object>> jsonData = convertService.excelToJson(excel);
+        //현재 동기호출이 안됨.
+        RestStatus restStatus = convertService.saveToEs(excel.getName(), jsonData);
 
-            //현재 동기호출이 안됨.
-            RestStatus restStatus = convertService.saveToEs(excel.getName(), jsonData);
+        //카산드라에 raw데이터 저장
+        //convertService.saveToCassandra(jsonData,channelId,vendorId);
 
-            //카산드라에 raw데이터 저장
-            resultMessage = restStatus.name();
-            //convertService.saveToCassandra(jsonData,channelId,vendorId);
-        }catch (Exception e){
-            resultMessage = "upload fail!";
-            status = HttpStatus.SERVICE_UNAVAILABLE;
-        }
-
-        return new ResponseEntity<>(resultMessage, status);
+        return restStatus.name();
     }
 
     @RequestMapping(value="/excel/list",
