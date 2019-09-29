@@ -1,5 +1,9 @@
 package com.argo.collect.service;
 
+import com.argo.common.domain.channel.ChannelCollectInfo;
+import com.argo.common.domain.channel.ChannelCollectInfoRepository;
+import com.argo.common.domain.channel.SalesChannel;
+import com.argo.common.domain.channel.SalesChannelService;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.raw.RawEventService;
 import com.google.gson.Gson;
@@ -62,9 +66,10 @@ public class ConvertService {
     @Autowired
     RawEventService rawEventService;
 
-
     @Autowired
     Gson gson;
+
+
 
     private RestHighLevelClient esClient;
 
@@ -99,43 +104,38 @@ public class ConvertService {
         return destinationFile;
     }
 
-    public List<HashMap<String,Object>> excelToJson(File file)
-    {
+    public List<HashMap<String,Object>> excelToJson(File file) throws IOException {
         List<HashMap<String,Object>> result = new ArrayList<>();
 
-        try{
-            FileInputStream fInputStream = new FileInputStream(file);
+        FileInputStream fInputStream = new FileInputStream(file);
 
-            Workbook excelWorkBook = new XSSFWorkbook(fInputStream);
+        Workbook excelWorkBook = new XSSFWorkbook(fInputStream);
 
-            int totalSheetNumber = excelWorkBook.getNumberOfSheets();
+        int totalSheetNumber = excelWorkBook.getNumberOfSheets();
 
-            for(int i=0;i<totalSheetNumber;i++)
+        for(int i=0;i<totalSheetNumber;i++)
+        {
+            Sheet sheet = excelWorkBook.getSheetAt(i);
+
+            String sheetName = sheet.getSheetName();
+
+            if(sheetName != null && sheetName.length() > 0)
             {
-                Sheet sheet = excelWorkBook.getSheetAt(i);
 
-                String sheetName = sheet.getSheetName();
+                List<List<String>> sheetDataTable = getSheetDataList(sheet);
+                List<List<String>> mainDataTable = getMainDataList(sheetDataTable);
 
-                if(sheetName != null && sheetName.length() > 0)
-                {
+                HashMap<String,Object> convertSheet = new HashMap<>();
 
-                    List<List<String>> sheetDataTable = getSheetDataList(sheet);
-                    List<List<String>> mainDataTable = getMainDataList(sheetDataTable);
+                convertSheet.put("sheetHeader",mainDataTable.get(0));
+                convertSheet.put("sheetName",sheetName);
+                convertSheet.put("sheetData",getJSONStringFromList(mainDataTable));
+                result.add(convertSheet);
 
-                    HashMap<String,Object> convertSheet = new HashMap<>();
-
-                    convertSheet.put("sheetHeader",mainDataTable.get(0));
-                    convertSheet.put("sheetName",sheetName);
-                    convertSheet.put("sheetData",getJSONStringFromList(mainDataTable));
-                    result.add(convertSheet);
-
-                }
             }
-            excelWorkBook.close();
-
-        }catch(Exception ex){
-            ex.printStackTrace();
         }
+        excelWorkBook.close();
+
         return result;
     }
 
@@ -154,6 +154,8 @@ public class ConvertService {
             {
                 Row row = sheet.getRow(i);
 
+                if(row == null) continue;
+
                 int firstCellNum = row.getFirstCellNum();
                 int lastCellNum = row.getLastCellNum();
 
@@ -163,6 +165,9 @@ public class ConvertService {
                 for(int j = firstCellNum; j < lastCellNum; j++)
                 {
                     Cell cell = row.getCell(j);
+
+                    if(cell==null) continue;
+
 
                     CellType cellType = cell.getCellType();
 
@@ -174,10 +179,8 @@ public class ConvertService {
                     {
                         Double doubleValue = cell.getNumericCellValue();
 
-                        String value = "";
-                        if(doubleValue >0){
-                            value = String.valueOf(Math.abs(doubleValue*100/100.0));
-                        } else{
+                        String value = doubleValue.toString();
+                        if(doubleValue - doubleValue.intValue() == 0){
                             value = String.valueOf(Math.round(doubleValue*100/100.0));
                         }
 
@@ -200,13 +203,21 @@ public class ConvertService {
                     }else if(cellType == CellType.FORMULA)
                     {
 
-                        long value = Math.round(cell.getNumericCellValue());
-                        String stringCellValue = String.valueOf(value);
+                        String stringCellValue ;
+                        try{
+                            long value = Math.round(cell.getNumericCellValue());
+                            stringCellValue = String.valueOf(value);
+
+                        }catch (IllegalStateException e){
+                            stringCellValue = cell.getStringCellValue();
+                        }
 
                         rowDataList.add(stringCellValue);
 
                     }else if(cellType == CellType.BLANK)
                     {
+                        if(j==firstCellNum) continue;
+
                         rowDataList.add("");
                     }
                 }
@@ -262,20 +273,21 @@ public class ConvertService {
 
                 int columnCount = headerRow.size();
 
-                for(int i=1; i<rowCount; i++)
-                {
+                for(int i=1; i<rowCount; i++) {
                     List<String> dataRow = dataTable.get(i);
 
-                    LinkedHashMap<String,String> col = new LinkedHashMap();
+                    if (dataRow.size() >= columnCount) {
 
-                    for(int j=0;j<columnCount;j++)
-                    {
-                        String columnName = headerRow.get(j);
-                        String columnValue = dataRow.get(j);
+                        LinkedHashMap<String, String> col = new LinkedHashMap();
 
-                        col.put(columnName, columnValue);
+                        for (int j = 0; j < columnCount; j++) {
+                            String columnName = headerRow.get(j);
+                            String columnValue = dataRow.get(j);
+
+                            col.put(columnName, columnValue);
+                        }
+                        result.add(col);
                     }
-                    result.add(col);
                 }
             }
         }
@@ -395,4 +407,5 @@ public class ConvertService {
 
         return data;
     }
+
 }
