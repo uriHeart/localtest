@@ -36,11 +36,8 @@ import java.util.UUID;
 public class OrderService {
     private RestHighLevelClient client;
     private ObjectMapper objectMapper;
-    @Autowired
     private ReactiveOrderRepository reactiveOrderRepository;
-    @Autowired
     private ReactiveOrderAddressRepository reactiveOrderAddressRepository;
-    @Autowired
     private ReactiveOrderVendorItemLifecycleRepository reactiveOrderVendorItemLifecycleRepository;
 
     @Autowired

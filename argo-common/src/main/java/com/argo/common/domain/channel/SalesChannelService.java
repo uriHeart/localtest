@@ -1,5 +1,7 @@
 package com.argo.common.domain.channel;
 
+import com.argo.common.domain.vendor.VendorChannelService;
+import com.argo.common.domain.vendor.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,9 @@ import java.util.List;
 public class SalesChannelService {
     @Autowired
     private SalesChannelRepository salesChannelRepository;
+
+    @Autowired
+    private VendorService vendorService;
 
     @Autowired
     private ChannelCollectInfoRepository channelCollectInfoRepository;

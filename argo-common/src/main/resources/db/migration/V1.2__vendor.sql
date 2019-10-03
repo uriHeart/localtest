@@ -30,7 +30,18 @@ CREATE TABLE sales_channels (
 
 INSERT INTO sales_channels (code, name, base_uri, token_uri, login_uri) VALUES
 ('PLAYER', '플레이어', 'http://biz.player.co.kr', '/po/login/set_token', '/po/login/make_login'),
-('EZ_ADMIN', '이지어드민', 'https://www.ezadmin.co.kr', null, '/login_process2.php');
+('EZ_ADMIN', '이지어드민', 'https://www.ezadmin.co.kr', null, '/login_process2.php'),
+('employee', '직원', null, null, null, ),
+('TWENTY_NINE_CM', '29CM', null, null, null),
+('W_CONCEPT', 'W컨셉', null, null, null),
+('Lotte_com', '롯데닷컴', null, null, null),
+('MUSINSA', '무신사', null, null, null),
+('SSG', '신세계', null, null, null),
+('CAFE24', '카페24', null, null, null),
+('CAFE24_US', '카페24(US)', null, null, null),
+('CAFE24_CN', '카페24(CN)', null, null, null),
+('CAFE24_SPAIN', '카페24(SPAIN)', null, null, null)
+;
 
 
 CREATE TABLE channel_collect_info (
@@ -51,16 +62,29 @@ CREATE TABLE vendor_channels (
   vendor_channel_id SERIAL,
   vendor_id SERIAL,
   sales_channel_id SERIAL,
-  enabled VARCHAR(1),
+  enabled boolean,
+  auto_collecting boolean,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT vendor_channels_pk PRIMARY KEY (vendor_channel_id),
   CONSTRAINT vendor_channels_uk01 UNIQUE (vendor_id, sales_channel_id)
 );
 
-INSERT INTO vendor_channels (vendor_id, sales_channel_id, enabled) VALUES
-(1, 1, 'Y'),
-(1, 2, 'Y');
+INSERT INTO vendor_channels (vendor_id, sales_channel_id, enabled, auto_collecting) VALUES
+(1, 1, true, false),
+(1, 2, true, true),
+(1, 4, true, false),
+(1, 5, true, false),
+(1, 6, true, false),
+(1, 7, true, false),
+(1, 8, true, false),
+(1, 9, true, false),
+(1, 10, true, false),
+(1, 11, true, false),
+(1, 12, true, false),
+(1, 13, true, false)
+;
+
 
 
  -- vendor_channel_accounts 로 이름 변경

@@ -21,10 +21,10 @@ public class OrderCollectExecutor {
 //    @Scheduled(cron = "0 0/5 * * * *")
     public void run() {
 
-        for (VendorChannel channel : vendorService.listAllByEnabled()) {
+        for (VendorChannel channel : vendorService.autoCollectingTargets()) {
             collectors.forEach(
                 c -> {
-                    if (c.isSupport(SalesChannel.valueOf(channel.getSalesChannel().getCode()))) {
+                    if (c.isSupport(channel.getSalesChannel().getCode())) {
                         c.collect(channel);
                     }
                 });

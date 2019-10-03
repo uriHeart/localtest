@@ -1,6 +1,5 @@
 package com.argo.collect.domain.auth;
 
-import com.argo.collect.domain.enums.SalesChannel;
 import com.argo.collect.domain.util.ArgoScriptEngineManager;
 import com.argo.common.domain.vendor.VendorChannel;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,8 +27,8 @@ public class PlayerAuthorityManager extends AbstractAuthorityManager {
     private ArgoScriptEngineManager scriptEngineManager;
 
     @Override
-    public boolean isTargetChannel(SalesChannel channel) {
-        return SalesChannel.PLAYER == channel;
+    public boolean isTargetChannel(String channel) {
+        return "PLAYER".equals(channel);
     }
 
     @Override

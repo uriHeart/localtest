@@ -12,6 +12,6 @@ public class VendorChannelService {
     private VendorChannelRepository vendorChannelRepository;
 
     public List<VendorChannel> listAllByEnabled() {
-        return vendorChannelRepository.findByEnabled(YesOrNo.Y);
+        return vendorChannelRepository.findByEnabled(true);
     }
 }

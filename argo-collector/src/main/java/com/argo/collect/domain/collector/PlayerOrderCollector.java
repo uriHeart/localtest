@@ -27,8 +27,8 @@ import java.util.Map;
 public class PlayerOrderCollector extends AbstractOrderCollector {
 
     @Override
-    public boolean isSupport(SalesChannel channel) {
-        return SalesChannel.PLAYER == channel;
+    public boolean isSupport(String channel) {
+        return "PLAYER".equals(channel);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class PlayerOrderCollector extends AbstractOrderCollector {
         ObjectMapper objectMapper = new ObjectMapper();
         RestTemplate restTemplate = new RestTemplate();
 
-        AuthorityManager authorityManager = super.getAuth(SalesChannel.valueOf(channel.getSalesChannel().getCode()));
+        AuthorityManager authorityManager = super.getAuth(channel.getSalesChannel().getCode());
         String authorization = authorityManager.requestAuth(channel);
         CollectParam collectParam = super.getCollectInfo(channel);
 

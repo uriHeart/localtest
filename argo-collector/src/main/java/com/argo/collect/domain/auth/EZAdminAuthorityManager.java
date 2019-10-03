@@ -1,10 +1,8 @@
 package com.argo.collect.domain.auth;
 
-import com.argo.collect.domain.enums.SalesChannel;
 import com.argo.collect.domain.util.ArgoScriptEngineManager;
 import com.argo.common.domain.common.util.ArgoDateUtil;
 import com.argo.common.domain.vendor.VendorChannel;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -17,7 +15,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,8 +23,8 @@ public class EZAdminAuthorityManager extends AbstractAuthorityManager {
     private ArgoScriptEngineManager scriptEngineManager;
 
     @Override
-    public boolean isTargetChannel(SalesChannel channel) {
-        return SalesChannel.EZ_ADMIN == channel;
+    public boolean isTargetChannel(String channel) {
+        return "EZ_ADMIN".equals(channel);
     }
 
     @Override

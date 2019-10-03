@@ -33,8 +33,10 @@ public class VendorChannel implements SystemMetadata {
     private SalesChannel salesChannel;
 
     @Column(name = "enabled")
-    @Enumerated(EnumType.STRING)
-    private YesOrNo enabled; //boolean 으로 변경
+    private Boolean enabled; //boolean 으로 변경
+
+    @Column(name = "auto_collecting")
+    private Boolean autoCollecting;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)

@@ -24,7 +24,7 @@ public abstract class AbstractOrderCollector implements OrderCollector {
     @Autowired
     private SalesChannelService salesChannelService;
 
-    protected AuthorityManager getAuth(SalesChannel channel) {
+    protected AuthorityManager getAuth(String channel) {
         return authorityManagers.stream().filter(a -> a.isTargetChannel(channel)).findFirst().orElse(null);
     }
 

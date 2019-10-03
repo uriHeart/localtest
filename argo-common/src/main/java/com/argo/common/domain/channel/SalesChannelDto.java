@@ -11,4 +11,13 @@ public class SalesChannelDto {
     private String salesChannelCode;
     private String salesChannelName;
     private String baseUrl;
+
+    public static SalesChannelDto from(SalesChannel channel) {
+        return SalesChannelDto.builder()
+                .salesChannelId(channel.getSalesChannelId())
+                .salesChannelCode(channel.getCode())
+                .salesChannelName(channel.getName())
+                .baseUrl(channel.getBaseUrl())
+                .build();
+    }
 }

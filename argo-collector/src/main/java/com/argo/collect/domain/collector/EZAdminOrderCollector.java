@@ -30,13 +30,13 @@ public class EZAdminOrderCollector extends AbstractOrderCollector {
     private static final int MAX_ROW = 500;
 
     @Override
-    public boolean isSupport(SalesChannel channel) {
-        return SalesChannel.EZ_ADMIN == channel;
+    public boolean isSupport(String channel) {
+        return "EZ_ADMIN".equals(channel);
     }
 
     @Override
     public void collect(VendorChannel channel) {
-        AuthorityManager authorityManager = super.getAuth(SalesChannel.valueOf(channel.getSalesChannel().getCode()));
+        AuthorityManager authorityManager = super.getAuth(channel.getSalesChannel().getCode());
         String authorization = authorityManager.requestAuth(channel);
         log.info("authorization - {}", authorization);
 
