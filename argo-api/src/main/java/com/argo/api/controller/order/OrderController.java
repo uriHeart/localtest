@@ -5,10 +5,7 @@ import com.argo.common.domain.order.*;
 import com.argo.common.domain.order.dto.OrderResultDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -27,15 +24,13 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @PostMapping("/order/{orderId}")
-    public Mono<Void> addOrder(@PathVariable String orderId) {
+    @PostMapping("/order")
+    public Mono<Void> addOrder(@RequestParam Long vendorId, @RequestParam Long channelId,
+                               @RequestParam String orderId, @RequestParam String vendorItemId) {
 
-        return orderService.addOrder(OrderDoc.builder()
-                    .id(orderId)
-                    .orderId(orderId)
-                    .orderedAt(new Date()).build())
+        return orderService.addOrder(vendorId, channelId, orderId, vendorItemId)
                 .subscribeOn(Schedulers.elastic())
-                .timeout(Duration.ofMillis(500)).retry(3)
+                .timeout(Duration.ofMillis(1000)).retry(3)
                 .onErrorResume(error -> {
                     log.error("index error ", error);
                     return Mono.empty();

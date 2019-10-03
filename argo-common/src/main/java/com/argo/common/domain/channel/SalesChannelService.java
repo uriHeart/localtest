@@ -25,4 +25,8 @@ public class SalesChannelService {
     public ChannelCollectInfo getChannelCollectInfo(SalesChannel salesChannel) {
         return channelCollectInfoRepository.findBySalesChannel(salesChannel);
     }
+
+    public SalesChannel getSalesChannel(Long salesChannelId) {
+        return salesChannelRepository.findBySalesChannelId(salesChannelId);
+    }
 }

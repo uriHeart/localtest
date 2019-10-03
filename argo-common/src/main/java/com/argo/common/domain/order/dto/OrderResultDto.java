@@ -1,11 +1,13 @@
 package com.argo.common.domain.order.dto;
 
 
+import com.argo.common.domain.channel.SalesChannel;
 import com.argo.common.domain.channel.SalesChannelDto;
 import com.argo.common.domain.order.ArgoOrder;
 import com.argo.common.domain.order.OrderAddress;
 import com.argo.common.domain.order.doc.OrderDoc;
 import com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle;
+import com.argo.common.domain.vendor.Vendor;
 import com.argo.common.domain.vendor.VendorDto;
 import lombok.*;
 
@@ -31,7 +33,8 @@ public class OrderResultDto {
 
     private OrderAddressDto orderAddress; //주문 주소
 
-    public static OrderResultDto from(OrderDoc doc, ArgoOrder order, OrderAddress address, OrderVendorItemLifecycle vendorItem) {
+    public static OrderResultDto from(OrderDoc doc, ArgoOrder order, OrderAddress address,
+                                      OrderVendorItemLifecycle vendorItem, Vendor vendor, SalesChannel channel) {
         return OrderResultDto.builder()
                 .orderId(order.getOrderId())
                 .orderedAt(order.getMetadata().getOrderedAt())
@@ -41,12 +44,12 @@ public class OrderResultDto {
                 .orderState(order.getState())
                 .vendor(VendorDto.builder()
                         .vendorId(order.getVendorId())
-                        .vendorName(null)
+                        .vendorName(vendor.getName())
                         .build())
                 .salesChannel(SalesChannelDto.builder()
                         .salesChannelId(order.getChannelId())
                         .salesChannelCode(doc.getSalesChannelCode())
-                        .salesChannelName(null)
+                        .salesChannelName(channel.getName())
                         .build())
                 .orderAddress(OrderAddressDto.builder()
                         .originalAddress(OriginalAddressDto.builder()

@@ -35,4 +35,8 @@ public class VendorService {
         return vendorChannelRepository.findByVendorAndEnabledAndAutoCollecting(vendorRepository.findByVendorId(vendorId), true, false)
                 .stream().map(VendorChannel::getSalesChannel).collect(Collectors.toList());
     }
+
+    public Vendor getVendor(Long vendorId) {
+        return vendorRepository.findByVendorId(vendorId);
+    }
 }

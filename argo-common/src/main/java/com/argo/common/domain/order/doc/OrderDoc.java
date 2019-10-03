@@ -15,10 +15,14 @@ public class OrderDoc {
     private Long vendorId;
     private Long channelId;
     private String salesChannelCode;
+    private String salesChannelName;
     private Date orderedAt;
     private Date collectedAt;
 
     private String orderStatus;
+
+    private String recipientName;
+    private String originalPostalCode;
 
     private String vendorItemId;
     private String vendorItemLifeCycleStatus;

@@ -1,12 +1,16 @@
 package com.argo.common.domain.order;
 
+import com.argo.common.domain.channel.SalesChannel;
+import com.argo.common.domain.channel.SalesChannelService;
 import com.argo.common.domain.common.util.JsonUtil;
 import com.argo.common.domain.order.doc.OrderDoc;
 import com.argo.common.domain.order.dto.OrderResultDto;
 import com.argo.common.domain.order.reactive.ReactiveOrderAddressRepository;
 import com.argo.common.domain.order.reactive.ReactiveOrderRepository;
-import com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle;
 import com.argo.common.domain.order.reactive.ReactiveOrderVendorItemLifecycleRepository;
+import com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle;
+import com.argo.common.domain.vendor.Vendor;
+import com.argo.common.domain.vendor.VendorService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
@@ -39,19 +43,72 @@ public class OrderService {
     private ReactiveOrderRepository reactiveOrderRepository;
     private ReactiveOrderAddressRepository reactiveOrderAddressRepository;
     private ReactiveOrderVendorItemLifecycleRepository reactiveOrderVendorItemLifecycleRepository;
+    private VendorService vendorService;
+    private SalesChannelService salesChannelService;
 
     @Autowired
     public OrderService(RestHighLevelClient client, ObjectMapper objectMapper,
-                        ReactiveOrderRepository reactiveOrderRepository, ReactiveOrderAddressRepository reactiveOrderAddressRepository,
-                        ReactiveOrderVendorItemLifecycleRepository reactiveOrderVendorItemLifecycleRepository) {
+                        ReactiveOrderRepository reactiveOrderRepository,
+                        ReactiveOrderAddressRepository reactiveOrderAddressRepository,
+                        ReactiveOrderVendorItemLifecycleRepository reactiveOrderVendorItemLifecycleRepository,
+                        VendorService vendorService, SalesChannelService salesChannelService) {
         this.client = client;
         this.objectMapper = objectMapper;
         this.reactiveOrderRepository = reactiveOrderRepository;
         this.reactiveOrderAddressRepository = reactiveOrderAddressRepository;
         this.reactiveOrderVendorItemLifecycleRepository = reactiveOrderVendorItemLifecycleRepository;
+        this.vendorService = vendorService;
+        this.salesChannelService = salesChannelService;
     }
 
-    public Mono<Void> addOrder(OrderDoc orderDoc){
+    public void saveOrder(ArgoOrder order, OrderAddress orderAddress, List<OrderVendorItemLifecycle> orderVendorItemLifecycles) {
+        reactiveOrderRepository.save(order);
+        reactiveOrderAddressRepository.save(orderAddress);
+        reactiveOrderVendorItemLifecycleRepository.saveAll(orderVendorItemLifecycles);
+
+        this.buildOrderDocument(order, orderAddress, orderVendorItemLifecycles);
+    }
+
+    public Mono<Void> addOrder(Long vendorId, Long channelId, String orderId, String vendoItemId) {
+       Mono<ArgoOrder> order = reactiveOrderRepository.findFirstByVendorIdAndChannelIdAndOrderIdOrderByPublishedAtDesc(vendorId, channelId, orderId);
+       Mono<OrderAddress> orderAddress = reactiveOrderAddressRepository.findFirstByVendorIdAndChannelIdAndOrderIdOrderByPublishedAtDesc(vendorId, channelId, orderId);
+       Mono<OrderVendorItemLifecycle> vendorItem = reactiveOrderVendorItemLifecycleRepository.findFirstByVendorIdAndChannelIdAndOrderIdAndVendorItemIdOrderByPublishedAtDesc(vendorId, channelId, orderId, UUID.fromString(vendoItemId));
+       return Mono.create(sink -> {
+           Mono.zip(order, orderAddress, vendorItem).subscribe(o -> this.buildOrderDocument(o.getT1(), o.getT2(), Lists.newArrayList(o.getT3())));
+           sink.success();
+       });
+    }
+
+    private void buildOrderDocument(ArgoOrder order, OrderAddress orderAddress, List<OrderVendorItemLifecycle> vendorItems) {
+        SalesChannel salesChannel = salesChannelService.getSalesChannel(order.getChannelId());
+        vendorItems.forEach(
+                item -> this.indexingOrder(OrderDoc.builder()
+                        .id(order.getOrderId())
+                        .orderId(order.getOrderId())
+                        .vendorId(order.getVendorId())
+                        .channelId(order.getChannelId())
+                        .collectedAt(order.getMetadata().getCollectedAt())
+                        .orderedAt(order.getMetadata().getOrderedAt())
+                        .orderStatus(order.getState())
+                        .salesChannelCode(salesChannel.getCode())
+                        .salesChannelName(salesChannel.getName())
+                        .recipientName(orderAddress.getRecipient().getName())
+                        .originalPostalCode(orderAddress.getOriginalPostalCode())
+                        .vendorItemId(item.getVendorItemId().toString())
+                        .vendorItemLifeCycleStatus(item.getState())
+                        .originalPrice(item.getMetadata().getOriginalPrice())
+                        .paymentAmount(item.getMetadata().getPaymentAmount())
+                        .paymentMethod(item.getMetadata().getPaymentMethod())
+                        .salesPrice(item.getMetadata().getSalesPrice())
+                        .quantity(item.getQuantity())
+                        .sourceItemId(item.getSourceItemId())
+                        .sourceItemName(item.getSourceItemName())
+                        .sourceItemOption(item.getSourceItemOption())
+                        .build())
+        );
+    }
+
+    private void indexingOrder(OrderDoc orderDoc){
         String json;
         try {
             json = objectMapper.writeValueAsString(orderDoc);
@@ -62,20 +119,16 @@ public class OrderService {
         IndexRequest indexRequest = new IndexRequest("order_doc").id(orderDoc.getId());
         indexRequest.source(json, XContentType.JSON);
 
-        return Mono.create(sink -> {  //1
-            client.indexAsync(indexRequest, RequestOptions.DEFAULT, new ActionListener<IndexResponse>() {  //2
-                @Override
-                public void onResponse(IndexResponse indexResponse) {
-                    log.info("index success : " + indexResponse.toString());
-                    sink.success();
-                }
+        client.indexAsync(indexRequest, RequestOptions.DEFAULT, new ActionListener<IndexResponse>() {  //2
+            @Override
+            public void onResponse(IndexResponse indexResponse) {
+                log.info("index success : " + indexResponse.toString());
+            }
 
-                @Override
-                public void onFailure(Exception e) {
-                    log.error("index error ", e);
-                    sink.error(e);
-                }
-            });
+            @Override
+            public void onFailure(Exception e) {
+                log.error("index error ", e);
+            }
         });
     }
 
@@ -123,15 +176,27 @@ public class OrderService {
     }
 
     public Mono<List<OrderResultDto>> getOrderData(OrderSearchParam param) {
+
         Mono<List<OrderDoc>> docs = this.searchOrders(param);
         return docs.flatMapMany(Flux::fromIterable)
                 .concatMap(doc -> {
                     final Mono<ArgoOrder> order = getOrder(doc);
                     final Mono<OrderAddress> address = getOrderAddress(doc);
                     final Mono<OrderVendorItemLifecycle> item = getOrderVendorItem(doc);
-                    return Flux.zip(order, address, item)
-                            .map(o -> OrderResultDto.from(doc, o.getT1(), o.getT2(), o.getT3()));
+                    final Mono<Vendor> vendor = getVendor(doc.getVendorId());
+                    final Mono<SalesChannel> channel = getChannel(doc.getChannelId());
+                    return Flux.zip(order, address, item, vendor, channel)
+                            .map(o -> OrderResultDto
+                                    .from(doc, o.getT1(), o.getT2(), o.getT3(), o.getT4(), o.getT5()));
                 }).collectList();
+    }
+
+    private Mono<Vendor> getVendor(Long vendorId) {
+        return Mono.just(vendorService.getVendor(vendorId));
+    }
+
+    private Mono<SalesChannel> getChannel(Long channelId) {
+        return Mono.just(salesChannelService.getSalesChannel(channelId));
     }
 
     private Mono<ArgoOrder> getOrder(OrderDoc param) {
