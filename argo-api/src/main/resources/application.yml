@@ -56,4 +56,4 @@ file:
     default-path: C:\attachments
 
 elasticsearch:
-  hosts: http://localhost:9200
+  hosts: http://15.164.111.122:9200

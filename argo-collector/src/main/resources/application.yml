@@ -55,4 +55,4 @@ file:
     index: test
 
 elasticsearch:
-  hosts: localhost:9200
+  hosts: http://15.164.111.122:9200

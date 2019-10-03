@@ -77,7 +77,7 @@ public class OrderVendorItemLifecycle {
     @CassandraType(type = DataType.Name.TIMESTAMP)
     private Date createdAt;
 
-    public OrderVendorItemMetadata getOrderVendorItemMatadata() {
+    public OrderVendorItemMetadata getOrderVendorItemMetadata() {
         if (this.metadata == null) {
             return OrderVendorItemMetadata.builder().build();
         }
