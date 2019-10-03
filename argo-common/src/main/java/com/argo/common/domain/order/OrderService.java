@@ -14,6 +14,7 @@ import com.argo.common.domain.vendor.VendorService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.google.common.hash.Hashing;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.index.IndexRequest;
@@ -32,7 +33,9 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.UUID;
 
 @Service
@@ -79,11 +82,21 @@ public class OrderService {
        });
     }
 
+    private String getDocId(ArgoOrder order, OrderVendorItemLifecycle item) {
+        StringJoiner strJoiner = new StringJoiner(",");
+        strJoiner.add(String.valueOf(order.getVendorId()))
+                .add(String.valueOf(order.getChannelId()))
+                .add(order.getOrderId()).add(item.getVendorItemId().toString());
+        return Hashing.sha256()
+                .hashString(strJoiner.toString(), StandardCharsets.UTF_8)
+                .toString();
+    }
+
     private void buildOrderDocument(ArgoOrder order, OrderAddress orderAddress, List<OrderVendorItemLifecycle> vendorItems) {
         SalesChannel salesChannel = salesChannelService.getSalesChannel(order.getChannelId());
         vendorItems.forEach(
                 item -> this.indexingOrder(OrderDoc.builder()
-                        .id(order.getOrderId())
+                        .id(this.getDocId(order, item))
                         .orderId(order.getOrderId())
                         .vendorId(order.getVendorId())
                         .channelId(order.getChannelId())
