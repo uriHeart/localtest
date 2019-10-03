@@ -77,7 +77,7 @@ public class OrderVendorItemLifecycle {
     @CassandraType(type = DataType.Name.TIMESTAMP)
     private Date createdAt;
 
-    public OrderVendorItemMetadata getOrderVendorItemMetadata() {
+    public OrderVendorItemMetadata getMetadata() {
         if (this.metadata == null) {
             return OrderVendorItemMetadata.builder().build();
         }
@@ -85,7 +85,7 @@ public class OrderVendorItemLifecycle {
         return JsonUtil.read(this.metadata, OrderVendorItemMetadata.class);
     }
 
-    public void setOrderVendorItemMetadata(OrderVendorItemMetadata orderVendorItemMetadata) {
+    public void setMetadata(OrderVendorItemMetadata orderVendorItemMetadata) {
         this.metadata = JsonUtil.write(orderVendorItemMetadata);
     }
 }
