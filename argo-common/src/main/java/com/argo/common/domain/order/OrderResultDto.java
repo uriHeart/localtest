@@ -23,7 +23,7 @@ public class OrderResultDto {
 
     private VendorDto vendor; //벤더 정보
     private SalesChannelDto salesChannel; //채널 정보
-    private OrderProductDto orderProduct; //주문 상품정보
+    //private OrderProductDto orderProduct; //주문 상품정보
 
-    private OrderAddressDto orderAddress; //주문 주소
+    //private OrderAddressDto orderAddress; //주문 주소
 }

@@ -16,7 +16,7 @@ import java.util.Date;
 @Data
 @Builder
 @Table("raw_event")
-public class RawEvent implements ConvertibleData {
+public class RawEvent extends ConvertibleData {
     @PrimaryKeyColumn(ordinal = 0, type = PrimaryKeyType.PARTITIONED, name = "vendor_id")
     @CassandraType(type = DataType.Name.BIGINT)
     private Long vendorId;

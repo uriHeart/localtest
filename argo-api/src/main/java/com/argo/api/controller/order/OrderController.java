@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 package com.argo.api.controller.order;
 
 import com.argo.common.domain.order.doc.OrderDoc;
@@ -50,62 +49,4 @@ public class OrderController {
                 });
     }
 }
-=======
-package com.argo.api.controller.order;
 
-import com.argo.common.domain.channel.SalesChannelDto;
-import com.argo.common.domain.vendor.VendorDto;
-import com.argo.common.domain.order.*;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.testng.collections.Lists;
-import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
-
-import java.time.Duration;
-import java.util.Date;
-import java.util.List;
-
-@Slf4j
-@RestController
-public class OrderController {
-
-    private OrderService orderService;
-
-    @Autowired
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
-    }
-
-    @PostMapping("/order/{orderId}")
-    public Mono<Void> addOrder(@PathVariable String orderId) {
-
-        return orderService.addOrder(OrderDoc.builder()
-                    .id(orderId)
-                    .orderId(orderId)
-                    .orderedAt(new Date()).build())
-                .subscribeOn(Schedulers.elastic())
-                .timeout(Duration.ofMillis(500)).retry(3)
-                .onErrorResume(error -> {
-                    log.error("index error ", error);
-                    return Mono.empty();
-                });
-    }
-
-    @PostMapping("/orders")
-    public Mono<List<OrderResultDto>> getOrders(@RequestBody OrderSearchParam param) {
-        return orderService.getOrders(param)
-                .subscribeOn(Schedulers.elastic())
-                .timeout(Duration.ofMillis(500))
-                .retry(3)
-                .onErrorResume(error -> {
-                    log.error("search error ", error);
-                    return Mono.empty();
-                });
-    }
-}
->>>>>>> Stashed changes
