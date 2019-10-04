@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream:argo-common/src/main/java/com/argo/common/domain/order/dto/RecipientDto.java
 package com.argo.common.domain.order.dto;
 
 import lombok.*;
@@ -12,18 +11,3 @@ public class RecipientDto {
     private String phoneNumber1; //수취인 전화번호1
     private String phoneNumber2; //수취인 전화번호2
 }
-=======
-package com.argo.common.domain.order;
-
-import lombok.*;
-
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class RecipientDto {
-    private String name; //수취인 이름
-    private String phoneNumber1; //수취인 전화번호1
-    private String phoneNumber2; //수취인 전화번호2
-}
->>>>>>> Stashed changes:argo-common/src/main/java/com/argo/common/domain/order/RecipientDto.java

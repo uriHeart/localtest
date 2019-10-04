@@ -11,10 +11,9 @@ import javax.persistence.Enumerated;
 @Builder
 @UserDefinedType("conversion_rule")
 public class ConversionRule {
+    private String sourceField;
 
     private String targetField;
-
-    private String sourceField;
 
     @Enumerated(EnumType.STRING)
     private ConversionType conversionType;
@@ -23,5 +22,5 @@ public class ConversionRule {
 
     private String operatorMethod;
 
-    private String sql;
+    private String sqlString;
 }

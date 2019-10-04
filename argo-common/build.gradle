@@ -7,6 +7,9 @@ jar { enabled = true }
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-cassandra:${springBootVersion}"
+    // https://mvnrepository.com/artifact/org.springframework.data/spring-data-cassandra
+    compile group: 'org.springframework.data', name: 'spring-data-cassandra', version: '2.2.0.RELEASE'
+
     compile "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
