@@ -4,12 +4,10 @@ import com.argo.collect.service.ConvertService;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.rest.RestStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,31 +23,44 @@ public class ConvertController {
     @Autowired
     ConvertService convertService;
 
+    @Autowired
+    HttpSession httpSession;
+
     @RequestMapping(value="/excelUpload",
             method = RequestMethod.POST,
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public @ResponseBody String excelUpload(@RequestParam("file")MultipartFile parts,
-                                              @RequestParam("channelId")Long channelId,
-                                              @RequestParam("vendorId")Long vendorId) throws IOException {
+                                            @RequestParam("channelId")Long channelId,
+                                            @RequestParam("vendorId")Long vendorId) throws IOException {
         //엑셀저장
         File excel = convertService.excelUpload(parts);
-
         //엑셀데이터 json변환  List<엑셀sheet List<레코드 >
         List<HashMap<String, Object>> jsonData = convertService.excelToJson(excel);
 
         //현재 동기호출이 안됨.
-        RestStatus restStatus = convertService.saveToEs(excel.getName(), jsonData);
+        RestStatus restStatus = convertService.saveToEs(excel.getName(), jsonData,vendorId);
+
+        List<HashMap<String, Object>> factorAddJsonData = convertService.addExcelFactor(jsonData,channelId);
 
         //카산드라에 raw데이터 저장
-        //convertService.saveToCassandra(jsonData,channelId,vendorId);
+        convertService.saveToCassandra((List<HashMap<String, String>>) factorAddJsonData.get(0).get("sheetData"),channelId,vendorId);
 
         return restStatus.name();
+    }
+
+
+    @RequestMapping(value="/excel",
+            method = RequestMethod.GET,
+            produces = "application/json; charset=utf8")
+    public @ResponseBody Boolean existsExcel(@RequestParam("fileName")String fileName) throws IOException {
+        boolean excelList = convertService.existsExcel(fileName);
+        return excelList;
     }
 
     @RequestMapping(value="/excel/list",
             method = RequestMethod.GET,
             produces = "application/json; charset=utf8")
-    public @ResponseBody List<Map<String,Object>> getUploadList(HttpServletRequest req) throws IOException {
+    public @ResponseBody List<Map<String,Object>> getUploadList() throws IOException {
         //TODO userId에 해당하는 업로드파일만 조회
         //HttpSession session = req.getSession();
         //String userId = (String)session.getAttribute("userId");
@@ -58,11 +69,6 @@ public class ConvertController {
     }
 
     /**
-     *TODO
-     * 업로드한 엑셀의 헤더와 본문내용을 가져와 front의 그리드에 출력한다.
-     * 별도로 엑셀 문서마다 헤더 맵핑을 하지않고 업로드한 엑셀 형식을 동적으로 보여준다.
-     * 차후 저장 할 엑셀문서의 양식이 확정되면 헤더맵핑한다.
-     *
      * @param indexId
      * @return Object
      * @throws IOException

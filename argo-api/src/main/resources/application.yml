@@ -54,6 +54,7 @@ server:
 file:
   upload:
     default-path: C:\attachments
+    index: excel_upload
 
 elasticsearch:
   hosts: http://15.164.111.122:9200

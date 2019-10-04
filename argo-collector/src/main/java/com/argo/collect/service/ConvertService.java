@@ -1,9 +1,7 @@
 package com.argo.collect.service;
 
-import com.argo.common.domain.channel.ChannelCollectInfo;
-import com.argo.common.domain.channel.ChannelCollectInfoRepository;
-import com.argo.common.domain.channel.SalesChannel;
-import com.argo.common.domain.channel.SalesChannelService;
+import com.argo.collect.domain.excel.ChannelExcelMapping;
+import com.argo.collect.domain.excel.ChannelExcelMappingService;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.raw.RawEventService;
 import com.google.gson.Gson;
@@ -11,28 +9,23 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequest;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.support.IndicesOptions;
-import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.core.CountRequest;
 import org.elasticsearch.client.core.CountResponse;
-import org.elasticsearch.client.indices.GetMappingsRequest;
-import org.elasticsearch.client.indices.GetMappingsResponse;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.FetchSourceContext;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +33,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -69,9 +64,13 @@ public class ConvertService {
     @Autowired
     Gson gson;
 
-
+    @Autowired
+    HttpSession httpSession;
 
     private RestHighLevelClient esClient;
+
+    @Autowired
+    ChannelExcelMappingService channelExcelMappingService;
 
     @Autowired
     public ConvertService(RestHighLevelClient client) {
@@ -93,10 +92,10 @@ public class ConvertService {
 
         destinationFile = new File(path+"/" + sourceFileName);
 
-        if(destinationFile.exists()){
-            String milliSecondLong = String.valueOf(Instant.now().getEpochSecond());
-            destinationFile = new File(path+"/" + sourceFileBaseName+"_"+milliSecondLong + "."+sourceFileNameExtension);
-        }
+//        if(destinationFile.exists()){
+//            String milliSecondLong = String.valueOf(Instant.now().getEpochSecond());
+//            destinationFile = new File(path+"/" + sourceFileBaseName+"_"+milliSecondLong + "."+sourceFileNameExtension);
+//        }
 
         destinationFile.getParentFile().mkdirs();
         filePart.transferTo(destinationFile);
@@ -143,7 +142,7 @@ public class ConvertService {
 
     private List<List<String>> getSheetDataList(Sheet sheet)
     {
-        List<List<String>> ret = new ArrayList<List<String>>();
+        List<List<String>> ret = new ArrayList<>();
 
         int firstRowNum = sheet.getFirstRowNum();
         int lastRowNum = sheet.getLastRowNum();
@@ -166,8 +165,10 @@ public class ConvertService {
                 {
                     Cell cell = row.getCell(j);
 
-                    if(cell==null) continue;
-
+                    if(cell==null){
+                        rowDataList.add("");
+                        continue;
+                    }
 
                     CellType cellType = cell.getCellType();
 
@@ -254,7 +255,7 @@ public class ConvertService {
                 findHeader = true;
                 mainDataList.add(row);
             }
-        };
+        }
 
         return mainDataList;
     }
@@ -276,18 +277,23 @@ public class ConvertService {
                 for(int i=1; i<rowCount; i++) {
                     List<String> dataRow = dataTable.get(i);
 
-                    if (dataRow.size() >= columnCount) {
-
-                        LinkedHashMap<String, String> col = new LinkedHashMap();
-
-                        for (int j = 0; j < columnCount; j++) {
-                            String columnName = headerRow.get(j);
-                            String columnValue = dataRow.get(j);
-
-                            col.put(columnName, columnValue);
+                    if(columnCount> dataRow.size()){
+                        int addCount = columnCount-dataRow.size();
+                        for(int addCol = 0; addCol < addCount; addCol++){
+                            dataRow.add("");
                         }
-                        result.add(col);
                     }
+
+
+                    LinkedHashMap<String, String> col = new LinkedHashMap();
+
+                    for (int j = 0; j < columnCount; j++) {
+                        String columnName = headerRow.get(j);
+                        String columnValue = dataRow.get(j);
+
+                        col.put(columnName, columnValue);
+                    }
+                    result.add(col);
                 }
             }
         }
@@ -314,39 +320,56 @@ public class ConvertService {
     }
 
 
-    public void saveToCassandra(List<HashMap<String,List<HashMap<String,String>>>> jsonData, Long channelId, Long vendorId) {
-        //sheet 단위 채널단위가 되지 않을까?
-        jsonData.forEach(sheet -> {
-            sheet.values().forEach(jsonObjets ->{
-                //record 단위
+    public void saveToCassandra(List<HashMap<String,String>> jsonData, Long channelId, Long vendorId) {
+        jsonData.forEach(jsonRaw ->{
+            SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String publishedAtString =jsonRaw.get("published_at");
 
-                jsonObjets.forEach(jsonRaw ->{
-                    SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    Date orderDate = null;
-                    try {
-                        orderDate = transFormat.parse(jsonRaw.get("order_date"));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        orderDate = new Date();
-                    }
-                    RawEvent rawEvent = RawEvent.builder()
-                            .vendorId(vendorId)
-                            .channelId(channelId)
-                            .format("JSON")
-                            .auto(false)
-                            .data(gson.toJson(jsonRaw))
-                            .orderId(jsonRaw.get("oder_no"))
-                            .publishedAt(orderDate)
-                            .createdAt(new Date())
-                            .build();
-                    rawEventService.save(rawEvent);
-                });
-            });
+            Date publishedAt = null;
+            String orderId = jsonRaw.get("order_id");
 
+            try {
+                publishedAt = java.sql.Date.valueOf(LocalDate.parse(publishedAtString, DateTimeFormatter.BASIC_ISO_DATE));
+
+                //엑셀입력형식이 다를경우
+                //publishedAt = transFormat.parse("2019-01-01 23:59:59");
+            } catch (Exception e) {
+                e.printStackTrace();
+                publishedAt = new Date();
+            }
+
+            jsonRaw.remove("order_id");
+            jsonRaw.remove("published_at");
+
+            String gonData = gson.toJson(jsonRaw);
+            String json_uft_8 = null;
+            try {
+//                byte[] euckrStringBuffer = gonData.getBytes("euc-kr");
+//                String decodedFromEucKr = new String(euckrStringBuffer, "euc-kr");
+//                byte[] utf8StringBuffer = decodedFromEucKr.getBytes("utf-8");
+//                json_uft_8 = new String(utf8StringBuffer, "utf-8");
+                json_uft_8 = new String(gonData.getBytes("euc-kr"),"utf-8");
+
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+            RawEvent rawEvent
+                    = RawEvent.builder()
+                    .vendorId(vendorId)
+                    .channelId(channelId)
+                    .orderId(orderId)
+                    .publishedAt(publishedAt)
+                    .format("JSON")
+                    .auto(false)
+                    .data(json_uft_8)
+                    .createdAt(new Date())
+                    .build();
+            rawEventService.save(rawEvent);
         });
     }
 
-    public RestStatus saveToEs(String id, List<HashMap<String, Object>> jsonData) throws IOException {
+    public RestStatus saveToEs(String id, List<HashMap<String, Object>> jsonData,Long vendorId) throws IOException {
 
         String dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
@@ -357,8 +380,10 @@ public class ConvertService {
         data.put("@timeStamp",Instant.now().getEpochSecond());
         data.put("excelData",jsonData);
         data.put("fileName",id);
+        data.put("vendorId",vendorId);
 
-        request.source(gson.toJson(data), XContentType.JSON);
+
+        request.source(gson.toJson(data), XContentType.JSON).id(id);
 
         IndexResponse response = esClient.index(request, RequestOptions.DEFAULT);
         CountRequest countRequest = new CountRequest(excelIndex);
@@ -400,12 +425,43 @@ public class ConvertService {
         return result;
     }
 
+    public boolean existsExcel(String id) throws IOException {
+        GetRequest getRequest = new GetRequest(
+                excelIndex,
+                id);
+        getRequest.fetchSourceContext(new FetchSourceContext(false));
+        getRequest.storedFields("_none_");
+        boolean exists = esClient.exists(getRequest, RequestOptions.DEFAULT);
+
+        return exists;
+    }
+
+
     public ArrayList<HashMap<String,HashMap<String,Object>>> getExcelMainText(String indexId) throws IOException {
         GetRequest getRequest = new GetRequest(excelIndex,indexId);
         GetResponse getResponse = esClient.get(getRequest, RequestOptions.DEFAULT);
         ArrayList<HashMap<String,HashMap<String,Object>>> data = (ArrayList<HashMap<String, HashMap<String, Object>>>) getResponse.getSourceAsMap().get("excelData");
 
+
         return data;
+    }
+
+
+    public List<HashMap<String, Object>> addExcelFactor(List<HashMap<String, Object>> convertExcelData,Long ChannelId){
+        List<HashMap<String,String>> sheetData = (List<HashMap<String, String>>) convertExcelData.get(0).get("sheetData");
+        List<ChannelExcelMapping> channelExcelMappings = channelExcelMappingService.getChannelExcelMapping(ChannelId);
+        sheetData.forEach(row ->{
+            channelExcelMappings.forEach( factor ->{
+                StringBuilder factorValue = new StringBuilder();
+                factor.getExcelFactorInfo().forEach(excelFactorInfo -> {
+                    factorValue.append(row.get(excelFactorInfo.getColumnName()));
+                });
+                row.put(factor.getFactorId(),factorValue.toString());
+            });
+        });
+
+
+        return convertExcelData;
     }
 
 }

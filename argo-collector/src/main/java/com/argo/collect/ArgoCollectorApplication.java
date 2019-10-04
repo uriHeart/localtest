@@ -21,12 +21,12 @@ public class ArgoCollectorApplication {
 
     @Bean(name = "web")
     public ArgoServletRegistrationBean web() {
-        return new ArgoServletRegistrationBean("webServlet", ArgoCollectorWebConfig.class, "/*");
+        return new ArgoServletRegistrationBean("webServlet", ArgoCollectorWebConfig.class, "/web");
     }
 
-    @Bean(name = "api")
-    public ArgoServletRegistrationBean api() {
-        return new ArgoServletRegistrationBean("apiServlet", ArgoCollectorApiConfig.class, "/api/*");
-    }
+//    @Bean(name = "api")
+//    public ArgoServletRegistrationBean api() {
+//        return new ArgoServletRegistrationBean("apiServlet", ArgoCollectorApiConfig.class, "/api/*");
+//    }
 
 }
