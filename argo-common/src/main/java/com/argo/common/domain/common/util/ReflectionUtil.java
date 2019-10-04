@@ -1,5 +1,6 @@
 package com.argo.common.domain.common.util;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 public class ReflectionUtil {
@@ -25,5 +26,22 @@ public class ReflectionUtil {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public static boolean setFieldValue(Object object, String fieldName, Object fieldValue) {
+        Class<?> clazz = object.getClass();
+        if(clazz != null) {
+            try {
+                Field field = clazz.getDeclaredField(fieldName);
+                field.setAccessible(true);
+                field.set(object, fieldValue);
+                return true;
+            } catch (NoSuchFieldException e) {
+                clazz = clazz.getSuperclass();
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            }
+        }
+        return false;
     }
 }

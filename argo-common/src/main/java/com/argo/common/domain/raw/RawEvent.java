@@ -53,6 +53,6 @@ public class RawEvent extends ConvertibleData {
     private Date createdAt;
 
     public String sourceKey() {
-        return channelId.toString() + type;
+        return channelId.toString() + "-" + type;
     }
 }
