@@ -48,7 +48,7 @@ public class ConvertServiceTest {
         String orderId = new String(value.getBytes(UTF_8));
 
 
-        String inputText = "한글";
+        String inputText = "한글1";
         InputStream is = new ByteArrayInputStream(inputText.getBytes("UTF-8"));
         BufferedReader rd = new BufferedReader(new InputStreamReader(is));
         String line;
