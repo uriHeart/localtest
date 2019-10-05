@@ -2,6 +2,7 @@ package com.argo.common.domain.raw;
 
 import com.argo.common.domain.common.data.ConvertibleData;
 import com.datastax.driver.core.DataType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
@@ -34,10 +35,11 @@ public class RawEvent extends ConvertibleData {
 
     @Column
     @CassandraType(type = DataType.Name.TEXT)
-    private String type;
+    private String event;
 
     @Column
     @CassandraType(type = DataType.Name.TEXT)
+    @JsonProperty
     private String data;
 
     @Column
@@ -53,6 +55,6 @@ public class RawEvent extends ConvertibleData {
     private Date createdAt;
 
     public String sourceKey() {
-        return channelId.toString() + "-" + type;
+        return channelId.toString() + "-" + event;
     }
 }

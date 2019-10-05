@@ -38,12 +38,12 @@ public class ConversionTemplateService {
                 .createdAt(new Date())
                 .expiredAt(null)
                 .sourceId("2-null")
-                .targetId("ArgoOrder")
+                .targetId("com.argo.common.domain.order.ArgoOrder")
                 .rules(getTestRuleForArgoOrder())
                 .build();
         HashMap map = new HashMap();
 
-        map.put("2-null", template);
+        map.put(template.getTargetId(), template);
         return map;
     }
 
@@ -51,6 +51,11 @@ public class ConversionTemplateService {
         List<ConversionRule> list = new ArrayList<>();
         ArgoOrder order;
         RawEvent event;
+        /*Map map = new HashMap<>();
+        map.put();
+        map.put();
+        map.put();
+        map.put();*/
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
@@ -88,6 +93,16 @@ public class ConversionTemplateService {
                 .sourceField("status")
                 .targetField("state")
                 .build());
+        list.add(ConversionRule.builder()
+                .conversionType(ConversionType.DIRECT)
+                .sourceField("event")
+                .targetField("event")
+                .build());
+        /*list.add(ConversionRule.builder()
+                .conversionType(ConversionType.JSON)
+                .jsonMap()
+                .targetField("event")
+                .build());*/
 
         return list;
     }
