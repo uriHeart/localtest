@@ -80,6 +80,7 @@ public class EZAdminOrderCollector extends AbstractOrderCollector {
                         Map dataRow = dataRows.get(0);
                         String collectDate = dataRow.get("collect_date").toString() + " " + dataRow.get("collect_time").toString();
                         String orderDate = dataRow.get("order_date").toString() + " " + dataRow.get("order_time").toString();
+                        String orderId = order.get("order_id").toString();
 
                         RawEvent rawEvent = RawEvent.builder()
                                 .vendorId(channel.getVendor().getVendorId())
@@ -87,8 +88,7 @@ public class EZAdminOrderCollector extends AbstractOrderCollector {
                                 .format("JSON")
                                 .auto(true)
                                 .data(objectMapper.writeValueAsString(order))
-                                .orderId(order.get("order_id").toString())
-                                .rawEventId(UUID.randomUUID().toString())
+                                .orderId(orderId.startsWith("C") ? orderId.substring(1) : orderId)
                                 .publishedAt(ArgoDateUtil.getDate(orderDate.startsWith("0000-00-00") ? collectDate : orderDate))
                                 .createdAt(new Date())
                                 .build();

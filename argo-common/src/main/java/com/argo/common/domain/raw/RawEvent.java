@@ -13,7 +13,7 @@ import java.util.Date;
 
 @Data
 @Builder
-@Table("raw_order_event")
+@Table("raw_event")
 public class RawEvent {
     @PrimaryKeyColumn(ordinal = 0, type = PrimaryKeyType.PARTITIONED, name = "vendor_id")
     @CassandraType(type = DataType.Name.BIGINT)
@@ -27,11 +27,7 @@ public class RawEvent {
     @CassandraType(type = DataType.Name.VARCHAR)
     private String orderId;
 
-    @PrimaryKeyColumn(ordinal = 3, type = PrimaryKeyType.CLUSTERED, name = "raw_event_id")
-    @CassandraType(type = DataType.Name.VARCHAR)
-    private String rawEventId;
-
-    @PrimaryKeyColumn(ordinal = 4, type = PrimaryKeyType.CLUSTERED, name = "published_at")
+    @PrimaryKeyColumn(ordinal = 3, type = PrimaryKeyType.CLUSTERED, name = "published_at")
     @CassandraType(type = DataType.Name.TIMESTAMP)
     private Date publishedAt;
 
