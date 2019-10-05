@@ -13,11 +13,13 @@ public class RawEventService {
     private RawEventRepository rawEventRepository;
 
     public void save(RawEvent rawEvent) {
-        List<RawEvent> rawEvents = rawEventRepository.findByVendorIdAndChannelIdAndOrderId(rawEvent.getVendorId(), rawEvent.getChannelId(), rawEvent.getOrderId());
-        if (rawEvents.isEmpty()) {
-            rawEvent.setEvent(EventType.ORDER.toString());
-        } else {
-            rawEvent.setEvent(EventType.OTHER.toString());
+        if (rawEvent.getEvent() == null) {
+            List<RawEvent> rawEvents = rawEventRepository.findByVendorIdAndChannelIdAndOrderId(rawEvent.getVendorId(), rawEvent.getChannelId(), rawEvent.getOrderId());
+            if (rawEvents.isEmpty()) {
+                rawEvent.setEvent(EventType.ORDER.toString());
+            } else {
+                rawEvent.setEvent(EventType.OTHER.toString());
+            }
         }
         rawEventRepository.save(rawEvent);
     }
