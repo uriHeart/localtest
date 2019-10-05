@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
 
 @SpringBootApplication(exclude = { FlywayAutoConfiguration.class })
 @Import({ArgoCommonConfig.class})
@@ -22,6 +23,9 @@ public class ArgoCollectorApplication {
     @Bean(name = "web")
     public ArgoServletRegistrationBean web() {
         return new ArgoServletRegistrationBean("webServlet", ArgoCollectorWebConfig.class, "/web");
+    }
+    @EnableJdbcHttpSession
+    public class HttpSessionConfig {
     }
 
 //    @Bean(name = "api")
