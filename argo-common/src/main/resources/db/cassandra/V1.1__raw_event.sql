@@ -1,13 +1,14 @@
-CREATE TABLE argo.raw_event (
+CREATE TABLE argo.raw_order_event (
   vendor_id bigint,
   channel_id bigint,
   order_id varchar,
+  raw_event_id txt,
   data text,
   format varchar,
   auto boolean,
   published_at timestamp,
   created_at timestamp,
-  PRIMARY KEY ((vendor_id, channel_id, order_id), published_at)
+  PRIMARY KEY ((vendor_id, channel_id, order_id, raw_event_id), published_at)
 ) WITH CLUSTERING ORDER BY (published_at DESC)
  AND bloom_filter_fp_chance = 0.01
  AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}

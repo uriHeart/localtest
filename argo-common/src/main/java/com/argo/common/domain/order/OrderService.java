@@ -154,8 +154,12 @@ public class OrderService {
             if (param.getFrom() != null) {
                 filter.filter(QueryBuilders.rangeQuery("orderedAt").gte(param.getFrom()).lte(param.getTo()));
             }
-            filter.filter(QueryBuilders.matchQuery("vendorId", param.getVendorId()))
-                    .filter(QueryBuilders.matchQuery("salesChannelCode", param.getSalesChannelCode()));
+
+            filter.filter(QueryBuilders.matchQuery("vendorId", param.getVendorId()));
+
+            if (param.getSalesChannelId() != null) {
+                filter.filter(QueryBuilders.matchQuery("salesChannelId", param.getSalesChannelId()));
+            }
         }
 
         SearchRequest request = new SearchRequest("order_doc");

@@ -11,4 +11,7 @@ dependencies {
     compile 'org.seleniumhq.selenium:selenium-chrome-driver:3.141.59'
     compile 'org.seleniumhq.selenium:selenium-server:3.141.59'
     compile 'commons-fileupload:commons-fileupload:1.4'
+
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.8.RELEASE'
+
 }

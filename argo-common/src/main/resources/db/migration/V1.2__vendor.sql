@@ -40,7 +40,11 @@ INSERT INTO sales_channels (code, name, base_uri, token_uri, login_uri) VALUES
 ('CAFE24', '카페24', null, null, null),
 ('CAFE24_US', '카페24(US)', null, null, null),
 ('CAFE24_CN', '카페24(CN)', null, null, null),
-('CAFE24_SPAIN', '카페24(SPAIN)', null, null, null)
+('CAFE24_SPAIN', '카페24(SPAIN)', null, null, null),
+('KASINA_ONLINE', '카시나(온라인)', null, null, null),
+('KASINA_OFFLINE', '카시나(오프라인)', null, null, null),
+('BEAKER', '비이커', null, null, null),
+('GOAL_FLAGSHIP', 'GOAL 플래그쉽스토어', null, null, null)
 ;
 
 
@@ -82,7 +86,11 @@ INSERT INTO vendor_channels (vendor_id, sales_channel_id, enabled, auto_collecti
 (1, 10, true, false),
 (1, 11, true, false),
 (1, 12, true, false),
-(1, 13, true, false)
+(1, 13, true, false),
+(1, 15, true, false),
+(1, 16, true, false),
+(1, 17, true, false),
+(1, 18, true, false)
 ;
 
 

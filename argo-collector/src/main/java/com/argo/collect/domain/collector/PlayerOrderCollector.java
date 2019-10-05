@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -64,6 +65,7 @@ public class PlayerOrderCollector extends AbstractOrderCollector {
                                     .auto(true)
                                     .data(objectMapper.writeValueAsString(event))
                                     .orderId(event.get("ord_no").toString())
+                                    .rawEventId(UUID.randomUUID().toString())
                                     .publishedAt(ArgoDateUtil.getDate(event.get("ord_date").toString().replaceAll("\\.", "-")))
                                     .createdAt(new Date())
                                     .build();

@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -86,6 +88,7 @@ public class EZAdminOrderCollector extends AbstractOrderCollector {
                                 .auto(true)
                                 .data(objectMapper.writeValueAsString(order))
                                 .orderId(order.get("order_id").toString())
+                                .rawEventId(UUID.randomUUID().toString())
                                 .publishedAt(ArgoDateUtil.getDate(orderDate.startsWith("0000-00-00") ? collectDate : orderDate))
                                 .createdAt(new Date())
                                 .build();

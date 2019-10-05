@@ -17,6 +17,6 @@ public class OrderMetadata {
     private Long deliveryPrice;
     private Long cancelPrice;
     private Long cancelDeliveryPrice;
-    private Date collectedAt;
-    private Date orderedAt;
+    private Date collectedAt; // dataRows.collect_date + dataRows.collect_time
+    private Date orderedAt; // dataRows.order_date + dataRows.order_time
 }

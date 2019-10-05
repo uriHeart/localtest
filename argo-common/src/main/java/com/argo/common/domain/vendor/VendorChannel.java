@@ -1,7 +1,6 @@
 package com.argo.common.domain.vendor;
 
 import com.argo.common.domain.channel.SalesChannel;
-import com.argo.common.domain.common.enums.YesOrNo;
 import com.argo.common.domain.common.jpa.CreatedAtListener;
 import com.argo.common.domain.common.jpa.SystemMetadata;
 import com.argo.common.domain.common.jpa.UpdatedAtListener;

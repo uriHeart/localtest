@@ -39,15 +39,15 @@ public class OrderVendorItemLifecycle {
 
     @Column("source_item_id")
     @CassandraType(type = DataType.Name.TEXT)
-    private String sourceItemId;
+    private String sourceItemId; // dataRows.product_id
 
     @Column("source_item_name")
     @CassandraType(type = DataType.Name.TEXT)
-    private String sourceItemName;
+    private String sourceItemName; // dataRows.product_name
 
     @Column("source_item_option")
     @CassandraType(type = DataType.Name.TEXT)
-    private String sourceItemOption;
+    private String sourceItemOption; // dataRows.options
 
     @Column("metadata")
     @CassandraType(type = DataType.Name.TEXT)
@@ -67,7 +67,7 @@ public class OrderVendorItemLifecycle {
 
     @Column("quantity")
     @CassandraType(type = DataType.Name.INT)
-    private Long quantity;
+    private Long quantity; //dataRows.qty
 
     @Column("replay_count")
     @CassandraType(type = DataType.Name.INT)

@@ -1,7 +1,6 @@
 package com.argo.common.domain.vendor;
 
 import com.argo.common.domain.channel.SalesChannel;
-import com.argo.common.domain.common.enums.YesOrNo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

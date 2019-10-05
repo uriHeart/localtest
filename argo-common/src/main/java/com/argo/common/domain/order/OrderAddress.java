@@ -38,7 +38,7 @@ public class OrderAddress {
 
     @Column("original_postalcode")
     @CassandraType(type = DataType.Name.TEXT)
-    private String originalPostalCode;
+    private String originalPostalCode; //dataRows.recv_zip
 
     @Column("refined_address")
     @CassandraType(type = DataType.Name.TEXT)

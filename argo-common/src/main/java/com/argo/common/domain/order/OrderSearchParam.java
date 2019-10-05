@@ -10,6 +10,7 @@ import java.util.Date;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class OrderSearchParam {
     private String salesChannelCode;
+    private Long salesChannelId;
     private Long vendorId;
     private Date from;
     private Date to;
