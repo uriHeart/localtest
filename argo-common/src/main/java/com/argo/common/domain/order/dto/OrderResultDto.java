@@ -87,7 +87,7 @@ public class OrderResultDto {
                                 .build())
                         .build())
                 .orderProduct(OrderProductDto.builder()
-                        .vendorItemId(vendorItem.getVendorItemId().toString())
+                        .vendorItemId(vendorItem.getVendorItemId())
                         .productId(vendorItem.getSourceItemId())
                         .productName(vendorItem.getSourceItemName())
                         .productDesc(vendorItem.getSourceItemOption())

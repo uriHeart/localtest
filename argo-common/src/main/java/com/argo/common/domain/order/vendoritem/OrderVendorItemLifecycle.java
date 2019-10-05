@@ -29,9 +29,9 @@ public class OrderVendorItemLifecycle {
     @CassandraType(type = DataType.Name.VARCHAR)
     private String orderId;
 
-    @PrimaryKeyColumn(ordinal = 3, type = PrimaryKeyType.PARTITIONED, name = "vendor_item_id")
-    @CassandraType(type = DataType.Name.VARCHAR)
-    private UUID vendorItemId;
+    @PrimaryKeyColumn(ordinal = 3, type = PrimaryKeyType.CLUSTERED, name = "vendor_item_id")
+    @CassandraType(type = DataType.Name.TEXT)
+    private String vendorItemId;
 
     @PrimaryKeyColumn(ordinal = 4, type = PrimaryKeyType.CLUSTERED, name = "published_at")
     @CassandraType(type = DataType.Name.TIMESTAMP)

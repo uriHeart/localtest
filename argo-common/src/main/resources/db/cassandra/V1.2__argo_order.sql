@@ -59,15 +59,16 @@ CREATE TABLE argo.order_address (
  AND read_repair_chance = 0.0
  AND speculative_retry = '99PERCENTILE';
 
-CREATE TABLE argo.vendor_item_mapping (
+CREATE TABLE argo.external_vendor_item_mapping (
   vendor_id bigint,
   source_item_id text,
   source_item_name text,
   source_item_option text,
-  vendor_item_id uuid,
+  vendor_item_id text,
   created_at timestamp,
-  PRIMARY KEY ((vendor_id, source_item_id, source_item_name, source_item_option))
-) bloom_filter_fp_chance = 0.01
+  PRIMARY KEY ((vendor_id, source_item_id, source_item_name, source_item_option), vendor_item_id)
+) WITH CLUSTERING ORDER BY (vendor_item_id DESC)
+ AND bloom_filter_fp_chance = 0.01
  AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
  AND comment = ''
  AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
@@ -86,7 +87,7 @@ CREATE TABLE argo.order_vendor_item_lifecycle (
   vendor_id bigint,
   channel_id bigint,
   order_id text,
-  vendor_item_id uuid,
+  vendor_item_id text,
   source_item_id text,
   source_item_name text,
   source_item_option text,
@@ -98,8 +99,8 @@ CREATE TABLE argo.order_vendor_item_lifecycle (
   sku_mappings text,
   created_at timestamp,
   published_at timestamp,
-  PRIMARY KEY ((vendor_id, channel_id, order_id, vendor_item_id), published_at)
-) WITH CLUSTERING ORDER BY (published_at DESC)
+  PRIMARY KEY ((vendor_id, channel_id, order_id), vendor_item_id, published_at)
+) WITH CLUSTERING ORDER BY (vendor_item_id desc, published_at DESC)
  AND bloom_filter_fp_chance = 0.01
  AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
  AND comment = ''

@@ -75,7 +75,7 @@ public class OrderService {
     public Mono<Void> addOrder(Long vendorId, Long channelId, String orderId, String vendoItemId) {
        Mono<ArgoOrder> order = reactiveOrderRepository.findFirstByVendorIdAndChannelIdAndOrderIdOrderByPublishedAtDesc(vendorId, channelId, orderId);
        Mono<OrderAddress> orderAddress = reactiveOrderAddressRepository.findFirstByVendorIdAndChannelIdAndOrderIdOrderByPublishedAtDesc(vendorId, channelId, orderId);
-       Mono<OrderVendorItemLifecycle> vendorItem = reactiveOrderVendorItemLifecycleRepository.findFirstByVendorIdAndChannelIdAndOrderIdAndVendorItemIdOrderByPublishedAtDesc(vendorId, channelId, orderId, UUID.fromString(vendoItemId));
+       Mono<OrderVendorItemLifecycle> vendorItem = reactiveOrderVendorItemLifecycleRepository.findFirstByVendorIdAndChannelIdAndOrderIdAndVendorItemIdOrderByVendorItemIdDescPublishedAtDesc(vendorId, channelId, orderId, vendoItemId);
        return Mono.create(sink -> {
            Mono.zip(order, orderAddress, vendorItem).subscribe(o -> this.buildOrderDocument(o.getT1(), o.getT2(), Lists.newArrayList(o.getT3())));
            sink.success();
@@ -86,7 +86,7 @@ public class OrderService {
         StringJoiner strJoiner = new StringJoiner(",");
         strJoiner.add(String.valueOf(order.getVendorId()))
                 .add(String.valueOf(order.getChannelId()))
-                .add(order.getOrderId()).add(item.getVendorItemId().toString());
+                .add(order.getOrderId()).add(item.getVendorItemId());
         return Hashing.sha256()
                 .hashString(strJoiner.toString(), StandardCharsets.UTF_8)
                 .toString();
@@ -107,7 +107,7 @@ public class OrderService {
                         .salesChannelName(salesChannel.getName())
                         .recipientName(orderAddress.getRecipient().getName())
                         .originalPostalCode(orderAddress.getOriginalPostalCode())
-                        .vendorItemId(item.getVendorItemId().toString())
+                        .vendorItemId(item.getVendorItemId())
                         .vendorItemLifeCycleStatus(item.getState())
                         .originalPrice(item.getMetadata().getOriginalPrice())
                         .paymentAmount(item.getMetadata().getPaymentAmount())
@@ -230,8 +230,7 @@ public class OrderService {
         if (param.getVendorItemId() == null) {
             return Mono.empty();
         }
-        UUID vendorItemId = UUID.fromString(param.getVendorItemId());
         return reactiveOrderVendorItemLifecycleRepository
-                .findFirstByVendorIdAndChannelIdAndOrderIdAndVendorItemIdOrderByPublishedAtDesc(param.getVendorId(), param.getChannelId(), param.getOrderId(), vendorItemId);
+                .findFirstByVendorIdAndChannelIdAndOrderIdAndVendorItemIdOrderByVendorItemIdDescPublishedAtDesc(param.getVendorId(), param.getChannelId(), param.getOrderId(), param.getVendorItemId());
     }
 }
