@@ -16,6 +16,7 @@ public class OrderDoc {
     private Long channelId;
     private String salesChannelCode;
     private String salesChannelName;
+    private Date publishedAt;
     private Date orderedAt;
     private Date collectedAt;
 

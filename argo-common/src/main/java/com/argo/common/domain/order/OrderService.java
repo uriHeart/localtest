@@ -100,6 +100,7 @@ public class OrderService {
                         .orderId(order.getOrderId())
                         .vendorId(order.getVendorId())
                         .channelId(order.getChannelId())
+                        .publishedAt(item.getPublishedAt())
                         .collectedAt(order.getMetadata().getCollectedAt())
                         .orderedAt(order.getMetadata().getOrderedAt())
                         .orderStatus(order.getState())
