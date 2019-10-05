@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ExternalVendorItemMappingRepository extends CassandraRepository<ExternalVendorItemMapping, Long> {
+    ExternalVendorItemMapping findFirstByVendorIdAndSourceItemIdAndSourceItemNameAndSourceItemOptionOrderByVendorItemIdDesc(Long vendorId, String sourceItemId, String sourceItemName, String sourceItemOption);
 }

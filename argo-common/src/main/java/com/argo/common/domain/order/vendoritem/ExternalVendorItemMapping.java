@@ -33,8 +33,8 @@ public class ExternalVendorItemMapping {
     private String sourceItemOption;
 
     @Column("vendor_item_id")
-    @CassandraType(type = DataType.Name.UUID)
-    private UUID vendorItemId;
+    @CassandraType(type = DataType.Name.TEXT)
+    private String vendorItemId;
 
     @Column("created_at")
     @CassandraType(type = DataType.Name.TIMESTAMP)
