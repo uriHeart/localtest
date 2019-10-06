@@ -16,10 +16,15 @@ import java.util.Date;
 
 @Data
 @Builder
-@Table("argo_order")
-@NoArgsConstructor
 @AllArgsConstructor
+@Table("argo_order")
 public class ArgoOrder {
+
+    public ArgoOrder() {
+        this.replayCount = 0;
+        this.createdAt = new Date();
+    }
+
     @PrimaryKeyColumn(ordinal = 0, type = PrimaryKeyType.PARTITIONED, name = "vendor_id")
     @CassandraType(type = DataType.Name.BIGINT)
     private Long vendorId;

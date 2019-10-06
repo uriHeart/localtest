@@ -34,7 +34,6 @@ public class ConversionRule {
     private String conversionTemplateTargetId;
 
 
-
     private String sqlString;
 
     public Class[] getOperatorParamsAsClass() {

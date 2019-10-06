@@ -6,8 +6,6 @@ import com.argo.common.domain.common.data.conversion.template.ConversionTemplate
 import com.argo.common.domain.common.data.conversion.template.ConversionType;
 import com.argo.common.domain.common.util.DateUtil;
 import com.argo.common.domain.common.util.ReflectionUtil;
-import com.argo.common.domain.order.ArgoOrder;
-import com.argo.common.domain.order.OrderRepository;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,23 +13,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.commons.lang3.time.DateUtils;
-import org.apache.commons.math3.util.ArithmeticUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
-import org.springframework.data.repository.support.Repositories;
 import org.springframework.objenesis.instantiator.util.ClassUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.WebApplicationContext;
-import reactor.core.publisher.Mono;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +42,7 @@ public class DataConversionService {
     private ConversionTemplateService conversionTemplateService;
 
     public Map<String, Object> convert(ConvertibleData sourceData) {
-        Map<String, ConversionTemplate> conversionTemplateMap = conversionTemplateService.getTestTemplate(sourceData);
+        Map<String, ConversionTemplate> conversionTemplateMap = conversionTemplateService.getRawEventConversionTemplateMap(sourceData);
         Map<String, Object> result = conversionTemplateMap.entrySet().stream()
                 .collect(Collectors.toMap(
                         e -> e.getKey(),
@@ -89,14 +78,20 @@ public class DataConversionService {
         } else if(clazz.equals(Integer.class) || clazz.equals(int.class)) {
             if(jsonNode.isInt()) {
                 return jsonNode.asInt();
+            } else {
+                return Integer.valueOf(jsonNode.asText());
             }
         } else if(clazz.equals(Long.class) || clazz.equals(long.class)) {
             if(jsonNode.isNumber()) {
                 return jsonNode.asLong();
+            } else {
+                return Long.valueOf(jsonNode.asText());
             }
         } else if(clazz.equals(Double.class) || clazz.equals(double.class)) {
             if(jsonNode.isDouble()) {
                 return jsonNode.asDouble();
+            } else {
+                return Double.valueOf(jsonNode.asText());
             }
         } else if(clazz.equals(Date.class)) {
             String dateString = jsonNode.asText();
@@ -132,6 +127,12 @@ public class DataConversionService {
         ConversionType conversionType = conversionRule.getConversionType();
         Object targetValue = null;
         Object fieldValue = null;
+        Class fieldType = null;
+        try {
+            fieldType = target.getClass().getDeclaredField(conversionRule.getTargetField()).getType();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
 
         switch (conversionType) {
             case DIRECT:
@@ -152,12 +153,7 @@ public class DataConversionService {
                         .stream()
                         .mapToDouble(node -> Double.valueOf(node.asText()))
                         .sum();
-                Class fieldType = null;
-                try {
-                    fieldType = target.getClass().getDeclaredField(conversionRule.getTargetField()).getType();
-                } catch (NoSuchFieldException e) {
-                    e.printStackTrace();
-                }
+
                 if(fieldType.equals(Long.class) || fieldType.equals(long.class)) {
                     targetValue = doubleSum.longValue();
                 } else if(fieldType.equals(Integer.class) || fieldType.equals(int.class)) {
@@ -167,13 +163,19 @@ public class DataConversionService {
             case JSON:
                 break;
             case CONVERSION_TEMPLATE:
-                ConversionTemplate conversionTemplate = conversionTemplateService.getConversionTemplate(conversionRule.getConversionTemplateSourceId(), conversionRule.getConversionTemplateTargetId());
+                ConversionTemplate conversionTemplate = conversionTemplateService.conversionTemplateBySourceIdAndTargetId(conversionRule.getConversionTemplateSourceId(), conversionRule.getConversionTemplateTargetId());//getConversionTemplate(conversionRule.getConversionTemplateSourceId(), conversionRule.getConversionTemplateTargetId());
                 targetValue = convert(jsonNode, getClassWithName(conversionTemplate.getTargetId()), conversionTemplate);
+                if(fieldType.equals(String.class)) {
+                    try {
+                        targetValue = mapper.writeValueAsString(targetValue);
+                    } catch (JsonProcessingException jsonException) {
+                        jsonException.printStackTrace();
+                    }
+                }
                 break;
             default:
                 throw new UnsupportedOperationException("Not Supported Conversion Type");
         }
-
         ReflectionUtil.setFieldValue(target, conversionRule.getTargetField(), targetValue);
     }
 
