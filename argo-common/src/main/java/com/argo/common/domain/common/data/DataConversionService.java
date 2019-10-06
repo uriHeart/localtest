@@ -4,33 +4,35 @@ import com.argo.common.domain.common.data.conversion.template.ConversionRule;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplateService;
 import com.argo.common.domain.common.data.conversion.template.ConversionType;
-import com.argo.common.domain.common.util.DateUtil;
+import com.argo.common.domain.common.util.ConversionUtil;
 import com.argo.common.domain.common.util.ReflectionUtil;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.objenesis.instantiator.util.ClassUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.WebApplicationContext;
+import org.testng.collections.Lists;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class DataConversionService {
+public class DataConversionService implements ApplicationContextAware {
 
-    @Autowired
-    private WebApplicationContext appContext;
+    private ApplicationContext appContext;
 
     @Autowired
     private ObjectMapper mapper;
@@ -58,47 +60,32 @@ public class DataConversionService {
     }
 
     public Object convert(ConvertibleData sourceData, Class targetClass, ConversionTemplate template) {
-        Object targetInstance = ClassUtils.newInstance(targetClass);
         String json = convertibleDataToJsonString(sourceData);
         JsonNode jsonNode = jsonStringToJsonObject(json, sourceData);
         List<ConversionRule> conversionRules = template.getRules();
-        conversionRules.stream().forEach(rule -> applyConversionRule(rule, jsonNode, targetInstance));
-        return targetInstance;
-    }
-
-    private Object getJsonValueWithType(JsonNode jsonNode, Class clazz) {
-        if(clazz.equals(String.class)) {
-            if(jsonNode.isTextual()) {
-                return jsonNode.asText();
-            }
-        } else if(clazz.equals(Boolean.class) || clazz.equals(boolean.class)) {
-            if(jsonNode.isBoolean()) {
-                return jsonNode.asBoolean();
-            }
-        } else if(clazz.equals(Integer.class) || clazz.equals(int.class)) {
-            if(jsonNode.isInt()) {
-                return jsonNode.asInt();
+        if(template.getListReference() == null || template.getListReference().isEmpty()) {
+            Object targetInstance = ClassUtils.newInstance(targetClass);
+            conversionRules.stream().forEach(rule -> applyConversionRule(rule, jsonNode, targetInstance));
+            return targetInstance;
+        } else {
+           List list = Lists.newArrayList();
+           String listRef = template.getListReference();
+           ObjectNode originalObjNode = (ObjectNode) jsonNode;
+           JsonNode arrNode = jsonNode.findValue(template.getListReference());
+           originalObjNode.findParent(listRef).remove(listRef);
+           if(arrNode.isArray()) {
+               for (JsonNode node : arrNode) {
+                    ObjectNode objNode = (ObjectNode) node;
+                    objNode.set("originalData", originalObjNode);
+                    Object targetInstance = ClassUtils.newInstance(targetClass);
+                    conversionRules.stream().forEach(rule -> applyConversionRule(rule, objNode, targetInstance));
+                    list.add(targetInstance);
+                }
             } else {
-                return Integer.valueOf(jsonNode.asText());
+                throw new IllegalStateException("List Reference : " + template.getListReference() + " is not an array format");
             }
-        } else if(clazz.equals(Long.class) || clazz.equals(long.class)) {
-            if(jsonNode.isNumber()) {
-                return jsonNode.asLong();
-            } else {
-                return Long.valueOf(jsonNode.asText());
-            }
-        } else if(clazz.equals(Double.class) || clazz.equals(double.class)) {
-            if(jsonNode.isDouble()) {
-                return jsonNode.asDouble();
-            } else {
-                return Double.valueOf(jsonNode.asText());
-            }
-        } else if(clazz.equals(Date.class)) {
-            String dateString = jsonNode.asText();
-            return DateUtil.parseDateString(dateString);
+           return list;
         }
-
-        return jsonNode.asText();
     }
 
     public Object convert(JsonNode jsonNode, Class targetClass, ConversionTemplate template) {
@@ -117,7 +104,7 @@ public class DataConversionService {
         try {
             targetField = target.getClass().getDeclaredField(conversionRule.getTargetField());
             fieldType = targetField.getType();
-            fieldValue = getJsonValueWithType(jsonNode, fieldType);
+            fieldValue = ConversionUtil.getJsonValueWithType(jsonNode, fieldType);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
@@ -145,8 +132,11 @@ public class DataConversionService {
                 targetValue = getTargetValueBySql((String) fieldValue, conversionRule.getSqlString());
                 break;
             case OPERATION:
-                fieldValue = getFieldValue(conversionRule, jsonNode.findValue(conversionRule.getSourceField()), target);
-                targetValue = getTargetValueByInvocation(fieldValue, conversionRule.getOperatorParamsAsClass(), conversionRule.getOperatorClass(), conversionRule.getOperatorMethod());
+                List<String> values = Lists.newArrayList(conversionRule.getOperatorParams().keySet())
+                        .stream().map(value -> jsonNode.findValue(value).asText()).collect(Collectors.toList());
+                Class[] paramClasses = conversionRule.getOperatorParamsAsClasses();
+                Object[] paramValues = ConversionUtil.getOperatorParamsValues(paramClasses, values.toArray(new String[0]));
+                targetValue = getTargetValueByInvocation(conversionRule.getOperatorClass(), conversionRule.getOperatorMethod(), paramClasses, paramValues);
                 break;
             case AGGREGATE:
                 Double doubleSum = jsonNode.findValues(conversionRule.getSourceField())
@@ -184,11 +174,12 @@ public class DataConversionService {
         return null;
     }
 
-    private Object getTargetValueByInvocation(Object sourceValue, Class[] sourceType, String invokingClass, String invokingMethod) {
+    private Object getTargetValueByInvocation(String invokingClass, String invokingMethod, Class[] sourceTypes, Object[] sourceValues) {
         Object result = null;
         try {
-            Method method = appContext.getBean(invokingClass).getClass().getMethod(invokingMethod, sourceType);
-            result = method.invoke(sourceValue);
+            Object invokingClassBean = appContext.getBean(invokingClass);
+            Method method = invokingClassBean.getClass().getMethod(invokingMethod, sourceTypes);
+            result = method.invoke(invokingClassBean, sourceValues);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (IllegalAccessException | InvocationTargetException e) {
@@ -240,5 +231,9 @@ public class DataConversionService {
 
     private List<Field> findJsonProperties(Class clazz) {
         return FieldUtils.getFieldsListWithAnnotation(clazz, JsonProperty.class);
+    }
+
+    public void setApplicationContext(org.springframework.context.ApplicationContext applicationContext) throws BeansException {
+        this.appContext = applicationContext;
     }
 }

@@ -4,6 +4,8 @@ import com.argo.common.domain.common.data.ConvertibleData;
 import com.argo.common.domain.common.data.conversion.template.address.*;
 import com.argo.common.domain.common.data.conversion.template.order.ArgoOrderConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.order.OrderMetadataConversionTemplate;
+import com.argo.common.domain.common.data.conversion.template.vendoritem.OrderVendorItemLifecycleConversionTemplate;
+import com.argo.common.domain.common.data.conversion.template.vendoritem.OrderVendorItemMetadataConversionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +55,10 @@ public class ConversionTemplateService {
                 return getRecipientTemplate();
             case "2-null-DeliveryRequest-com.argo.common.domain.order.DeliveryRequest":
                 return getDeliveryRequestTemplate();
+            case "2-null-com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle":
+                return getOrderVendorItemLifecycleTemplate();
+            case "2-null-OrderVendorItemMetadata-com.argo.common.domain.order.vendoritem.OrderVendorItemMetadata":
+                return getOrderVendorItemMetadataTemplate();
         }
         return null;
     }
@@ -61,17 +67,11 @@ public class ConversionTemplateService {
         return ArgoOrderConversionTemplate.getArgoOrderTemplate();
     }
 
-    public ConversionTemplate getArgoOrderMetadataTemplate() {
-        return OrderMetadataConversionTemplate.getOrderMetadataTemplate();
-    }
+    public ConversionTemplate getArgoOrderMetadataTemplate() { return OrderMetadataConversionTemplate.getOrderMetadataTemplate(); }
 
-    public ConversionTemplate getOrderAddressTemplate() {
-        return OrderAddressConversionTemplate.getOrderAddressTemplate();
-    }
+    public ConversionTemplate getOrderAddressTemplate() { return OrderAddressConversionTemplate.getOrderAddressTemplate(); }
 
-    public ConversionTemplate getOriginalAddressTemplate() {
-        return OriginalAddressConversionTemplate.getOriginalAddressTemplate();
-    }
+    public ConversionTemplate getOriginalAddressTemplate() { return OriginalAddressConversionTemplate.getOriginalAddressTemplate(); }
 
     public ConversionTemplate getOrdererTemplate() {
         return OrdererConversionTemplate.getOrdererTemplate();
@@ -81,18 +81,22 @@ public class ConversionTemplateService {
         return RecipientConversionTemplate.getRecipientTemplate();
     }
 
-    public ConversionTemplate getDeliveryRequestTemplate() {
-        return DeliveryRequestConversionTemplate.getDeliveryRequestTemplate();
-    }
+    public ConversionTemplate getDeliveryRequestTemplate() { return DeliveryRequestConversionTemplate.getDeliveryRequestTemplate(); }
+
+    public ConversionTemplate getOrderVendorItemLifecycleTemplate() { return OrderVendorItemLifecycleConversionTemplate.getOrderVendorItemLifecycleTemplate(); }
+
+    public ConversionTemplate getOrderVendorItemMetadataTemplate() { return OrderVendorItemMetadataConversionTemplate.getOrderVendorItemMetadataTemplate(); }
 
     public Map<String, ConversionTemplate> getRawEventConversionTemplateMap(ConvertibleData convertibleData) {
         Map templateMap = new HashMap<String, ConversionTemplate>();
 
         ConversionTemplate argoOrderTemplate = getArgoOrderTemplate();
         ConversionTemplate orderAddressTemplate = getOrderAddressTemplate();
+        ConversionTemplate vendorItemLifecycleTemplate = getOrderVendorItemLifecycleTemplate();
 
         templateMap.put(argoOrderTemplate.getTargetId(), argoOrderTemplate);
         templateMap.put(orderAddressTemplate.getTargetId(), orderAddressTemplate);
+        templateMap.put(vendorItemLifecycleTemplate.getTargetId(), vendorItemLifecycleTemplate);
 
         return templateMap;
 

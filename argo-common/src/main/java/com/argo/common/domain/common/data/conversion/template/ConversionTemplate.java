@@ -34,7 +34,12 @@ public class ConversionTemplate {
     @CassandraType(type = DataType.Name.TIMESTAMP)
     private Date expiredAt;
 
-    @Column
+    @Column("list_reference")
+    @CassandraType(type = DataType.Name.TEXT)
+    private String listReference;
+
+    @Column("rules")
     @CassandraType(type = DataType.Name.UDT, userTypeName = "conversion_rules")
     private List<ConversionRule> rules;
+
 }

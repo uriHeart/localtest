@@ -2,8 +2,10 @@ package com.argo.common.domain.order.vendoritem;
 
 import com.argo.common.domain.common.util.JsonUtil;
 import com.datastax.driver.core.DataType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.Column;
@@ -15,8 +17,15 @@ import java.util.UUID;
 
 @Data
 @Builder
+@AllArgsConstructor
 @Table("order_vendor_item_lifecycle")
 public class OrderVendorItemLifecycle {
+
+    public OrderVendorItemLifecycle() {
+        this.replayCount = 0;
+        this.createdAt = new Date();
+    }
+
     @PrimaryKeyColumn(ordinal = 0, type = PrimaryKeyType.PARTITIONED, name = "vendor_id")
     @CassandraType(type = DataType.Name.BIGINT)
     private Long vendorId;

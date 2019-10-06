@@ -1,16 +1,16 @@
 package com.argo.common.domain.common.data.conversion.template;
 
+import com.argo.common.domain.common.util.ConversionUtil;
+import com.argo.common.domain.common.util.DateUtil;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.cassandra.core.mapping.UserDefinedType;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -36,8 +36,8 @@ public class ConversionRule {
 
     private String sqlString;
 
-    public Class[] getOperatorParamsAsClass() {
-        List<Class> classes = ClassUtils.convertClassNamesToClasses(new ArrayList(this.operatorParams.keySet()));
+    public Class[] getOperatorParamsAsClasses() {
+        List<Class> classes = ClassUtils.convertClassNamesToClasses(new ArrayList(this.operatorParams.values()));
         return classes.toArray(new Class[0]);
     }
 }
