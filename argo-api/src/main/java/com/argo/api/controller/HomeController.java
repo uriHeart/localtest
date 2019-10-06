@@ -30,11 +30,11 @@ public class HomeController {
 
     @GetMapping(value = "/order/rawEventConversionTest")
     @ResponseStatus(value = HttpStatus.OK)
-    public void test() {
+    public String test() {
         RawEvent rawEvent = rawEventRepository.findFirstByVendorIdAndChannelIdAndOrderId(1L, 2L, "[20190905-0000016]");
         Map<String, Object> map = dataConversionService.convert(rawEvent);
         orderService.saveOrder((ArgoOrder) map.get("com.argo.common.domain.order.ArgoOrder"), (OrderAddress) map.get("com.argo.common.domain.order.OrderAddress"), (List<OrderVendorItemLifecycle>) map.get("com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle"));
-        map.toString();
+        return map.toString();
     }
 
     @GetMapping("/home")

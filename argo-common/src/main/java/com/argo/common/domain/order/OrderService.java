@@ -65,9 +65,9 @@ public class OrderService {
     }
 
     public void saveOrder(ArgoOrder order, OrderAddress orderAddress, List<OrderVendorItemLifecycle> orderVendorItemLifecycles) {
-        reactiveOrderRepository.save(order);
-        reactiveOrderAddressRepository.save(orderAddress);
-        reactiveOrderVendorItemLifecycleRepository.saveAll(orderVendorItemLifecycles);
+        reactiveOrderRepository.save(order).subscribe();
+        reactiveOrderAddressRepository.save(orderAddress).subscribe();
+        reactiveOrderVendorItemLifecycleRepository.saveAll(orderVendorItemLifecycles).subscribe();
 
         this.buildOrderDocument(order, orderAddress, orderVendorItemLifecycles);
     }
