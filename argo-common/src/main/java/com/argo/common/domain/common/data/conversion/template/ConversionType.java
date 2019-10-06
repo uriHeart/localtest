@@ -5,4 +5,6 @@ public enum ConversionType {
     SQL,
     DIRECT,
     JSON,
+    AGGREGATE,
+    CONVERSION_TEMPLATE,
 }

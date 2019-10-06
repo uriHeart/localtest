@@ -27,8 +27,23 @@ public class ConversionTemplateService {
         return map;
     }
 
+    public ConversionTemplate getConversionTemplate(String sourceId, String targetId) {
+        return conversionTemplateRepository.findFirstBySourceIdAndTargetIdOrderByExpiredAtDesc(sourceId, targetId);
+    }
+
     public void save(ConversionTemplate conversionTemplate) {
         conversionTemplateRepository.save(conversionTemplate);
+    }
+
+
+    public ConversionTemplate getArgoOrderMetadataTemplate() {
+        return ConversionTemplate.builder()
+                .createdAt(new Date())
+                .expiredAt(null)
+                .sourceId("2-null-OrderMetadata")
+                .targetId("com.argo.common.domain.order.OrderMetadata")
+                .rules(getTestRuleForArgoOrderMetadata())
+                .build();
     }
 
     public Map<String, ConversionTemplate> getTestTemplate(ConvertibleData convertibleData) {
@@ -47,15 +62,55 @@ public class ConversionTemplateService {
         return map;
     }
 
+    private List<ConversionRule> getTestRuleForArgoOrderMetadata() {
+        List<ConversionRule> list = new ArrayList<>();
+
+        list.add(ConversionRule.builder()
+                .conversionType(ConversionType.DIRECT)
+                .sourceField("total_qty")
+                .targetField("totalQuantity")
+                .build());
+
+        list.add(ConversionRule.builder()
+                .conversionType(ConversionType.AGGREGATE)
+                .sourceField("prd_shop_price")
+                .targetField("totalPrice")
+                .build());
+        list.add(ConversionRule.builder()
+                .conversionType(ConversionType.DIRECT)
+                .sourceField("")
+                .targetField("deliveryPrice")
+                .build());
+        list.add(ConversionRule.builder()
+                .conversionType(ConversionType.DIRECT)
+                .sourceField("")
+                .targetField("cancelPrice")
+                .build());
+        list.add(ConversionRule.builder()
+                .conversionType(ConversionType.DIRECT)
+                .sourceField("collect_date" + "collect_time")
+                .targetField("collectedAt")
+                .build());
+        list.add(ConversionRule.builder()
+                .conversionType(ConversionType.DIRECT)
+                .sourceField("order_date" + "order_time")
+                .targetField("orderedAt")
+                .build());
+        return list;
+    }
+
     private List<ConversionRule> getTestRuleForArgoOrder() {
         List<ConversionRule> list = new ArrayList<>();
         ArgoOrder order;
         RawEvent event;
-        /*Map map = new HashMap<>();
-        map.put();
-        map.put();
-        map.put();
-        map.put();*/
+        Map map = new HashMap<>();
+        map.put("totalQuantity", "total_qty");
+        map.put("totalPrice", "");
+        map.put("deliveryPrice", "");
+        map.put("cancelPrice", "");
+        map.put("cancelDeliveryPrice", "");
+        map.put("collectedAt", "collect_date" + "collect_time");
+        map.put("orderedAt", "order_date" + "order_time");
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
@@ -98,11 +153,11 @@ public class ConversionTemplateService {
                 .sourceField("event")
                 .targetField("event")
                 .build());
-        /*list.add(ConversionRule.builder()
+        list.add(ConversionRule.builder()
                 .conversionType(ConversionType.JSON)
-                .jsonMap()
-                .targetField("event")
-                .build());*/
+                .jsonMap(map)
+                .targetField("")
+                .build());
 
         return list;
     }

@@ -17,6 +17,7 @@ import com.google.gson.JsonParser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.commons.math3.util.ArithmeticUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
@@ -105,39 +106,75 @@ public class DataConversionService {
         return jsonNode.asText();
     }
 
-    private void applyConversionRule(ConversionRule conversionRule, JsonNode jsonNode, Object target) {
-        ConversionType conversionType = conversionRule.getConversionType();
+    public Object convert(JsonNode jsonNode, Class targetClass, ConversionTemplate template) {
+        Object targetInstance = ClassUtils.newInstance(targetClass);
+        List<ConversionRule> conversionRules = template.getRules();
+        conversionRules.stream().forEach(rule -> applyConversionRule(rule, jsonNode, targetInstance));
+        return targetInstance;
+    }
+
+    private Object getFieldValue(ConversionRule conversionRule, JsonNode jsonNode, Object target) {
         Object fieldValue = null;
         Field targetField = null;
         Class fieldType = null;
-        Object targetValue = null;
+
 
         try {
             targetField = target.getClass().getDeclaredField(conversionRule.getTargetField());
             fieldType = targetField.getType();
-            fieldValue = getJsonValueWithType(jsonNode.findValue(conversionRule.getSourceField()), fieldType);
+            fieldValue = getJsonValueWithType(jsonNode, fieldType);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
-
+        return fieldValue;
+    }
+    private void applyConversionRule(ConversionRule conversionRule, JsonNode jsonNode, Object target) {
+        ConversionType conversionType = conversionRule.getConversionType();
+        Object targetValue = null;
+        Object fieldValue = null;
 
         switch (conversionType) {
             case DIRECT:
                 // default so do nothing for now
+                fieldValue = getFieldValue(conversionRule, jsonNode.findValue(conversionRule.getSourceField()), target);
                 targetValue = fieldValue;
                 break;
             case SQL:
+                fieldValue = getFieldValue(conversionRule, jsonNode.findValue(conversionRule.getSourceField()), target);
                 targetValue = getTargetValueBySql((String) fieldValue, conversionRule.getSqlString());
                 break;
             case OPERATION:
-                targetValue = getTargetValueByInvocation(fieldValue, fieldType, conversionRule.getOperatorClass(), conversionRule.getOperatorMethod());
+                fieldValue = getFieldValue(conversionRule, jsonNode.findValue(conversionRule.getSourceField()), target);
+                targetValue = getTargetValueByInvocation(fieldValue, conversionRule.getOperatorParamsAsClass(), conversionRule.getOperatorClass(), conversionRule.getOperatorMethod());
+                break;
+            case AGGREGATE:
+                Double doubleSum = jsonNode.findValues(conversionRule.getSourceField())
+                        .stream()
+                        .mapToDouble(node -> Double.valueOf(node.asText()))
+                        .sum();
+                Class fieldType = null;
+                try {
+                    fieldType = target.getClass().getDeclaredField(conversionRule.getTargetField()).getType();
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                }
+                if(fieldType.equals(Long.class) || fieldType.equals(long.class)) {
+                    targetValue = doubleSum.longValue();
+                } else if(fieldType.equals(Integer.class) || fieldType.equals(int.class)) {
+                    targetValue = doubleSum.intValue();
+                }
+                break;
+            case JSON:
+                break;
+            case CONVERSION_TEMPLATE:
+                ConversionTemplate conversionTemplate = conversionTemplateService.getConversionTemplate(conversionRule.getConversionTemplateSourceId(), conversionRule.getConversionTemplateTargetId());
+                targetValue = convert(jsonNode, getClassWithName(conversionTemplate.getTargetId()), conversionTemplate);
                 break;
             default:
                 throw new UnsupportedOperationException("Not Supported Conversion Type");
         }
 
-
-        ReflectionUtil.setFieldValue(target, targetField.getName(), targetValue);
+        ReflectionUtil.setFieldValue(target, conversionRule.getTargetField(), targetValue);
     }
 
 
@@ -145,7 +182,7 @@ public class DataConversionService {
         return null;
     }
 
-    private Object getTargetValueByInvocation(Object sourceValue, Class sourceType, String invokingClass, String invokingMethod) {
+    private Object getTargetValueByInvocation(Object sourceValue, Class[] sourceType, String invokingClass, String invokingMethod) {
         Object result = null;
         try {
             Method method = appContext.getBean(invokingClass).getClass().getMethod(invokingMethod, sourceType);

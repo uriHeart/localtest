@@ -27,7 +27,7 @@ public class HomeController {
   @GetMapping(value = "/order/rawEventConversionTest")
   @ResponseStatus(value = HttpStatus.OK)
   public void test() {
-    RawEvent rawEvent = rawEventRepository.findByVendorIdAndChannelIdAndOrderId(1L, 2L, "[20190905-0000016]");
+    RawEvent rawEvent = rawEventRepository.findFirstByVendorIdAndChannelIdAndOrderId(1L, 2L, "[20190905-0000016]");
     Map<String, Object> map = dataConversionService.convert(rawEvent);
     map.toString();
   }

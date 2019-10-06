@@ -10,4 +10,5 @@ import java.util.List;
 public interface ConversionTemplateRepository extends CassandraRepository<ConversionTemplate, MapId> {
     List<ConversionTemplate> findAllBySourceId(String sourceId);
     ConversionTemplate findFirstBySourceIdAndTargetIdOrderByExpiredAtDesc(String sourceId, String targetId);
+
 }
