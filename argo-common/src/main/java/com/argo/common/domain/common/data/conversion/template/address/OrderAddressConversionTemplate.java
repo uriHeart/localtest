@@ -3,10 +3,12 @@ package com.argo.common.domain.common.data.conversion.template.address;
 import com.argo.common.domain.common.data.conversion.template.ConversionRule;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.ConversionType;
+import com.google.common.collect.Maps;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class OrderAddressConversionTemplate {
     public static ConversionTemplate getOrderAddressTemplate() {
@@ -28,9 +30,14 @@ public class OrderAddressConversionTemplate {
                 .targetField("vendorId")
                 .build());
 
+        Map<String, String> channelIdParams = Maps.newLinkedHashMap();
+        channelIdParams.put("vendorId", "java.lang.Long");
+        channelIdParams.put("shop_id", "java.lang.String");
         list.add(ConversionRule.builder()
-                .conversionType(ConversionType.DIRECT)
-                .sourceField("channelId")
+                .conversionType(ConversionType.OPERATION)
+                .operatorClass("vendorService")
+                .operatorMethod("getChannelId")
+                .operatorParams(channelIdParams)
                 .targetField("channelId")
                 .build());
 

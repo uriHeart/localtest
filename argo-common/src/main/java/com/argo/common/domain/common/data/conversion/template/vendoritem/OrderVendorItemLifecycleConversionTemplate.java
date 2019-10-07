@@ -32,9 +32,14 @@ public class OrderVendorItemLifecycleConversionTemplate {
                 .targetField("vendorId")
                 .build());
 
+        Map<String, String> channelIdParams = Maps.newLinkedHashMap();
+        channelIdParams.put("vendorId", "java.lang.Long");
+        channelIdParams.put("shop_id", "java.lang.String");
         list.add(ConversionRule.builder()
-                .conversionType(ConversionType.DIRECT)
-                .sourceField("channelId")
+                .conversionType(ConversionType.OPERATION)
+                .operatorClass("vendorService")
+                .operatorMethod("getChannelId")
+                .operatorParams(channelIdParams)
                 .targetField("channelId")
                 .build());
 
@@ -44,17 +49,16 @@ public class OrderVendorItemLifecycleConversionTemplate {
                 .targetField("orderId")
                 .build());
 
-        Map<String, String> params = Maps.newLinkedHashMap();
-        params.put("vendorId", "java.lang.Long");
-        params.put("product_id", "java.lang.String");
-        params.put("product_name", "java.lang.String");
-        params.put("options", "java.lang.String");
+        Map<String, String> vendorItemIdParams = Maps.newLinkedHashMap();
+        vendorItemIdParams.put("vendorId", "java.lang.Long");
+        vendorItemIdParams.put("product_id", "java.lang.String");
+        vendorItemIdParams.put("product_name", "java.lang.String");
+        vendorItemIdParams.put("options", "java.lang.String");
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.OPERATION)
-                .sourceField("orderId")
                 .operatorClass("externalVendorItemMappingService")
                 .operatorMethod("getVendorItem")
-                .operatorParams(params)
+                .operatorParams(vendorItemIdParams)
                 .targetField("vendorItemId")
                 .build());
 

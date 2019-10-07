@@ -1,24 +1,21 @@
 package com.argo.common.domain.common.data.conversion.template;
 
-import com.argo.common.domain.common.util.ConversionUtil;
-import com.argo.common.domain.common.util.DateUtil;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.cassandra.core.mapping.UserDefinedType;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
 @UserDefinedType("conversion_rule")
 public class ConversionRule {
     private String sourceField;
-
     private String targetField;
 
     @Enumerated(EnumType.STRING)
