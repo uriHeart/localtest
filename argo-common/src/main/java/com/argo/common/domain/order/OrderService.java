@@ -155,7 +155,7 @@ public class OrderService {
         } else {
             if (param.getFrom() != null) {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                filter.filter(QueryBuilders.rangeQuery("orderedAt")
+                filter.filter(QueryBuilders.rangeQuery("publishedAt")
                         .gte(formatter.format(param.getFrom())).lte(formatter.format(param.getTo())));
             }
 
