@@ -34,6 +34,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.UUID;
@@ -153,7 +154,9 @@ public class OrderService {
             filter.filter(QueryBuilders.matchQuery("orderId", param.getOrderId()));
         } else {
             if (param.getFrom() != null) {
-                filter.filter(QueryBuilders.rangeQuery("orderedAt").gte(param.getFrom()).lte(param.getTo()));
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                filter.filter(QueryBuilders.rangeQuery("orderedAt")
+                        .gte(formatter.format(param.getFrom())).lte(formatter.format(param.getTo())));
             }
 
             filter.filter(QueryBuilders.matchQuery("vendorId", param.getVendorId()));
