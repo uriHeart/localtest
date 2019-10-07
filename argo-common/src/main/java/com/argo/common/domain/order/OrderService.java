@@ -162,7 +162,7 @@ public class OrderService {
             filter.filter(QueryBuilders.matchQuery("vendorId", param.getVendorId()));
 
             if (param.getSalesChannelId() != null) {
-                filter.filter(QueryBuilders.matchQuery("salesChannelId", param.getSalesChannelId()));
+                filter.filter(QueryBuilders.matchQuery("channelId", param.getSalesChannelId()));
             }
         }
 
