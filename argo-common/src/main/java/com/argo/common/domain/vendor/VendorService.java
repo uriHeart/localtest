@@ -3,8 +3,11 @@ package com.argo.common.domain.vendor;
 import com.argo.common.domain.channel.SalesChannel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.testng.collections.Maps;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,6 +20,18 @@ public class VendorService {
 
     @Autowired
     private VendorChannelRepository vendorChannelRepository;
+
+    private Map<Long, Vendor> vendorMap;
+
+    @PostConstruct
+    public void init() {
+        vendorMap = Maps.newHashMap();
+        listAll().forEach(
+            v -> {
+                vendorMap.put(v.getVendorId(), v);
+            }
+        );
+    }
 
     public List<Vendor> listAll() {
         return vendorRepository.findAll();
@@ -36,7 +51,7 @@ public class VendorService {
     }
 
     public Vendor getVendor(Long vendorId) {
-        return vendorRepository.findByVendorId(vendorId);
+        return vendorMap.get(vendorId);
     }
 
     public Long getChannelId(Long vendorId, String sourceChannelId) {

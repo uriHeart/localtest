@@ -168,6 +168,7 @@ public class OrderService {
 
         SearchRequest request = new SearchRequest("order_doc");
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.size(10000);
         searchSourceBuilder.query(filter);
         request.source(searchSourceBuilder);
 

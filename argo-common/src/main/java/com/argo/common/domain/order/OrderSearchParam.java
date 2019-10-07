@@ -15,4 +15,8 @@ public class OrderSearchParam {
     private Date from;
     private Date to;
     private String orderId;
+
+    public Long getSalesChannelId() {
+        return salesChannelId == null || salesChannelId == 0L ? null : salesChannelId;
+    }
 }
