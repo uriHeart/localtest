@@ -39,7 +39,7 @@ public class VendorService {
         return vendorRepository.findByVendorId(vendorId);
     }
 
-    public Long getVendorId(Long vendorId, String sourceChannelId) {
+    public Long getChannelId(Long vendorId, String sourceChannelId) {
         VendorChannel result = vendorChannelRepository.findByVendorAndChannelMapping(getVendor(vendorId), sourceChannelId);
         if (result == null) {
             return null;
