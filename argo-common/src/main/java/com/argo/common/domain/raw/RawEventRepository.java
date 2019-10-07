@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface RawEventRepository extends CassandraRepository<RawEvent, Long> {
     List<RawEvent> findByVendorIdAndChannelIdAndOrderId(Long vendorId, Long channelId, String orderId);
+    RawEvent findFirstByVendorIdAndChannelIdAndOrderId(Long vendorId, Long channelId, String orderId);
 }

@@ -12,3 +12,4 @@ public class ProductPriceDto {
     private Long salesPrice; // 실판매가
     private Long paymentAmount; // 결제금액
 }
+

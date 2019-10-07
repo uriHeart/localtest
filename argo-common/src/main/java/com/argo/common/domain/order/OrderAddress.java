@@ -2,8 +2,10 @@ package com.argo.common.domain.order;
 
 import com.argo.common.domain.common.util.JsonUtil;
 import com.datastax.driver.core.DataType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.Column;
@@ -14,8 +16,14 @@ import java.util.Date;
 
 @Data
 @Builder
+@AllArgsConstructor
 @Table("order_address")
 public class OrderAddress {
+
+    public OrderAddress() {
+        this.createdAt = new Date();
+    }
+
     @PrimaryKeyColumn(ordinal = 0, type = PrimaryKeyType.PARTITIONED, name = "vendor_id")
     @CassandraType(type = DataType.Name.BIGINT)
     private Long vendorId;

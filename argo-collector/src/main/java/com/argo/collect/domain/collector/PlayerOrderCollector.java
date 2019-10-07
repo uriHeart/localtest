@@ -65,6 +65,7 @@ public class PlayerOrderCollector extends AbstractOrderCollector {
                                     .auto(true)
                                     .data(objectMapper.writeValueAsString(event))
                                     .orderId(event.get("ord_no").toString())
+                                    .rawEventId(UUID.randomUUID().toString())
                                     .publishedAt(ArgoDateUtil.getDate(event.get("ord_date").toString().replaceAll("\\.", "-")))
                                     .createdAt(new Date())
                                     .build();

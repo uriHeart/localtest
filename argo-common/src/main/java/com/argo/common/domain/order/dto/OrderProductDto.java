@@ -15,3 +15,4 @@ public class OrderProductDto {
     private ProductPriceDto productPrice; // 상품 가격
     private String applyType; // 주문, 교환, 취소(배송전), 반품(배송후)
 }
+

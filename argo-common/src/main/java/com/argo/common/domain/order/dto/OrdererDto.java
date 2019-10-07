@@ -11,3 +11,4 @@ public class OrdererDto {
     private String phoneNumber1; //주문자 전화번호1
     private String phoneNumber2; //주문자 전화번호2
 }
+

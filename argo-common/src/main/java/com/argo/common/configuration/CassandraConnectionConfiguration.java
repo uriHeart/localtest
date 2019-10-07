@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
+import org.springframework.data.cassandra.config.AbstractReactiveCassandraConfiguration;
 import org.springframework.data.cassandra.config.CassandraClusterFactoryBean;
 import org.springframework.data.cassandra.config.CassandraSessionFactoryBean;
 import org.springframework.data.cassandra.config.SchemaAction;
@@ -16,13 +16,15 @@ import org.springframework.data.cassandra.core.cql.keyspace.CreateKeyspaceSpecif
 import org.springframework.data.cassandra.core.cql.keyspace.DropKeyspaceSpecification;
 import org.springframework.data.cassandra.core.mapping.CassandraMappingContext;
 import org.springframework.data.cassandra.core.mapping.SimpleUserTypeResolver;
+import org.springframework.data.cassandra.repository.config.EnableReactiveCassandraRepositories;
 
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @Configuration
-public class CassandraConnectionConfiguration extends AbstractCassandraConfiguration {
+@EnableReactiveCassandraRepositories
+public class CassandraConnectionConfiguration extends AbstractReactiveCassandraConfiguration {
 
     @Value("${spring.data.cassandra.keyspace-name}")
     private String keyspace;

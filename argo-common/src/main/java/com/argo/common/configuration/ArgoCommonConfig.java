@@ -42,4 +42,7 @@ public class ArgoCommonConfig implements AsyncConfigurer, TransactionManagementC
     public PlatformTransactionManager annotationDrivenTransactionManager() {
         return chainedTransactionManager();
     }
+
+    
 }
+
