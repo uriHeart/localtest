@@ -31,11 +31,19 @@ public class VendorService {
     }
 
     public List<SalesChannel> listActiveVendorChannel(Long vendorId) {
-        return vendorChannelRepository.findByVendorAndEnabledAndAutoCollecting(vendorRepository.findByVendorId(vendorId), true, false)
+        return vendorChannelRepository.findByVendorAndEnabledAndAutoCollecting(getVendor(vendorId), true, false)
                 .stream().map(VendorChannel::getSalesChannel).collect(Collectors.toList());
     }
 
     public Vendor getVendor(Long vendorId) {
         return vendorRepository.findByVendorId(vendorId);
+    }
+
+    public Long getVendorId(Long vendorId, String sourceChannelId) {
+        VendorChannel result = vendorChannelRepository.findByVendorAndChannelMapping(getVendor(vendorId), sourceChannelId);
+        if (result == null) {
+            return null;
+        }
+        return result.getSalesChannel().getSalesChannelId();
     }
 }

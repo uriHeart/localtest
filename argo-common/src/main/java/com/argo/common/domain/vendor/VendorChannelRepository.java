@@ -10,4 +10,5 @@ public interface VendorChannelRepository extends JpaRepository<VendorChannel, Lo
     List<VendorChannel> findByEnabled(Boolean enabled);
     List<VendorChannel> findAllByAutoCollecting(Boolean autoCollecting);
     List<VendorChannel> findByVendorAndEnabledAndAutoCollecting(Vendor vendor, Boolean enabled, Boolean autoCollecting);
+    VendorChannel findByVendorAndChannelMapping(Vendor vendor, String channelMapping);
 }

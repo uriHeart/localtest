@@ -68,30 +68,32 @@ CREATE TABLE vendor_channels (
   sales_channel_id SERIAL,
   enabled boolean,
   auto_collecting boolean,
+  channel_mapping text,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT vendor_channels_pk PRIMARY KEY (vendor_channel_id),
   CONSTRAINT vendor_channels_uk01 UNIQUE (vendor_id, sales_channel_id)
 );
 
-INSERT INTO vendor_channels (vendor_id, sales_channel_id, enabled, auto_collecting) VALUES
-(1, 1, true, false),
-(1, 2, true, true),
-(1, 4, true, false),
-(1, 5, true, false),
-(1, 6, true, false),
-(1, 7, true, false),
-(1, 8, true, false),
-(1, 9, true, false),
-(1, 10, true, false),
-(1, 11, true, false),
-(1, 12, true, false),
-(1, 13, true, false),
-(1, 15, true, false),
-(1, 16, true, false),
-(1, 17, true, false),
-(1, 18, true, false)
+INSERT INTO vendor_channels (vendor_id, sales_channel_id, enabled, auto_collecting, channel_mapping) VALUES
+(1, 1, true, false, '10060'),
+(1, 2, true, true, null),
+(1, 4, true, false, '10080'),
+(1, 5, true, false, '10012'),
+(1, 6, true, false, '10069'),
+(1, 7, true, false, '10009'),
+(1, 8, true, false, '10052'),
+(1, 9, true, false, '10015'),
+(1, 10, true, false, '10072'),
+(1, 11, true, false, '10172'),
+(1, 12, true, false, '10372'),
+(1, 13, true, false, '10472'),
+(1, 15, true, false, null),
+(1, 16, true, false, null),
+(1, 17, true, false, null),
+(1, 18, true, false, null)
 ;
+
 
 
 

@@ -37,6 +37,9 @@ public class VendorChannel implements SystemMetadata {
     @Column(name = "auto_collecting")
     private Boolean autoCollecting;
 
+    @Column(name = "channel_mapping")
+    private String channelMapping;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)
     private Date createdAt;
