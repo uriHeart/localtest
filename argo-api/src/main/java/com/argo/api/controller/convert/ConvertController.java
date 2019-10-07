@@ -1,12 +1,13 @@
-package com.argo.collect.web;
+package com.argo.api.controller.convert;
 
-import com.argo.collect.service.ConvertService;
+import com.argo.api.service.ConvertService;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.rest.RestStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "*")
 @RestController
 @Slf4j
 public class ConvertController {
@@ -34,16 +34,16 @@ public class ConvertController {
                                             @RequestParam("vendorId")Long vendorId) throws IOException {
         //엑셀저장
         File excel = convertService.excelUpload(parts);
+
         //엑셀데이터 json변환  List<엑셀sheet List<레코드 >
         List<HashMap<String, Object>> jsonData = convertService.excelToJson(excel);
 
-        //현재 동기호출이 안됨.
         RestStatus restStatus = convertService.saveToEs(excel.getName(), jsonData,vendorId);
 
-        List<HashMap<String, Object>> factorAddJsonData = convertService.addExcelFactor(jsonData,channelId);
+        List<HashMap<String, String>> factorAddJsonData = convertService.addExcelFactor(jsonData,channelId);
 
         //카산드라에 raw데이터 저장
-        convertService.saveToCassandra((List<HashMap<String, String>>) factorAddJsonData.get(0).get("sheetData"),channelId,vendorId);
+        convertService.saveToCassandra((List<HashMap<String, String>>) factorAddJsonData,channelId,vendorId);
 
         return restStatus.name();
     }
@@ -57,8 +57,7 @@ public class ConvertController {
         return excelList;
     }
 
-    @RequestMapping(value="/excel/list",
-            method = RequestMethod.GET,
+    @GetMapping(value="/excel/list",
             produces = "application/json; charset=utf8")
     public @ResponseBody List<Map<String,Object>> getUploadList() throws IOException {
         //TODO userId에 해당하는 업로드파일만 조회

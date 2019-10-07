@@ -1,7 +1,9 @@
-package com.argo.collect.service;
+package com.argo.api.service;
 
-import com.argo.collect.domain.excel.ChannelExcelMapping;
-import com.argo.collect.domain.excel.ChannelExcelMappingService;
+
+import com.argo.api.domain.excel.ChannelExcelMapping;
+import com.argo.api.domain.excel.ChannelExcelMappingService;
+import com.argo.api.domain.excel.ExcelToCassandraDto;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.raw.RawEventService;
 import com.google.gson.Gson;
@@ -37,11 +39,8 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -321,51 +320,60 @@ public class ConvertService {
 
 
     public void saveToCassandra(List<HashMap<String,String>> jsonData, Long channelId, Long vendorId) {
+        SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        HashMap<String, ExcelToCassandraDto> cassandraJsonData = new HashMap<>();
+
         jsonData.forEach(jsonRaw ->{
-            SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String publishedAtString =jsonRaw.get("published_at");
+            String key = jsonRaw.get("orderId");
+            if(cassandraJsonData.containsKey(key)){
+                cassandraJsonData.get(key).getRaw().add(jsonRaw);
+            }else {
+                ExcelToCassandraDto excelRow = new ExcelToCassandraDto();
+                String publishedAtString = jsonRaw.get("publishedAt");
 
-            Date publishedAt = null;
-            String orderId = jsonRaw.get("order_id");
+                Date publishedAt = null;
 
-            try {
-                publishedAt = java.sql.Date.valueOf(LocalDate.parse(publishedAtString, DateTimeFormatter.BASIC_ISO_DATE));
+                if(publishedAtString.split(" ").length==1){
+                    publishedAtString += " 00:00:00";
+                }
 
-                //엑셀입력형식이 다를경우
-                //publishedAt = transFormat.parse("2019-01-01 23:59:59");
-            } catch (Exception e) {
-                e.printStackTrace();
-                publishedAt = new Date();
+                try {
+                    //엑셀입력형식이 다를경우
+                    //publishedAt = java.sql.Date.valueOf(LocalDate.parse(publishedAtString, DateTimeFormatter.BASIC_ISO_DATE));
+                    publishedAt = transFormat.parse(publishedAtString);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    publishedAt = new Date();
+                }
+
+                excelRow.setPublishedAt(publishedAt);
+                excelRow.getRaw().add(jsonRaw);
+                cassandraJsonData.put(key,excelRow);
             }
 
-            jsonRaw.remove("order_id");
-            jsonRaw.remove("published_at");
+            jsonRaw.remove("orderId");
+            jsonRaw.remove("publishedAt");
+        });
 
-            String gonData = gson.toJson(jsonRaw);
-            String json_uft_8 = null;
-            try {
-//                byte[] euckrStringBuffer = gonData.getBytes("euc-kr");
-//                String decodedFromEucKr = new String(euckrStringBuffer, "euc-kr");
-//                byte[] utf8StringBuffer = decodedFromEucKr.getBytes("utf-8");
-//                json_uft_8 = new String(utf8StringBuffer, "utf-8");
-                json_uft_8 = new String(gonData.getBytes("euc-kr"),"utf-8");
-
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+        cassandraJsonData.forEach((order,excelToCassandraDto) ->{
+            HashMap<String,List> datas = new HashMap<>();
+            datas.put("datas",excelToCassandraDto.getRaw());
 
             RawEvent rawEvent
                     = RawEvent.builder()
                     .vendorId(vendorId)
                     .channelId(channelId)
-                    .orderId(orderId)
-                    .publishedAt(publishedAt)
+                    .orderId(order)
+                    .publishedAt(excelToCassandraDto.getPublishedAt())
                     .format("JSON")
                     .auto(false)
-                    .data(json_uft_8)
+                    .data(gson.toJson(datas))
+                    .event(null)
                     .createdAt(new Date())
                     .build();
             rawEventService.save(rawEvent);
+
         });
     }
 
@@ -447,21 +455,26 @@ public class ConvertService {
     }
 
 
-    public List<HashMap<String, Object>> addExcelFactor(List<HashMap<String, Object>> convertExcelData,Long ChannelId){
+    public List<HashMap<String, String>> addExcelFactor(List<HashMap<String, Object>> convertExcelData,Long ChannelId){
         List<HashMap<String,String>> sheetData = (List<HashMap<String, String>>) convertExcelData.get(0).get("sheetData");
         List<ChannelExcelMapping> channelExcelMappings = channelExcelMappingService.getChannelExcelMapping(ChannelId);
         sheetData.forEach(row ->{
             channelExcelMappings.forEach( factor ->{
                 StringBuilder factorValue = new StringBuilder();
                 factor.getExcelFactorInfo().forEach(excelFactorInfo -> {
-                    factorValue.append(row.get(excelFactorInfo.getColumnName()));
+                    //factor를 만들 정보가 없는 엑셀은 UUID 를 사용한다.
+                    if(excelFactorInfo.getColumnNo()== 0){
+                        factorValue.append(UUID.randomUUID().toString());
+                    }else{
+                        factorValue.append(row.get(excelFactorInfo.getColumnName()));
+                    }
                 });
                 row.put(factor.getFactorId(),factorValue.toString());
             });
         });
 
 
-        return convertExcelData;
+        return sheetData;
     }
 
 }

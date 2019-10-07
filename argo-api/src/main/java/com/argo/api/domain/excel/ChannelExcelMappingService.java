@@ -1,4 +1,4 @@
-package com.argo.collect.domain.excel;
+package com.argo.api.domain.excel;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

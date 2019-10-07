@@ -1,4 +1,4 @@
-package com.argo.collect.domain.excel;
+package com.argo.api.domain.excel;
 
 import com.argo.common.domain.common.jpa.CreatedAtListener;
 import com.argo.common.domain.common.jpa.SystemMetadata;

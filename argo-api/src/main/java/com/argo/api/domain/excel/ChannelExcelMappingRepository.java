@@ -1,4 +1,4 @@
-package com.argo.collect.domain.excel;
+package com.argo.api.domain.excel;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
