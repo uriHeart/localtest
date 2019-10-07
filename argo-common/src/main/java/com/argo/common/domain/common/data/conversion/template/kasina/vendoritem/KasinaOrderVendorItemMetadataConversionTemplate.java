@@ -1,4 +1,4 @@
-package com.argo.common.domain.common.data.conversion.template.address;
+package com.argo.common.domain.common.data.conversion.template.kasina.vendoritem;
 
 import com.argo.common.domain.common.data.conversion.template.ConversionRule;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplate;
@@ -8,38 +8,35 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class OrdererConversionTemplate {
-    public static ConversionTemplate getOrdererTemplate() {
+public class KasinaOrderVendorItemMetadataConversionTemplate {
+    public static ConversionTemplate getOrderVendorItemMetadataTemplate() {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("2-null-Orderer")
-                .targetId("com.argo.common.domain.order.Orderer")
-                .rules(getConversionRuleForOrderer())
+                .sourceId("15-ORDER-OrderVendorItemMetadata")
+                .targetId("com.argo.common.domain.order.vendoritem.OrderVendorItemMetadata")
+                .rules(getConversionRuleForOrderVendorItemMetadata())
                 .build();
     }
 
-    private static List<ConversionRule> getConversionRuleForOrderer() {
+    private static List<ConversionRule> getConversionRuleForOrderVendorItemMetadata() {
         List<ConversionRule> list = new ArrayList<>();
 
         list.add(ConversionRule.builder()
-                .conversionType(ConversionType.DIRECT)
-                .sourceField("order_name")
-                .targetField("name")
+                .conversionType(ConversionType.AGGREGATE)
+                .sourceField("소비자가")
+                .targetField("originalPrice")
                 .build());
-
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
-                .sourceField("order_tel1")
-                .targetField("phoneNumber1")
+                .sourceField("판매가")
+                .targetField("salesPrice")
                 .build());
-
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
-                .sourceField("order_tel2")
-                .targetField("phoneNumber2")
+                .sourceField("판매가")
+                .targetField("paymentAmount")
                 .build());
-
         return list;
     }
 }

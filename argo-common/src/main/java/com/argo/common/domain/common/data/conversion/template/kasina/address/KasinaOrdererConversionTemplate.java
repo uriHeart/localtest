@@ -1,4 +1,4 @@
-package com.argo.common.domain.common.data.conversion.template.address;
+package com.argo.common.domain.common.data.conversion.template.kasina.address;
 
 import com.argo.common.domain.common.data.conversion.template.ConversionRule;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplate;
@@ -8,35 +8,35 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class RecipientConversionTemplate {
-    public static ConversionTemplate getRecipientTemplate() {
+public class KasinaOrdererConversionTemplate {
+    public static ConversionTemplate getOrdererTemplate() {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("2-null-Recipient")
-                .targetId("com.argo.common.domain.order.Recipient")
-                .rules(getConversionRuleForRecipient())
+                .sourceId("15-ORDER-Orderer")
+                .targetId("com.argo.common.domain.order.Orderer")
+                .rules(getConversionRuleForOrderer())
                 .build();
     }
 
-    private static List<ConversionRule> getConversionRuleForRecipient() {
+    private static List<ConversionRule> getConversionRuleForOrderer() {
         List<ConversionRule> list = new ArrayList<>();
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
-                .sourceField("recv_name")
+                .sourceField("받는분이름")
                 .targetField("name")
                 .build());
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
-                .sourceField("recv_tel1")
+                .sourceField("받는분전화번호")
                 .targetField("phoneNumber1")
                 .build());
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
-                .sourceField("recv_tel2")
+                .sourceField("받는분핸드폰")
                 .targetField("phoneNumber2")
                 .build());
 

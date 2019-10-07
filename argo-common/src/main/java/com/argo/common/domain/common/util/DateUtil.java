@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 public class DateUtil {
-    final static List<String> dateFormats = Arrays.asList("yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd");
+    final static List<String> dateFormats = Arrays.asList("yyyy-MM-dd HH:mm:ss, yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd");
 
     public static Date parseDateString(String strDate) {
         for (String format : dateFormats) {

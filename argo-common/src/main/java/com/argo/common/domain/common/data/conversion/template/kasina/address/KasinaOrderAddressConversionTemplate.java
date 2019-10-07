@@ -1,4 +1,4 @@
-package com.argo.common.domain.common.data.conversion.template.order;
+package com.argo.common.domain.common.data.conversion.template.kasina.address;
 
 import com.argo.common.domain.common.data.conversion.template.ConversionRule;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplate;
@@ -10,18 +10,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class ArgoOrderConversionTemplate {
-    public static ConversionTemplate getArgoOrderTemplate() {
+public class KasinaOrderAddressConversionTemplate {
+    public static ConversionTemplate getOrderAddressTemplate() {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("2-null")
-                .targetId("com.argo.common.domain.order.ArgoOrder")
-                .rules(getConversiontRuleForArgoOrder())
+                .sourceId("15-ORDER")
+                .targetId("com.argo.common.domain.order.OrderAddress")
+                .rules(getConversionRuleForOrderAddress())
                 .build();
     }
 
-    private static List<ConversionRule> getConversiontRuleForArgoOrder() {
+    private static List<ConversionRule> getConversionRuleForOrderAddress() {
         List<ConversionRule> list = new ArrayList<>();
 
         list.add(ConversionRule.builder()
@@ -30,14 +30,9 @@ public class ArgoOrderConversionTemplate {
                 .targetField("vendorId")
                 .build());
 
-        Map<String, String> channelIdParams = Maps.newLinkedHashMap();
-        channelIdParams.put("vendorId", "java.lang.Long");
-        channelIdParams.put("shop_id", "java.lang.String");
         list.add(ConversionRule.builder()
-                .conversionType(ConversionType.OPERATION)
-                .operatorClass("vendorService")
-                .operatorMethod("getChannelId")
-                .operatorParams(channelIdParams)
+                .conversionType(ConversionType.DIRECT)
+                .sourceField("channelId")
                 .targetField("channelId")
                 .build());
 
@@ -55,36 +50,36 @@ public class ArgoOrderConversionTemplate {
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
-                .sourceField("order_date")
-                .targetField("paidAt")
+                .sourceField("우편번호")
+                .targetField("originalPostalCode")
                 .build());
 
-        list.add(ConversionRule.builder()
-                .conversionType(ConversionType.DIRECT)
-                .sourceField("data")
-                .targetField("metadata")
-                .build());
-
-        Map<String, String> stateParams = Maps.newLinkedHashMap();
-        stateParams.put("status", "java.lang.String");
-        list.add(ConversionRule.builder()
-                .conversionType(ConversionType.OPERATION)
-                .operatorClass("codeService")
-                .operatorMethod("getOrderStatusMapping")
-                .operatorParams(stateParams)
-                .targetField("state")
-                .build());
-
-        list.add(ConversionRule.builder()
-                .conversionType(ConversionType.DIRECT)
-                .sourceField("event")
-                .targetField("event")
-                .build());
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.CONVERSION_TEMPLATE)
-                .targetField("metadata")
-                .conversionTemplateSourceId("2-null-OrderMetadata")
-                .conversionTemplateTargetId("com.argo.common.domain.order.OrderMetadata")
+                .targetField("originalAddress")
+                .conversionTemplateSourceId("15-ORDER-OriginalAddress")
+                .conversionTemplateTargetId("com.argo.common.domain.order.OriginalAddress")
+                .build());
+
+        list.add(ConversionRule.builder()
+                .conversionType(ConversionType.CONVERSION_TEMPLATE)
+                .targetField("orderer")
+                .conversionTemplateSourceId("15-ORDER-Orderer")
+                .conversionTemplateTargetId("com.argo.common.domain.order.Orderer")
+                .build());
+
+        list.add(ConversionRule.builder()
+                .conversionType(ConversionType.CONVERSION_TEMPLATE)
+                .targetField("recipient")
+                .conversionTemplateSourceId("15-ORDER-Recipient")
+                .conversionTemplateTargetId("com.argo.common.domain.order.Recipient")
+                .build());
+
+        list.add(ConversionRule.builder()
+                .conversionType(ConversionType.CONVERSION_TEMPLATE)
+                .targetField("deliveryRequest")
+                .conversionTemplateSourceId("15-ORDER-DeliveryRequest")
+                .conversionTemplateTargetId("com.argo.common.domain.order.DeliveryRequest")
                 .build());
 
         return list;

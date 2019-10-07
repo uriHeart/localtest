@@ -1,4 +1,4 @@
-package com.argo.common.domain.common.data.conversion.template.address;
+package com.argo.common.domain.common.data.conversion.template.kasina.address;
 
 import com.argo.common.domain.common.data.conversion.template.ConversionRule;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplate;
@@ -8,24 +8,24 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class OriginalAddressConversionTemplate {
-    public static ConversionTemplate getOriginalAddressTemplate() {
+public class KasinaDeliveryRequestConversionTemplate {
+    public static ConversionTemplate getDeliveryRequestTemplate() {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("2-null-OriginalAddress")
-                .targetId("com.argo.common.domain.order.OriginalAddress")
-                .rules(getConversionRuleForOriginalAddress())
+                .sourceId("15-ORDER-DeliveryRequest")
+                .targetId("com.argo.common.domain.order.DeliveryRequest")
+                .rules(getConversionRuleForDeliveryRequest())
                 .build();
     }
 
-    private static List<ConversionRule> getConversionRuleForOriginalAddress() {
+    private static List<ConversionRule> getConversionRuleForDeliveryRequest() {
         List<ConversionRule> list = new ArrayList<>();
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
-                .sourceField("recv_add")
-                .targetField("fullAddress")
+                .sourceField("요청사항")
+                .targetField("deliveryRequest")
                 .build());
 
         return list;

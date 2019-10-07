@@ -1,4 +1,4 @@
-package com.argo.common.domain.common.data.conversion.template.vendoritem;
+package com.argo.common.domain.common.data.conversion.template.ezadmin.order;
 
 import com.argo.common.domain.common.data.conversion.template.ConversionRule;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplate;
@@ -8,40 +8,42 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class OrderVendorItemMetadataConversionTemplate {
-    public static ConversionTemplate getOrderVendorItemMetadataTemplate() {
+public class EZAdminOrderMetadataConversionTemplate {
+    public static ConversionTemplate getOrderMetadataTemplate() {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("2-null-OrderVendorItemMetadata")
-                .targetId("com.argo.common.domain.order.vendoritem.OrderVendorItemMetadata")
-                .rules(getConversionRuleForOrderVendorItemMetadata())
+                .sourceId("2-null-OrderMetadata")
+                .targetId("com.argo.common.domain.order.OrderMetadata")
+                .rules(getConversionRuleForOrderMetadata())
                 .build();
     }
 
-    private static List<ConversionRule> getConversionRuleForOrderVendorItemMetadata() {
+    private static List<ConversionRule> getConversionRuleForOrderMetadata() {
         List<ConversionRule> list = new ArrayList<>();
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
-                .sourceField("pay_type")
-                .targetField("paymentMethod")
+                .sourceField("total_qty")
+                .targetField("totalQuantity")
                 .build());
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.AGGREGATE)
                 .sourceField("prd_shop_price")
-                .targetField("originalPrice")
+                .targetField("totalPrice")
                 .build());
+
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
-                .sourceField("shop_price")
-                .targetField("salesPrice")
+                .sourceField("collect_date")
+                .targetField("collectedAt")
                 .build());
+
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
-                .sourceField("amount")
-                .targetField("paymentAmount")
+                .sourceField("order_date")
+                .targetField("orderedAt")
                 .build());
         return list;
     }

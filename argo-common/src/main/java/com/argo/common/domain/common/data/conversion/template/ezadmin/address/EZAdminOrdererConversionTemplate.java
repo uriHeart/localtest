@@ -1,4 +1,4 @@
-package com.argo.common.domain.common.data.conversion.template.order;
+package com.argo.common.domain.common.data.conversion.template.ezadmin.address;
 
 import com.argo.common.domain.common.data.conversion.template.ConversionRule;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplate;
@@ -8,41 +8,38 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class OrderMetadataConversionTemplate {
-    public static ConversionTemplate getOrderMetadataTemplate() {
+public class EZAdminOrdererConversionTemplate {
+    public static ConversionTemplate getOrdererTemplate() {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("2-null-OrderMetadata")
-                .targetId("com.argo.common.domain.order.OrderMetadata")
-                .rules(getConversionRuleForOrderMetadata())
+                .sourceId("2-null-Orderer")
+                .targetId("com.argo.common.domain.order.Orderer")
+                .rules(getConversionRuleForOrderer())
                 .build();
     }
 
-    private static List<ConversionRule> getConversionRuleForOrderMetadata() {
+    private static List<ConversionRule> getConversionRuleForOrderer() {
         List<ConversionRule> list = new ArrayList<>();
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
-                .sourceField("total_qty")
-                .targetField("totalQuantity")
+                .sourceField("order_name")
+                .targetField("name")
                 .build());
 
         list.add(ConversionRule.builder()
-                .conversionType(ConversionType.AGGREGATE)
-                .sourceField("prd_shop_price")
-                .targetField("totalPrice")
+                .conversionType(ConversionType.DIRECT)
+                .sourceField("order_tel1")
+                .targetField("phoneNumber1")
                 .build());
+
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
-                .sourceField("collect_date")
-                .targetField("collectedAt")
+                .sourceField("order_tel2")
+                .targetField("phoneNumber2")
                 .build());
-        list.add(ConversionRule.builder()
-                .conversionType(ConversionType.DIRECT)
-                .sourceField("order_date")
-                .targetField("orderedAt")
-                .build());
+
         return list;
     }
 }

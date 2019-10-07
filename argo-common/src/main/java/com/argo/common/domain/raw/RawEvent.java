@@ -55,6 +55,10 @@ public class RawEvent extends ConvertibleData {
     private Date createdAt;
 
     public String sourceKey() {
-        return channelId.toString() + event;
+        if(channelId == 15L) {
+            return channelId.toString() + "-" + "ORDER";
+        } else {
+            return channelId.toString() + "-" + event;
+        }
     }
 }

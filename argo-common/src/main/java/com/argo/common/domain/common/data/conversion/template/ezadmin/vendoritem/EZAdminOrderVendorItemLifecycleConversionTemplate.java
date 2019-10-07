@@ -1,4 +1,4 @@
-package com.argo.common.domain.common.data.conversion.template.address;
+package com.argo.common.domain.common.data.conversion.template.ezadmin.vendoritem;
 
 import com.argo.common.domain.common.data.conversion.template.ConversionRule;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplate;
@@ -10,18 +10,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class OrderAddressConversionTemplate {
-    public static ConversionTemplate getOrderAddressTemplate() {
+public class EZAdminOrderVendorItemLifecycleConversionTemplate {
+    public static ConversionTemplate getOrderVendorItemLifecycleTemplate() {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
                 .sourceId("2-null")
-                .targetId("com.argo.common.domain.order.OrderAddress")
-                .rules(getConversionRuleForOrderAddress())
+                .targetId("com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle")
+                .listReference("dataRows")
+                .rules(getConversionRuleForOrderVendorItemLifecycle())
                 .build();
     }
 
-    private static List<ConversionRule> getConversionRuleForOrderAddress() {
+    private static List<ConversionRule> getConversionRuleForOrderVendorItemLifecycle() {
         List<ConversionRule> list = new ArrayList<>();
 
         list.add(ConversionRule.builder()
@@ -47,6 +48,19 @@ public class OrderAddressConversionTemplate {
                 .targetField("orderId")
                 .build());
 
+        Map<String, String> vendorItemIdParams = Maps.newLinkedHashMap();
+        vendorItemIdParams.put("vendorId", "java.lang.Long");
+        vendorItemIdParams.put("product_id", "java.lang.String");
+        vendorItemIdParams.put("product_name", "java.lang.String");
+        vendorItemIdParams.put("options", "java.lang.String");
+        list.add(ConversionRule.builder()
+                .conversionType(ConversionType.OPERATION)
+                .operatorClass("externalVendorItemMappingService")
+                .operatorMethod("getVendorItem")
+                .operatorParams(vendorItemIdParams)
+                .targetField("vendorItemId")
+                .build());
+
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
                 .sourceField("publishedAt")
@@ -54,31 +68,35 @@ public class OrderAddressConversionTemplate {
                 .build());
 
         list.add(ConversionRule.builder()
-                .conversionType(ConversionType.CONVERSION_TEMPLATE)
-                .targetField("originalAddress")
-                .conversionTemplateSourceId("2-null-OriginalAddress")
-                .conversionTemplateTargetId("com.argo.common.domain.order.OriginalAddress")
+                .conversionType(ConversionType.DIRECT)
+                .sourceField("product_id")
+                .targetField("sourceItemId")
                 .build());
 
         list.add(ConversionRule.builder()
-                .conversionType(ConversionType.CONVERSION_TEMPLATE)
-                .targetField("orderer")
-                .conversionTemplateSourceId("2-null-Orderer")
-                .conversionTemplateTargetId("com.argo.common.domain.order.Orderer")
+                .conversionType(ConversionType.DIRECT)
+                .sourceField("product_name")
+                .targetField("sourceItemName")
                 .build());
 
         list.add(ConversionRule.builder()
-                .conversionType(ConversionType.CONVERSION_TEMPLATE)
-                .targetField("recipient")
-                .conversionTemplateSourceId("2-null-Recipient")
-                .conversionTemplateTargetId("com.argo.common.domain.order.Recipient")
+                .conversionType(ConversionType.DIRECT)
+                .sourceField("options")
+                .targetField("sourceItemOption")
                 .build());
+
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.CONVERSION_TEMPLATE)
-                .targetField("deliveryRequest")
-                .conversionTemplateSourceId("2-null-DeliveryRequest")
-                .conversionTemplateTargetId("com.argo.common.domain.order.DeliveryRequest")
+                .targetField("metadata")
+                .conversionTemplateSourceId("2-null-OrderVendorItemMetadata")
+                .conversionTemplateTargetId("com.argo.common.domain.order.vendoritem.OrderVendorItemMetadata")
+                .build());
+
+        list.add(ConversionRule.builder()
+                .conversionType(ConversionType.DIRECT)
+                .sourceField("qty")
+                .targetField("quantity")
                 .build());
 
         return list;

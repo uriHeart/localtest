@@ -1,4 +1,4 @@
-package com.argo.common.domain.common.data.conversion.template.address;
+package com.argo.common.domain.common.data.conversion.template.ezadmin.address;
 
 import com.argo.common.domain.common.data.conversion.template.ConversionRule;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplate;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DeliveryRequestConversionTemplate {
+public class EZAdminDeliveryRequestConversionTemplate {
     public static ConversionTemplate getDeliveryRequestTemplate() {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
