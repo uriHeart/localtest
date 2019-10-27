@@ -1,7 +1,7 @@
 package com.argo.common.domain.common;
 
+import com.google.common.collect.Maps;
 import org.springframework.stereotype.Service;
-import org.testng.collections.Maps;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;

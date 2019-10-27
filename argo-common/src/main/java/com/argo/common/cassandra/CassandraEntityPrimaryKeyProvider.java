@@ -1,9 +1,11 @@
 package com.argo.common.cassandra;
 
+//import com.google.common.collect.Maps;
+
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.util.ReflectionUtils;
-import org.testng.collections.Maps;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
