@@ -1,7 +1,22 @@
 version: 0.2
 
 phases:
+  install:
+    runtime-versions:
+      java: openjdk8
   build:
     commands:
       - ls
+      - java -version
       - gradle build
+  post_build:
+    commands:
+      - find . -type d
+      - mv argo-common/build/libs/*.jar .
+      - mv argo-api/build/libs/*.jar .
+      - mv argo-collector/build/libs/*.jar .
+artifacts:
+  files:
+    - '*.jar'
+#    - 'argo-common/build/libs/*'
+#    - 'argo-api/build/libs/*.jar'
