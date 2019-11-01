@@ -1,10 +1,9 @@
 package com.argo.common.domain.channel;
 
-import com.argo.common.domain.vendor.VendorChannelService;
 import com.argo.common.domain.vendor.VendorService;
+import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.testng.collections.Maps;
 
 import javax.annotation.PostConstruct;
 import java.util.List;

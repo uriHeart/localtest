@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -20,7 +21,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.objenesis.instantiator.util.ClassUtils;
 import org.springframework.stereotype.Service;
-import org.testng.collections.Lists;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
