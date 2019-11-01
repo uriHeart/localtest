@@ -6,17 +6,20 @@ phases:
       java: openjdk8
   build:
     commands:
-      - ls
-      - java -version
-      - gradle build
+      - gradle build -x test
   post_build:
     commands:
-      - find . -type d
-      - mv argo-common/build/libs/*.jar .
-      - mv argo-api/build/libs/*.jar .
-      - mv argo-collector/build/libs/*.jar .
+      - mkdir build-out
+      - mv argo-common/build/libs/*.jar build-out
+      - mv argo-api/build/libs/*.jar build-out
+      - mv argo-collector/build/libs/*.jar build-out
+      - mv appspec.yml build-out
+      - mv argo-api-start.sh build-out
+      - mv argo-api-stop.sh build-out
+      - mv argo-api-before.sh build-out
+      - zip argo-api-build.zip -j build-out/*
 artifacts:
   files:
-    - '*.jar'
+    - '*.zip'
 #    - 'argo-common/build/libs/*'
 #    - 'argo-api/build/libs/*.jar'

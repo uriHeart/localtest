@@ -1,0 +1,15 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/argo-api
+hooks:
+  BeforeInstall:
+    - location: argo-api-before.sh
+      runas: root
+  AfterInstall:
+    - location: argo-api-stop.sh
+      runas : root
+  ApplicationStart:
+    - location: argo-api-start.sh
+      runas : root
