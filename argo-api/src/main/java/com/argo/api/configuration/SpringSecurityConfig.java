@@ -27,7 +27,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .authorizeRequests()
                 .antMatchers("/error**", "/api/auth/login",
-                        "/api/auth/seller-register",
+                        "/api/auth/register-vendor",
                         "/api/auth/key",
                         "/order/*",
                         "/order*",

@@ -48,7 +48,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping(value = "/auth/seller-register")
+    @PostMapping(value = "/auth/register-vendor")
     public void addUser(@RequestBody AddUserForm addUserForm) {
         userService.addSeller(addUserForm, session.getAttribute("_RSA_WEB_Key_").toString());
     }

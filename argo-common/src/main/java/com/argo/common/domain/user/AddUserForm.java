@@ -5,14 +5,14 @@ import lombok.Data;
 @Data
 public class AddUserForm {
 
-    private String loginId;
+    private String email;
     private String password;
+    private String company;
+    private String managerName;
+    private String phoneNumber;
+    private boolean isApproved;
 
     public Seller toSellerEntity() {
-        Seller newSeller = new Seller();
-        newSeller.setLoginId(this.loginId);
-        newSeller.setPassword(this.password);
-        newSeller.setUserName(this.loginId);
-        return newSeller;
+        return UserMapper.INSTANCE.userFormToSeller(this);
     }
 }

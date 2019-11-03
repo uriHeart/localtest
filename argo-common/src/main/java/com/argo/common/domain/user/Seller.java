@@ -14,6 +14,10 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class Seller extends ArgoUser {
 
+    private String companyName;
+    private String phoneNumber;
+    private boolean isApproved;
+
     public List<Role> getRoles() {
         return Lists.newArrayList(Role.builder().roleId(RoleType.SELLER.name()).build());
     }
