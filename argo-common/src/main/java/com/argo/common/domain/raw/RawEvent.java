@@ -5,6 +5,7 @@ import com.datastax.driver.core.DataType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.Column;
@@ -15,6 +16,7 @@ import java.util.Date;
 
 @Data
 @Builder
+@EqualsAndHashCode(callSuper=false)
 @Table("raw_event")
 public class RawEvent extends ConvertibleData {
     @PrimaryKeyColumn(ordinal = 0, type = PrimaryKeyType.PARTITIONED, name = "vendor_id")

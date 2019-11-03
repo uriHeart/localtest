@@ -1,5 +1,6 @@
 package com.argo.api.controller;
 
+import com.argo.common.domain.common.email.EmailService;
 import com.argo.common.domain.order.ArgoOrder;
 import com.argo.common.domain.order.OrderAddress;
 import com.argo.common.domain.order.OrderService;
@@ -26,6 +27,9 @@ public class HomeController {
     DataConversionService dataConversionService;
 
     @Autowired
+    EmailService emailService;
+
+    @Autowired
     OrderService orderService;
 
     @GetMapping(value = "/order/rawEventConversionTest")
@@ -40,5 +44,10 @@ public class HomeController {
     @GetMapping("/home")
     public String home() {
         return "home";
+    }
+
+    @GetMapping("/order/testMail")
+    public void testMail() {
+        emailService.sendSimpleMessage("syy0320@gmail.com", "Test Email", "Argo Test");
     }
 }

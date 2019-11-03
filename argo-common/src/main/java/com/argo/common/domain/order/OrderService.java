@@ -15,6 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.google.common.hash.Hashing;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.index.IndexRequest;
@@ -28,7 +29,6 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -37,10 +37,10 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.StringJoiner;
-import java.util.UUID;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class OrderService {
     private RestHighLevelClient client;
     private ObjectMapper objectMapper;
@@ -49,21 +49,6 @@ public class OrderService {
     private ReactiveOrderVendorItemLifecycleRepository reactiveOrderVendorItemLifecycleRepository;
     private VendorService vendorService;
     private SalesChannelService salesChannelService;
-
-    @Autowired
-    public OrderService(RestHighLevelClient client, ObjectMapper objectMapper,
-                        ReactiveOrderRepository reactiveOrderRepository,
-                        ReactiveOrderAddressRepository reactiveOrderAddressRepository,
-                        ReactiveOrderVendorItemLifecycleRepository reactiveOrderVendorItemLifecycleRepository,
-                        VendorService vendorService, SalesChannelService salesChannelService) {
-        this.client = client;
-        this.objectMapper = objectMapper;
-        this.reactiveOrderRepository = reactiveOrderRepository;
-        this.reactiveOrderAddressRepository = reactiveOrderAddressRepository;
-        this.reactiveOrderVendorItemLifecycleRepository = reactiveOrderVendorItemLifecycleRepository;
-        this.vendorService = vendorService;
-        this.salesChannelService = salesChannelService;
-    }
 
     public void saveOrder(ArgoOrder order, OrderAddress orderAddress, List<OrderVendorItemLifecycle> orderVendorItemLifecycles) {
         reactiveOrderRepository.save(order).subscribe();
