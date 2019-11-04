@@ -6,22 +6,20 @@ import com.argo.common.domain.order.ArgoOrder;
 import com.argo.common.domain.order.OrderAddress;
 import com.argo.common.domain.order.OrderService;
 import com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@AllArgsConstructor
 public class RawEventService {
-    @Autowired
+
     private RawEventRepository rawEventRepository;
 
-    @Autowired
     private DataConversionService dataConversionService;
 
-    @Autowired
     private OrderService orderService;
 
     public void save(RawEvent rawEvent) {

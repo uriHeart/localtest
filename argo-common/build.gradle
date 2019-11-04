@@ -46,6 +46,8 @@ dependencies {
 
     testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 //    testCompile 'io.projectreactor:reactor-test'
+    compile "org.springframework.boot:spring-boot-starter-mail:${springBootVersion}"
+
 }
 
 ext.profile = (!project.hasProperty('profile') || !profile) ? 'local' : profile

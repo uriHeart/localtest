@@ -8,7 +8,6 @@ datasource:
 spring:
   jpa:
     database: postgresql
-
     show-sql: true
     properties:
       hibernate:
@@ -24,8 +23,20 @@ spring:
           default_schema: public
     hibernate.ddl-auto: update
     hibernate.naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-
-
+  main:
+    allow-bean-definition-overriding: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: contact@argoport.com
+    password: argo2020
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    default-encoding: UTF-8
   data:
     cassandra:
       port: 9042
@@ -47,7 +58,6 @@ webdriver:
   profiles:
     active: local
 
-spring.main.allow-bean-definition-overriding: true
 server:
   port: 10002
 

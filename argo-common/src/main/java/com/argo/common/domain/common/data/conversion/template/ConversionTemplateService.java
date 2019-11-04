@@ -11,7 +11,7 @@ import com.argo.common.domain.common.data.conversion.template.kasina.order.Kasin
 import com.argo.common.domain.common.data.conversion.template.kasina.order.KasinaOrderMetadataConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.kasina.vendoritem.KasinaOrderVendorItemLifecycleConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.kasina.vendoritem.KasinaOrderVendorItemMetadataConversionTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -21,9 +21,15 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class ConversionTemplateService {
-    @Autowired
     private ConversionTemplateRepository conversionTemplateRepository;
+
+    public void save(ConversionTemplate conversionTemplate) {
+        if (conversionTemplate == null) {
+            conversionTemplateRepository.save(conversionTemplate);
+        }
+    }
 
     public Map<String, ConversionTemplate> getConversionTemplateMaps(ConvertibleData convertibleData) {
         return getConversionTemplateMaps(convertibleData.sourceKey());
@@ -40,11 +46,6 @@ public class ConversionTemplateService {
     public ConversionTemplate getConversionTemplate(String sourceId, String targetId) {
         return conversionTemplateRepository.findFirstBySourceIdAndTargetIdOrderByExpiredAtDesc(sourceId, targetId);
     }
-
-    public void save(ConversionTemplate conversionTemplate) {
-        conversionTemplateRepository.save(conversionTemplate);
-    }
-
 
     public ConversionTemplate conversionTemplateBySourceIdAndTargetId(String sourceId, String targetId) {
         switch (sourceId + "-" + targetId) {
