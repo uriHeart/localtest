@@ -46,27 +46,25 @@ public class AuthController {
     }
 
     @PostMapping(value = "/auth/login")
-    public ResponseEntity<Object> login(@RequestBody LoginParams params) {
+    public ResponseEntity<Object> login(@RequestBody LoginParams params, HttpSession httpSession) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(params.getLoginId(), params.getPassword());
         try {
             Authentication authentication = authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+            httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
             return ResponseEntity.ok(true);
         } catch (Exception e) {
             return ResponseEntity.ok(false);
         }
     }
 
-    @PostMapping(value = "/auth/register-vendor")
-    public void addUser(@RequestBody AddUserForm addUserForm) {
-        userService.addSeller(addUserForm, session.getAttribute("_RSA_WEB_Key_").toString());
+    @PostMapping(value = "/auth/seller-register")
+    public void addUser(@RequestBody AddUserForm addUserForm, HttpSession httpSession) {
+        userService.addSeller(addUserForm, httpSession.getAttribute("_RSA_WEB_Key_").toString());
     }
 
     @GetMapping(value = "/auth/confirm/{uuid}")
     public void confirmUser(@PathVariable String uuid) {
         authService.confirmUser(uuid);
     }
-
-
 }
