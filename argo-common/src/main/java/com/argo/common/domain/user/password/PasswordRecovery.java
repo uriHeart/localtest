@@ -4,28 +4,20 @@ import com.argo.common.domain.common.jpa.CreatedAtListener;
 import com.argo.common.domain.common.jpa.SystemMetadata;
 import com.argo.common.domain.common.jpa.UpdatedAtListener;
 import com.argo.common.domain.user.ArgoUser;
-import com.argo.common.domain.user.Role;
 import lombok.*;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Builder
 @Entity
-@javax.persistence.Table(name = "password_recovery", schema = "public")
+@javax.persistence.Table(name = "password_recoveries", schema = "public")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @EntityListeners( { CreatedAtListener.class, UpdatedAtListener.class } )
 public class PasswordRecovery implements SystemMetadata {
-
-
-
     public static final int MAX_TOKEN_SIZE = 256;
 
     @Id
@@ -34,8 +26,9 @@ public class PasswordRecovery implements SystemMetadata {
     @javax.persistence.Column(name = "password_recovery_id", nullable = false)
     private Long passwordRecoveryId;
 
-    @ManyToOne
-    private ArgoUser argoUser;
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="user_id")
+    private ArgoUser user;
 
     @Size(max = 256)
     @Column(name = "token")
