@@ -2,6 +2,7 @@ package com.argo.api.controller;
 
 import com.argo.api.auth.LoginParams;
 import com.argo.api.auth.RsaKeyGenerator;
+import com.argo.common.domain.auth.AuthService;
 import com.argo.common.domain.user.AddUserForm;
 import com.argo.common.domain.user.UserService;
 import java.security.NoSuchAlgorithmException;
@@ -14,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,10 +32,18 @@ public class AuthController {
     private UserService userService;
 
     @Autowired
+    private AuthService authService;
+
+    @Autowired
     private RsaKeyGenerator rsaKeyGenerator;
 
     @Autowired
     private HttpSession session;
+
+    @GetMapping(value = "/auth/key")
+    public String getPublicKey() throws NoSuchAlgorithmException {
+        return rsaKeyGenerator.getPublicKey();
+    }
 
     @PostMapping(value = "/auth/login")
     public ResponseEntity<Object> login(@RequestBody LoginParams params) {
@@ -53,8 +63,10 @@ public class AuthController {
         userService.addSeller(addUserForm, session.getAttribute("_RSA_WEB_Key_").toString());
     }
 
-    @GetMapping(value = "/auth/key")
-    public String getPublicKey() throws NoSuchAlgorithmException {
-        return rsaKeyGenerator.getPublicKey();
+    @GetMapping(value = "/auth/confirm/{uuid}")
+    public void confirmUser(@PathVariable String uuid) {
+        authService.confirmUser(uuid);
     }
+
+
 }

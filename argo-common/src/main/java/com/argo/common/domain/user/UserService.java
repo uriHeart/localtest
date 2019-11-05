@@ -16,6 +16,9 @@ public class UserService {
     @Autowired
     private RsaDecrypter rsaDecrypter;
 
+    @Autowired
+    private SignUpMailService signUpMailService;
+
     public ArgoUser getUserByLoginId(String loginId) {
         return userRepository.findByLoginId(loginId);
     }
@@ -23,12 +26,14 @@ public class UserService {
     @Transactional
     public ArgoUser addSeller(AddUserForm addUserForm, String rsaPrivateKey) {
         assertValid(addUserForm);
+
         Seller seller = addUserForm.toSellerEntity();
         String password = rsaDecrypter.decryptRsa(seller.getPassword(), rsaPrivateKey);
         seller.setPassword(HashUtil.sha256(password));
-        Seller savedSeller = userRepository.save(seller);
-
-        return savedSeller;
+        seller.setApproved(false);
+        Seller save = userRepository.save(seller);
+        signUpMailService.sendConfirmMail(save);
+        return save;
     }
 
     private void assertValid(AddUserForm form) {

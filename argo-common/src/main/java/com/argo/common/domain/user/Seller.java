@@ -16,9 +16,16 @@ public class Seller extends ArgoUser {
 
     private String companyName;
     private String phoneNumber;
-    private boolean isApproved;
 
     public List<Role> getRoles() {
         return Lists.newArrayList(Role.builder().roleId(RoleType.SELLER.name()).build());
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 }

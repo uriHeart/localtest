@@ -13,6 +13,13 @@ public class AddUserForm {
     private boolean isApproved;
 
     public Seller toSellerEntity() {
-        return UserMapper.INSTANCE.userFormToSeller(this);
+        Seller newSeller = new Seller();
+        newSeller.setLoginId(this.email);
+        newSeller.setPassword(this.password);
+        newSeller.setUserName(this.managerName);
+        newSeller.setCompanyName(this.company);
+        newSeller.setPhoneNumber(this.phoneNumber);
+        newSeller.setApproved(false);
+        return newSeller;
     }
 }
