@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,17 +45,7 @@ public class EZAdminAuthorityManager extends AbstractAuthorityManager {
             wr.flush();
             wr.close();
 
-            String result = null;
-            try (InputStream in = con.getInputStream();
-                 ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-
-                byte[] buf = new byte[1024 * 8];
-                int length = 0;
-                while ((length = in.read(buf)) != -1) {
-                    out.write(buf, 0, length);
-                }
-                result = new String(out.toByteArray(), "UTF-8");
-            }
+            super.getResult(con.getInputStream(), true);
 
             return con.getHeaderFields().get("Set-Cookie").stream().collect(Collectors.joining());
         } catch (IOException e) {

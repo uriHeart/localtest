@@ -50,18 +50,7 @@ public class PlayerAuthorityManager extends AbstractAuthorityManager {
             wr.flush();
             wr.close();
 
-            Map result = null;
-            try (InputStream in = con.getInputStream();
-                 ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-
-                byte[] buf = new byte[1024 * 8];
-                int length = 0;
-                while ((length = in.read(buf)) != -1) {
-                    out.write(buf, 0, length);
-                }
-                ObjectMapper mapper = new ObjectMapper();
-                result = mapper.readValue(new String(out.toByteArray(), "UTF-8"), Map.class);
-            }
+            Map result = super.getResult(con.getInputStream(), false);
 
             if (result == null || !"1".equals(result.get("cd").toString())) {
                 return null;

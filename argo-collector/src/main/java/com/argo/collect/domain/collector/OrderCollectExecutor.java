@@ -28,17 +28,19 @@ public class OrderCollectExecutor {
             log.info("Already Order Collecting ##### ");
             return;
         }
-
-        setRun(true);
-        for (VendorChannel channel : vendorService.autoCollectingTargets()) {
-            collectors.forEach(
-                c -> {
-                    if (c.isSupport(channel.getSalesChannel().getCode())) {
-                        c.collect(channel);
-                    }
-                });
+        try {
+            setRun(true);
+            for (VendorChannel channel : vendorService.autoCollectingTargets()) {
+                collectors.forEach(
+                        c -> {
+                            if (c.isSupport(channel.getSalesChannel().getCode())) {
+                                c.collect(channel);
+                            }
+                        });
+            }
+        } finally {
+            setRun(false);
         }
-        setRun(false);
     }
 
     public synchronized boolean isRun() {
