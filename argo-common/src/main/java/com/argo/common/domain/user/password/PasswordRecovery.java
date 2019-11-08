@@ -28,7 +28,7 @@ public class PasswordRecovery implements SystemMetadata {
 
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="user_id")
-    private ArgoUser user;
+    private ArgoUser argoUser;
 
     @Size(max = 256)
     @Column(name = "token")

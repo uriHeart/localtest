@@ -1,42 +1,35 @@
 package com.argo.common.domain.user;
 
+import com.argo.common.domain.auth.AuthService;
 import com.argo.common.domain.auth.HashUtil;
 import com.argo.common.domain.auth.RsaDecrypter;
 import com.argo.common.domain.user.password.PasswordService;
-import com.argo.common.exception.AlreadyUserRegisteredException;
-import lombok.AllArgsConstructor;
 import com.argo.common.exception.UserRegistrationException;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Date;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
 
 @Service
 @AllArgsConstructor
 public class UserService {
 
     private UserRepository userRepository;
-
     private RsaDecrypter rsaDecrypter;
-
     private PasswordService passwordService;
+    private AuthService authService;
+    private UserRegistrationConfirmMailService userRegistrationConfirmMailService;
 
     public ArgoUser getUserByLoginId(String loginId) {
         return userRepository.findByLoginId(loginId);
     }
 
     @Transactional
-    public ArgoUser addSeller(AddUserForm addUserForm, String rsaPrivateKey) {
+    public void addSeller(AddUserForm addUserForm, String rsaPrivateKey) {
         assertValid(addUserForm);
-
-        Seller seller = addUserForm.toSellerEntity();
-        String password = rsaDecrypter.decryptRsa(seller.getPassword(), rsaPrivateKey);
-        seller.setPassword(HashUtil.sha256(password));
-        seller.setApproved(false);
-        Seller save = userRepository.save(seller);
-        signUpMailService.sendConfirmMail(save);
-        return save;
+        ArgoUser newSeller = userRepository.save(addUserForm.toSellerEntity(rsaDecrypter, rsaPrivateKey));
+        String uuidForConfirm = authService.createUuidForConfirm(newSeller);
+        userRegistrationConfirmMailService.sendConfirmationMail(newSeller, uuidForConfirm);
     }
 
     private void assertValid(AddUserForm form) {
@@ -67,5 +60,11 @@ public class UserService {
         String decryptPassword = passwordService.decryptPassword(password);
         user.setPassword(HashUtil.sha256(decryptPassword));
         return userRepository.save(user);
+    }
+
+    @Transactional
+    public void confirmUser(String uuid) {
+        ArgoUser confirmedUser = authService.confirmUser(uuid);
+        userRegistrationConfirmMailService.sendCompletionMail(confirmedUser);
     }
 }

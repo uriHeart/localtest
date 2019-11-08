@@ -2,10 +2,11 @@ package com.argo.api.controller;
 
 import com.argo.api.auth.LoginParams;
 import com.argo.api.auth.RsaKeyGenerator;
-import com.argo.common.domain.auth.AuthService;
 import com.argo.common.domain.user.AddUserForm;
 import com.argo.common.domain.user.UserService;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,13 +33,7 @@ public class AuthController {
     private UserService userService;
 
     @Autowired
-    private AuthService authService;
-
-    @Autowired
     private RsaKeyGenerator rsaKeyGenerator;
-
-    @Autowired
-    private HttpSession session;
 
     @GetMapping(value = "/auth/key")
     public String getPublicKey() throws NoSuchAlgorithmException {
@@ -64,7 +59,9 @@ public class AuthController {
     }
 
     @GetMapping(value = "/auth/confirm/{uuid}")
-    public void confirmUser(@PathVariable String uuid) {
-        authService.confirmUser(uuid);
+    public void confirmUser(@PathVariable String uuid, HttpServletResponse response) throws IOException {
+        userService.confirmUser(uuid);
+        response.sendRedirect("some-url");
+//        return "Verification completed.";
     }
 }

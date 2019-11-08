@@ -1,0 +1,82 @@
+
+datasource:
+  argo:
+    jdbc-url: 'jdbc:postgresql://localhost:5432/argo'
+    username: 'argo'
+    password: 'argo2020'
+    driver-class-name: 'org.postgresql.Driver'
+
+spring:
+  profiles:
+    active: local
+
+  jpa:
+    database: postgresql
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        show-sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        temp:
+          use_jdbc_metadata_defaults: false
+        hibernate:
+          default_schema: public
+    hibernate.ddl-auto: create-drop
+    generate-ddl: true
+    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+    hibernate.naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  main:
+    allow-bean-definition-overriding: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: contact@argoport.com
+    password: argo2020
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    default-encoding: UTF-8
+  data:
+    cassandra:
+      port: 9042
+      schema-action: CREATE_IF_NOT_EXISTS
+      consistency-level: one
+      contact-points: 15.164.111.122
+      keyspace-name: argo
+      username: argo
+      password: argo2020
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+webdriver:
+  chrome:
+    driver: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome
+
+  profiles:
+    active: local
+
+server:
+  port: 10002
+
+file:
+  upload:
+    default-path: /Users/ags0688/Documents/attachements
+    index: excel_upload
+
+elasticsearch:
+  hosts: http://15.164.111.122:9200
+
+
+registration:
+  url:
+    confirm: http://localhost:10002/api/auth/confirm
+    external-info: http://localhost:3000/auth/additional-info

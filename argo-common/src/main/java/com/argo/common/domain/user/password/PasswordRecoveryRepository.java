@@ -8,11 +8,11 @@ import java.util.List;
 
 @Repository
 public interface PasswordRecoveryRepository extends JpaRepository<PasswordRecovery, Long> {
-    PasswordRecovery findFirstByArgoUserAndIsActive(ArgoUser user);
+    PasswordRecovery findFirstByArgoUserAndActive(ArgoUser user, Boolean active);
 
     List<PasswordRecovery> findAllByArgoUser(ArgoUser user);
 
-    PasswordRecovery findByTokenAndIsActive(String token);
+    PasswordRecovery findByTokenAndActive(String token, Boolean active);
 
     Long countByArgoUser(ArgoUser user);
 

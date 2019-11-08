@@ -3,12 +3,14 @@ package com.argo.common.domain.user.password;
 import com.argo.common.domain.auth.RsaDecrypter;
 import com.argo.common.domain.user.ArgoUser;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 
+@Service
 @AllArgsConstructor
 public class PasswordService {
 
@@ -33,7 +35,7 @@ public class PasswordService {
     }
 
     public PasswordRecovery getActivePasswordRecoveryByToken(String token) {
-        return passwordRecoveryRepository.findByTokenAndIsActive(token);
+        return passwordRecoveryRepository.findByTokenAndActive(token, false);
     }
 
     public Long getPasswordRecoveryCountByUser(ArgoUser user) {
