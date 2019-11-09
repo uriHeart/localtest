@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -42,14 +43,16 @@ public class TwentyNineCollector extends AbstractOrderCollector {
         String dataUrl = collectParam.getCollectUrl();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.add("Cookie", authorization);
+        headers.add("cookie", authorization);
+        headers.add("referer", "https://partner.29cm.co.kr/cs/order-list");
 
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
-        map.add("start_date", ArgoDateUtil.getDateString(LocalDate.now().minusMonths(1)));
-        map.add("end_date", ArgoDateUtil.getDateString(LocalDate.now()));
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
-        String dataResult = restTemplate.postForObject(dataUrl, request , String.class);
+        dataUrl = dataUrl + "?start_date=" + ArgoDateUtil.getDateString(LocalDate.now().minusMonths(1))
+                + "&end_date=" + ArgoDateUtil.getDateString(LocalDate.now())
+                + "&limit=1000&offset=0";
+
+        HttpEntity request = new HttpEntity<>(headers);
+        String dataResult = restTemplate.exchange(dataUrl, HttpMethod.GET, request, String.class).getBody();
         try {
             Map data = objectMapper.readValue(dataResult, Map.class);
             List<Map> rawEvents = (List<Map>) data.get("results");

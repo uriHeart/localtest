@@ -38,11 +38,11 @@ public class TwentyNineAuthorityManager extends AbstractAuthorityManager {
 
             Map result = super.getResult(con.getInputStream(), false);
 
-            if (result == null || "change-password".equals(result.get("message").toString())) {
+            if (result == null || !"partner".equals(result.get("message").toString())) {
                 return null;
             }
 
-            return con.getHeaderFields().get("Set-Cookie").stream().collect(Collectors.joining());
+            return con.getHeaderFields().get("set-Cookie").stream().collect(Collectors.joining(";"));
         } catch (IOException e) {
             e.printStackTrace();
         }
