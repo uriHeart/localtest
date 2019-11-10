@@ -68,3 +68,8 @@ file:
 
 elasticsearch:
   hosts: http://15.164.111.122:9200
+
+registration:
+  url:
+    confirm: https://argoport.com/auth/confirm
+    additional-info: http://argoport.com/auth/additional-info

@@ -13,7 +13,7 @@ public class UserRegistrationConfirmMailService {
     @Value("${registration.url.confirm}")
     private String confirmLink;
 
-    @Value("${registration.url.additional-info")
+    @Value("${registration.url.additional-info}")
     private String additionalInfoLink;
 
     @Autowired
@@ -39,7 +39,7 @@ public class UserRegistrationConfirmMailService {
         String content = "안녕하세요 {name} 님.\n"
                              + "  고객님의 {mail} 메일 주소는 정상적인 주소로 확인되었습니다.\n"
                              + "  아래 링크를 클릭하거나 등록하신 이메일 주소와 비밀번호로 로그인하셔서 나머지 정보를 등록하여 주시기 바랍니다.\n"
-                             + "  {additionalInfo}\n"
+                             + "  {additionalInfoLink}\n"
                              + "  감사합니다.\n"
                              + "  ARGO 드림";
 

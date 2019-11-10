@@ -1,7 +1,7 @@
 package com.argo.common.domain.user;
 
 import com.argo.common.domain.auth.AuthService;
-import com.argo.common.domain.auth.HashUtil;
+import com.argo.common.domain.common.util.HashUtil;
 import com.argo.common.domain.auth.RsaDecrypter;
 import com.argo.common.domain.user.password.PasswordService;
 import com.argo.common.exception.UserRegistrationException;

@@ -25,8 +25,8 @@ spring:
           use_jdbc_metadata_defaults: false
         hibernate:
           default_schema: public
-    hibernate.ddl-auto: create-drop
-    generate-ddl: true
+    hibernate.ddl-auto: update
+#    generate-ddl: true
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
     hibernate.naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   main:
@@ -75,8 +75,7 @@ file:
 elasticsearch:
   hosts: http://15.164.111.122:9200
 
-
 registration:
   url:
-    confirm: http://localhost:10002/api/auth/confirm
-    external-info: http://localhost:3000/auth/additional-info
+    confirm: http://localhost:3000/auth/confirm
+    additional-info: http://localhost:3000/auth/additional-info

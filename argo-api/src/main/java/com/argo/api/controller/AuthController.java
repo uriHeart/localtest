@@ -4,9 +4,7 @@ import com.argo.api.auth.LoginParams;
 import com.argo.api.auth.RsaKeyGenerator;
 import com.argo.common.domain.user.AddUserForm;
 import com.argo.common.domain.user.UserService;
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -59,9 +57,8 @@ public class AuthController {
     }
 
     @GetMapping(value = "/auth/confirm/{uuid}")
-    public void confirmUser(@PathVariable String uuid, HttpServletResponse response) throws IOException {
+    public String confirmUser(@PathVariable String uuid) {
         userService.confirmUser(uuid);
-        response.sendRedirect("some-url");
-//        return "Verification completed.";
+        return "User Authentication Completed.";
     }
 }

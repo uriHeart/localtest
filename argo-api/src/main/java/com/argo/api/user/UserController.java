@@ -1,6 +1,5 @@
 package com.argo.api.user;
 
-import com.argo.common.domain.auth.HashUtil;
 import com.argo.common.domain.common.email.EmailService;
 import com.argo.common.domain.user.ArgoUser;
 import com.argo.common.domain.user.UserService;
@@ -11,11 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.net.URLEncoder;
 import java.security.Principal;
 
 @RestController("/user")

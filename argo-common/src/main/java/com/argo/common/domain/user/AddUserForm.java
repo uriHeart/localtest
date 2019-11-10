@@ -1,6 +1,6 @@
 package com.argo.common.domain.user;
 
-import com.argo.common.domain.auth.HashUtil;
+import com.argo.common.domain.common.util.HashUtil;
 import com.argo.common.domain.auth.RsaDecrypter;
 import lombok.Data;
 

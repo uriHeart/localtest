@@ -1,6 +1,6 @@
 package com.argo.api.auth;
 
-import com.argo.common.domain.auth.HashUtil;
+import com.argo.common.domain.common.util.HashUtil;
 import com.argo.common.domain.auth.RsaDecrypter;
 import com.argo.common.domain.user.ArgoUser;
 import com.argo.common.domain.user.UserService;

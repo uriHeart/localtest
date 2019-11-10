@@ -1,4 +1,4 @@
-package com.argo.common.domain.auth;
+package com.argo.common.domain.common.util;
 
 import com.argo.common.exception.HashingFailException;
 import java.security.MessageDigest;
