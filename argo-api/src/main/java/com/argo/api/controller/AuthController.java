@@ -1,23 +1,21 @@
 package com.argo.api.controller;
 
 import com.argo.api.auth.LoginParams;
+import com.argo.api.auth.LoginResult;
 import com.argo.api.auth.RsaKeyGenerator;
 import com.argo.common.domain.user.AddUserForm;
 import com.argo.common.domain.user.UserService;
 import java.security.NoSuchAlgorithmException;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping(value = "/api")
 @RestController
@@ -38,15 +36,12 @@ public class AuthController {
     }
 
     @PostMapping(value = "/auth/login")
-    public ResponseEntity<Object> login(@RequestBody LoginParams params, HttpSession httpSession) {
-    public ResponseEntity<LoginResult> login(@RequestBody LoginParams params) {
+    public ResponseEntity<LoginResult> login(@RequestBody LoginParams params, HttpSession httpSession) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(params.getLoginId(), params.getPassword());
         try {
             Authentication authentication = authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-            return ResponseEntity.ok(true);
-            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
             return new ResponseEntity<>(LoginResult.builder()
                     .success(true)
                     .vendorId(1L)
