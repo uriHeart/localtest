@@ -8,3 +8,15 @@ CREATE TABLE argo_users (
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT argo_users_pk PRIMARY KEY (argo_user_id)
 );
+
+ALTER TABLE argo_users
+  ADD COLUMN vendor_id bigint;
+
+ALTER TABLE argo_users
+  ADD COLUMN isapproved boolean;
+
+ALTER TABLE argo_users
+  ADD COLUMN companyName VARCHAR(100);
+
+ALTER TABLE argo_users
+  ADD COLUMN phoneNumber VARCHAR(20);
