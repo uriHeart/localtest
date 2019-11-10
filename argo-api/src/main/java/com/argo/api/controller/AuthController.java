@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,16 +33,18 @@ public class AuthController {
     @Autowired
     private RsaKeyGenerator rsaKeyGenerator;
 
-    @Autowired
-    private HttpSession session;
+    @GetMapping(value = "/auth/key")
+    public String getPublicKey() throws NoSuchAlgorithmException {
+        return rsaKeyGenerator.getPublicKey();
+    }
 
     @PostMapping(value = "/auth/login")
-    public ResponseEntity<Object> login(@RequestBody LoginParams params) {
+    public ResponseEntity<Object> login(@RequestBody LoginParams params, HttpSession httpSession) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(params.getLoginId(), params.getPassword());
         try {
             Authentication authentication = authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+            httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
             return ResponseEntity.ok(true);
         } catch (Exception e) {
             return ResponseEntity.ok(false);
@@ -49,12 +52,13 @@ public class AuthController {
     }
 
     @PostMapping(value = "/auth/seller-register")
-    public void addUser(@RequestBody AddUserForm addUserForm) {
-        userService.addSeller(addUserForm, session.getAttribute("_RSA_WEB_Key_").toString());
+    public void addUser(@RequestBody AddUserForm addUserForm, HttpSession httpSession) {
+        userService.addSeller(addUserForm, httpSession.getAttribute("_RSA_WEB_Key_").toString());
     }
 
-    @GetMapping(value = "/auth/key")
-    public String getPublicKey() throws NoSuchAlgorithmException {
-        return rsaKeyGenerator.getPublicKey();
+    @GetMapping(value = "/auth/confirm/{uuid}")
+    public String confirmUser(@PathVariable String uuid) {
+        userService.confirmUser(uuid);
+        return "User Authentication Completed.";
     }
 }

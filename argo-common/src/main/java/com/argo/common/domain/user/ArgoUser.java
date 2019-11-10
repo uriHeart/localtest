@@ -48,6 +48,8 @@ public class ArgoUser implements SystemMetadata {
     @Column(name = "password")
     private String password;
 
+    private boolean isApproved;
+
     @OneToMany
     @JoinColumn(name="role_id")
     private final List<Role> roles = new ArrayList<>();
@@ -63,5 +65,4 @@ public class ArgoUser implements SystemMetadata {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
-
 }

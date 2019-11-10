@@ -19,7 +19,7 @@ CREATE TABLE sales_channels (
   sales_channel_id SERIAL,
   code VARCHAR(50) NOT NULL,
   name VARCHAR(50) NOT NULL,
-  base_uri VARCHAR(100) NOT NULL,
+  base_uri VARCHAR(100),
   token_uri VARCHAR(100),
   login_uri VARCHAR(100),
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -31,7 +31,7 @@ CREATE TABLE sales_channels (
 INSERT INTO sales_channels (code, name, base_uri, token_uri, login_uri) VALUES
 ('PLAYER', '플레이어', 'http://biz.player.co.kr', '/po/login/set_token', '/po/login/make_login'),
 ('EZ_ADMIN', '이지어드민', 'https://www.ezadmin.co.kr', null, '/login_process2.php'),
-('employee', '직원', null, null, null, ),
+('employee', '직원', null, null, null),
 ('TWENTY_NINE_CM', '29CM', null, null, null),
 ('W_CONCEPT', 'W컨셉', null, null, null),
 ('Lotte_com', '롯데닷컴', null, null, null),

@@ -1,11 +1,15 @@
+
 datasource:
   argo:
-    jdbc-url: 'jdbc:postgresql://argo-db.cnkxzmhdcjyk.ap-northeast-2.rds.amazonaws.com:5432/argo'
+    jdbc-url: 'jdbc:postgresql://localhost:5432/argo'
     username: 'argo'
     password: 'argo2020'
     driver-class-name: 'org.postgresql.Driver'
 
 spring:
+  profiles:
+    active: local
+
   jpa:
     database: postgresql
     show-sql: true
@@ -22,6 +26,8 @@ spring:
         hibernate:
           default_schema: public
     hibernate.ddl-auto: update
+#    generate-ddl: true
+    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
     hibernate.naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   main:
     allow-bean-definition-overriding: true
@@ -71,5 +77,5 @@ elasticsearch:
 
 registration:
   url:
-    confirm: https://argoport.com/auth/confirm
-    additional-info: http://argoport.com/auth/additional-info
+    confirm: http://localhost:3000/auth/confirm
+    additional-info: http://localhost:3000/auth/additional-info
