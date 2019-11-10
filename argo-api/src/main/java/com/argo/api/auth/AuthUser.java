@@ -14,6 +14,7 @@ public class AuthUser implements GrantedAuthority {
     private String userName;
     private String password;
     private List<Role> roles;
+    private Long vendorId;
 
     @Override
     public String getAuthority() {

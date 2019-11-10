@@ -14,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,14 +39,21 @@ public class AuthController {
 
     @PostMapping(value = "/auth/login")
     public ResponseEntity<Object> login(@RequestBody LoginParams params, HttpSession httpSession) {
+    public ResponseEntity<LoginResult> login(@RequestBody LoginParams params) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(params.getLoginId(), params.getPassword());
         try {
             Authentication authentication = authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
             return ResponseEntity.ok(true);
+            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+            return new ResponseEntity<>(LoginResult.builder()
+                    .success(true)
+                    .vendorId(1L)
+                    .dashboardUrl("https://db.argoport.com:5601/app/kibana#/dashboard/b90faa00-e78c-11e9-8acc-f3cddb6dfb41?embed=true&_g=(refreshInterval%3A(pause%3A!f%2Cvalue%3A5000)%2Ctime%3A(from%3Anow-30d%2Cto%3Anow))")
+                    .build(), HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.ok(false);
+            return new ResponseEntity<>(LoginResult.builder().success(false).message(e.getMessage()).build(), HttpStatus.OK);
         }
     }
 
