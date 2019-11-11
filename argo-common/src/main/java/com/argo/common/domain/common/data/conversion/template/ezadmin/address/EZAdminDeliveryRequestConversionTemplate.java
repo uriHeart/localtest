@@ -13,7 +13,7 @@ public class EZAdminDeliveryRequestConversionTemplate {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("2-null-DeliveryRequest")
+                .sourceId("2-ORDER-DeliveryRequest")
                 .targetId("com.argo.common.domain.order.DeliveryRequest")
                 .rules(getConversionRuleForDeliveryRequest())
                 .build();

@@ -13,7 +13,7 @@ public class EZAdminOrderVendorItemMetadataConversionTemplate {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("2-null-OrderVendorItemMetadata")
+                .sourceId("2-ORDER-OrderVendorItemMetadata")
                 .targetId("com.argo.common.domain.order.vendoritem.OrderVendorItemMetadata")
                 .rules(getConversionRuleForOrderVendorItemMetadata())
                 .build();

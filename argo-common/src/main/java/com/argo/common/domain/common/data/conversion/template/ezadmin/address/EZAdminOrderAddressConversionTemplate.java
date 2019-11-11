@@ -15,7 +15,7 @@ public class EZAdminOrderAddressConversionTemplate {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("2-null")
+                .sourceId("2-ORDER")
                 .targetId("com.argo.common.domain.order.OrderAddress")
                 .rules(getConversionRuleForOrderAddress())
                 .build();
@@ -62,28 +62,28 @@ public class EZAdminOrderAddressConversionTemplate {
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.CONVERSION_TEMPLATE)
                 .targetField("originalAddress")
-                .conversionTemplateSourceId("2-null-OriginalAddress")
+                .conversionTemplateSourceId("2-ORDER-OriginalAddress")
                 .conversionTemplateTargetId("com.argo.common.domain.order.OriginalAddress")
                 .build());
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.CONVERSION_TEMPLATE)
                 .targetField("orderer")
-                .conversionTemplateSourceId("2-null-Orderer")
+                .conversionTemplateSourceId("2-ORDER-Orderer")
                 .conversionTemplateTargetId("com.argo.common.domain.order.Orderer")
                 .build());
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.CONVERSION_TEMPLATE)
                 .targetField("recipient")
-                .conversionTemplateSourceId("2-null-Recipient")
+                .conversionTemplateSourceId("2-ORDER-Recipient")
                 .conversionTemplateTargetId("com.argo.common.domain.order.Recipient")
                 .build());
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.CONVERSION_TEMPLATE)
                 .targetField("deliveryRequest")
-                .conversionTemplateSourceId("2-null-DeliveryRequest")
+                .conversionTemplateSourceId("2-ORDER-DeliveryRequest")
                 .conversionTemplateTargetId("com.argo.common.domain.order.DeliveryRequest")
                 .build());
 

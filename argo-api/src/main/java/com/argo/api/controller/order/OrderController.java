@@ -30,7 +30,7 @@ public class OrderController {
     @PostMapping("/order")
     public Mono<Void> addOrder(@RequestParam Long vendorId, @RequestParam Long channelId,
                                @RequestParam String orderId, @RequestParam String vendorItemId) {
-        vendorValidator.valid(vendorId);
+//        vendorValidator.valid(vendorId);
 
         return orderService.addOrder(vendorId, channelId, orderId, vendorItemId)
                 .subscribeOn(Schedulers.elastic())
@@ -44,7 +44,7 @@ public class OrderController {
     @PostMapping("/orders")
     public Mono<List<OrderResultDto>> getOrders(@RequestBody OrderSearchParam param) {
 
-        vendorValidator.valid(param.getVendorId());
+//        vendorValidator.valid(param.getVendorId());
 
         return orderService.getOrderData(param)
                 .subscribeOn(Schedulers.elastic())

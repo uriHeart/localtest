@@ -50,23 +50,23 @@ public class ConversionTemplateService {
     public ConversionTemplate conversionTemplateBySourceIdAndTargetId(String sourceId, String targetId) {
         switch (sourceId + "-" + targetId) {
             // EZAdmin Template Mapping
-            case "2-null-com.argo.common.domain.order.ArgoOrder":
+            case "2-ORDER-com.argo.common.domain.order.ArgoOrder":
                 return getEZAdminArgoOrderTemplate();
-            case "2-null-OrderMetadata-com.argo.common.domain.order.OrderMetadata":
+            case "2-ORDER-OrderMetadata-com.argo.common.domain.order.OrderMetadata":
                 return getEZAdminArgoOrderMetadataTemplate();
-            case "2-null-com.argo.common.domain.order.OrderAddress":
+            case "2-ORDER-com.argo.common.domain.order.OrderAddress":
                 return getEZAdminOrderAddressTemplate();
-            case "2-null-OriginalAddress-com.argo.common.domain.order.OriginalAddress":
+            case "2-ORDER-OriginalAddress-com.argo.common.domain.order.OriginalAddress":
                 return getEZAdminOriginalAddressTemplate();
-            case "2-null-Orderer-com.argo.common.domain.order.Orderer":
+            case "2-ORDER-Orderer-com.argo.common.domain.order.Orderer":
                 return getEZAdminOrdererTemplate();
-            case "2-null-Recipient-com.argo.common.domain.order.Recipient":
+            case "2-ORDER-Recipient-com.argo.common.domain.order.Recipient":
                 return getEZAdminRecipientTemplate();
-            case "2-null-DeliveryRequest-com.argo.common.domain.order.DeliveryRequest":
+            case "2-ORDER-DeliveryRequest-com.argo.common.domain.order.DeliveryRequest":
                 return getEZAdminDeliveryRequestTemplate();
-            case "2-null-com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle":
+            case "2-ORDER-com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle":
                 return getEZAdminOrderVendorItemLifecycleTemplate();
-            case "2-null-OrderVendorItemMetadata-com.argo.common.domain.order.vendoritem.OrderVendorItemMetadata":
+            case "2-ORDER-OrderVendorItemMetadata-com.argo.common.domain.order.vendoritem.OrderVendorItemMetadata":
                 return getEZAdminOrderVendorItemMetadataTemplate();
             // Kasina Template Mapping
             case "15-ORDER-com.argo.common.domain.order.ArgoOrder":
@@ -137,7 +137,7 @@ public class ConversionTemplateService {
         ConversionTemplate vendorItemLifecycleTemplate = null;
 
         switch (convertibleData.sourceKey()) {
-            case "2-null":
+            case "2-ORDER":
                 argoOrderTemplate = getEZAdminArgoOrderTemplate();
                 orderAddressTemplate = getEZAdminOrderAddressTemplate();
                 vendorItemLifecycleTemplate = getEZAdminOrderVendorItemLifecycleTemplate();

@@ -13,7 +13,7 @@ public class EZAdminOriginalAddressConversionTemplate {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("2-null-OriginalAddress")
+                .sourceId("2-ORDER-OriginalAddress")
                 .targetId("com.argo.common.domain.order.OriginalAddress")
                 .rules(getConversionRuleForOriginalAddress())
                 .build();

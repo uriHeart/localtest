@@ -13,7 +13,7 @@ public class EZAdminRecipientConversionTemplate {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("2-null-Recipient")
+                .sourceId("2-ORDER-Recipient")
                 .targetId("com.argo.common.domain.order.Recipient")
                 .rules(getConversionRuleForRecipient())
                 .build();

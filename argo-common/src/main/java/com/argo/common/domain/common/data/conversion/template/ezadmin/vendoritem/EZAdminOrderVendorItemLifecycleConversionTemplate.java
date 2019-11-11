@@ -15,7 +15,7 @@ public class EZAdminOrderVendorItemLifecycleConversionTemplate {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("2-null")
+                .sourceId("2-ORDER")
                 .targetId("com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle")
                 .listReference("dataRows")
                 .rules(getConversionRuleForOrderVendorItemLifecycle())
@@ -89,7 +89,7 @@ public class EZAdminOrderVendorItemLifecycleConversionTemplate {
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.CONVERSION_TEMPLATE)
                 .targetField("metadata")
-                .conversionTemplateSourceId("2-null-OrderVendorItemMetadata")
+                .conversionTemplateSourceId("2-ORDER-OrderVendorItemMetadata")
                 .conversionTemplateTargetId("com.argo.common.domain.order.vendoritem.OrderVendorItemMetadata")
                 .build());
 

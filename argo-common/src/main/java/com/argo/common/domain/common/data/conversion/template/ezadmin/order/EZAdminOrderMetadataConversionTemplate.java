@@ -13,7 +13,7 @@ public class EZAdminOrderMetadataConversionTemplate {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("2-null-OrderMetadata")
+                .sourceId("2-ORDER-OrderMetadata")
                 .targetId("com.argo.common.domain.order.OrderMetadata")
                 .rules(getConversionRuleForOrderMetadata())
                 .build();

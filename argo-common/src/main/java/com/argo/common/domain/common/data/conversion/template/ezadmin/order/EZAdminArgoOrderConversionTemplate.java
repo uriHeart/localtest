@@ -15,7 +15,7 @@ public class EZAdminArgoOrderConversionTemplate {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("2-null")
+                .sourceId("2-ORDER")
                 .targetId("com.argo.common.domain.order.ArgoOrder")
                 .rules(getConversiontRuleForArgoOrder())
                 .build();
@@ -78,7 +78,7 @@ public class EZAdminArgoOrderConversionTemplate {
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.CONVERSION_TEMPLATE)
                 .targetField("metadata")
-                .conversionTemplateSourceId("2-null-OrderMetadata")
+                .conversionTemplateSourceId("2-ORDER-OrderMetadata")
                 .conversionTemplateTargetId("com.argo.common.domain.order.OrderMetadata")
                 .build());
 

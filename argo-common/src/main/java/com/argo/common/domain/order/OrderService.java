@@ -51,10 +51,14 @@ public class OrderService {
     private SalesChannelService salesChannelService;
 
     public void saveOrder(ArgoOrder order, OrderAddress orderAddress, List<OrderVendorItemLifecycle> orderVendorItemLifecycles) {
+        if (order == null) {
+            return;
+        }
         reactiveOrderRepository.save(order).subscribe();
-        reactiveOrderAddressRepository.save(orderAddress).subscribe();
         reactiveOrderVendorItemLifecycleRepository.saveAll(orderVendorItemLifecycles).subscribe();
-
+        if (orderAddress != null) {
+            reactiveOrderAddressRepository.save(orderAddress).subscribe();
+        }
         this.buildOrderDocument(order, orderAddress, orderVendorItemLifecycles);
     }
 
