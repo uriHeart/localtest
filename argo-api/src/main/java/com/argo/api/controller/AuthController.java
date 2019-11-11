@@ -35,6 +35,11 @@ public class AuthController {
         return rsaKeyGenerator.getPublicKey();
     }
 
+    @GetMapping(value = "/auth-check")
+    public Boolean check() {
+        return true;
+    }
+
     @PostMapping(value = "/auth/login")
     public ResponseEntity<LoginResult> login(@RequestBody LoginParams params, HttpSession httpSession) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(params.getLoginId(), params.getPassword());
