@@ -36,8 +36,8 @@ public class AuthController {
     }
 
     @GetMapping(value = "/auth-check")
-    public Boolean check() {
-        return true;
+    public String check() {
+        return "success";
     }
 
     @PostMapping(value = "/auth/login")
