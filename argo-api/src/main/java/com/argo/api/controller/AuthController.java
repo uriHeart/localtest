@@ -35,6 +35,7 @@ public class AuthController {
         return rsaKeyGenerator.getPublicKey();
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping(value = "/auth-check")
     public String check() {
         return "success";
