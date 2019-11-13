@@ -1,8 +1,6 @@
 package com.argo.api.controller;
 
-import com.argo.api.auth.LoginParams;
-import com.argo.api.auth.LoginResult;
-import com.argo.api.auth.RsaKeyGenerator;
+import com.argo.api.auth.*;
 import com.argo.common.domain.user.AddUserForm;
 import com.argo.common.domain.user.UserService;
 import java.security.NoSuchAlgorithmException;
@@ -30,15 +28,34 @@ public class AuthController {
     @Autowired
     private RsaKeyGenerator rsaKeyGenerator;
 
+    @Autowired
+    private UserManager userManager;
+
     @GetMapping(value = "/auth/key")
     public String getPublicKey() throws NoSuchAlgorithmException {
         return rsaKeyGenerator.getPublicKey();
     }
 
-    @CrossOrigin(origins = "*")
+    private AuthUser get() {
+        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().isEmpty()) {
+            return null;
+        }
+        return (AuthUser) SecurityContextHolder.getContext().getAuthentication().getAuthorities().iterator().next();
+    }
+
     @GetMapping(value = "/auth-check")
-    public String check() {
-        return "success";
+    public ResponseEntity<LoginResult> check() {
+        AuthUser authUser = this.get();
+        if (authUser == null) {
+            return new ResponseEntity<>(LoginResult.builder().success(false).message("로그인이 되지 않았습니다.").build(), HttpStatus.OK);
+        } else {
+            AuthUser user = this.get();
+            return new ResponseEntity<>(LoginResult.builder()
+                    .success(true)
+                    .vendorId(user == null ? 0L : user.getVendorId())
+                    .dashboardUrl("https://db.argoport.com:5601/app/kibana#/dashboard/b90faa00-e78c-11e9-8acc-f3cddb6dfb41?embed=true&_g=(refreshInterval%3A(pause%3A!f%2Cvalue%3A5000)%2Ctime%3A(from%3Anow-30d%2Cto%3Anow))")
+                    .build(), HttpStatus.OK);
+        }
     }
 
     @PostMapping(value = "/auth/login")
@@ -48,9 +65,10 @@ public class AuthController {
             Authentication authentication = authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+            AuthUser user = this.get();
             return new ResponseEntity<>(LoginResult.builder()
                     .success(true)
-                    .vendorId(1L)
+                    .vendorId(user == null ? 0L : user.getVendorId())
                     .dashboardUrl("https://db.argoport.com:5601/app/kibana#/dashboard/b90faa00-e78c-11e9-8acc-f3cddb6dfb41?embed=true&_g=(refreshInterval%3A(pause%3A!f%2Cvalue%3A5000)%2Ctime%3A(from%3Anow-30d%2Cto%3Anow))")
                     .build(), HttpStatus.OK);
         } catch (Exception e) {

@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 @Scope(value="session", proxyMode= ScopedProxyMode.TARGET_CLASS)
 public class UserManager {
     public AuthUser get() {
+        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().isEmpty()) {
+            return null;
+        }
         return (AuthUser) SecurityContextHolder.getContext().getAuthentication().getAuthorities().iterator().next();
     }
 }
