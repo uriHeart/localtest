@@ -5,6 +5,8 @@ import com.argo.common.domain.user.AddUserForm;
 import com.argo.common.domain.user.UserService;
 import java.security.NoSuchAlgorithmException;
 import javax.servlet.http.HttpSession;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RequestMapping(value = "/api")
 @RestController
 public class AuthController {
@@ -37,10 +40,16 @@ public class AuthController {
     }
 
     private AuthUser get() {
-        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().isEmpty()) {
+        try {
+            if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().isEmpty()) {
+                return null;
+            }
+            return (AuthUser) SecurityContextHolder.getContext().getAuthentication().getAuthorities().iterator().next();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
             return null;
         }
-        return (AuthUser) SecurityContextHolder.getContext().getAuthentication().getAuthorities().iterator().next();
     }
 
     @GetMapping(value = "/auth-check")
