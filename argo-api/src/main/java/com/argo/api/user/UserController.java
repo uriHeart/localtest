@@ -35,8 +35,6 @@ public class UserController {
             return ResponseEntity.badRequest().body("Different user trying to modify another user's info");
         }
 
-        // user have the option to change everything but the password
-
         if(!StringUtils.isNotEmpty(argoUser.getPassword())) {
             // password is being changed
             return ResponseEntity.badRequest().body("Password is being changed, user cannot update password info");
