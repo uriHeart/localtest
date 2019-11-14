@@ -1,6 +1,5 @@
 package com.argo.api.user;
 
-import com.argo.common.domain.common.email.EmailService;
 import com.argo.common.domain.user.ArgoUser;
 import com.argo.common.domain.user.UserService;
 import com.argo.common.domain.user.password.PasswordRecovery;
