@@ -16,8 +16,6 @@ import java.security.Principal;
 
 @RestController("/user")
 public class UserController {
-    @Autowired
-    private EmailService emailService;
 
     @Autowired
     private UserService userService;
