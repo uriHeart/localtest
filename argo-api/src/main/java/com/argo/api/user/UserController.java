@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 
-@RestController("/user")
+//@RestController("/user")
 public class UserController {
     private EmailService emailService;
 
