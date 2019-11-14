@@ -7,18 +7,22 @@ import com.argo.common.domain.user.password.PasswordRecovery;
 import com.argo.common.domain.user.password.PasswordResetForm;
 import com.argo.common.domain.user.password.PasswordService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 
-//@RestController("/user")
+@RestController("/user")
 public class UserController {
+    @Autowired
     private EmailService emailService;
 
+    @Autowired
     private UserService userService;
 
+    @Autowired
     private PasswordService passwordService;
 
 
