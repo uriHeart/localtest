@@ -52,7 +52,7 @@ public class AuthController {
         }
     }
 
-    @GetMapping(value = "/auth-check")
+    @GetMapping(value = "/check/auth")
     public ResponseEntity<LoginResult> check() {
         AuthUser user = this.get();
         if (user == null) {
