@@ -39,6 +39,10 @@ public class SalesChannel implements SystemMetadata {
     @Column(name = "login_uri")
     private String loginUrl;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "channel_type")
+    private ChannelType channelType;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)
     private Date createdAt;

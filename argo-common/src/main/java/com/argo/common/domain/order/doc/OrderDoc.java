@@ -14,6 +14,8 @@ public class OrderDoc {
     private String orderId;
     private Long vendorId;
     private Long channelId;
+    private String channelType;
+    private String channelTypeDescription;
     private String salesChannelCode;
     private String salesChannelName;
     private Date publishedAt;

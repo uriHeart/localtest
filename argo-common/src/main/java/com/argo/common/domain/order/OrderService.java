@@ -90,6 +90,8 @@ public class OrderService {
                         .orderId(order.getOrderId())
                         .vendorId(order.getVendorId())
                         .channelId(order.getChannelId())
+                        .channelType(salesChannel.getChannelType().name())
+                        .channelTypeDescription(salesChannel.getChannelType().getDescription())
                         .publishedAt(item.getPublishedAt())
                         .collectedAt(order.getMetadata().getCollectedAt())
                         .orderedAt(order.getMetadata().getOrderedAt())

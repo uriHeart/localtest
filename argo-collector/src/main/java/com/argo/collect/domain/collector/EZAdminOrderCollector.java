@@ -50,7 +50,7 @@ public class EZAdminOrderCollector extends AbstractOrderCollector {
         headers.add("Cookie", authorization);
 
         String params = "date_type=collect_date" +
-                "&start_date=" + ArgoDateUtil.getDateString(LocalDate.now().minusMonths(1)) +
+                "&start_date=" + ArgoDateUtil.getDateString(LocalDate.now().minusWeeks(1)) +
                 "&end_date=" + ArgoDateUtil.getDateString(LocalDate.now()) +
                 "&date_period_sel=0&search_type=0&shop_id=&order_status=-1&order_cs=0&query_trans_who=0&is_gift=0&work_type=0";
         int total = this.getTotal(dataUrl, headers, params);
