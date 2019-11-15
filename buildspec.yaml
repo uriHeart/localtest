@@ -19,7 +19,5 @@ phases:
       - mv argo-api-before.sh build-out
       - zip argo-api-build.zip -j build-out/*
 artifacts:
-  files:
-    - appspec.yml
-    - build/libs/*.jar
-  discard-paths: yes
+   files:
+      - argo-api-build.zip
