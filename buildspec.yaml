@@ -9,15 +9,22 @@ phases:
       - gradle build -x test
   post_build:
     commands:
-      - mkdir build-out
-      - mv argo-common/build/libs/*.jar build-out
-      - mv argo-api/build/libs/*.jar build-out
-      - mv argo-collector/build/libs/*.jar build-out
-      - mv appspec.yml build-out
-      - mv argo-api-start.sh build-out
-      - mv argo-api-stop.sh build-out
-      - mv argo-api-before.sh build-out
-      - zip argo-api-build.zip -j build-out/*
+       - echo $(basename ./build/libs/*.jar)
+       - pwd
+#      - mkdir build-out
+#      - mv argo-common/build/libs/*.jar build-out
+#      - mv argo-api/build/libs/*.jar build-out
+#      - mv argo-collector/build/libs/*.jar build-out
+#      - mv appspec.yml build-out
+#      - mv argo-api-start.sh build-out
+#      - mv argo-api-stop.sh build-out
+#      - mv argo-api-before.sh build-out
+#      - zip argo-api-build.zip -j build-out/*
 artifacts:
    files:
-      - argo-api-build.zip
+      - appspec.yml
+      - build/libs/*.jar
+      - scripts/**
+    discard-paths: yes
+#    - 'argo-common/build/libs/*'
+#    - 'argo-api/build/libs/*.jar'
