@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class VendorValidator {
-    @Autowired
+//    @Autowired
     private UserManager userManager;
 
     public void valid(Long vendorId) {

@@ -31,7 +31,7 @@ public class AuthController {
     @Autowired
     private RsaKeyGenerator rsaKeyGenerator;
 
-    @Autowired
+//    @Autowired
     private UserManager userManager;
 
     @GetMapping(value = "/auth/key")
