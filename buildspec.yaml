@@ -20,6 +20,6 @@ phases:
       - zip argo-api-build.zip -j build-out/*
 artifacts:
   files:
-    - '*.zip'
-#    - 'argo-common/build/libs/*'
-#    - 'argo-api/build/libs/*.jar'
+    - appspec.yml
+    - build/libs/*.jar
+  discard-paths: yes
