@@ -14,4 +14,5 @@ public class LoginResult {
     private String message;
     private Long vendorId;
     private String dashboardUrl;
+    private String totalDashboardUrl;
 }

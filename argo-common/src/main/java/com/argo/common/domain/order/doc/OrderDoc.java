@@ -21,6 +21,7 @@ public class OrderDoc {
     private Date publishedAt;
     private Date orderedAt;
     private Date collectedAt;
+    private Date publishedDate;
 
     private String orderStatus;
 
