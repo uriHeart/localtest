@@ -6,13 +6,13 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,16 +42,15 @@ public class S3Service {
         try {
             File uploadFile = convert(file);
             PutObjectRequest putObjectRequest = new PutObjectRequest(path, fileName, uploadFile);
-            putObjectRequest.setCannedAcl(CannedAccessControlList.AuthenticatedRead);
-//            amazonS3.putObject(putObjectRequest);
+            amazonS3.putObject(putObjectRequest);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
     }
 
-    private File convert(MultipartFile file) throws IOException {
-        File convertFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
-        file.transferTo(convertFile);
-        return convertFile;
+    private File convert(MultipartFile multipartFile) throws IOException {
+        File file = new File("./", Objects.requireNonNull(multipartFile.getOriginalFilename()));
+        FileUtils.writeByteArrayToFile(file, multipartFile.getBytes());
+        return file;
     }
 }

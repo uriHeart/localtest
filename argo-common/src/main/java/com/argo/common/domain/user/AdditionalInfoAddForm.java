@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 public class AdditionalInfoAddForm {
 
-    private static final String FILE_LOCATION = "/user-additional-info/license/";
+    private static final String FILE_LOCATION = "/user-additional-info/license";
     private static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private String businessType;

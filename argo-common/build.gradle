@@ -48,6 +48,7 @@ dependencies {
 //    testCompile 'io.projectreactor:reactor-test'
     compile "org.springframework.boot:spring-boot-starter-mail:${springBootVersion}"
     compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.675'
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
 
 }
 
