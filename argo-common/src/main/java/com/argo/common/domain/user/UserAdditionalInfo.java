@@ -2,6 +2,7 @@ package com.argo.common.domain.user;
 
 import com.google.common.collect.Maps;
 import java.util.Map;
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -34,7 +35,7 @@ public class UserAdditionalInfo {
     @Column(name = "user_additional_info_id", nullable = false)
     private Long userAdditionalInfoId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "argo_user_id")
     private ArgoUser argoUser;
 

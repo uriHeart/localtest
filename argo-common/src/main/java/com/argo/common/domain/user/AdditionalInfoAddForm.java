@@ -30,11 +30,19 @@ public class AdditionalInfoAddForm {
         userAdditionalInfo.setDetailAddress(detailAddress);
         userAdditionalInfo.setSaleForm(saleForm);
         userAdditionalInfo.setSaleType(saleType);
-        userAdditionalInfo.setLicenseLocation(FILE_LOCATION);
-        userAdditionalInfo.setFileName(licenseNumber + representativeName + "." + getFileExtension());
+        userAdditionalInfo.setLicenseLocation(getFileLocation());
+        userAdditionalInfo.setFileName(getFileName());
         userAdditionalInfo.setArgoUser(user);
 
         return userAdditionalInfo;
+    }
+
+    public String getFileLocation() {
+        return FILE_LOCATION;
+    }
+
+    public String getFileName() {
+        return licenseNumber + representativeName + "." + getFileExtension();
     }
 
     private String getFileExtension() {

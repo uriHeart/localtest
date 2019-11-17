@@ -10,6 +10,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -48,7 +50,8 @@ public class ArgoUser implements SystemMetadata {
     @Column(name = "password")
     private String password;
 
-    private boolean isApproved;
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
 
     @Column(name = "vendor_id")
     private Long vendorId;
@@ -69,4 +72,7 @@ public class ArgoUser implements SystemMetadata {
     @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
 
+    public boolean isConfirmed() {
+        return UserStatus.INITIALIZED.equals(this.status);
+    }
 }

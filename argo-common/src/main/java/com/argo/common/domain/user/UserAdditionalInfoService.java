@@ -1,8 +1,8 @@
 package com.argo.common.domain.user;
 
-import com.argo.common.aws.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserAdditionalInfoService {
@@ -13,12 +13,11 @@ public class UserAdditionalInfoService {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private S3Service s3Service;
-
+    @Transactional
     public void addAdditionalInfo(AdditionalInfoAddForm form, String userId) {
         UserAdditionalInfo info = form.getEntity(userService.getUserByLoginId(userId));
-        s3Service.uploadFile(info.getFileLocation(), info.getFileName(), form.getFile());
+        ArgoUser targetUser = info.getArgoUser();
+        targetUser.setStatus(UserStatus.ACTIVATED);
         userAdditionalInfoRepository.save(info);
     }
 }

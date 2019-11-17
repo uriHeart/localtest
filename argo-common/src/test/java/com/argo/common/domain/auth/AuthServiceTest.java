@@ -1,16 +1,15 @@
 package com.argo.common.domain.auth;
 
 import com.argo.common.domain.user.Seller;
-//import com.argo.common.exception.UserAlreadyApprovedException;
+import com.argo.common.domain.user.UserStatus;
 import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+
+//import com.argo.common.exception.UserAlreadyApprovedException;
 
 //@RunWith(MockitoJUnitRunner.class)
 public class AuthServiceTest {
@@ -27,14 +26,14 @@ public class AuthServiceTest {
 //    @Test(expected = UserAlreadyApprovedException.class)
     public void alreadyApprovedUser() {
         Seller user = new Seller();
-        user.setApproved(true);
+        user.setStatus(UserStatus.INITIALIZED);
         authService.createUuidForConfirm(user);
     }
 
 //    @Test
     public void createConfirmData() {
         Seller user = new Seller();
-        user.setApproved(false);
+        user.setStatus(UserStatus.INITIALIZED);
 
         String uuidForConfirm = authService.createUuidForConfirm(user);
         Mockito.verify(userConfirmsRepository).save(argCaptor.capture());

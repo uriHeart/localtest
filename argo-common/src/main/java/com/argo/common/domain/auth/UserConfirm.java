@@ -1,6 +1,7 @@
 package com.argo.common.domain.auth;
 
 import com.argo.common.domain.user.ArgoUser;
+import com.argo.common.domain.user.UserStatus;
 import com.argo.common.exception.UserRegistrationException;
 import java.util.Date;
 import javax.persistence.CascadeType;
@@ -60,6 +61,6 @@ public class UserConfirm {
             throw new UserRegistrationException("이메일 인증 기간이 만료되었습니다.");
         }
         ArgoUser argoUser = getArgoUser();
-        argoUser.setApproved(true);
+        argoUser.setStatus(UserStatus.AUTHENTICATED);
     }
 }
