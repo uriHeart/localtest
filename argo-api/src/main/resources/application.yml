@@ -71,8 +71,8 @@ elasticsearch:
 
 registration:
   url:
-    confirm: https://argoport.com/auth/confirm
-    additional-info: http://argoport.com/auth/additional-info
+    confirm: https://argoport.com/#/auth/confirm
+    additional-info: http://argoport.com/#/auth/additional-info
 
 aws:
   s3:
