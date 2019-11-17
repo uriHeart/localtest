@@ -17,7 +17,7 @@ public class UserAdditionalInfoService {
     public void addAdditionalInfo(AdditionalInfoAddForm form, String userId) {
         UserAdditionalInfo info = form.getEntity(userService.getUserByLoginId(userId));
         ArgoUser targetUser = info.getArgoUser();
-        targetUser.setStatus(UserStatus.ACTIVATED);
+        targetUser.setStatus(UserStatus.PREPARE);
         userAdditionalInfoRepository.save(info);
     }
 }

@@ -50,6 +50,9 @@ public class ArgoUser implements SystemMetadata {
     @Column(name = "password")
     private String password;
 
+    @Deprecated
+    private boolean isApproved;
+
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
@@ -73,6 +76,6 @@ public class ArgoUser implements SystemMetadata {
     private Date updatedAt;
 
     public boolean isConfirmed() {
-        return UserStatus.INITIALIZED.equals(this.status);
+        return !UserStatus.INITIALIZED.equals(this.status);
     }
 }
