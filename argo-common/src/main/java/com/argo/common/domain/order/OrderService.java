@@ -29,6 +29,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.joda.time.LocalDate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -92,6 +93,7 @@ public class OrderService {
                         .channelId(order.getChannelId())
                         .channelType(salesChannel.getChannelType().name())
                         .channelTypeDescription(salesChannel.getChannelType().getDescription())
+                        .publishedDate(LocalDate.fromDateFields(item.getPublishedAt()).toDate())
                         .publishedAt(item.getPublishedAt())
                         .collectedAt(order.getMetadata().getCollectedAt())
                         .orderedAt(order.getMetadata().getOrderedAt())
