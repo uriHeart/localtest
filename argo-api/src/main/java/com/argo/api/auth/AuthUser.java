@@ -2,8 +2,6 @@ package com.argo.api.auth;
 
 import com.argo.common.domain.user.Role;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import java.io.Serializable;
 import java.util.List;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,5 +22,9 @@ public class AuthUser implements GrantedAuthority {
     @Override
     public String getAuthority() {
         return RoleType.SELLER.name();
+    }
+
+    public Long getVendorId() {
+        return this.vendorId == null ? 0L : this.vendorId;
     }
 }

@@ -18,7 +18,7 @@ public class AuthService {
 
     @Transactional
     public String createUuidForConfirm(ArgoUser user) {
-        if (user.isApproved()) {
+        if (user.isConfirmed()) {
             throw new UserRegistrationException("이미 승인된 사용자 입니다.");
         }
 

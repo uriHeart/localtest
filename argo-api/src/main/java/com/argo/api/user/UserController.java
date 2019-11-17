@@ -5,13 +5,16 @@ import com.argo.common.domain.user.UserService;
 import com.argo.common.domain.user.password.PasswordRecovery;
 import com.argo.common.domain.user.password.PasswordResetForm;
 import com.argo.common.domain.user.password.PasswordService;
+import java.security.Principal;
+import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
-import java.security.Principal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController("/user")
 public class UserController {
@@ -21,7 +24,6 @@ public class UserController {
 
     @Autowired
     private PasswordService passwordService;
-
 
     @GetMapping
     public ResponseEntity<ArgoUser> getUser(String email) {
@@ -79,4 +81,5 @@ public class UserController {
         ArgoUser user = userService.resetPassword(principal.getName(), resetForm.getNewPassword());
         return ResponseEntity.ok(user);
     }
+
 }
