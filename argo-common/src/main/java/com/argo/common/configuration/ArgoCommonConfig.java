@@ -1,5 +1,6 @@
 package com.argo.common.configuration;
 
+import javax.annotation.Resource;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,8 +16,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
-
-import javax.annotation.Resource;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.argo")
@@ -42,7 +41,5 @@ public class ArgoCommonConfig implements AsyncConfigurer, TransactionManagementC
     public PlatformTransactionManager annotationDrivenTransactionManager() {
         return chainedTransactionManager();
     }
-
-    
 }
 
