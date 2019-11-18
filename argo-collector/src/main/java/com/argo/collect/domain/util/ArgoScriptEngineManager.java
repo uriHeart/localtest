@@ -19,7 +19,7 @@ public class ArgoScriptEngineManager {
     public void init() {
         ScriptEngineManager sem = new ScriptEngineManager();
         se = sem.getEngineByName("JavaScript");
-        File jsDir = new File("/Users/ags0688/git/argo/argo-collector/src/main/resources/js");
+        File jsDir = new File("/home/ec2-user/js");
 
         try {
             if (jsDir.listFiles() == null) {
