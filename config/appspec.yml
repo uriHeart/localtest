@@ -5,11 +5,11 @@ files:
     destination: /home/ec2-user/argo-collector
 hooks:
   BeforeInstall:
-    - location: config/argo-collector-before.sh
+    - location: argo-collector-before.sh
       runas: root
   AfterInstall:
-    - location: config/argo-collector-stop.sh
+    - location: argo-collector-stop.sh
       runas : root
   ApplicationStart:
-    - location: config/argo-collector-start.sh
+    - location: argo-collector-start.sh
       runas : root
