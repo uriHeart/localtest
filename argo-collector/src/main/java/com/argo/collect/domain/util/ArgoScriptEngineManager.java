@@ -9,6 +9,7 @@ import javax.script.ScriptException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Arrays;
 
 @Component
 public class ArgoScriptEngineManager {
@@ -22,11 +23,13 @@ public class ArgoScriptEngineManager {
         File jsDir = new File("/home/ec2-user/js");
 
         try {
-            if (jsDir.listFiles() == null) {
+            File[] jsFiles = jsDir.listFiles();
+            if (jsFiles == null) {
                 return;
             }
 
-            for (File js : jsDir.listFiles()) {
+            Arrays.sort(jsFiles);
+            for (File js : jsFiles) {
                 FileReader reader = new FileReader(js);
                 se.eval(reader);
             }
