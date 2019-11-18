@@ -11,7 +11,6 @@ phases:
     commands:
       - mkdir build-out
       - mv argo-common/build/libs/*.jar build-out
-      - mv argo-api/build/libs/*.jar build-out
       - mv argo-collector/build/libs/*.jar build-out
       - mv config/* build-out
       - zip argo-collector-build.zip -j build-out/*
