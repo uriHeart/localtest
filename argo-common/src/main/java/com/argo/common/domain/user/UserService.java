@@ -41,7 +41,7 @@ public class UserService {
     public ArgoUser updateUser(ArgoUser inputUser, String email) {
         ArgoUser user = userRepository.findByLoginId(email);
         // update user with not null values
-        if(inputUser.getLoginId() != null) {
+        if (inputUser.getLoginId() != null) {
             user.setLoginId(inputUser.getLoginId());
         }
 

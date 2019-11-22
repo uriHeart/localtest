@@ -17,7 +17,6 @@ import java.util.Date;
 @ToString
 @EntityListeners( { CreatedAtListener.class, UpdatedAtListener.class } )
 public class SalesChannel implements SystemMetadata {
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="sales_channels_seq")
     @SequenceGenerator(name="sales_channels_seq", sequenceName="sales_channels_seq", allocationSize=1)

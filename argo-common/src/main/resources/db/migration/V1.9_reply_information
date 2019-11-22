@@ -1,0 +1,3 @@
+ALTER TABLE main_board
+ADD COLUMN admin_reply VARCHAR(1000),
+ADD COLUMN user_reply VARCHAR(1000);
