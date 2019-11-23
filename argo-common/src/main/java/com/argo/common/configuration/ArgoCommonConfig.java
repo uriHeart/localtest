@@ -1,6 +1,5 @@
 package com.argo.common.configuration;
 
-import javax.annotation.Resource;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,7 +8,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 import org.springframework.data.cassandra.repository.config.EnableReactiveCassandraRepositories;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.transaction.ChainedTransactionManager;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -17,8 +15,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
+import javax.annotation.Resource;
+
 @Configuration
-@EnableJpaRepositories(basePackages = "com.argo")
 @EnableReactiveCassandraRepositories(basePackages = "com.argo.common.domain.order.reactive")
 @EnableCassandraRepositories(basePackages = "com.argo.common.domain")
 @EnableJpaAuditing
