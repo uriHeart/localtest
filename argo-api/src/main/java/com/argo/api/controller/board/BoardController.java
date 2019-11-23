@@ -20,10 +20,8 @@ public class BoardController {
     @Autowired
     MainBoardService mainBoardService;
 
-
-
     @GetMapping(value = "/list/{boardNo}")
-    public MainBoard findBoard(@PathVariable Long boardNo) {
+    public MainBoard findBoard(@PathVariable int boardNo) {
         return mainBoardService.getBoardById(boardNo);
     }
 
@@ -35,5 +33,15 @@ public class BoardController {
 //    @PostMapping(value = "/post/reply")
 //    public void addAdminNewReply(@RequestBody ReplyBoard replyBoard) {
 //    }
+
+    @GetMapping(value = "/list/check/{boardNo}")
+    public boolean assertExists(@PathVariable int boardNo) {
+        if (mainBoardService.assertExists(boardNo)) {
+            return true;
+        };
+        return false;
+    }
+
+
 
 }

@@ -1,7 +1,7 @@
 CREATE TABLE main_board (
 --     writer_id SERIAL NOT NULL PRIMARY KEY,
     writer_id SERIAL,
-    board_number BIGINT,
+    board_number INT,
     user_email VARCHAR(200),
     title VARCHAR(300),
     post VARCHAR(9999),
