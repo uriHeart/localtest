@@ -58,6 +58,10 @@ public class OrderVendorItemLifecycle {
     @CassandraType(type = DataType.Name.TEXT)
     private String sourceItemOption; // dataRows.options
 
+    @Column("barcode")
+    @CassandraType(type = DataType.Name.TEXT)
+    private String barcode;
+
     @Column("metadata")
     @CassandraType(type = DataType.Name.TEXT)
     private String metadata;

@@ -80,3 +80,6 @@ aws:
 goData:
   token: v8N7GVyY1dKTJ8inAiv3lBPbajbHgjl8NAYSu1vKXvMCBUU2JhuQee8VyFVcS%2Bt37rZ1h9N9PktQeQRxjtUsnw%3D%3D
   url: http://apis.data.go.kr/B552015/NpsBplcInfoInqireService/getBassInfoSearch
+
+collect:
+  auth-script-location: /home/ec2-user/js

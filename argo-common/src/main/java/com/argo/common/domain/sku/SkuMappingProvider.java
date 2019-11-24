@@ -55,48 +55,27 @@ public class SkuMappingProvider {
         return channelId + "-" + vendorId + "-" + sourceItemCode;
     }
 
-    public String getSkuNameByItemCode(Long channelId, Long vendorId, String sourceItemCode) {
+    public SkuData getSku(Long channelId, Long vendorId, String sourceItemCode, String barcode) {
+        SkuData result = this.getSku(channelId, vendorId, sourceItemCode);
+        return result == null ?
+                ( this.getSku(barcode) == null ?
+                        this.getSku(2L, vendorId, sourceItemCode) // EZAdmin 상품
+                        : this.getSku(barcode))
+                : result;
+    }
+
+    public SkuData getSku(Long channelId, Long vendorId, String sourceItemCode) {
         if (!items.containsKey(this.getItemIdKey(channelId, vendorId, sourceItemCode))) {
             return null;
         }
         String barcode = items.get(this.getItemIdKey(channelId, vendorId, sourceItemCode)).getBarcode();
-        return skus.get(barcode).getName();
+        return skus.get(barcode);
     }
 
-    public String getSkuNameByBarcode(String barcode) {
+    public SkuData getSku(String barcode) {
         if (!items.containsKey(barcode)) {
             return null;
         }
-        return skus.get(barcode).getName();
-    }
-
-    public String getSkuColorByItemCode(Long channelId, Long vendorId, String sourceItemCode) {
-        if (!items.containsKey(this.getItemIdKey(channelId, vendorId, sourceItemCode))) {
-            return null;
-        }
-        String barcode = items.get(this.getItemIdKey(channelId, vendorId, sourceItemCode)).getBarcode();
-        return skus.get(barcode).getColor();
-    }
-
-    public String getSkuColorByBarcode(String barcode) {
-        if (!items.containsKey(barcode)) {
-            return null;
-        }
-        return skus.get(barcode).getColor();
-    }
-
-    public String getSkuSizeByItemCode(Long channelId, Long vendorId, String sourceItemCode) {
-        if (!items.containsKey(this.getItemIdKey(channelId, vendorId, sourceItemCode))) {
-            return null;
-        }
-        String barcode = items.get(this.getItemIdKey(channelId, vendorId, sourceItemCode)).getBarcode();
-        return skus.get(barcode).getSize();
-    }
-
-    public String getSkuSizeByBarcode(String barcode) {
-        if (!items.containsKey(barcode)) {
-            return null;
-        }
-        return skus.get(barcode).getSize();
+        return skus.get(barcode);
     }
 }

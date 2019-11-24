@@ -9,6 +9,8 @@ import com.argo.common.domain.order.reactive.ReactiveOrderAddressRepository;
 import com.argo.common.domain.order.reactive.ReactiveOrderRepository;
 import com.argo.common.domain.order.reactive.ReactiveOrderVendorItemLifecycleRepository;
 import com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle;
+import com.argo.common.domain.sku.SkuData;
+import com.argo.common.domain.sku.SkuMappingProvider;
 import com.argo.common.domain.vendor.Vendor;
 import com.argo.common.domain.vendor.VendorService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -50,6 +52,7 @@ public class OrderService {
     private ReactiveOrderVendorItemLifecycleRepository reactiveOrderVendorItemLifecycleRepository;
     private VendorService vendorService;
     private SalesChannelService salesChannelService;
+    private SkuMappingProvider skuMappingProvider;
 
     public void saveOrder(ArgoOrder order, OrderAddress orderAddress, List<OrderVendorItemLifecycle> orderVendorItemLifecycles) {
         if (order == null) {
@@ -86,33 +89,41 @@ public class OrderService {
     private void buildOrderDocument(ArgoOrder order, OrderAddress orderAddress, List<OrderVendorItemLifecycle> vendorItems) {
         SalesChannel salesChannel = salesChannelService.getSalesChannel(order.getChannelId());
         vendorItems.forEach(
-                item -> this.indexingOrder(OrderDoc.builder()
-                        .id(this.getDocId(order, item))
-                        .orderId(order.getOrderId())
-                        .vendorId(order.getVendorId())
-                        .channelId(order.getChannelId())
-                        .channelType(salesChannel.getChannelType().name())
-                        .channelTypeDescription(salesChannel.getChannelType().getDescription())
-                        .publishedDate(LocalDate.fromDateFields(item.getPublishedAt()).toDate())
-                        .publishedAt(item.getPublishedAt())
-                        .collectedAt(order.getMetadata().getCollectedAt())
-                        .orderedAt(order.getMetadata().getOrderedAt())
-                        .orderStatus(order.getState())
-                        .salesChannelCode(salesChannel.getCode())
-                        .salesChannelName(salesChannel.getName())
-                        .recipientName(orderAddress.getRecipient().getName())
-                        .originalPostalCode(orderAddress.getOriginalPostalCode())
-                        .vendorItemId(item.getVendorItemId())
-                        .vendorItemLifeCycleStatus(item.getState())
-                        .originalPrice(item.getMetadata().getOriginalPrice())
-                        .paymentAmount(item.getMetadata().getPaymentAmount())
-                        .paymentMethod(item.getMetadata().getPaymentMethod())
-                        .salesPrice(item.getMetadata().getSalesPrice())
-                        .quantity(item.getQuantity())
-                        .sourceItemId(item.getSourceItemId())
-                        .sourceItemName(item.getSourceItemName())
-                        .sourceItemOption(item.getSourceItemOption())
-                        .build())
+                item -> {
+                    SkuData sku = skuMappingProvider.getSku(order.getChannelId(), order.getVendorId(), item.getSourceItemId(), item.getBarcode());
+                    this.indexingOrder(OrderDoc.builder()
+                            .id(this.getDocId(order, item))
+                            .orderId(order.getOrderId())
+                            .vendorId(order.getVendorId())
+                            .channelId(order.getChannelId())
+                            .channelType(salesChannel.getChannelType().name())
+                            .channelTypeDescription(salesChannel.getChannelType().getDescription())
+                            .publishedDate(LocalDate.fromDateFields(item.getPublishedAt()).toDate())
+                            .publishedAt(item.getPublishedAt())
+                            .collectedAt(order.getMetadata().getCollectedAt())
+                            .orderedAt(order.getMetadata().getOrderedAt())
+                            .orderStatus(order.getState())
+                            .salesChannelCode(salesChannel.getCode())
+                            .salesChannelName(salesChannel.getName())
+                            .recipientName(orderAddress == null ? null : orderAddress.getRecipient().getName())
+                            .originalPostalCode(orderAddress == null ? null : orderAddress.getOriginalPostalCode())
+                            .vendorItemId(item.getVendorItemId())
+                            .vendorItemLifeCycleStatus(item.getState())
+                            .originalPrice(item.getMetadata().getOriginalPrice())
+                            .paymentAmount(item.getMetadata().getPaymentAmount())
+                            .paymentMethod(item.getMetadata().getPaymentMethod())
+                            .salesPrice(item.getMetadata().getSalesPrice())
+                            .quantity(item.getQuantity())
+                            .sourceItemId(item.getSourceItemId())
+                            .sourceItemName(item.getSourceItemName())
+                            .sourceItemOption(item.getSourceItemOption())
+                            .barcode(sku == null ? item.getBarcode() : sku.getBarcode())
+                            .skuId(sku == null ? null : sku.getSkuId())
+                            .skuName(sku == null ? null : sku.getName())
+                            .skuColor(sku == null ? null : sku.getColor())
+                            .skuSize(sku == null ? null : sku.getSize())
+                            .build());
+                }
         );
     }
 
