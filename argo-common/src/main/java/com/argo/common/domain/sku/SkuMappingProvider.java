@@ -1,10 +1,11 @@
 package com.argo.common.domain.sku;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.testng.collections.Lists;
-import org.testng.collections.Maps;
+
 
 import javax.annotation.PostConstruct;
 import java.util.List;
