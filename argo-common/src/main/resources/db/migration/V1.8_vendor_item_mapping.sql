@@ -6,8 +6,11 @@ CREATE TABLE source_item_info (
   item_name VARCHAR(500) NOT NULL,
   item_option VARCHAR(500) NOT NULL,
   barcode VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT source_item_info_pk PRIMARY KEY (source_item_id)
 );
+
 
 CREATE TABLE sku_master (
   sku_id SERIAL,
@@ -41,3 +44,6 @@ CREATE TABLE sku_attribute (
   updated_by VARCHAR(200),
   CONSTRAINT sku_attribute_pk PRIMARY KEY (sku_attribute_id)
 );
+
+CREATE INDEX sku_attribute_idx01
+  ON sku_attribute (sku_id);

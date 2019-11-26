@@ -58,10 +58,6 @@ public class OrderVendorItemLifecycle {
     @CassandraType(type = DataType.Name.TEXT)
     private String sourceItemOption; // dataRows.options
 
-    @Column("barcode")
-    @CassandraType(type = DataType.Name.TEXT)
-    private String barcode;
-
     @Column("metadata")
     @CassandraType(type = DataType.Name.TEXT)
     private String metadata;
@@ -100,5 +96,17 @@ public class OrderVendorItemLifecycle {
 
     public void setMetadata(OrderVendorItemMetadata orderVendorItemMetadata) {
         this.metadata = JsonUtil.write(orderVendorItemMetadata);
+    }
+
+    public SkuMappingData getSkuMappings() {
+        if (this.skuMappings == null) {
+            return SkuMappingData.builder().build();
+        }
+
+        return JsonUtil.read(this.skuMappings, SkuMappingData.class);
+    }
+
+    public void setSkuMappings(SkuMappingData skuMappings) {
+        this.skuMappings = JsonUtil.write(skuMappings);
     }
 }

@@ -50,13 +50,16 @@ INSERT INTO sales_channels (code, name, base_uri, token_uri, login_uri) VALUES
 
 CREATE TABLE channel_collect_info (
   channel_collect_info_id SERIAL,
-  sales_channel_id SERIAL,
+  sales_channel_id BIGINT,
   collect_uri VARCHAR(100),
   collect_param TEXT,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT channel_collect_info_pk PRIMARY KEY (channel_collect_info_id)
 );
+
+ALTER TABLE channel_collect_info
+  ADD CONSTRAINT channel_collect_info_uk01 UNIQUE (sales_channel_id);
 
 INSERT INTO channel_collect_info (sales_channel_id, collect_uri, collect_param) VALUES
 (1, '/po/order/ord01/search', '{"S_SDATE":"S_SDATE","S_EDATE":"S_EDATE"}'),
