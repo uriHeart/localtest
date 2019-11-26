@@ -90,7 +90,7 @@ public class OrderService {
         SalesChannel salesChannel = salesChannelService.getSalesChannel(order.getChannelId());
         vendorItems.forEach(
                 item -> {
-                    SkuData sku = skuMappingProvider.getSku(order.getChannelId(), order.getVendorId(), item.getSourceItemId(), item.getBarcode());
+                    SkuData sku = skuMappingProvider.getSku(order.getChannelId(), order.getVendorId(), item.getSourceItemId(), null);
                     this.indexingOrder(OrderDoc.builder()
                             .id(this.getDocId(order, item))
                             .orderId(order.getOrderId())
@@ -117,7 +117,7 @@ public class OrderService {
                             .sourceItemId(item.getSourceItemId())
                             .sourceItemName(item.getSourceItemName())
                             .sourceItemOption(item.getSourceItemOption())
-                            .barcode(sku == null ? item.getBarcode() : sku.getBarcode())
+                            .barcode(sku == null ? null : sku.getBarcode())
                             .skuId(sku == null ? null : sku.getSkuId())
                             .skuName(sku == null ? null : sku.getName())
                             .skuColor(sku == null ? null : sku.getColor())
