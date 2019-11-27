@@ -52,7 +52,7 @@ public class AuthController {
             if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().isEmpty()) {
                 return null;
             }
-            return (AuthUser) SecurityContextHolder.getContext().getAuthentication().getAuthorities().iterator().next();
+            return (AuthUser) SecurityContextHolder.getContext().getAuthentication().getDetails();
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();
@@ -68,6 +68,7 @@ public class AuthController {
         } else {
             return new ResponseEntity<>(LoginResult.builder()
                     .success(true)
+                    .userId(user.getLoginId())
                     .vendorId(user.getVendorId())
                     .dashboardUrl("https://db.argoport.com/app/kibana#/dashboard/3416c9a0-0861-11ea-938e-293ce79f4c46?embed=true&_g=(refreshInterval%3A(pause%3A!f%2Cvalue%3A5000)%2Ctime%3A(from%3Anow-7d%2Cto%3Anow))")
                     .totalDashboardUrl("https://db.argoport.com/app/kibana#/dashboard/85687930-086f-11ea-938e-293ce79f4c46?embed=true&_g=(filters%3A!()%2CrefreshInterval%3A(pause%3A!f%2Cvalue%3A5000)%2Ctime%3A(from%3Anow-1y%2Cto%3Anow))")
@@ -82,7 +83,7 @@ public class AuthController {
             Authentication authentication = authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-            AuthUser user = this.get();
+            AuthUser user = (AuthUser)authentication.getDetails();
             return new ResponseEntity<>(LoginResult.builder()
                     .success(true)
                     .vendorId(user == null ? 0L : user.getVendorId())

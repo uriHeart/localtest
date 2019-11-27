@@ -1,6 +1,5 @@
 package com.argo.api.configuration;
 
-import com.argo.api.auth.RoleType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -26,9 +25,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .cors()
             .and()
                 .authorizeRequests()
-                .antMatchers("/error**", "/api/auth/**", "/board/**").permitAll()
-                .antMatchers("/**").authenticated()
-                .antMatchers("/admin/**").access(RoleType.ADMIN.name())
+                .antMatchers("/error**", "/user/password/**", "/api/auth/**", "/board/**").permitAll()
+                .anyRequest().access("@authorizationChecker.check(request, authentication)")
             .and()
                 .formLogin().disable()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))

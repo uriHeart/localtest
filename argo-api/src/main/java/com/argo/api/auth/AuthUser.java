@@ -1,5 +1,6 @@
 package com.argo.api.auth;
 
+import com.argo.common.domain.common.util.HashUtil;
 import com.argo.common.domain.user.Role;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
@@ -26,5 +27,9 @@ public class AuthUser implements GrantedAuthority {
 
     public Long getVendorId() {
         return this.vendorId == null ? 0L : this.vendorId;
+    }
+
+    public boolean confirmPassword(String password) {
+        return HashUtil.sha256(password).equals(getPassword());
     }
 }
