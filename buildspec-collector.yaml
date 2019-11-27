@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: openjdk8
+  build:
+    commands:
+      - gradle build -x test
+  post_build:
+    commands:
+      - mkdir build-out
+      - mv argo-common/build/libs/*.jar build-out
+      - mv argo-collector/build/libs/*.jar build-out
+      - mv config/* build-out
+      - zip argo-collector-build.zip -j build-out/*
+artifacts:
+   files:
+      - '*.zip'

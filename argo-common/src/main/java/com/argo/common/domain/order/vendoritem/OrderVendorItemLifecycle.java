@@ -97,4 +97,16 @@ public class OrderVendorItemLifecycle {
     public void setMetadata(OrderVendorItemMetadata orderVendorItemMetadata) {
         this.metadata = JsonUtil.write(orderVendorItemMetadata);
     }
+
+    public SkuMappingData getSkuMappings() {
+        if (this.skuMappings == null) {
+            return SkuMappingData.builder().build();
+        }
+
+        return JsonUtil.read(this.skuMappings, SkuMappingData.class);
+    }
+
+    public void setSkuMappings(SkuMappingData skuMappings) {
+        this.skuMappings = JsonUtil.write(skuMappings);
+    }
 }

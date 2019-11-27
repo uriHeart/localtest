@@ -1,0 +1,15 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/argo-collector
+hooks:
+  BeforeInstall:
+    - location: argo-collector-before.sh
+      runas: root
+  AfterInstall:
+    - location: argo-collector-stop.sh
+      runas : root
+  ApplicationStart:
+    - location: argo-collector-start.sh
+      runas : root

@@ -72,3 +72,14 @@ registration:
   url:
     confirm: https://argoport.com/auth/confirm
     additional-info: http://argoport.com/auth/additional-info
+aws:
+  s3:
+    accessKey: AKIAY7LXOLNEKJ4LQANO
+    secretKey: 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
+
+goData:
+  token: v8N7GVyY1dKTJ8inAiv3lBPbajbHgjl8NAYSu1vKXvMCBUU2JhuQee8VyFVcS%2Bt37rZ1h9N9PktQeQRxjtUsnw%3D%3D
+  url: http://apis.data.go.kr/B552015/NpsBplcInfoInqireService/getBassInfoSearch
+
+collect:
+  auth-script-location: /home/ec2-user/js

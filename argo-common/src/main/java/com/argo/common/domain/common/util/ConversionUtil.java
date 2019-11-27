@@ -55,7 +55,11 @@ public class ConversionUtil {
             if(jsonNode.isNumber()) {
                 return jsonNode.asLong();
             } else {
-                return Long.valueOf(jsonNode.asText().replaceAll("[^\\d.]", ""));
+                try {
+                    return Long.valueOf(jsonNode.asText().replaceAll("[^\\d.]", ""));
+                } catch (Exception e) {
+                    return 0L;
+                }
             }
         } else if(clazz.equals(Double.class) || clazz.equals(double.class)) {
             if(jsonNode.isDouble()) {
