@@ -21,7 +21,7 @@ spring:
           use_jdbc_metadata_defaults: false
         hibernate:
           default_schema: public
-    hibernate.ddl-auto: update
+    hibernate.ddl-auto: none
     hibernate.naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   main:
     allow-bean-definition-overriding: true
@@ -72,7 +72,7 @@ elasticsearch:
 registration:
   url:
     confirm: https://argoport.com/#/auth/confirm
-    additional-info: http://argoport.com/#/auth/additional-info
+    additional-info: https://argoport.com/#/auth/additional-info
 
 aws:
   s3:
@@ -82,3 +82,7 @@ aws:
 goData:
   token: v8N7GVyY1dKTJ8inAiv3lBPbajbHgjl8NAYSu1vKXvMCBUU2JhuQee8VyFVcS%2Bt37rZ1h9N9PktQeQRxjtUsnw%3D%3D
   url: http://apis.data.go.kr/B552015/NpsBplcInfoInqireService/getBassInfoSearch
+
+passwordreset:
+  url:
+    confirm: https://argoport.com/#/auth/resetPasswordConfirm

@@ -1,22 +1,26 @@
 package com.argo.api.user;
 
+import com.argo.api.exception.ApiException;
 import com.argo.common.domain.user.ArgoUser;
 import com.argo.common.domain.user.UserService;
 import com.argo.common.domain.user.password.PasswordRecovery;
 import com.argo.common.domain.user.password.PasswordResetForm;
 import com.argo.common.domain.user.password.PasswordService;
 import java.security.Principal;
-import javax.servlet.http.HttpSession;
+import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/user")
+@RestController
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
@@ -47,17 +51,16 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping("/passwordRecovery")
-    public void passwordRecovery(String email) {
-        ArgoUser user = userService.getUserByLoginId(email);
+    @GetMapping("/password/passwordRecovery/{email:.+}")
+    public void passwordRecovery(@PathVariable String email) {
+        ArgoUser user = Optional.ofNullable(userService.getUserByLoginId(email)).orElseThrow(new ApiException("등록되지 않은 email 주소입니다."));
         if(user != null) {
             passwordService.deactivateTokenForUser(user);
-
         }
     }
 
 
-    @GetMapping(value = "/recover")
+    @GetMapping(value = "/password/recover")
     public ResponseEntity recover(@RequestParam(value = "token") String token) {
         PasswordRecovery passwordRecovery = passwordService.getActivePasswordRecoveryByToken(token);
 
@@ -65,7 +68,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         } else {
             if(passwordService.isTokenValid(passwordRecovery)) {
-                return ResponseEntity.ok().build();
+                return ResponseEntity.ok().body(passwordRecovery.getArgoUser().getLoginId());
             } else {
                 passwordService.deactivatePasswordRecovery(passwordRecovery);
                 return ResponseEntity.notFound().build();
@@ -74,11 +77,8 @@ public class UserController {
     }
 
     @PutMapping(value = "/password/reset")
-    public ResponseEntity resetPassword(@RequestBody PasswordResetForm resetForm, Principal principal, HttpSession httpSession) {
-        if(resetForm.getNewPassword().equals(resetForm.getNewPasswordConfirm())) {
-            return ResponseEntity.badRequest().body("Password does not match");
-        }
-        ArgoUser user = userService.resetPassword(principal.getName(), resetForm.getNewPassword());
+    public ResponseEntity resetPassword(@RequestBody PasswordResetForm resetForm) {
+        ArgoUser user = userService.resetPassword(resetForm.getLoginId(), resetForm.getNewPassword());
         return ResponseEntity.ok(user);
     }
 

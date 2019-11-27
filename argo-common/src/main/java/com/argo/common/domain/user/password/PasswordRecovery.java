@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 @Builder
 @Entity
-@javax.persistence.Table(name = "password_recoveries", schema = "public")
+@Table(name = "password_recoveries", schema = "public")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @EntityListeners( { CreatedAtListener.class, UpdatedAtListener.class } )
@@ -23,7 +23,7 @@ public class PasswordRecovery implements SystemMetadata {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "password_recovery_seq")
     @SequenceGenerator(name = "password_recovery_seq", sequenceName = "password_recovery_seq", allocationSize = 1)
-    @javax.persistence.Column(name = "password_recovery_id", nullable = false)
+    @Column(name = "password_recovery_id", nullable = false)
     private Long passwordRecoveryId;
 
     @ManyToOne(fetch=FetchType.EAGER)

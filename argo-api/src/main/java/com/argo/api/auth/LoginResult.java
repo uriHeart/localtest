@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginResult {
     private boolean success;
+    private String userId;
     private String message;
     private Long vendorId;
     private String dashboardUrl;
