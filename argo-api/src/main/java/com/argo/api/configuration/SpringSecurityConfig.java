@@ -28,8 +28,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .cors()
             .and()
                 .authorizeRequests()
-                .antMatchers("/error**", "/user/password/**", "/api/auth/**", "/board/**").permitAll()
-                .anyRequest().access("@authorizationChecker.check(request, authentication)")
+                .antMatchers("/error**",
+                        "/sku",
+                        "/user/password/**", "/api/auth/**", "/board/**").permitAll()
+//                .anyRequest().access("@authorizationChecker.check(request, authentication)")
             .and()
                 .formLogin().disable()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))

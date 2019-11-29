@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Mono;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
@@ -38,7 +39,7 @@ public class ConvertController {
         //엑셀데이터 json변환  List<엑셀sheet List<레코드 >
         List<HashMap<String, Object>> jsonData = convertService.excelToJson(excel);
 
-        RestStatus restStatus = convertService.saveToEs(excel.getName(), jsonData,vendorId);
+        RestStatus restStatus = convertService.saveToEs(excel.getName(), jsonData,vendorId,channelId);
 
         List<HashMap<String, String>> factorAddJsonData = convertService.addExcelFactor(jsonData,channelId);
 
@@ -78,6 +79,13 @@ public class ConvertController {
     public @ResponseBody Object getExcelMainText(@RequestParam String indexId) throws IOException {
         ArrayList<HashMap<String, HashMap<String, Object>>> excelMainText = convertService.getExcelMainText(indexId);
         return excelMainText;
+    }
+
+    @DeleteMapping(value="/excel/delete")
+    public @ResponseBody
+    Mono<RestStatus> deleteIndex(@RequestParam String docId){
+        Mono<RestStatus> restStatus = convertService.deleteIndex(docId);
+        return restStatus;
     }
 
 }

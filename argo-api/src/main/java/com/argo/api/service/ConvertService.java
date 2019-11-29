@@ -11,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.elasticsearch.action.ActionListener;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -34,11 +37,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Mono;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -208,8 +213,8 @@ public class ConvertService {
                             long value = Math.round(cell.getNumericCellValue());
                             stringCellValue = String.valueOf(value);
 
-                        }catch (IllegalStateException e){
-                            stringCellValue = cell.getStringCellValue();
+                        }catch (Exception e){
+                            stringCellValue = cell.getCellFormula();
                         }
 
                         rowDataList.add(stringCellValue);
@@ -342,6 +347,8 @@ public class ConvertService {
                     //엑셀입력형식이 다를경우
                     //publishedAt = java.sql.Date.valueOf(LocalDate.parse(publishedAtString, DateTimeFormatter.BASIC_ISO_DATE));
                     publishedAt = transFormat.parse(publishedAtString);
+                    Timestamp ts=new Timestamp(publishedAt.getTime());
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     publishedAt = new Date();
@@ -377,7 +384,7 @@ public class ConvertService {
         });
     }
 
-    public RestStatus saveToEs(String id, List<HashMap<String, Object>> jsonData,Long vendorId) throws IOException {
+    public RestStatus saveToEs(String id, List<HashMap<String, Object>> jsonData,Long vendorId,Long channelId) throws IOException {
 
         String dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
@@ -388,7 +395,30 @@ public class ConvertService {
         data.put("@timeStamp",Instant.now().getEpochSecond());
         data.put("excelData",jsonData);
         data.put("fileName",id);
+
+        jsonData.forEach(sheetData ->{
+            List<HashMap<String,String>> rowData = (List<HashMap<String, String>>) sheetData.get("sheetData");
+            rowData.forEach(row-> {
+
+                List<String> deleteList = new ArrayList<>();
+
+                row.forEach( (key,value)->{
+
+                    System.out.println(key);
+
+                    if(!(key.equals("orderId") || key.equals("publishedAt"))){
+                        deleteList.add(key);
+                    }
+                });
+
+                deleteList.forEach(key->row.remove(key));
+
+            });
+        });
+
+        //key
         data.put("vendorId",vendorId);
+        data.put("channelId",channelId);
 
 
         request.source(gson.toJson(data), XContentType.JSON).id(id);
@@ -458,23 +488,44 @@ public class ConvertService {
     public List<HashMap<String, String>> addExcelFactor(List<HashMap<String, Object>> convertExcelData,Long ChannelId){
         List<HashMap<String,String>> sheetData = (List<HashMap<String, String>>) convertExcelData.get(0).get("sheetData");
         List<ChannelExcelMapping> channelExcelMappings = channelExcelMappingService.getChannelExcelMapping(ChannelId);
-        sheetData.forEach(row ->{
-            channelExcelMappings.forEach( factor ->{
+        sheetData.forEach(row -> {
+            channelExcelMappings.forEach(factor -> {
                 StringBuilder factorValue = new StringBuilder();
                 factor.getExcelFactorInfo().forEach(excelFactorInfo -> {
                     //factor를 만들 정보가 없는 엑셀은 UUID 를 사용한다.
-                    if(excelFactorInfo.getColumnNo()== 0){
+                    if (excelFactorInfo.getColumnNo() == 0) {
                         factorValue.append(UUID.randomUUID().toString());
-                    }else{
+                    } else {
                         factorValue.append(row.get(excelFactorInfo.getColumnName()));
                     }
                 });
-                row.put(factor.getFactorId(),factorValue.toString());
+                row.put(factor.getFactorId(), factorValue.toString());
             });
         });
 
-
         return sheetData;
+    }
+
+
+    public Mono<RestStatus> deleteIndex(String docId) {
+
+        DeleteRequest request = new DeleteRequest(excelIndex,docId);
+
+        return Mono.create(sink -> {
+            esClient.deleteAsync(request, RequestOptions.DEFAULT, new ActionListener<DeleteResponse>() {
+                @Override
+                public void onResponse(DeleteResponse deleteIndexResponse) {
+                    sink.success(deleteIndexResponse.status());
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    log.error("index delete error: {}",e);
+                    sink.error(e);
+                }
+            });
+
+        });
     }
 
 }

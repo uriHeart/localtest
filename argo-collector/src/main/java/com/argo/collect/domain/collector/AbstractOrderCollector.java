@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.LinkedMultiValueMap;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -40,5 +41,26 @@ public abstract class AbstractOrderCollector implements OrderCollector {
             e.printStackTrace();
         }
         return null;
+    }
+
+    protected List<CollectParam> getCollectInfoList(VendorChannel channel) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<ChannelCollectInfo> infoList = salesChannelService.getChannelCollectInfoList(channel.getSalesChannel());
+
+        List<CollectParam> collectParamList = new ArrayList<>();
+
+        infoList.forEach( info ->{
+            try {
+                collectParamList.add( CollectParam.builder()
+                        .collectUrl(channel.getSalesChannel().getBaseUrl() + info.getCollectUri())
+                        .collectParam(objectMapper.readValue(info.getCollectParam(), Map.class))
+                        .build());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+
+        return collectParamList;
     }
 }
