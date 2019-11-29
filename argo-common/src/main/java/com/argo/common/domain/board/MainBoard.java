@@ -19,11 +19,8 @@ public class MainBoard implements SystemMetadata {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="main_board_seq")
     @SequenceGenerator(name="main_board_seq", sequenceName="main_board_seq", allocationSize=1)
-    @Column(name = "writer_id", nullable = false)
-    private Long writerId;
-
-    @Column(name = "board_number")
-    private int boardNumber;
+    @Column(name = "board_id", nullable = false)
+    private Long boardId;
 
     @Column(name = "user_email")
     private String userEmail;
@@ -37,11 +34,21 @@ public class MainBoard implements SystemMetadata {
     @Column(name = "post")
     private String post;
 
-//    @Column(name = "admin_reply")
-//    private String adminReply;
-//
+    @Column(name = "parent")
+    private Long parent;
+
+    @Column(name = "admin_reply")
+    private boolean adminReply;
+
 //    @Column(name = "user_reply")
 //    private String userReply;
+
+    @Column(name = "replied")
+    private boolean replied;
+
+    /** need to declare the column as deleted or else it doesn't detect the thing**/
+    @Column(name = "deleted")
+    private boolean deleted;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)
@@ -50,4 +57,15 @@ public class MainBoard implements SystemMetadata {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
+
+    public void deleteBoard(Long boardId) {
+        this.deleted = true;
+    }
+
+    public void replied(Long boardId) {
+        this.replied = true;
+    }
+
+    // need implementation along with the replyboard
+    public void newQuestion(Long boardId) {}
 }
