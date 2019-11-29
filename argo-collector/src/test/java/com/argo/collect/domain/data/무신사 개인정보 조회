@@ -1,0 +1,79 @@
+		inquiry_privacy : function() {
+			var ff = document.ord01_detail_f1;
+			var id = getCookie("puser[id]");
+			var p_user_ord_cnt = getCookie("p_user_ord_cnt");
+			var data = p_user_ord_cnt.split("|");
+			var mgr_id = data[0];
+			var cnt = data[1];
+
+			if(mgr_id == id && cnt > 100){
+				if(!confirm("개인정보를 조회하겠습니까? 조회이력은 자동으로 기록되고 있습니다.")){
+					return false;
+				}
+			}
+
+			$.ajax({
+				type: "POST",
+				url: "/po/api/order/ord01/inquiry_privacy",
+				data: "ORD_NO="+ ff.ORD_NO.value,
+				success: function(msg) {
+					eval("var json = " + msg);
+					var cd = json.cd;
+					var msg = json.msg;
+
+					if(cd == "1") {		//정상 처리
+						if(ord01_detail_layout_type == "layer") {
+							app_ord01_order.get_user_info(ff.ORD_NO.value, ff.USER_ID.value);
+						} else {
+							document.location.reload();
+						}
+					} else {
+						alert("인증 시 오류가 발생하였습니다.다시 시도하여 주시기 바랍니다.");
+					}
+				}
+			});
+		},
+		get_user_info : function(ord_no, user_id) {
+			$.ajax({
+				type: "POST",
+				url: "/po/api/order/ord01/get_user_info",
+				data: "ORD_NO=" + ord_no + "&USER_ID=" + user_id,
+				success: function(msg) {
+					eval("var json = " + msg);
+					if(json.length > 0) {
+						if($("#o_user_nm").parents(".splitcontent").find(".btn_accordion_panel").hasClass('btn_toggle_panel')) {
+							app_ord01_order.list_data.USER_NM = json[0].user_nm;
+						}
+
+						app_ord01_order.list_data.USER_NM = json[0].user_nm;
+						app_ord01_order.list_data.PHONE = json[0].phone;
+						app_ord01_order.list_data.MOBILE = json[0].mobile;
+						app_ord01_order.list_data.EMAIL = json[0].email;
+
+						if($("#r_nm_span").parents(".splitcontent").find(".btn_accordion_panel").hasClass('btn_toggle_panel')) {
+							app_ord01_receiver.list_data.R_NM = json[0].user_nm;
+						}
+
+						app_ord01_receiver.list_data.R_NM = json[0].user_nm;
+						app_ord01_receiver.list_data.R_PHONE = json[0].r_phone;
+						app_ord01_receiver.list_data.R_MOBILE = json[0].r_mobile;
+						app_ord01_receiver.list_data.R_ADDR = json[0].r_addr1 + json[0].r_addr2;
+					}
+				}
+			});
+		},
+		close : function() {
+			if(ord01_detail_layout_type == "layer") {
+				closeLayer($("form[name='f2']"));
+			} else if(ord01_detail_layout_type == "popup") {
+				self.close();
+			} else if(ord01_detail_layout_type == "view") {
+				if(document.referrer) {
+					document.location.href = document.referrer;
+				} else {
+					document.location.href = "/po/order/ord01";
+				}
+			}
+		}
+	}
+});
