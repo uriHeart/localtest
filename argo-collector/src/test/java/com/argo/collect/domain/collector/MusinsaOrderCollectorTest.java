@@ -116,14 +116,15 @@ public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
                         }
 
                         List<String> cookie = con.getHeaderFields().get("Set-Cookie");
-                        String p_user_ord_cnt = cookie.get(0).split(";")[0];
-                        String p_user_ord_no = cookie.get(1).split(";")[0];
+//                        String p_user_ord_cnt = cookie.get(0).split(";")[0];
+//                        String p_user_ord_no = cookie.get(1).split(";")[0];
+                        String p_user_ord_cnt = "p_user_ord_cnt=goal%7C6";
+                        String p_user_ord_no = "p_user_ord_no=goal%7C"+ORD_NO;
                         String auth2 = authorization+"; "+p_user_ord_cnt+"; "+p_user_ord_no;
 
                         MultiValueMap<String, String> detailMap2= new LinkedMultiValueMap<>();
                         detailMap2.add("ORD_NO", ORD_NO);
                         detailMap2.add("ORD_OPT_NO", ORD_OPT_NO);
-
 
                         HttpHeaders headers2 = new HttpHeaders();
                         headers2.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
