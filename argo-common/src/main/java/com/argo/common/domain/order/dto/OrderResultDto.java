@@ -98,6 +98,13 @@ public class OrderResultDto {
                                 .paymentMethod(vendorItem.getMetadata().getPaymentMethod())
                                 .paymentAmount(vendorItem.getMetadata().getPaymentAmount())
                                 .build())
+                        .skuDto(OrderSkuDto.builder()
+                                .barcode(doc.getBarcode())
+                                .skuId(doc.getSkuId())
+                                .skuName(doc.getSkuName())
+                                .skuSize(doc.getSkuSize())
+                                .skuColor(doc.getSkuColor())
+                                .build())
                         .build())
                 .build();
     }
