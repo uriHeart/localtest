@@ -48,7 +48,7 @@ public class PlayerAuthorityManagerTest {
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
-        log.info("result : {}", result);
+//        log.info("result : {}", result);
 
         if (result == null) {
             return;
@@ -114,7 +114,7 @@ public class PlayerAuthorityManagerTest {
         if (dataResult != null) {
            ObjectMapper objectMapper = new ObjectMapper();
            Map data = objectMapper.readValue(dataResult, Map.class);
-           log.info("data : {}", dataResult);
+//           log.info("data : {}", dataResult);
         }
     }
 }

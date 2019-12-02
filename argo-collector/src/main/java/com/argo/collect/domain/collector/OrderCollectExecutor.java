@@ -22,7 +22,7 @@ public class OrderCollectExecutor {
 
     private boolean collectRun = false;
 
-    @Scheduled(cron = "0 0/2 * * * *")
+    //@Scheduled(cron = "0 0/2 * * * *")
     public void run() {
         if (isRun()) {
             log.info("Already Order Collecting ##### ");
