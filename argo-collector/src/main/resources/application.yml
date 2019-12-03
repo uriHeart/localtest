@@ -83,3 +83,7 @@ goData:
 
 collect:
   auth-script-location: /home/ec2-user/js
+
+passwordreset:
+  url:
+    confirm: https://argoport.com/#/auth/resetPasswordConfirm
