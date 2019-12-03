@@ -47,6 +47,12 @@ public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
     @Autowired
     private VendorService vendorService;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Override
     public boolean isSupport(String channel) {
         return false;
@@ -54,8 +60,6 @@ public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
 
     @Override
     public void collect(VendorChannel channel) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        RestTemplate restTemplate = new RestTemplate();
 
         AuthorityManager authorityManager = super.getAuth(channel.getSalesChannel().getCode());
         String authorization = authorityManager.requestAuth(channel);
@@ -70,91 +74,86 @@ public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
         map.add("S_SDATE", ArgoDateUtil.getDateString(LocalDate.now().minusMonths(1)));
         map.add("S_EDATE", ArgoDateUtil.getDateString(LocalDate.now()));
         map.add("MENU_ID", "/po/order/ord01");
-//        map.add("USR_SEARCH_ITEM_CNT", "1");
-//        map.add("S_COLS", "b.mobile");
-//
-//        map.add("MENU_ID", "/po/order/ord01");
-//        map.add("USR_SEARCH_ITEM_CNT", "1");
-//        map.add("S_COLS", "b.mobile");
-//        map.add("PAGE_CNT", "10");
-//        map.add("PAGE", "1");
-//        map.add("SORT", "desc");
-//        map.add("ORD_FIELD", "a.ord_date");
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
-        String dataResult = restTemplate.postForObject(dataUrl, request , String.class);
-        //https://bizest.musinsa.com/po/order/ord01/detail?ORD_NO=201912021211325925&ORD_OPT_NO=45145228&LAYOUT_TYPE=popup
-
+        //수집대상 호출부분
+        List<Map> orderList =null;
         try {
-            Map data = objectMapper.readValue(dataResult, Map.class);
-            List<Map> rawEvents = (List<Map>) data.get("data");
-            rawEvents.forEach(
-                    event -> {
-
-                        String detailUrl ="https://bizest.musinsa.com/po/api/order/ord01/get_detail";
-                        String ORD_NO = event.get("ord_no").toString();
-                        String ORD_OPT_NO = event.get("ord_opt_no").toString();
-
-
-
-                        String urlParameters ="ORD_NO="+ORD_NO;
-                        HttpURLConnection con =null;
-                        try {
-                            URL obj = new URL("https://bizest.musinsa.com/po/api/order/ord01/inquiry_privacy");
-                            con = (HttpURLConnection) obj.openConnection();
-
-                            con.setRequestMethod(HttpMethod.POST.name());
-
-                            con.setRequestProperty("cookie", authorization);
-                            con.setDoOutput(true);
-                            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-                            wr.writeBytes(urlParameters);
-                            wr.flush();
-                            wr.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        List<String> cookie = con.getHeaderFields().get("Set-Cookie");
-//                        String p_user_ord_cnt = cookie.get(0).split(";")[0];
-//                        String p_user_ord_no = cookie.get(1).split(";")[0];
-                        String p_user_ord_cnt = "p_user_ord_cnt=goal%7C6";
-                        String p_user_ord_no = "p_user_ord_no=goal%7C"+ORD_NO;
-                        String auth2 = authorization+"; "+p_user_ord_cnt+"; "+p_user_ord_no;
-
-                        MultiValueMap<String, String> detailMap2= new LinkedMultiValueMap<>();
-                        detailMap2.add("ORD_NO", ORD_NO);
-                        detailMap2.add("ORD_OPT_NO", ORD_OPT_NO);
-
-                        HttpHeaders headers2 = new HttpHeaders();
-                        headers2.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-                        headers2.add("cookie", auth2);
-                        HttpEntity<MultiValueMap<String, String>> detailRequest2 = new HttpEntity<>(detailMap2, headers2);
-                        String detailResult2 = restTemplate.postForObject(detailUrl, detailRequest2 , String.class);
-
-
-
-                        try {
-                            RawEvent rawEvent = RawEvent.builder()
-                                    .vendorId(channel.getVendor().getVendorId())
-                                    .channelId(channel.getSalesChannel().getSalesChannelId())
-                                    .format("JSON")
-                                    .auto(true)
-                                    .data(objectMapper.writeValueAsString(event))
-                                    .orderId(event.get("ord_no").toString())
-                                    .publishedAt(ArgoDateUtil.getDate(event.get("ord_date").toString().replaceAll("\\.", "-")))
-                                    .createdAt(new Date())
-                                    .build();
-                            rawEventService.save(rawEvent);
-                        } catch (JsonProcessingException e) {
-                            e.printStackTrace();
-                        }
-                    }
-            );
-        } catch (
-                IOException e) {
+            orderList = (List<Map>) this.getUrlCallResult(dataUrl,headers,map).get("data");
+        } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+        orderList.forEach(event -> {
+
+            String detailUrl = "https://bizest.musinsa.com/po/api/order/ord01/get_detail";
+            String ORD_NO = event.get("ord_no").toString();
+            String ORD_OPT_NO = event.get("ord_opt_no").toString();
+
+            String p_user_ord_cnt = "p_user_ord_cnt=goal%7C6";
+            String p_user_ord_no = "p_user_ord_no=goal%7C"+ORD_NO;
+
+            String cookieDetail = authorization+"; "+p_user_ord_cnt+"; "+p_user_ord_no;
+
+            MultiValueMap<String, String> detailMap= new LinkedMultiValueMap<>();
+            detailMap.add("ORD_NO", ORD_NO);
+            detailMap.add("ORD_OPT_NO", ORD_OPT_NO);
+
+            headers.add("cookie", cookieDetail);
+
+            Map orderDetail= null;
+            try {
+                orderDetail = this.getUrlCallResult(detailUrl,headers,detailMap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Map detailData = (Map) orderDetail.get("order");
+            event.putAll(detailData);
+
+            //오더별로 묶여진 pay
+            Map payment = (Map) orderDetail.get("payment");
+
+            event.putAll(payment);
+
+            System.out.println("event");
+        });
+    }
+
+    public Map getUrlCallResult(String dataUrl,HttpHeaders headers,MultiValueMap<String, String> paramMap) throws IOException {
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(paramMap, headers);
+        String dataResult = restTemplate.postForObject(dataUrl, request , String.class);
+
+        Map data = objectMapper.readValue(dataResult, Map.class);
+
+        return data;
+    }
+
+    public void saveCassandra(List<Map> orderList, Long vendorId, Long channelId){
+
+        orderList.forEach(event->{
+            String eventToJson = null;
+
+            try {
+                eventToJson = objectMapper.writeValueAsString(event);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
+            RawEvent rawEvent = RawEvent.builder()
+                .vendorId(vendorId)
+                .channelId(channelId)
+                .format("JSON")
+                .auto(true)
+                .data(eventToJson)
+                .orderId(event.get("ord_no").toString())
+                .publishedAt(ArgoDateUtil.getDate(event.get("ord_date").toString().replaceAll("\\.", "-")))
+                .createdAt(new Date())
+                .build();
+            rawEventService.save(rawEvent);
+
+        });
     }
 
     @Test
