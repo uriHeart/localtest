@@ -56,9 +56,8 @@ public class SkuMappingProvider {
         return channelId + "-" + vendorId + "-" + sourceItemCode;
     }
 
-    public Long getSkuId(Long channelId, Long vendorId, String sourceItemCode, String barcode) {
-        SkuData result = this.getSku(channelId, vendorId, sourceItemCode, barcode);
-        return result == null ? 0L : result.getSkuId();
+    public List<Long> getSkuIds(Long channelId, Long vendorId, String sourceItemCode) {
+        return null;
     }
 
     public SkuData getSku(Long channelId, Long vendorId, String sourceItemCode, String barcode) {
