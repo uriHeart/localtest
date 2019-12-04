@@ -1,19 +1,26 @@
 package com.argo.common.domain.sku;
 
+import com.argo.common.domain.vendor.item.VendorItem;
+import com.argo.common.domain.vendor.item.VendorItemService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.hash.Hashing;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import javax.annotation.PostConstruct;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class SkuMappingProvider {
+    private final static Long EZ_ADMIN_CHANNEL_ID = 2L;
     @Autowired
     private SkuRepository skuRepository;
 
@@ -21,66 +28,65 @@ public class SkuMappingProvider {
     private SkuAttributeRepository skuAttributeRepository;
 
     @Autowired
-    private SourceItemRepository sourceItemRepository;
+    private SkuMappingRepository skuMappingRepository;
 
-    private Map<String, SourceItem> items;
-    private Map<String, SkuData> skus;
+    @Autowired
+    private VendorItemService vendorItemService;
+
+    private Map<Long, List<SkuMapping>> skuMappings;
+    private Map<Long, SkuData> skuData;
 
     @PostConstruct
     public void init() {
-        items = Maps.newHashMap();
-        skus = Maps.newHashMap();
-        sourceItemRepository.findAllLazy().forEach(i -> items.put(
-                this.getItemIdKey(i.getSalesChannel().getSalesChannelId(), i.getVendor().getVendorId(), i.getItemId()), i));
+        skuMappings = Maps.newHashMap();
+        skuData = Maps.newHashMap();
 
-        skuRepository.findAll().forEach(s -> {
-            skus.put(s.getBarcode(), SkuData.builder()
-                    .skuId(s.getSkuId())
-                    .name(s.getName())
-                    .barcode(s.getBarcode())
-                    .brand(s.getBrand())
-                    .attributes(Lists.newArrayList())
-                    .build());
-        });
+        List<SkuMapping> mappings = skuMappingRepository.findAllBy();
+        mappings.forEach(
+                m -> {
+                    List<SkuMapping> targets = skuMappings.getOrDefault(m.getVendorItem().getVendorItemId(), Lists.newArrayList());
+                    targets.add(m);
+                    skuMappings.put(m.getVendorItem().getVendorItemId(), targets);
+                }
+        );
+
+        skuRepository.findAll().forEach(s -> skuData.put(s.getSkuId(), SkuData.builder()
+                .skuId(s.getSkuId())
+                .name(s.getName())
+                .barcode(s.getBarcode())
+                .brand(s.getBrand())
+                .attributes(Lists.newArrayList())
+                .build()));
 
         for (SkuAttributeData sa : skuAttributeRepository.findAllSkuAttributeData()) {
-            if (!skus.containsKey(sa.getBarcode())) {
-                continue;
+            if (skuData.containsKey(sa.getSkuId())) {
+                List<SkuAttributeData> data = skuData.get(sa.getSkuId()).getAttributes();
+                data.add(sa);
             }
-            List<SkuAttributeData> data = skus.get(sa.getBarcode()).getAttributes();
-            data.add(sa);
         }
     }
 
-    private String getItemIdKey(Long channelId, Long vendorId, String sourceItemCode) {
-        return channelId + "-" + vendorId + "-" + sourceItemCode;
+    public List<Long> getSkuIds(Long channelId, Long vendorId, String sourceItemName, String sourceItemOption) {
+        StringJoiner strJoiner = new StringJoiner("_");
+        strJoiner.add(sourceItemName).add(sourceItemOption);
+        String key = Hashing.sha256().hashString(strJoiner.toString(), StandardCharsets.UTF_8).toString();
+        return this.getSkuIds(channelId, vendorId, key);
     }
 
     public List<Long> getSkuIds(Long channelId, Long vendorId, String sourceItemCode) {
-        return null;
-    }
-
-    public SkuData getSku(Long channelId, Long vendorId, String sourceItemCode, String barcode) {
-        SkuData result = this.getSku(channelId, vendorId, sourceItemCode);
-        return result == null ?
-                ( this.getSku(barcode) == null ?
-                        this.getSku(2L, vendorId, sourceItemCode) // EZAdmin 상품
-                        : this.getSku(barcode))
-                : result;
-    }
-
-    public SkuData getSku(Long channelId, Long vendorId, String sourceItemCode) {
-        if (!items.containsKey(this.getItemIdKey(channelId, vendorId, sourceItemCode))) {
-            return null;
+        VendorItem vendorItem = vendorItemService.getVendorItem(vendorId, channelId, sourceItemCode);
+        vendorItem = vendorItem == null
+                ? vendorItemService.getVendorItem(vendorId, EZ_ADMIN_CHANNEL_ID, sourceItemCode)
+                : vendorItem;
+        if (vendorItem == null) {
+            return Collections.emptyList();
         }
-        String barcode = items.get(this.getItemIdKey(channelId, vendorId, sourceItemCode)).getBarcode();
-        return skus.get(barcode);
+
+        return skuMappings.getOrDefault(vendorItem.getVendorItemId(), Lists.newArrayList()).stream()
+                .map(m -> m.getSku().getSkuId()).collect(Collectors.toList());
     }
 
-    public SkuData getSku(String barcode) {
-        if (!items.containsKey(barcode)) {
-            return null;
-        }
-        return skus.get(barcode);
+    public List<SkuData> getSkus(List<Long> skus) {
+        return skus.stream().map(s -> skuData.getOrDefault(s, SkuData.builder().build())).collect(Collectors.toList());
     }
 }

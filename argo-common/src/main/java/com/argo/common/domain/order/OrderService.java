@@ -3,6 +3,7 @@ package com.argo.common.domain.order;
 import com.argo.common.domain.channel.SalesChannel;
 import com.argo.common.domain.channel.SalesChannelService;
 import com.argo.common.domain.common.util.JsonUtil;
+import com.argo.common.domain.order.doc.Location;
 import com.argo.common.domain.order.doc.OrderDoc;
 import com.argo.common.domain.order.dto.OrderResultDto;
 import com.argo.common.domain.order.reactive.ReactiveOrderAddressRepository;
@@ -13,6 +14,7 @@ import com.argo.common.domain.sku.SkuData;
 import com.argo.common.domain.sku.SkuMappingProvider;
 import com.argo.common.domain.vendor.Vendor;
 import com.argo.common.domain.vendor.VendorService;
+import com.argo.common.domain.vendor.item.VendorItem;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
@@ -33,6 +35,7 @@ import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.joda.time.LocalDate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -90,7 +93,13 @@ public class OrderService {
         SalesChannel salesChannel = salesChannelService.getSalesChannel(order.getChannelId());
         vendorItems.forEach(
                 item -> {
-                    SkuData sku = skuMappingProvider.getSku(order.getChannelId(), order.getVendorId(), item.getSourceItemId(), null);
+                    SkuData sku = null;
+                    List<Long> skuIds = skuMappingProvider.getSkuIds(order.getChannelId(), order.getVendorId(), item.getSourceItemId());
+                    List<SkuData> skus = skuMappingProvider.getSkus(skuIds);
+                    if (!CollectionUtils.isEmpty(skus)) {
+                        sku = skus.stream().findFirst().get();
+                    }
+
                     this.indexingOrder(OrderDoc.builder()
                             .id(this.getDocId(order, item))
                             .orderId(order.getOrderId())
@@ -122,6 +131,10 @@ public class OrderService {
                             .skuName(sku == null ? null : sku.getName())
                             .skuColor(sku == null ? null : sku.getColor())
                             .skuSize(sku == null ? null : sku.getSize())
+                            .location(Location.builder()
+                                    .lat(0.0d)
+                                    .lon(0.0d)
+                                    .build())
                             .build());
                 }
         );

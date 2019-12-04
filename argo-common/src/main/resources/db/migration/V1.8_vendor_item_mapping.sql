@@ -1,14 +1,33 @@
-CREATE TABLE source_item_info (
-  source_item_id SERIAL,
+CREATE TABLE source_item_mapping (
+  source_item_mapping_id SERIAL,
   channel_id BIGINT,
   vendor_id BIGINT,
   item_id VARCHAR(100) NOT NULL,
   item_name VARCHAR(500) NOT NULL,
   item_option VARCHAR(500) NOT NULL,
-  barcode VARCHAR(50) NOT NULL,
+  vendor_item_id BIGINT,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT source_item_info_pk PRIMARY KEY (source_item_id)
+);
+
+CREATE TABLE vendor_item (
+  vendor_item_id SERIAL,
+  vendor_id BIGINT,
+  vendor_item_name VARCHAR(500) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT vendor_item_pk PRIMARY KEY (vendor_item_id)
+);
+
+CREATE TABLE sku_mapping (
+  sku_mapping_id SERIAL,
+  vendor_item_id BIGINT,
+  sku_id BIGINT,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT vendor_item_sku_mapping_pk PRIMARY KEY (sku_mapping_id),
+  CONSTRAINT vendor_item_sku_mapping_uk01 UNIQUE (vendor_item_id, sku_id)
 );
 
 

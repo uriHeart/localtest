@@ -47,6 +47,8 @@ public class OrderDoc {
     private String skuSize;
     private String skuColor;
 
+    private Location location;
+
     public Long getVendorId() {
         return vendorId == null ? 1L : vendorId;
     }
