@@ -1,8 +1,6 @@
 package com.argo.common.domain.common.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
@@ -28,7 +26,7 @@ public class ConversionUtil {
         } else if(clazz.equals(Character.class) || clazz.equals(char.class)) {
             return value.indexOf(0);
         } else if(clazz.equals(Date.class)) {
-            return DateUtil.parseDateString(value);
+            return ArgoDateUtil.parseDateString(value);
         }
         return null;
     }
@@ -69,7 +67,7 @@ public class ConversionUtil {
             }
         } else if(clazz.equals(Date.class)) {
             String dateString = jsonNode.asText();
-            return DateUtil.parseDateString(dateString);
+            return ArgoDateUtil.parseDateString(dateString);
         }
 
         return jsonNode.asText();

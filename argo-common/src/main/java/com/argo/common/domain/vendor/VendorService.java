@@ -1,6 +1,8 @@
 package com.argo.common.domain.vendor;
 
 import com.argo.common.domain.channel.SalesChannel;
+import com.argo.common.domain.common.data.conversion.template.annotation.ConversionOperationMethod;
+import com.argo.common.domain.common.data.conversion.template.annotation.ConversionOperationService;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@ConversionOperationService
 @Service
 public class VendorService {
     @Autowired
@@ -54,6 +57,7 @@ public class VendorService {
         return vendorMap.get(vendorId);
     }
 
+    @ConversionOperationMethod
     public Long getChannelId(Long vendorId, String sourceChannelId) {
         VendorChannel result = vendorChannelRepository.findByVendorAndChannelMapping(getVendor(vendorId), sourceChannelId);
         if (result == null) {

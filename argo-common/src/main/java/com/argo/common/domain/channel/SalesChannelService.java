@@ -1,8 +1,7 @@
 package com.argo.common.domain.channel;
 
-import com.argo.common.domain.vendor.VendorService;
 import com.google.common.collect.Maps;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -10,14 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@AllArgsConstructor
 public class SalesChannelService {
-    @Autowired
     private SalesChannelRepository salesChannelRepository;
 
-    @Autowired
-    private VendorService vendorService;
-
-    @Autowired
     private ChannelCollectInfoRepository channelCollectInfoRepository;
 
     private Map<Long, SalesChannel> salesChannelMap;

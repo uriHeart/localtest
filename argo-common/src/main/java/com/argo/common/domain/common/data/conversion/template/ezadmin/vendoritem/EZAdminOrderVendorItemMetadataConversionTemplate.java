@@ -23,12 +23,6 @@ public class EZAdminOrderVendorItemMetadataConversionTemplate {
         List<ConversionRule> list = new ArrayList<>();
 
         list.add(ConversionRule.builder()
-                .conversionType(ConversionType.DIRECT)
-                .sourceField("pay_type")
-                .targetField("paymentMethod")
-                .build());
-
-        list.add(ConversionRule.builder()
                 .conversionType(ConversionType.AGGREGATE)
                 .sourceField("prd_shop_price")
                 .targetField("originalPrice")
@@ -38,11 +32,7 @@ public class EZAdminOrderVendorItemMetadataConversionTemplate {
                 .sourceField("shop_price")
                 .targetField("salesPrice")
                 .build());
-        list.add(ConversionRule.builder()
-                .conversionType(ConversionType.DIRECT)
-                .sourceField("amount")
-                .targetField("paymentAmount")
-                .build());
+
         return list;
     }
 }

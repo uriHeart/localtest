@@ -4,6 +4,7 @@ package com.argo.api.service;
 import com.argo.api.domain.excel.ChannelExcelMapping;
 import com.argo.api.domain.excel.ChannelExcelMappingService;
 import com.argo.api.domain.excel.ExcelToCassandraDto;
+import com.argo.common.domain.common.util.ArgoDateUtil;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.raw.RawEventService;
 import com.google.gson.Gson;
@@ -320,7 +321,6 @@ public class ConvertService {
 
 
     public void saveToCassandra(List<HashMap<String,String>> jsonData, Long channelId, Long vendorId) {
-        SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         HashMap<String, ExcelToCassandraDto> cassandraJsonData = new HashMap<>();
 
@@ -341,7 +341,7 @@ public class ConvertService {
                 try {
                     //엑셀입력형식이 다를경우
                     //publishedAt = java.sql.Date.valueOf(LocalDate.parse(publishedAtString, DateTimeFormatter.BASIC_ISO_DATE));
-                    publishedAt = transFormat.parse(publishedAtString);
+                    publishedAt = ArgoDateUtil.parseDateString(publishedAtString);
                 } catch (Exception e) {
                     e.printStackTrace();
                     publishedAt = new Date();

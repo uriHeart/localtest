@@ -1,5 +1,7 @@
 package com.argo.common.domain.common;
 
+import com.argo.common.domain.common.data.conversion.template.annotation.ConversionOperationMethod;
+import com.argo.common.domain.common.data.conversion.template.annotation.ConversionOperationService;
 import com.google.common.collect.Maps;
 import org.springframework.stereotype.Service;
 
@@ -7,6 +9,7 @@ import javax.annotation.PostConstruct;
 import java.util.Map;
 
 @Service
+@ConversionOperationService
 public class CodeService {
     private Map<String, Map<String, String>> codeGroups;
 
@@ -21,6 +24,7 @@ public class CodeService {
         codeGroups.put("orderStatus", status);
     }
 
+    @ConversionOperationMethod
     public String getOrderStatusMapping(String code) {
         return codeGroups.get("orderStatus").getOrDefault(code, null);
     }

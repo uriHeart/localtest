@@ -1,10 +1,11 @@
 package com.argo.common.domain.common.data.conversion.template;
 
 public enum ConversionType {
+    DIRECT,
     OPERATION,
     SQL,
-    DIRECT,
     JSON,
     AGGREGATE,
     CONVERSION_TEMPLATE,
+    CUSTOM_INPUT,
 }

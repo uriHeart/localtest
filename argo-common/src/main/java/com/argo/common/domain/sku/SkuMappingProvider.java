@@ -1,5 +1,7 @@
 package com.argo.common.domain.sku;
 
+import com.argo.common.domain.common.data.conversion.template.annotation.ConversionOperationMethod;
+import com.argo.common.domain.common.data.conversion.template.annotation.ConversionOperationService;
 import com.argo.common.domain.vendor.item.VendorItem;
 import com.argo.common.domain.vendor.item.VendorItemService;
 import com.google.common.collect.Lists;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@ConversionOperationService
 public class SkuMappingProvider {
     private final static Long EZ_ADMIN_CHANNEL_ID = 2L;
     @Autowired
@@ -66,6 +69,7 @@ public class SkuMappingProvider {
         }
     }
 
+    @ConversionOperationMethod
     public List<Long> getSkuIds(Long channelId, Long vendorId, String sourceItemName, String sourceItemOption) {
         StringJoiner strJoiner = new StringJoiner("_");
         strJoiner.add(sourceItemName).add(sourceItemOption);

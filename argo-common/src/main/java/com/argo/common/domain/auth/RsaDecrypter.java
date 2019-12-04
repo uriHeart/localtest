@@ -6,9 +6,11 @@ import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
 import javax.crypto.Cipher;
+
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+@Component
 public class RsaDecrypter {
 
     public String decryptRsa(String credentials, String privateKey) throws DecryptFailException {

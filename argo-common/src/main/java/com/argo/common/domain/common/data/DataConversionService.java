@@ -6,6 +6,7 @@ import com.argo.common.domain.common.data.conversion.template.ConversionTemplate
 import com.argo.common.domain.common.data.conversion.template.ConversionType;
 import com.argo.common.domain.common.util.ConversionUtil;
 import com.argo.common.domain.common.util.ReflectionUtil;
+import com.argo.common.domain.order.PaymentType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +27,13 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class DataConversionService implements ApplicationContextAware {
 
@@ -43,7 +48,7 @@ public class DataConversionService implements ApplicationContextAware {
     @Autowired
     private ConversionTemplateService conversionTemplateService;
 
-    public Map<String, Object> convert(ConvertibleData sourceData) {
+    public Map<String, Object> convert(SourceData sourceData) {
         Map<String, ConversionTemplate> conversionTemplateMap = conversionTemplateService.getRawEventConversionTemplateMap(sourceData);
         Map<String, Object> result = conversionTemplateMap.entrySet().stream()
                 .collect(Collectors.toMap(
@@ -53,13 +58,13 @@ public class DataConversionService implements ApplicationContextAware {
         return result;
     }
 
-    public Object convertWithTemplate(ConvertibleData sourceData, String targetId, ConversionTemplate template) {
+    public Object convertWithTemplate(SourceData sourceData, String targetId, ConversionTemplate template) {
         Class targetClass = getClassWithName(targetId);
         Object object = convert(sourceData, targetClass, template);
         return object;
     }
 
-    public Object convert(ConvertibleData sourceData, Class targetClass, ConversionTemplate template) {
+    public Object convert(SourceData sourceData, Class targetClass, ConversionTemplate template) {
         String json = convertibleDataToJsonString(sourceData);
         JsonNode jsonNode = jsonStringToJsonObject(json, sourceData);
         List<ConversionRule> conversionRules = template.getRules();
@@ -86,6 +91,11 @@ public class DataConversionService implements ApplicationContextAware {
             }
            return list;
         }
+    }
+
+    public List<String> getMethods(String invokingClass) {
+        Object invokingClassBean = appContext.getBean(invokingClass);
+        return Arrays.stream(invokingClassBean.getClass().getDeclaredMethods()).map(Method::getName).collect(Collectors.toList());
     }
 
     public Object convert(JsonNode jsonNode, Class targetClass, ConversionTemplate template) {
@@ -152,6 +162,24 @@ public class DataConversionService implements ApplicationContextAware {
                 break;
             case JSON:
                 break;
+            case CUSTOM_INPUT:
+                String className = conversionRule.getCustomType();
+                Class customClass = null;
+                try {
+                    customClass = Class.forName(className);
+                } catch (ClassNotFoundException e) {
+                    log.error(MessageFormat.format("Class not found during CUSTOM_INPUT Conversion for : {1}", className));
+                }
+                if(customClass.isEnum()) {
+                    try {
+                        targetValue = customClass.getMethod("valueOf", String.class).invoke(null, conversionRule.getCustomValue());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    targetValue = ConversionUtil.convertStringToPrimitiveObject(customClass, conversionRule.getCustomValue());
+                }
+                break;
             case CONVERSION_TEMPLATE:
                 ConversionTemplate conversionTemplate = conversionTemplateService.conversionTemplateBySourceIdAndTargetId(conversionRule.getConversionTemplateSourceId(), conversionRule.getConversionTemplateTargetId());//getConversionTemplate(conversionRule.getConversionTemplateSourceId(), conversionRule.getConversionTemplateTargetId());
                 targetValue = convert(jsonNode, getClassWithName(conversionTemplate.getTargetId()), conversionTemplate);
@@ -181,6 +209,11 @@ public class DataConversionService implements ApplicationContextAware {
             Method method = invokingClassBean.getClass().getMethod(invokingMethod, sourceTypes);
             result = method.invoke(invokingClassBean, sourceValues);
         } catch (NoSuchMethodException e) {
+            StringBuilder sb = new StringBuilder();
+            for(int i = 0; i < sourceTypes.length; i++) {
+                sb.append(sourceTypes[i].getName() + " " + sourceValues[i].toString() + " ");
+            }
+            log.error("Method not found for class and values : " + sb.toString());
             e.printStackTrace();
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
@@ -188,7 +221,7 @@ public class DataConversionService implements ApplicationContextAware {
         return result;
     }
 
-    private JsonNode jsonStringToJsonObject(String json, ConvertibleData sourceData) {
+    private JsonNode jsonStringToJsonObject(String json, SourceData sourceData) {
         JsonNode jsonNode = null;
 
         try {
@@ -206,11 +239,11 @@ public class DataConversionService implements ApplicationContextAware {
         return jsonNode;
     }
 
-    private String convertibleDataToJsonString(ConvertibleData convertibleData) {
+    private String convertibleDataToJsonString(SourceData sourceData) {
         String json = "";
         try {
-            Class clazz = Class.forName(convertibleData.className());
-            json = mapper.writeValueAsString(clazz.cast(convertibleData));
+            Class clazz = Class.forName(sourceData.className());
+            json = mapper.writeValueAsString(clazz.cast(sourceData));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (JsonProcessingException e) {

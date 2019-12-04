@@ -1,4 +1,4 @@
-package com.argo.common.domain.common.data.conversion.template.kasina.address;
+package com.argo.common.domain.common.data.conversion.template.offline.paradise.address;
 
 import com.argo.common.domain.common.data.conversion.template.ConversionRule;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplate;
@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class KasinaDeliveryRequestConversionTemplate {
+public class ParadiseDeliveryRequestConversionTemplate {
     public static ConversionTemplate getDeliveryRequestTemplate() {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("15-ORDER-DeliveryRequest")
+                .sourceId("20-ORDER-DeliveryRequest")
                 .targetId("com.argo.common.domain.order.DeliveryRequest")
                 .rules(getConversionRuleForDeliveryRequest())
                 .build();
@@ -24,7 +24,7 @@ public class KasinaDeliveryRequestConversionTemplate {
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
-                .sourceField("요청사항")
+                .sourceField("memo")
                 .targetField("deliveryRequest")
                 .build());
 

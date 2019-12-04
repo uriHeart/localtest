@@ -1,5 +1,6 @@
 package com.argo.common.domain.order;
 
+import com.argo.common.domain.common.data.TargetData;
 import com.argo.common.domain.common.util.JsonUtil;
 import com.datastax.driver.core.DataType;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @Table("order_address")
-public class OrderAddress {
+public class OrderAddress extends TargetData {
 
     public OrderAddress() {
         this.createdAt = new Date();

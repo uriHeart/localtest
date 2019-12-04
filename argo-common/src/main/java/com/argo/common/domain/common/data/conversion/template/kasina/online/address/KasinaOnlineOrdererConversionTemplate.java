@@ -1,4 +1,4 @@
-package com.argo.common.domain.common.data.conversion.template.kasina.address;
+package com.argo.common.domain.common.data.conversion.template.kasina.online.address;
 
 import com.argo.common.domain.common.data.conversion.template.ConversionRule;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplate;
@@ -8,18 +8,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class KasinaRecipientConversionTemplate {
-    public static ConversionTemplate getRecipientTemplate() {
+public class KasinaOnlineOrdererConversionTemplate {
+    public static ConversionTemplate getOrdererTemplate() {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("15-ORDER-Recipient")
-                .targetId("com.argo.common.domain.order.Recipient")
-                .rules(getConversionRuleForRecipient())
+                .sourceId("15-ORDER-Orderer")
+                .targetId("com.argo.common.domain.order.Orderer")
+                .rules(getConversionRuleForOrderer())
                 .build();
     }
 
-    private static List<ConversionRule> getConversionRuleForRecipient() {
+    private static List<ConversionRule> getConversionRuleForOrderer() {
         List<ConversionRule> list = new ArrayList<>();
 
         list.add(ConversionRule.builder()

@@ -29,7 +29,7 @@ public class EmailService {
         try {
             emailSender.send(message);
         } catch (MailException e) {
-            log.error( MessageFormat.format("Failed to send mail to {0} with subject : {1}", to, subject));
+            log.error(MessageFormat.format("Failed to send mail to {0} with subject : {1}", to, subject));
         }
     }
 

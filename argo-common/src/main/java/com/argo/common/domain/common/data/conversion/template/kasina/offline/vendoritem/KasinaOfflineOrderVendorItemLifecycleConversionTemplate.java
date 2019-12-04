@@ -1,4 +1,4 @@
-package com.argo.common.domain.common.data.conversion.template.kasina.vendoritem;
+package com.argo.common.domain.common.data.conversion.template.kasina.offline.vendoritem;
 
 import com.argo.common.domain.common.data.conversion.template.ConversionRule;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplate;
@@ -10,12 +10,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class KasinaOrderVendorItemLifecycleConversionTemplate {
+public class KasinaOfflineOrderVendorItemLifecycleConversionTemplate {
     public static ConversionTemplate getOrderVendorItemLifecycleTemplate() {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("15-ORDER")
+                .sourceId("16-ORDER")
                 .targetId("com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle")
                 .listReference("datas")
                 .rules(getConversionRuleForOrderVendorItemLifecycle())
@@ -45,15 +45,28 @@ public class KasinaOrderVendorItemLifecycleConversionTemplate {
 
         Map<String, String> vendorItemIdParams = Maps.newLinkedHashMap();
         vendorItemIdParams.put("vendorId", "java.lang.Long");
-        vendorItemIdParams.put("스타일번호", "java.lang.String");
-        vendorItemIdParams.put("제품명", "java.lang.String");
-        vendorItemIdParams.put("옵션", "java.lang.String");
+        vendorItemIdParams.put("상품코드", "java.lang.String");
+        vendorItemIdParams.put("품명", "java.lang.String");
+        vendorItemIdParams.put("색상", "java.lang.String");
+        // vendorItemIdParams.put("사이즈", "java.lang.String");
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.OPERATION)
                 .operatorClass("externalVendorItemMappingService")
                 .operatorMethod("getVendorItem")
                 .operatorParams(vendorItemIdParams)
                 .targetField("vendorItemId")
+                .build());
+
+        Map<String, String> skuMappingParams = Maps.newLinkedHashMap();
+        skuMappingParams.put("channelId", "java.lang.Long");
+        skuMappingParams.put("vendorId", "java.lang.Long");
+        skuMappingParams.put("상품코드", "java.lang.String");
+        list.add(ConversionRule.builder()
+                .conversionType(ConversionType.OPERATION)
+                .operatorClass("skuMappingProvider")
+                .operatorMethod("getSkuIds")
+                .operatorParams(skuMappingParams)
+                .targetField("skuMappings")
                 .build());
 
         list.add(ConversionRule.builder()
@@ -64,19 +77,19 @@ public class KasinaOrderVendorItemLifecycleConversionTemplate {
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
-                .sourceField("스타일번호")
+                .sourceField("상품코드")
                 .targetField("sourceItemId")
                 .build());
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
-                .sourceField("제품명")
+                .sourceField("품명")
                 .targetField("sourceItemName")
                 .build());
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
-                .sourceField("옵션")
+                .sourceField("색상")
                 .targetField("sourceItemOption")
                 .build());
 
@@ -84,7 +97,7 @@ public class KasinaOrderVendorItemLifecycleConversionTemplate {
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.CONVERSION_TEMPLATE)
                 .targetField("metadata")
-                .conversionTemplateSourceId("15-ORDER-OrderVendorItemMetadata")
+                .conversionTemplateSourceId("16-ORDER-OrderVendorItemMetadata")
                 .conversionTemplateTargetId("com.argo.common.domain.order.vendoritem.OrderVendorItemMetadata")
                 .build());
 

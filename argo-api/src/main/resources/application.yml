@@ -63,7 +63,7 @@ server:
 
 file:
   upload:
-    default-path: /Users/ags0688/Documents/attachements
+    default-path: /Users/SoO/Documents/attachments
     index: excel_upload
 
 elasticsearch:

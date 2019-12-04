@@ -1,4 +1,4 @@
-package com.argo.common.domain.common.data.conversion.template.kasina.order;
+package com.argo.common.domain.common.data.conversion.template.offline.paradise.order;
 
 import com.argo.common.domain.common.data.conversion.template.ConversionRule;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplate;
@@ -10,12 +10,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class KasinaArgoOrderConversionTemplate {
+public class ParadiseArgoOrderConversionTemplate {
     public static ConversionTemplate getArgoOrderTemplate() {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("15-ORDER")
+                .sourceId("20-ORDER")
                 .targetId("com.argo.common.domain.order.ArgoOrder")
                 .rules(getConversiontRuleForArgoOrder())
                 .build();
@@ -30,9 +30,14 @@ public class KasinaArgoOrderConversionTemplate {
                 .targetField("vendorId")
                 .build());
 
+        Map<String, String> channelIdParams = Maps.newLinkedHashMap();
+        channelIdParams.put("vendorId", "java.lang.Long");
+        channelIdParams.put("shop_id", "java.lang.String");
         list.add(ConversionRule.builder()
-                .conversionType(ConversionType.DIRECT)
-                .sourceField("channelId")
+                .conversionType(ConversionType.OPERATION)
+                .operatorClass("vendorService")
+                .operatorMethod("getChannelId")
+                .operatorParams(channelIdParams)
                 .targetField("channelId")
                 .build());
 
@@ -50,30 +55,20 @@ public class KasinaArgoOrderConversionTemplate {
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
-                .sourceField("판매일자")
+                .sourceField("매출일시")
                 .targetField("paidAt")
                 .build());
-
-        /*Map<String, String> stateParams = Maps.newLinkedHashMap();
-        stateParams.put("status", "java.lang.String");
-        list.add(ConversionRule.builder()
-                .conversionType(ConversionType.OPERATION)
-                .operatorClass("codeService")
-                .operatorMethod("getOrderStatusMapping")
-                .operatorParams(stateParams)
-                .targetField("state")
-                .build());*/
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
                 .sourceField("event")
                 .targetField("event")
                 .build());
-        
+
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.CONVERSION_TEMPLATE)
                 .targetField("metadata")
-                .conversionTemplateSourceId("15-ORDER-OrderMetadata")
+                .conversionTemplateSourceId("20-ORDER-OrderMetadata")
                 .conversionTemplateTargetId("com.argo.common.domain.order.OrderMetadata")
                 .build());
 

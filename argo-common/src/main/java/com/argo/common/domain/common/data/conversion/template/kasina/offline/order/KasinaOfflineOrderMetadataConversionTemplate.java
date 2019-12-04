@@ -1,4 +1,4 @@
-package com.argo.common.domain.common.data.conversion.template.kasina.order;
+package com.argo.common.domain.common.data.conversion.template.kasina.offline.order;
 
 import com.argo.common.domain.common.data.conversion.template.ConversionRule;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplate;
@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class KasinaOrderMetadataConversionTemplate {
+public class KasinaOfflineOrderMetadataConversionTemplate {
     public static ConversionTemplate getOrderMetadataTemplate() {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("15-ORDER-OrderMetadata")
+                .sourceId("16-ORDER-OrderMetadata")
                 .targetId("com.argo.common.domain.order.OrderMetadata")
                 .rules(getConversionRuleForOrderMetadata())
                 .build();
