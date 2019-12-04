@@ -1,7 +1,10 @@
 package com.argo.common.domain.board;
 
+import com.google.gson.JsonArray;
+import org.json.simple.JSONArray;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import springfox.documentation.spring.web.json.Json;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -13,10 +16,13 @@ public interface MainBoardRepository extends JpaRepository<MainBoard, Long> {
     MainBoard findMainBoardByBoardId(Long boardId);
     boolean existsMainBoardByBoardId(Long boardId);
     ArrayList<MainBoard> findAllByDeletedIsFalse();
+    //댓글 다 불러오기
+    ArrayList<MainBoard> findAllByParentEquals(Long boardId);
+    ArrayList<MainBoard> findAllByParentIsNullAndDeletedIsFalse();
 
     @Query(value = FIND_LIST, nativeQuery = true)
-     List<List<Object>> findList();
-//
+     List<Object[]> findList();
+    //
 //    @Query(value = RESTART_AFTER, nativeQuery = true)
 //    void resetBoardIdAfterDelete();
 }

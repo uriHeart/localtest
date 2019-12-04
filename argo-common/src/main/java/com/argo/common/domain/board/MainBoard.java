@@ -17,8 +17,8 @@ import java.util.Date;
 @EntityListeners( { CreatedAtListener.class, UpdatedAtListener.class } )
 public class MainBoard implements SystemMetadata {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="main_board_seq")
-    @SequenceGenerator(name="main_board_seq", sequenceName="main_board_seq", allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="main_board_board_id_seq")
+    @SequenceGenerator(name="main_board_board_id_seq", sequenceName="main_board_board_id_seq", allocationSize=1)
     @Column(name = "board_id", nullable = false)
     private Long boardId;
 
@@ -58,11 +58,11 @@ public class MainBoard implements SystemMetadata {
     @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
 
-    public void deleteBoard(Long boardId) {
+    public void deleteBoard() {
         this.deleted = true;
     }
 
-    public void replied(Long boardId) {
+    public void replied() {
         this.replied = true;
     }
 

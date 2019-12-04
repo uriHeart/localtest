@@ -1,7 +1,10 @@
-package com.argo.api.controller.board;
+package com.argo.common.domain.board;
 
+import com.google.gson.JsonArray;
 import lombok.*;
 import org.json.simple.JSONArray;
+
+import java.util.List;
 
 @Builder
 @Data
@@ -15,6 +18,9 @@ public class BoardReturnParam {
     private String post; //
     private String message;  //NEED TO ADD EXCEPTION MESSAGE
     private Long parent; //DEFAULT NULL
+    private boolean deleted;
     private boolean admin_reply; //DEFAULT false
-    private JSONArray rowData;
+    private List<MainBoardShorten> rowData;
+    private List<String> replies;
+
 }
