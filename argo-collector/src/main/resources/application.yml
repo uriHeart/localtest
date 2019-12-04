@@ -87,3 +87,12 @@ collect:
 passwordreset:
   url:
     confirm: https://argoport.com/#/auth/resetPasswordConfirm
+
+refine:
+  service-type: kakao
+  kakao:
+    url: https://dapi.kakao.com/v2/local/search/address.json
+    access-key: KakaoAK 1af1d849e0fc9601d683f43794c1ed35
+  vworld:
+    url: http://api.vworld.kr/req/address?service=address&request=getcoord&version=2.0&crs=epsg:4326&refine=true&simple=false&format=json
+    access-key: 241C75FB-1F72-3587-B4A8-F225B5D10E31

@@ -1,5 +1,7 @@
 package com.argo.common.domain.order.dto;
 
+import com.argo.common.domain.address.OriginalAddressDto;
+import com.argo.common.domain.address.RefinedAddressDto;
 import lombok.*;
 
 @Data

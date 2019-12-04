@@ -1,6 +1,8 @@
 package com.argo.common.domain.order.dto;
 
 
+import com.argo.common.domain.address.OriginalAddressDto;
+import com.argo.common.domain.address.RefinedAddressDto;
 import com.argo.common.domain.channel.SalesChannel;
 import com.argo.common.domain.channel.SalesChannelDto;
 import com.argo.common.domain.order.ArgoOrder;

@@ -1,5 +1,7 @@
 package com.argo.common.domain.order;
 
+import com.argo.common.domain.address.AddressRefineHandler;
+import com.argo.common.domain.address.RefineResultDto;
 import com.argo.common.domain.channel.SalesChannel;
 import com.argo.common.domain.channel.SalesChannelService;
 import com.argo.common.domain.common.util.JsonUtil;
@@ -56,6 +58,7 @@ public class OrderService {
     private VendorService vendorService;
     private SalesChannelService salesChannelService;
     private SkuMappingProvider skuMappingProvider;
+    private AddressRefineHandler addressRefineHandler;
 
     public void saveOrder(ArgoOrder order, OrderAddress orderAddress, List<OrderVendorItemLifecycle> orderVendorItemLifecycles) {
         if (order == null) {
@@ -94,48 +97,57 @@ public class OrderService {
         vendorItems.forEach(
                 item -> {
                     SkuData sku = null;
+                    RefineResultDto refineResult = null;
                     List<Long> skuIds = skuMappingProvider.getSkuIds(order.getChannelId(), order.getVendorId(), item.getSourceItemId());
                     List<SkuData> skus = skuMappingProvider.getSkus(skuIds);
                     if (!CollectionUtils.isEmpty(skus)) {
                         sku = skus.stream().findFirst().get();
                     }
 
-                    this.indexingOrder(OrderDoc.builder()
-                            .id(this.getDocId(order, item))
-                            .orderId(order.getOrderId())
-                            .vendorId(order.getVendorId())
-                            .channelId(order.getChannelId())
-                            .channelType(salesChannel.getChannelType().name())
-                            .channelTypeDescription(salesChannel.getChannelType().getDescription())
-                            .publishedDate(LocalDate.fromDateFields(item.getPublishedAt()).toDate())
-                            .publishedAt(item.getPublishedAt())
-                            .collectedAt(order.getMetadata().getCollectedAt())
-                            .orderedAt(order.getMetadata().getOrderedAt())
-                            .orderStatus(order.getState())
-                            .salesChannelCode(salesChannel.getCode())
-                            .salesChannelName(salesChannel.getName())
-                            .recipientName(orderAddress == null ? null : orderAddress.getRecipient().getName())
-                            .originalPostalCode(orderAddress == null ? null : orderAddress.getOriginalPostalCode())
-                            .vendorItemId(item.getVendorItemId())
-                            .vendorItemLifeCycleStatus(item.getState())
-                            .originalPrice(item.getMetadata().getOriginalPrice())
-                            .paymentAmount(item.getMetadata().getPaymentAmount())
-                            .paymentMethod(item.getMetadata().getPaymentMethod())
-                            .salesPrice(item.getMetadata().getSalesPrice())
-                            .quantity(item.getQuantity())
-                            .sourceItemId(item.getSourceItemId())
-                            .sourceItemName(item.getSourceItemName())
-                            .sourceItemOption(item.getSourceItemOption())
-                            .barcode(sku == null ? null : sku.getBarcode())
-                            .skuId(sku == null ? null : sku.getSkuId())
-                            .skuName(sku == null ? null : sku.getName())
-                            .skuColor(sku == null ? null : sku.getColor())
-                            .skuSize(sku == null ? null : sku.getSize())
-                            .location(Location.builder()
-                                    .lat(0.0d)
-                                    .lon(0.0d)
-                                    .build())
-                            .build());
+                    if (orderAddress != null) {
+                        refineResult = addressRefineHandler.refine(orderAddress.getOriginalAddress().getFullAddress());
+                    }
+
+                    try {
+                        this.indexingOrder(OrderDoc.builder()
+                                .id(this.getDocId(order, item))
+                                .orderId(order.getOrderId())
+                                .vendorId(order.getVendorId())
+                                .channelId(order.getChannelId())
+                                .channelType(salesChannel.getChannelType().name())
+                                .channelTypeDescription(salesChannel.getChannelType().getDescription())
+                                .publishedDate(LocalDate.fromDateFields(item.getPublishedAt()).toDate())
+                                .publishedAt(item.getPublishedAt())
+                                .collectedAt(order.getMetadata().getCollectedAt())
+                                .orderedAt(order.getMetadata().getOrderedAt())
+                                .orderStatus(order.getState())
+                                .salesChannelCode(salesChannel.getCode())
+                                .salesChannelName(salesChannel.getName())
+                                .recipientName(orderAddress == null ? null : orderAddress.getRecipient().getName())
+                                .originalPostalCode(orderAddress == null ? null : orderAddress.getOriginalPostalCode())
+                                .vendorItemId(item.getVendorItemId())
+                                .vendorItemLifeCycleStatus(item.getState())
+                                .originalPrice(item.getMetadata().getOriginalPrice())
+                                .paymentAmount(item.getMetadata().getPaymentAmount())
+                                .paymentMethod(item.getMetadata().getPaymentMethod())
+                                .salesPrice(item.getMetadata().getSalesPrice())
+                                .quantity(item.getQuantity())
+                                .sourceItemId(item.getSourceItemId())
+                                .sourceItemName(item.getSourceItemName())
+                                .sourceItemOption(item.getSourceItemOption())
+                                .barcode(sku == null ? null : sku.getBarcode())
+                                .skuId(sku == null ? null : sku.getSkuId())
+                                .skuName(sku == null ? null : sku.getName())
+                                .skuColor(sku == null ? null : sku.getColor())
+                                .skuSize(sku == null ? null : sku.getSize())
+                                .deliveryLocation(Location.builder()
+                                        .lat(refineResult == null ? 0.0d : refineResult.getRefinedAddress().getLatitude())
+                                        .lon(refineResult == null ? 0.0d : refineResult.getRefinedAddress().getLongitude())
+                                        .build())
+                                .build());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
         );
     }
