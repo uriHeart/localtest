@@ -3,8 +3,12 @@ package com.argo.common.domain.common.jpa;
 import java.util.Arrays;
 
 public enum EventType {
-    RELEASE("RELEASE"),ORDER("ORDER"),EXCHANGE("EXCHANGE"),RETURN("RETURN")
-    ,OTHER("OTHER"),CANCEL("CANCEL");
+    ORDER("ORDER"), //주문
+    CANCEL("CANCEL"), //주문취소
+    RELEASE("RELEASE"),//출고
+    EXCHANGE("EXCHANGE"), //교환
+    RETURN("RETURN"), //환불
+    OTHER("OTHER");
 
 
     private String value;

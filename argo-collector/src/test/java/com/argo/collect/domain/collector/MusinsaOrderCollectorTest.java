@@ -2,6 +2,7 @@ package com.argo.collect.domain.collector;
 
 import com.argo.collect.ArgoCollectorApplication;
 import com.argo.collect.domain.auth.AuthorityManager;
+import com.argo.collect.domain.collector.ssg.SsgRawEventParam;
 import com.argo.common.domain.common.util.ArgoDateUtil;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.vendor.VendorChannel;
@@ -15,23 +16,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -99,11 +95,13 @@ public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
             detailMap.add("ORD_NO", ORD_NO);
             detailMap.add("ORD_OPT_NO", ORD_OPT_NO);
 
-            headers.add("cookie", cookieDetail);
+            HttpHeaders detailHeaders = new HttpHeaders();
+            detailHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            detailHeaders.add("cookie", cookieDetail);
 
             Map orderDetail= null;
             try {
-                orderDetail = this.getUrlCallResult(detailUrl,headers,detailMap);
+                orderDetail = this.getUrlCallResult(detailUrl,detailHeaders,detailMap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -116,9 +114,14 @@ public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
 
             event.putAll(payment);
 
-            System.out.println("event");
         });
+
+        HashMap<String, RawEventParam> mergedOrder = this.mergeRawEvent(orderList);
+
+        this.saveRawData(mergedOrder, channel);
+
     }
+
 
     public Map getUrlCallResult(String dataUrl,HttpHeaders headers,MultiValueMap<String, String> paramMap) throws IOException {
 
@@ -130,30 +133,53 @@ public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
         return data;
     }
 
-    public void saveCassandra(List<Map> orderList, Long vendorId, Long channelId){
+    public void saveRawData(HashMap<String, RawEventParam> mergedOrder, VendorChannel channel){
 
-        orderList.forEach(event->{
+        mergedOrder.forEach((key,event)->{
             String eventToJson = null;
 
+            Map dataRows = new HashMap<>();
+            dataRows.put("dataRows",event);
+
             try {
-                eventToJson = objectMapper.writeValueAsString(event);
+                eventToJson = objectMapper.writeValueAsString(dataRows);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
 
             RawEvent rawEvent = RawEvent.builder()
-                .vendorId(vendorId)
-                .channelId(channelId)
+                .vendorId(channel.getVendor().getVendorId())
+                .channelId(channel.getSalesChannel().getSalesChannelId())
                 .format("JSON")
                 .auto(true)
                 .data(eventToJson)
-                .orderId(event.get("ord_no").toString())
-                .publishedAt(ArgoDateUtil.getDate(event.get("ord_date").toString().replaceAll("\\.", "-")))
+                .orderId(key)
+                .publishedAt(ArgoDateUtil.getDate(event.getPublishedAt().replaceAll("\\.", "-")))
                 .createdAt(new Date())
                 .build();
             rawEventService.save(rawEvent);
 
         });
+    }
+
+    public HashMap<String, RawEventParam> mergeRawEvent(List<Map> orderList){
+
+        HashMap<String, RawEventParam> mergedOrder = new HashMap<>();
+        orderList.forEach(event -> {
+            String orderId = String.valueOf(event.get("ord_no"));
+            String publishedAt = String.valueOf(event.get("ord_date"));
+            if (mergedOrder.containsKey(orderId)) {
+                mergedOrder.get(orderId).getDataRows().add(event);
+            } else {
+                RawEventParam rawEventParam = new RawEventParam();
+                rawEventParam.setOrderId(orderId);
+                rawEventParam.setPublishedAt(publishedAt);
+                rawEventParam.getDataRows().add(event);
+                mergedOrder.put(orderId, rawEventParam);
+            }
+        });
+
+        return mergedOrder;
     }
 
     @Test

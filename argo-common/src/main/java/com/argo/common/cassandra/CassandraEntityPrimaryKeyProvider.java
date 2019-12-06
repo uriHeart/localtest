@@ -1,5 +1,6 @@
 package com.argo.common.cassandra;
 
+import com.argo.common.domain.order.ArgoOrder;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
@@ -39,5 +40,9 @@ public class CassandraEntityPrimaryKeyProvider {
                 }
         );
         return result;
+    }
+
+    public static void main(String[] args){
+        Map fields = getPrimaryKeyMap(new ArgoOrder());
     }
 }

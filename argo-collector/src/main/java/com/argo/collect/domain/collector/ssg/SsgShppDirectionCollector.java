@@ -11,6 +11,5 @@ public class SsgShppDirectionCollector extends AbstractOrderCollector {
 
     @Override
     public void collect(VendorChannel vendorChannel) {
-
     }
 }
