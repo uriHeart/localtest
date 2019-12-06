@@ -9,6 +9,7 @@ import com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,12 @@ public class RawEventService {
                 rawEvent.setEvent(EventType.OTHER.toString());
             }
         }
+
         Map<String, Object> map = dataConversionService.convert(rawEventRepository.save(rawEvent));
         orderService.saveOrder((ArgoOrder) map.get("com.argo.common.domain.order.ArgoOrder"), (OrderAddress) map.get("com.argo.common.domain.order.OrderAddress"), (List<OrderVendorItemLifecycle>) map.get("com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle"));
+    }
+
+    public RawEvent getRawEvent(Long vendorId, Long channelId, String orderId, Date publishedAt){
+        return rawEventRepository.findByVendorIdAndChannelIdAndOrderIdAndPublishedAt(vendorId, channelId, orderId, publishedAt);
     }
 }

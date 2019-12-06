@@ -39,9 +39,10 @@ public class ConvertController {
         //엑셀데이터 json변환  List<엑셀sheet List<레코드 >
         List<HashMap<String, Object>> jsonData = convertService.excelToJson(excel);
 
-        RestStatus restStatus = convertService.saveToEs(excel.getName(), jsonData,vendorId,channelId);
 
         List<HashMap<String, String>> factorAddJsonData = convertService.addExcelFactor(jsonData,channelId);
+
+        RestStatus restStatus = convertService.saveToEs(excel.getName(), jsonData,vendorId,channelId);
 
         //카산드라에 raw데이터 저장
         convertService.saveToCassandra((List<HashMap<String, String>>) factorAddJsonData,channelId,vendorId);
@@ -68,6 +69,14 @@ public class ConvertController {
         return excelList;
     }
 
+//    @RequestMapping(value="/excel/detail",
+//            method = RequestMethod.GET,
+//            produces = "application/json; charset=utf8")
+//    public @ResponseBody Object getExcelMainText(@RequestParam String indexId) throws IOException {
+//        ArrayList<HashMap<String, HashMap<String, Object>>> excelMainText = convertService.getExcelMainText(indexId);
+//        return excelMainText;
+//    }
+
     /**
      * @param indexId
      * @return Object
@@ -77,8 +86,10 @@ public class ConvertController {
             method = RequestMethod.GET,
             produces = "application/json; charset=utf8")
     public @ResponseBody Object getExcelMainText(@RequestParam String indexId) throws IOException {
-        ArrayList<HashMap<String, HashMap<String, Object>>> excelMainText = convertService.getExcelMainText(indexId);
-        return excelMainText;
+        Map excelMainText = convertService.getExcelMainText(indexId);
+            ArrayList<Map> result = new ArrayList<>();
+            result.add(excelMainText);
+        return result;
     }
 
     @DeleteMapping(value="/excel/delete")

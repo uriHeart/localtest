@@ -66,8 +66,12 @@ https://bizest.musinsa.com/po/order/ord01/detail?ORD_NO=201911052331539930&ORD_O
 상품준비중
 상품출고완료
 
-
-
+"ord_state":"출고요청","ord_state_cd":"10"
+         "ord_state": "출고완료",
+            "ord_state_cd": "30",
+       "ord_state": "배송완료",
+            "ord_state_cd": "40",
+"ord_state":"구매확정","ord_state_cd":"50"
 
 https://bizest.musinsa.com/po/order/ord01/receipt?ORD_NO=201911060954283848&LAYOUT_TYPE=popup
 적립금사용액	10,119	주문총액	178,000

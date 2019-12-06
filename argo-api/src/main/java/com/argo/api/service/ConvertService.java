@@ -4,8 +4,10 @@ package com.argo.api.service;
 import com.argo.api.domain.excel.ChannelExcelMapping;
 import com.argo.api.domain.excel.ChannelExcelMappingService;
 import com.argo.api.domain.excel.ExcelToCassandraDto;
+import com.argo.common.domain.common.util.ArgoDateUtil;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.raw.RawEventService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
@@ -70,6 +72,9 @@ public class ConvertService {
 
     @Autowired
     HttpSession httpSession;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     private RestHighLevelClient esClient;
 
@@ -393,33 +398,41 @@ public class ConvertService {
         HashMap<String, Object> data = new HashMap<>();
         data.put("upLoadDate",dateTime);
         data.put("@timeStamp",Instant.now().getEpochSecond());
-        data.put("excelData",jsonData);
         data.put("fileName",id);
+
+        List<HashMap<String,Object>> rowDatakeyList = new ArrayList<>();
+        HashMap<String,Boolean> dupChk = new HashMap<>();
 
         jsonData.forEach(sheetData ->{
             List<HashMap<String,String>> rowData = (List<HashMap<String, String>>) sheetData.get("sheetData");
             rowData.forEach(row-> {
-
-                List<String> deleteList = new ArrayList<>();
+                HashMap<String,Object> rowDatakey = new HashMap<>();
+                rowDatakey.put("vendorId",vendorId);
+                rowDatakey.put("channelId",channelId);
 
                 row.forEach( (key,value)->{
-
-                    System.out.println(key);
-
-                    if(!(key.equals("orderId") || key.equals("publishedAt"))){
-                        deleteList.add(key);
+                    if("orderId".equals(key)){
+                        rowDatakey.put("orderId",value);
+                    }else if("publishedAt".equals(key)){
+                        rowDatakey.put("publishedAt",value);
                     }
                 });
 
-                deleteList.forEach(key->row.remove(key));
+                if(!dupChk.containsKey(rowDatakey.get("orderId"))){
+                    dupChk.put(rowDatakey.get("orderId").toString(),true);
+                    rowDatakeyList.add(rowDatakey);
+                }
+
 
             });
+
+
         });
 
         //key
-        data.put("vendorId",vendorId);
-        data.put("channelId",channelId);
-
+        data.put("rowDatakeyList",rowDatakeyList);
+        data.put("sheetHeader",jsonData.get(0).get("sheetHeader"));
+        data.put("sheetName",id.split(".")[0]);
 
         request.source(gson.toJson(data), XContentType.JSON).id(id);
 
@@ -474,14 +487,51 @@ public class ConvertService {
         return exists;
     }
 
+//    public ArrayList<HashMap<String,HashMap<String,Object>>> getExcelMainText(String indexId) throws IOException {
+//        GetRequest getRequest = new GetRequest(excelIndex,indexId);
+//        GetResponse getResponse = esClient.get(getRequest, RequestOptions.DEFAULT);
+//        ArrayList<HashMap<String,HashMap<String,Object>>> data = (ArrayList<HashMap<String, HashMap<String, Object>>>) getResponse.getSourceAsMap().get("excelData");
+//
+//
+//        return data;
+//    }
 
-    public ArrayList<HashMap<String,HashMap<String,Object>>> getExcelMainText(String indexId) throws IOException {
+    public Map getExcelMainText(String indexId) throws IOException {
         GetRequest getRequest = new GetRequest(excelIndex,indexId);
         GetResponse getResponse = esClient.get(getRequest, RequestOptions.DEFAULT);
-        ArrayList<HashMap<String,HashMap<String,Object>>> data = (ArrayList<HashMap<String, HashMap<String, Object>>>) getResponse.getSourceAsMap().get("excelData");
+        Map data =  getResponse.getSourceAsMap();
+        List<HashMap> rowDatakeyList = (List<HashMap>) data.get("rowDatakeyList");
+        List<HashMap> rowDataList = new ArrayList<>();
+        rowDatakeyList.forEach(row ->{
 
+            Long vandorId = Long.parseLong(row.get("vendorId").toString());
+            Long channelId = Long.parseLong(row.get("channelId").toString());
+            String orderId = row.get("orderId").toString();
+            Date publishedAt = ArgoDateUtil.getDateBy24H(row.get("publishedAt").toString());
 
-        return data;
+            RawEvent rawEvent = rawEventService.getRawEvent(vandorId,channelId,orderId,publishedAt);
+
+            String rawData = null;
+
+            if(rawEvent != null){
+                rawData = rawEvent.getData();
+            }
+            Map raw = null;
+            try {
+                raw = objectMapper.readValue(rawData, Map.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            rowDataList.addAll((Collection<? extends HashMap>) raw.get("datas"));
+        });
+
+        Map result = new HashMap();
+        result.put("sheetData",rowDataList);
+        result.put("sheetHeader",data.get("sheetHeader"));
+        result.put("sheetName",data.get("sheetName"));
+
+        return result;
     }
 
 
