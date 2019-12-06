@@ -2,7 +2,6 @@ package com.argo.collect.domain.collector;
 
 import com.argo.collect.ArgoCollectorApplication;
 import com.argo.collect.domain.auth.AuthorityManager;
-import com.argo.collect.domain.collector.ssg.SsgRawEventParam;
 import com.argo.common.domain.common.util.ArgoDateUtil;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.vendor.VendorChannel;
@@ -138,11 +137,8 @@ public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
         mergedOrder.forEach((key,event)->{
             String eventToJson = null;
 
-            Map dataRows = new HashMap<>();
-            dataRows.put("dataRows",event);
-
             try {
-                eventToJson = objectMapper.writeValueAsString(dataRows);
+                eventToJson = objectMapper.writeValueAsString(event);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
