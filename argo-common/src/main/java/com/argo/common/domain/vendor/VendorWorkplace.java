@@ -10,15 +10,15 @@ import java.util.Date;
 @Data
 @Builder
 @Entity
-@Table(name = "vendor_location", schema = "public")
+@Table(name = "vendor_workplace", schema = "public")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @ToString
 @EntityListeners( { CreatedAtListener.class, UpdatedAtListener.class } )
-public class VendorLocation implements SystemMetadata {
+public class VendorWorkplace implements SystemMetadata {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendor_location_id")
-    @SequenceGenerator(name = "vendor_location_id", sequenceName = "vendor_location_id", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendor_workplace_id")
+    @SequenceGenerator(name = "vendor_workplace_id", sequenceName = "vendor_workplace_id", allocationSize = 1)
     @Column(name = "vendor_id", nullable = false)
     private Long vendorId;
     // vendor name 추가? vendorId 잇는거 사숑하면 될거 같기도 한데??

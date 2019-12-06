@@ -94,9 +94,6 @@ INSERT INTO vendor_channels (vendor_id, sales_channel_id, enabled, auto_collecti
 (1, 18, true, false, null)
 ;
 
-
-
-
  -- vendor_channel_accounts 로 이름 변경
 
 CREATE TABLE channel_vendor_accounts (

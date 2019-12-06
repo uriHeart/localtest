@@ -6,7 +6,6 @@ import com.argo.common.domain.common.jpa.SystemMetadata;
 import com.argo.common.domain.common.jpa.UpdatedAtListener;
 import com.argo.common.domain.vendor.Vendor;
 import lombok.*;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -21,6 +20,7 @@ public class ChannelCollectInfo implements SystemMetadata {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="channel_collect_info_seq")
     @SequenceGenerator(name="channel_collect_info_seq", sequenceName="channel_collect_info_seq", allocationSize=1)
+
     @Column(name = "channel_collect_info_id", nullable = false)
     private Long channelCollectInfoId;
 
