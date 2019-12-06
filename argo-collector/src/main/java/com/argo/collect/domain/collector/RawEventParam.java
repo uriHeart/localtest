@@ -14,7 +14,7 @@ import java.util.Map;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class RawEventParam {
 
-    private List<Map<String,String>> dataRows = new ArrayList<>();
+    private List<Map> dataRows = new ArrayList<>();
 
     private String publishedAt;
 
