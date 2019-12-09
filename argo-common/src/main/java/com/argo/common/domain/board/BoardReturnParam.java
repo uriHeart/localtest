@@ -22,5 +22,6 @@ public class BoardReturnParam {
     private boolean admin_reply; //DEFAULT false
     private List<MainBoardShorten> rowData;
     private List<String> replies;
+    private String reply;
 
 }

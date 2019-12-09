@@ -15,11 +15,11 @@ public interface MainBoardRepository extends JpaRepository<MainBoard, Long> {
     public static final String FIND_LIST = "SELECT board_id, user_email, title, created_at FROM main_board WHERE deleted = false";
     MainBoard findMainBoardByBoardId(Long boardId);
     boolean existsMainBoardByBoardId(Long boardId);
-    ArrayList<MainBoard> findAllByDeletedIsFalse();
+    ArrayList<MainBoard> findAllByParentIsNullAndDeletedIsFalseOrderByCreatedAt();
     //댓글 다 불러오기
     ArrayList<MainBoard> findAllByParentEquals(Long boardId);
     ArrayList<MainBoard> findAllByParentIsNullAndDeletedIsFalse();
-
+    ArrayList<MainBoard> findAllByDeletedIsFalseAndParentEqualsOrderByCreatedAt(Long boardId);
     @Query(value = FIND_LIST, nativeQuery = true)
      List<Object[]> findList();
     //

@@ -13,4 +13,5 @@ public class MainBoardShorten {
     public String user_email; //
     public String title; //
     public Date createdAt; //
+    public Date updatedAt;
 }

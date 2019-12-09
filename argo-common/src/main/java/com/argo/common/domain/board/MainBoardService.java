@@ -39,7 +39,7 @@ public class MainBoardService {
 //            JSONArray newArray = new JSONArray(list);
 //            jsonArray.put(newArray);
 //        }
-        List<MainBoardShorten> shortenList = listForList(mainBoardRepository.findAllByParentIsNullAndDeletedIsFalse());
+        List<MainBoardShorten> shortenList = listForList(mainBoardRepository.findAllByParentIsNullAndDeletedIsFalseOrderByCreatedAt());
         return new ResponseEntity<>(BoardReturnParam.builder()
                 .success(true)
                 .rowData(shortenList).build(), HttpStatus.OK);
@@ -65,7 +65,7 @@ public class MainBoardService {
 
     public ResponseEntity<BoardReturnParam> readBoard(Long boardId) {
         MainBoard selectedBoard = mainBoardRepository.findMainBoardByBoardId(boardId);
-        List<MainBoard> listOfReplies = mainBoardRepository.findAllByParentEquals(selectedBoard.getBoardId());
+        List<MainBoard> listOfReplies = mainBoardRepository.findAllByDeletedIsFalseAndParentEqualsOrderByCreatedAt(selectedBoard.getBoardId());
         List<String> listRefined = new ArrayList<>();
         for (MainBoard mainboard: listOfReplies) {
             listRefined.add(mainboard.getPost());
@@ -132,21 +132,23 @@ public class MainBoardService {
     public ResponseEntity<BoardReturnParam> addNewReply(BoardReceiverParam boardParam) throws InvalidInputException {
         try {
             //need exceptionHandlingmethod
+            Long parent = boardParam.getParent();
             MainBoard newReply = BoardParamToReply(boardParam);
             mainBoardRepository.save(newReply);
             newReply.setBoardId(0L);
             newReply.setParent(boardParam.getBoardId());
-            List<MainBoard> listOfReplies = mainBoardRepository.findAllByParentEquals(boardParam.getBoardId());
+            List<MainBoard> listOfReplies = mainBoardRepository.findAllByParentEquals(parent);
             List<String> listRefined = new ArrayList<>();
             for (MainBoard mainboard: listOfReplies) {
                 listRefined.add(mainboard.getPost());
             }
             return new ResponseEntity<>(BoardReturnParam.builder()
                     .success(true)
-                    .boardId(newReply.getParent())
+                    .boardId(parent)
                     .user_email(boardParam.getUser_email())
                     .title(boardParam.getTitle())
                     .post(boardParam.getPost())
+                    .reply(boardParam.getPost())
                     .replies(listRefined)
                     .build(), HttpStatus.OK);
         } catch (Exception e) {

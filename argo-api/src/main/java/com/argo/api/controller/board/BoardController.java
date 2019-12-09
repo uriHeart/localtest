@@ -109,9 +109,7 @@ public class BoardController {
     public ResponseEntity<BoardReturnParam> deleteBoard(@PathVariable Long boardId) throws Exception {
         try {
             MainBoard target = mainBoardRepository.findMainBoardByBoardId(boardId);
-            target.setBoardId(10000L);
-            mainBoardRepository.saveAndFlush(target);
-            target.setBoardId(3L);
+            target.setDeleted(true);
             mainBoardRepository.saveAndFlush(target);
 
             return new ResponseEntity<>(BoardReturnParam.builder()
@@ -137,6 +135,14 @@ public class BoardController {
 //        return replyBoardService.addReplyBoard(boardId, reply_text, parent, admin_reply, user_reply);
 //    }
 
+    @GetMapping(value = "/list/undelete/{boardId}")
+    public void undoDelete(@PathVariable Long boardId) {
+        MainBoard target = mainBoardRepository.findMainBoardByBoardId(boardId);
+        if (target.isDeleted()) {
+            target.setDeleted(false);
+        }
+        mainBoardRepository.saveAndFlush(target);
+    }
 
 //    @PostMapping(value = "/post/reply")
 //    public void addAdminNewReply(@RequestBody ReplyBoard replyBoard) {
