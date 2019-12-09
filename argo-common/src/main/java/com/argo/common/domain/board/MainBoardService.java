@@ -66,10 +66,14 @@ public class MainBoardService {
     public ResponseEntity<BoardReturnParam> readBoard(Long boardId) {
         MainBoard selectedBoard = mainBoardRepository.findMainBoardByBoardId(boardId);
         List<MainBoard> listOfReplies = mainBoardRepository.findAllByDeletedIsFalseAndParentEqualsOrderByCreatedAt(selectedBoard.getBoardId());
+        System.out.println(listOfReplies);
         List<String> listRefined = new ArrayList<>();
         for (MainBoard mainboard: listOfReplies) {
             listRefined.add(mainboard.getPost());
         }
+        System.out.println(selectedBoard.getBoardId());
+        System.out.println(selectedBoard.getPost());
+        System.out.println(listRefined);
         return new ResponseEntity<>(BoardReturnParam.builder()
                 .success(true)
                 .boardId(selectedBoard.getBoardId())
@@ -133,11 +137,12 @@ public class MainBoardService {
         try {
             //need exceptionHandlingmethod
             Long parent = boardParam.getParent();
+            MainBoard selectedBoard = mainBoardRepository.findMainBoardByBoardId(parent);
             MainBoard newReply = BoardParamToReply(boardParam);
             mainBoardRepository.save(newReply);
             newReply.setBoardId(0L);
             newReply.setParent(boardParam.getBoardId());
-            List<MainBoard> listOfReplies = mainBoardRepository.findAllByParentEquals(parent);
+            List<MainBoard> listOfReplies = mainBoardRepository.findAllByDeletedIsFalseAndParentEqualsOrderByCreatedAt(parent);
             List<String> listRefined = new ArrayList<>();
             for (MainBoard mainboard: listOfReplies) {
                 listRefined.add(mainboard.getPost());
@@ -147,7 +152,7 @@ public class MainBoardService {
                     .boardId(parent)
                     .user_email(boardParam.getUser_email())
                     .title(boardParam.getTitle())
-                    .post(boardParam.getPost())
+                    .post(selectedBoard.getPost())
                     .reply(boardParam.getPost())
                     .replies(listRefined)
                     .build(), HttpStatus.OK);

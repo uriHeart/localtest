@@ -96,6 +96,7 @@ public class BoardController {
         MainBoard targetBoard = mainBoardRepository.findMainBoardByBoardId(newPost.getBoardId());
         targetBoard.setTitle(newPost.getTitle());
         targetBoard.setPost(newPost.getPost());
+        targetBoard.setUserEmail(newPost.getUser_email());
         targetBoard.setUpdatedAt(new Date());
         mainBoardRepository.save(targetBoard);
         return new ResponseEntity<>(BoardReturnParam.builder()
