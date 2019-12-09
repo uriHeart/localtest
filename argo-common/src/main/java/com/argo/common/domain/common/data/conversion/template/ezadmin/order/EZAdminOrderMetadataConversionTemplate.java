@@ -41,7 +41,7 @@ public class EZAdminOrderMetadataConversionTemplate {
         orderedAtParams .put("order_time", "java.lang.String");
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.OPERATION)
-                .operatorClass("eZAdminConversionService")
+                .operatorClass("EZAdminConversionService")
                 .operatorMethod("mergeDateAndTime")
                 .operatorParams(orderedAtParams)
                 .targetField("orderedAt")

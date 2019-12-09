@@ -23,6 +23,7 @@ public class OrderResultDto {
     private String orderId; //주문아이디
     private Date orderedAt; //주문일시
     private Date collectedAt; //발주일시
+    private Date publishedAt;
     private Date paidAt; //결제일시
 
     private Long totalQuantity; //총 수량
@@ -40,6 +41,7 @@ public class OrderResultDto {
         return OrderResultDto.builder()
                 .orderId(order.getOrderId())
                 .orderedAt(order.getMetadata().getOrderedAt())
+                .publishedAt(vendorItem.getPublishedAt())
                 .paidAt(order.getPaidAt())
                 .totalQuantity(order.getMetadata().getTotalQuantity())
                 .orderState(order.getState())
