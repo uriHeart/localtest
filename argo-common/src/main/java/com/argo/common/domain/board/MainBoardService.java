@@ -62,25 +62,33 @@ public class MainBoardService {
         return shortenList;
     }
 
+    public static List<MainBoardReply> listforReplyList(List<MainBoard> originalList) {
+        ArrayList<MainBoardReply> shortenList = new ArrayList<>();
+        for (MainBoard mainboard : originalList) {
+            if (mainboard.isDeleted()) {
+                continue;
+            };
+            MainBoardReply replyList = new MainBoardReply();
+            replyList.boardId = mainboard.getBoardId();
+            replyList.user_email = mainboard.getUserEmail();
+            replyList.post = mainboard.getPost();
+            shortenList.add(replyList);
+        }
+        return shortenList;
+    }
+
 
     public ResponseEntity<BoardReturnParam> readBoard(Long boardId) {
         MainBoard selectedBoard = mainBoardRepository.findMainBoardByBoardId(boardId);
-        List<MainBoard> listOfReplies = mainBoardRepository.findAllByDeletedIsFalseAndParentEqualsOrderByCreatedAt(selectedBoard.getBoardId());
-        System.out.println(listOfReplies);
-        List<String> listRefined = new ArrayList<>();
-        for (MainBoard mainboard: listOfReplies) {
-            listRefined.add(mainboard.getPost());
-        }
-        System.out.println(selectedBoard.getBoardId());
-        System.out.println(selectedBoard.getPost());
-        System.out.println(listRefined);
+        List<MainBoardReply> replyList = listforReplyList(mainBoardRepository.findAllByDeletedIsFalseAndParentEqualsOrderByCreatedAt(selectedBoard.getBoardId()));
+        System.out.println(replyList);
         return new ResponseEntity<>(BoardReturnParam.builder()
                 .success(true)
                 .boardId(selectedBoard.getBoardId())
                 .user_email(selectedBoard.getUserEmail())
                 .title(selectedBoard.getTitle())
                 .post(selectedBoard.getPost())
-                .replies(listRefined)
+                .replies(replyList)
                 .build()
                 , HttpStatus.OK);
     }
@@ -142,11 +150,7 @@ public class MainBoardService {
             mainBoardRepository.save(newReply);
             newReply.setBoardId(0L);
             newReply.setParent(boardParam.getBoardId());
-            List<MainBoard> listOfReplies = mainBoardRepository.findAllByDeletedIsFalseAndParentEqualsOrderByCreatedAt(parent);
-            List<String> listRefined = new ArrayList<>();
-            for (MainBoard mainboard: listOfReplies) {
-                listRefined.add(mainboard.getPost());
-            }
+            List<MainBoardReply> replyList = listforReplyList(mainBoardRepository.findAllByDeletedIsFalseAndParentEqualsOrderByCreatedAt(selectedBoard.getBoardId()));
             return new ResponseEntity<>(BoardReturnParam.builder()
                     .success(true)
                     .boardId(parent)
@@ -154,7 +158,7 @@ public class MainBoardService {
                     .title(boardParam.getTitle())
                     .post(selectedBoard.getPost())
                     .reply(boardParam.getPost())
-                    .replies(listRefined)
+                    .replies(replyList)
                     .build(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(BoardReturnParam.builder()

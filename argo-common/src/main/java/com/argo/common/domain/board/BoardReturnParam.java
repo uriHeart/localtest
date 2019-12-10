@@ -21,7 +21,6 @@ public class BoardReturnParam {
     private boolean deleted;
     private boolean admin_reply; //DEFAULT false
     private List<MainBoardShorten> rowData;
-    private List<String> replies;
+    private List<MainBoardReply> replies;
     private String reply;
-
 }

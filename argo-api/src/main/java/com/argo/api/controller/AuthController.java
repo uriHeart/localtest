@@ -66,9 +66,12 @@ public class AuthController {
         if (user == null) {
             return new ResponseEntity<>(LoginResult.builder().success(false).message("로그인이 되지 않았습니다.").build(), HttpStatus.OK);
         } else {
+            // email 여기서 받기
+
             return new ResponseEntity<>(LoginResult.builder()
                     .success(true)
                     .vendorId(user.getVendorId())
+                    .user_email(user.getLoginId())
                     .dashboardUrl("https://db.argoport.com/app/kibana#/dashboard/3416c9a0-0861-11ea-938e-293ce79f4c46?embed=true&_g=(filters%3A!()%2CrefreshInterval%3A(pause%3A!f%2Cvalue%3A5000)%2Ctime%3A(from%3Anow-30d%2Cto%3Anow))")
                     .totalDashboardUrl("https://db.argoport.com/app/kibana#/dashboard/85687930-086f-11ea-938e-293ce79f4c46?embed=true&_g=(filters%3A!()%2CrefreshInterval%3A(pause%3A!f%2Cvalue%3A5000)%2Ctime%3A(from%3Anow-1y%2Cto%3Anow))")
                     .build(), HttpStatus.OK);

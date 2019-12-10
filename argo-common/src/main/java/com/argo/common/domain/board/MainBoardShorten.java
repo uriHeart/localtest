@@ -11,6 +11,7 @@ import java.util.List;
 public class MainBoardShorten {
     public Long boardId; //;
     public String user_email; //
+    public String post;
     public String title; //
     public Date createdAt; //
     public Date updatedAt;
