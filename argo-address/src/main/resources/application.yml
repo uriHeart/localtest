@@ -1,0 +1,98 @@
+datasource:
+  argo:
+    jdbc-url: 'jdbc:postgresql://argo-db.cnkxzmhdcjyk.ap-northeast-2.rds.amazonaws.com:5432/argo'
+    username: 'argo'
+    password: 'argo2020'
+    driver-class-name: 'org.postgresql.Driver'
+
+spring:
+  jpa:
+    database: postgresql
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        show-sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        temp:
+          use_jdbc_metadata_defaults: false
+        hibernate:
+          default_schema: public
+    hibernate.ddl-auto: update
+    hibernate.naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: contact@argoport.com
+    password: argo2020
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    default-encoding: UTF-8
+
+  data:
+    cassandra:
+      port: 9042
+      schema-action: CREATE_IF_NOT_EXISTS
+      consistency-level: one
+      contact-points: 15.164.111.122
+      keyspace-name: argo
+      username: argo
+      password: argo2020
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+webdriver:
+  chrome:
+    driver: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome
+
+  profiles:
+    active: local
+
+spring.main.allow-bean-definition-overriding: true
+server:
+  port: 10003
+
+file:
+  upload:
+    default-path: C:\attachments
+    index: excel_upload
+
+elasticsearch:
+  hosts: http://15.164.111.122:9200
+
+registration:
+  url:
+    confirm: https://argoport.com/auth/confirm
+    additional-info: http://argoport.com/auth/additional-info
+aws:
+  s3:
+    accessKey: AKIAY7LXOLNEKJ4LQANO
+    secretKey: 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
+
+goData:
+  token: v8N7GVyY1dKTJ8inAiv3lBPbajbHgjl8NAYSu1vKXvMCBUU2JhuQee8VyFVcS%2Bt37rZ1h9N9PktQeQRxjtUsnw%3D%3D
+  url: http://apis.data.go.kr/B552015/NpsBplcInfoInqireService/getBassInfoSearch
+
+collect:
+  auth-script-location: /home/ec2-user/js
+
+passwordreset:
+  url:
+    confirm: https://argoport.com/#/auth/resetPasswordConfirm
+
+refine:
+  service-type: kakao
+  kakao:
+    url: https://dapi.kakao.com/v2/local/search/address.json
+    access-key: KakaoAK 1af1d849e0fc9601d683f43794c1ed35
+  vworld:
+    url: http://api.vworld.kr/req/address?service=address&request=getcoord&version=2.0&crs=epsg:4326&refine=true&simple=false&format=json
+    access-key: 241C75FB-1F72-3587-B4A8-F225B5D10E31

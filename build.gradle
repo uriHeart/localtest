@@ -9,7 +9,7 @@ buildscript {
 		javaVersion='1.8'
 		javaEncoding='UTF-8'
 		flywayGradleVersion='5.2.4'
-		springBootVersion='2.1.6.RELEASE'
+		springBootVersion='2.1.8.RELEASE'
 		dependencyManagementVersion='1.0.8.RELEASE'
 		queryDslPluginVersion='1.0.10'
 		queryDslVersion='4.2.1'

@@ -1,5 +1,6 @@
 package com.argo.common.domain.auth;
 
+import com.argo.common.domain.common.jpa.SystemMetadata;
 import com.argo.common.domain.user.ArgoUser;
 import com.argo.common.domain.user.UserStatus;
 import com.argo.common.exception.UserRegistrationException;
@@ -30,7 +31,7 @@ import org.joda.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "user_confirm", schema = "public")
-public class UserConfirm {
+public class UserConfirm implements SystemMetadata {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="user_confirm_seq")

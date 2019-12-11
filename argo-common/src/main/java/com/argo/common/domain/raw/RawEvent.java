@@ -1,6 +1,6 @@
 package com.argo.common.domain.raw;
 
-import com.argo.common.domain.common.data.ConvertibleData;
+import com.argo.common.domain.common.data.SourceData;
 import com.datastax.driver.core.DataType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -18,7 +18,7 @@ import java.util.Date;
 @Builder
 @EqualsAndHashCode(callSuper=false)
 @Table("raw_event")
-public class RawEvent extends ConvertibleData {
+public class RawEvent extends SourceData {
     @PrimaryKeyColumn(ordinal = 0, type = PrimaryKeyType.PARTITIONED, name = "vendor_id")
     @CassandraType(type = DataType.Name.BIGINT)
     private Long vendorId;
@@ -57,10 +57,6 @@ public class RawEvent extends ConvertibleData {
     private Date createdAt;
 
     public String sourceKey() {
-        if(channelId == 15L) {
-            return channelId.toString() + "-" + "ORDER";
-        } else {
-            return channelId.toString() + "-" + event;
-        }
+        return channelId.toString() + "-" + event;
     }
 }

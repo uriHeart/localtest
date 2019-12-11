@@ -61,6 +61,18 @@ public class EZAdminOrderVendorItemLifecycleConversionTemplate {
                 .targetField("vendorItemId")
                 .build());
 
+        Map<String, String> skuMappingParams = Maps.newLinkedHashMap();
+        skuMappingParams.put("channelId", "java.lang.Long");
+        skuMappingParams.put("vendorId", "java.lang.Long");
+        skuMappingParams.put("product_id", "java.lang.String");
+        list.add(ConversionRule.builder()
+                .conversionType(ConversionType.OPERATION)
+                .operatorClass("skuMappingProvider")
+                .operatorMethod("getSkuIds")
+                .operatorParams(skuMappingParams)
+                .targetField("skuMappings")
+                .build());
+
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
                 .sourceField("publishedAt")

@@ -1,10 +1,10 @@
 package com.argo.api.auth;
 
-import com.argo.common.domain.common.util.HashUtil;
+import com.argo.api.exception.ApiException;
 import com.argo.common.domain.auth.RsaDecrypter;
 import com.argo.common.domain.user.ArgoUser;
 import com.argo.common.domain.user.UserService;
-import com.google.common.collect.Lists;
+import java.util.Optional;
 import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -34,16 +35,24 @@ public class AuthProvider implements AuthenticationProvider {
         try {
             String loginId = authentication.getName();
             String password = rsaDecrypter.decryptRsa(authentication.getCredentials().toString(), httpSession.getAttribute("_RSA_WEB_Key_").toString());
-            ArgoUser user = userService.getUserByLoginId(loginId);
+            ArgoUser user = Optional.ofNullable(userService.getUserByLoginId(loginId)).orElseThrow(new ApiException("등록된 사용자가 아닙니다."));
             AuthUser authUser = modelMapper.map(user, AuthUser.class);
-            if (authUser == null || !HashUtil.sha256(password).equals(user.getPassword())) {
-                return null;
+            if (!authUser.confirmPassword(password)) {
+                throw new ApiException("비밀번호가 잘못되었습니다.");
             }
-            return new UsernamePasswordAuthenticationToken(loginId, password, Lists.newArrayList(authUser));
+
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                loginId, password,
+                AuthorityUtils.createAuthorityList("ROLE_USER"));
+            token.setDetails(authUser);
+            return token;
+        } catch (ApiException e) {
+            log.error(e.getMessage(), e);
+            throw e;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+            throw new ApiException("로그인에 실패하였습니다.");
         }
-        return null;
     }
 
     @Override

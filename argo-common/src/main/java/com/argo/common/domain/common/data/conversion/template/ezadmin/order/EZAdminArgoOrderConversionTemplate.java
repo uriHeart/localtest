@@ -82,6 +82,22 @@ public class EZAdminArgoOrderConversionTemplate {
                 .conversionTemplateTargetId("com.argo.common.domain.order.OrderMetadata")
                 .build());
 
+        Map<String, String> paymentTypeParams = Maps.newLinkedHashMap();
+        paymentTypeParams.put("pay_type", "java.lang.String");
+        list.add(ConversionRule.builder()
+                .conversionType(ConversionType.OPERATION)
+                .operatorClass("paymentTypeService")
+                .operatorMethod("getPaymentType")
+                .operatorParams(paymentTypeParams)
+                .targetField("paymentType")
+                .build());
+
+        list.add(ConversionRule.builder()
+                .conversionType(ConversionType.AGGREGATE)
+                .sourceField("amount")
+                .targetField("totalAmount")
+                .build());
+
         return list;
     }
 }

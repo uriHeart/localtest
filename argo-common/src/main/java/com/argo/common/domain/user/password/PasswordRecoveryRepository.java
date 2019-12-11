@@ -1,10 +1,9 @@
 package com.argo.common.domain.user.password;
 
 import com.argo.common.domain.user.ArgoUser;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface PasswordRecoveryRepository extends JpaRepository<PasswordRecovery, Long> {
@@ -17,4 +16,5 @@ public interface PasswordRecoveryRepository extends JpaRepository<PasswordRecove
     Long countByArgoUser(ArgoUser user);
 
     void deleteAllByArgoUser(ArgoUser user);
+
 }

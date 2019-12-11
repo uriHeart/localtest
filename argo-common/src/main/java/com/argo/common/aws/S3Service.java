@@ -43,6 +43,7 @@ public class S3Service {
             File uploadFile = convert(file);
             PutObjectRequest putObjectRequest = new PutObjectRequest(path, fileName, uploadFile);
             amazonS3.putObject(putObjectRequest);
+            uploadFile.delete();
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }

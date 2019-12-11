@@ -1,11 +1,11 @@
 package com.argo.common.domain.order.vendoritem;
 
+import com.argo.common.domain.common.data.TargetData;
 import com.argo.common.domain.common.util.JsonUtil;
 import com.datastax.driver.core.DataType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.Column;
@@ -13,13 +13,14 @@ import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.util.Date;
-import java.util.UUID;
+import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
 @AllArgsConstructor
 @Table("order_vendor_item_lifecycle")
-public class OrderVendorItemLifecycle {
+public class OrderVendorItemLifecycle extends TargetData {
 
     public OrderVendorItemLifecycle() {
         this.replayCount = 0;
@@ -71,8 +72,8 @@ public class OrderVendorItemLifecycle {
     private String event;
 
     @Column("sku_mappings")
-    @CassandraType(type = DataType.Name.TEXT)
-    private String skuMappings;
+    @CassandraType(type = DataType.Name.LIST)
+    private List<Long> skuMappings;
 
     @Column("quantity")
     @CassandraType(type = DataType.Name.INT)

@@ -22,11 +22,11 @@ public class UserRegistrationConfirmMailService {
     void sendConfirmationMail(ArgoUser user, String uuidForConfirm) {
         String subject = "[ARGO] 계정을 등록하셨습니다.";
         String content = "안녕하세요 {name} 님.\n"
-                             + "  ARGO 계정에 등록하신 이메일 주소를 인증하기 위해 아래 링크를 클릭하여 주시기 바랍니다.\n"
-                             + "  {confirmLink}\n"
+                             + "ARGO 계정에 등록하신 이메일 주소를 인증하기 위해 아래 링크를 클릭하여 주시기 바랍니다.\n"
+                             + "{confirmLink}\n"
                              + "\n"
-                             + "  감사합니다.\n"
-                             + "  ARGO 드림";
+                             + "감사합니다.\n"
+                             + "ARGO 드림";
 
         emailService.sendSimpleMessage(user.getLoginId(),
             subject,
@@ -37,11 +37,11 @@ public class UserRegistrationConfirmMailService {
     void sendCompletionMail(ArgoUser user) {
         String subject = "[ARGO] 이메일 주소 인증이 완료되었습니다.";
         String content = "안녕하세요 {name} 님.\n"
-                             + "  고객님의 {mail} 메일 주소는 정상적인 주소로 확인되었습니다.\n"
-                             + "  아래 링크를 클릭하거나 등록하신 이메일 주소와 비밀번호로 로그인하셔서 나머지 정보를 등록하여 주시기 바랍니다.\n"
-                             + "  {additionalInfoLink}\n"
-                             + "  감사합니다.\n"
-                             + "  ARGO 드림";
+                             + "고객님의 {mail} 메일 주소는 정상적인 주소로 확인되었습니다.\n"
+                             + "아래 링크를 클릭하거나 등록하신 이메일 주소와 비밀번호로 로그인하셔서 나머지 정보를 등록하여 주시기 바랍니다.\n"
+                             + "{additionalInfoLink}\n"
+                             + "감사합니다.\n"
+                             + "ARGO 드림";
 
         emailService.sendSimpleMessage(user.getLoginId(),
             subject,

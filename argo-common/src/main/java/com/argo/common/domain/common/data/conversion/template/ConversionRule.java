@@ -30,6 +30,8 @@ public class ConversionRule {
     private String conversionTemplateSourceId;
     private String conversionTemplateTargetId;
 
+    private String customType;
+    private String customValue;
 
     private String sqlString;
 

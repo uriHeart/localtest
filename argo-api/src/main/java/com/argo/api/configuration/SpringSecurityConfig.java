@@ -1,6 +1,7 @@
 package com.argo.api.configuration;
 
-import com.argo.api.auth.RoleType;
+import com.argo.api.auth.UserStatusUpdateFilter;
+import javax.servlet.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -26,14 +28,20 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .cors()
             .and()
                 .authorizeRequests()
-                .antMatchers("/error**", "/api/auth/**", "/board/**").permitAll()
-                .antMatchers("/**").authenticated()
-                .antMatchers("/admin/**").access(RoleType.ADMIN.name())
+                .antMatchers("/error**", "/user/password/**", "/api/auth/**", "/board/**").permitAll()
+                .anyRequest().access("@authorizationChecker.check(request, authentication)")
             .and()
                 .formLogin().disable()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true);
+
+        http.addFilterAfter(userStatusUpdateFilterBean(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean
+    public Filter userStatusUpdateFilterBean() {
+        return new UserStatusUpdateFilter();
     }
 
     @Bean

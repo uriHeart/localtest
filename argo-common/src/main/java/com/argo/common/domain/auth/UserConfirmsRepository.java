@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-interface UserConfirmsRepository extends JpaRepository<UserConfirm, Long> {
+public interface UserConfirmsRepository extends JpaRepository<UserConfirm, Long> {
     Optional<UserConfirm> findByArgoUser(ArgoUser user);
     UserConfirm findByUuid(String uuid);
 }

@@ -3,10 +3,12 @@ package com.argo.common.domain.common.data.conversion.template.ezadmin.order;
 import com.argo.common.domain.common.data.conversion.template.ConversionRule;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.ConversionType;
+import com.google.common.collect.Maps;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class EZAdminOrderMetadataConversionTemplate {
     public static ConversionTemplate getOrderMetadataTemplate() {
@@ -34,17 +36,17 @@ public class EZAdminOrderMetadataConversionTemplate {
                 .targetField("totalPrice")
                 .build());
 
+        Map<String, String> orderedAtParams = Maps.newLinkedHashMap();
+        orderedAtParams .put("order_date", "java.lang.String");
+        orderedAtParams .put("order_time", "java.lang.String");
         list.add(ConversionRule.builder()
-                .conversionType(ConversionType.DIRECT)
-                .sourceField("collect_date")
-                .targetField("collectedAt")
-                .build());
-
-        list.add(ConversionRule.builder()
-                .conversionType(ConversionType.DIRECT)
-                .sourceField("order_date")
+                .conversionType(ConversionType.OPERATION)
+                .operatorClass("EZAdminConversionService")
+                .operatorMethod("mergeDateAndTime")
+                .operatorParams(orderedAtParams)
                 .targetField("orderedAt")
                 .build());
+
         return list;
     }
 }

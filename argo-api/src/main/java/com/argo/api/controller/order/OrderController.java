@@ -48,7 +48,7 @@ public class OrderController {
 
         return orderService.getOrderData(param)
                 .subscribeOn(Schedulers.elastic())
-                .timeout(Duration.ofMillis(10000))
+                .timeout(Duration.ofMillis(30000))
                 .retry(3)
                 .onErrorResume(error -> {
                     log.error("search error ", error);

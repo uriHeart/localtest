@@ -8,6 +8,8 @@ import com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.raw.RawEventRepository;
 import com.argo.common.domain.common.data.DataConversionService;
+import com.argo.common.domain.user.ArgoUser;
+import com.argo.common.domain.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,10 +34,13 @@ public class HomeController {
     @Autowired
     OrderService orderService;
 
+    @Autowired
+    UserService userService;
+
     @GetMapping(value = "/order/rawEventConversionTest")
     @ResponseStatus(value = HttpStatus.OK)
     public String test() {
-        RawEvent rawEvent = rawEventRepository.findFirstByVendorIdAndChannelIdAndOrderId(1L, 2L, "[20190905-0000016]");
+        RawEvent rawEvent = rawEventRepository.findFirstByVendorIdAndChannelIdAndOrderId(1L, 2L, "[1942_0]");
         Map<String, Object> map = dataConversionService.convert(rawEvent);
         orderService.saveOrder((ArgoOrder) map.get("com.argo.common.domain.order.ArgoOrder"), (OrderAddress) map.get("com.argo.common.domain.order.OrderAddress"), (List<OrderVendorItemLifecycle>) map.get("com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle"));
         return map.toString();

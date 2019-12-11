@@ -1,5 +1,6 @@
 package com.argo.common.domain.order;
 
+import com.argo.common.domain.common.data.TargetData;
 import com.argo.common.domain.common.util.JsonUtil;
 import com.datastax.driver.core.DataType;
 import lombok.AllArgsConstructor;
@@ -12,13 +13,15 @@ import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.util.Date;
 
 @Data
 @Builder
 @AllArgsConstructor
 @Table("argo_order")
-public class ArgoOrder {
+public class ArgoOrder extends TargetData {
 
     public ArgoOrder() {
         this.replayCount = 0;
@@ -68,6 +71,15 @@ public class ArgoOrder {
     @Column("created_at")
     @CassandraType(type = DataType.Name.TIMESTAMP)
     private Date createdAt;
+
+    @Column("payment_type")
+    @CassandraType(type = DataType.Name.TEXT)
+    @Enumerated(EnumType.STRING)
+    private PaymentType paymentType;
+
+    @Column("total_amount")
+    @CassandraType(type = DataType.Name.BIGINT)
+    private Long totalAmount;
 
     public OrderMetadata getMetadata() {
         if (this.metadata == null) {

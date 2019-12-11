@@ -1,6 +1,8 @@
 package com.argo.common.domain.order.dto;
 
 
+import com.argo.common.domain.address.OriginalAddressDto;
+import com.argo.common.domain.address.RefinedAddressDto;
 import com.argo.common.domain.channel.SalesChannel;
 import com.argo.common.domain.channel.SalesChannelDto;
 import com.argo.common.domain.order.ArgoOrder;
@@ -21,6 +23,7 @@ public class OrderResultDto {
     private String orderId; //주문아이디
     private Date orderedAt; //주문일시
     private Date collectedAt; //발주일시
+    private Date publishedAt;
     private Date paidAt; //결제일시
 
     private Long totalQuantity; //총 수량
@@ -38,7 +41,7 @@ public class OrderResultDto {
         return OrderResultDto.builder()
                 .orderId(order.getOrderId())
                 .orderedAt(order.getMetadata().getOrderedAt())
-                .collectedAt(order.getMetadata().getCollectedAt())
+                .publishedAt(vendorItem.getPublishedAt())
                 .paidAt(order.getPaidAt())
                 .totalQuantity(order.getMetadata().getTotalQuantity())
                 .orderState(order.getState())
@@ -96,7 +99,13 @@ public class OrderResultDto {
                                 .originalPrice(vendorItem.getMetadata().getOriginalPrice())
                                 .salesPrice(vendorItem.getMetadata().getSalesPrice())
                                 .paymentMethod(vendorItem.getMetadata().getPaymentMethod())
-                                .paymentAmount(vendorItem.getMetadata().getPaymentAmount())
+                                .build())
+                        .skuDto(OrderSkuDto.builder()
+                                .barcode(doc.getBarcode())
+                                .skuId(doc.getSkuId())
+                                .skuName(doc.getSkuName())
+                                .skuSize(doc.getSkuSize())
+                                .skuColor(doc.getSkuColor())
                                 .build())
                         .build())
                 .build();
