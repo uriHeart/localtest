@@ -68,7 +68,7 @@ file:
 
 elasticsearch:
 #  hosts: http://15.164.111.122:9200
-  hosts: http://localhost:9200
+  hosts: http://192.168.157.128:9200
 registration:
   url:
     confirm: https://argoport.com/#/auth/confirm

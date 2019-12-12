@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import reactor.core.publisher.Mono;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -60,6 +61,9 @@ public class ConvertServiceTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    ConvertService convertService;
+
 
 
     public Map getExcelMainText(String indexId) throws IOException {
@@ -100,10 +104,14 @@ public class ConvertServiceTest {
         return result;
     }
 
+    public void eventConfirm(String indexId) throws IOException {
+         convertService.getEventList(indexId);
+    }
+
 
     @Test
     public void exec() throws IOException {
-        getExcelMainText("골스토어_매출_상세내역.xlsx");
+       eventConfirm("골스토어_매출_상세내역.xlsx");
     }
 
 
