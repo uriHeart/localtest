@@ -469,7 +469,7 @@ public class ConvertService {
         searchSourceBuilder.query(matchAll);
 
         searchSourceBuilder.size(1000);
-        searchSourceBuilder.fetchSource(new String[]{"upLoadDate", "fileName"},new String[]{""});
+        searchSourceBuilder.fetchSource(new String[]{"upLoadDate", "fileName","channelId","vendorId"},new String[]{""});
         searchSourceBuilder.sort(new FieldSortBuilder("@timeStamp").order(SortOrder.DESC));
 
         SearchRequest searchRequest = new SearchRequest();
