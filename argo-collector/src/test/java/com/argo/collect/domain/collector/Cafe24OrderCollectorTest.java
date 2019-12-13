@@ -70,23 +70,23 @@ public class Cafe24OrderCollectorTest extends AbstractOrderCollector {
             Map data = objectMapper.readValue(dataResult, Map.class);
             List<Map> rawEvents = (List<Map>) data.get("data");
             rawEvents.forEach(
-                    event -> {
-                        try {
-                            RawEvent rawEvent = RawEvent.builder()
-                                    .vendorId(channel.getVendor().getVendorId())
-                                    .channelId(channel.getSalesChannel().getSalesChannelId())
-                                    .format("JSON")
-                                    .auto(true)
-                                    .data(objectMapper.writeValueAsString(event))
-                                    .orderId(event.get("ord_no").toString())
-                                    .publishedAt(ArgoDateUtil.getDate(event.get("ord_date").toString().replaceAll("\\.", "-")))
-                                    .createdAt(new Date())
-                                    .build();
-                            rawEventService.save(rawEvent);
-                        } catch (JsonProcessingException e) {
-                            e.printStackTrace();
-                        }
+                event -> {
+                    try {
+                        RawEvent rawEvent = RawEvent.builder()
+                                .vendorId(channel.getVendor().getVendorId())
+                                .channelId(channel.getSalesChannel().getSalesChannelId())
+                                .format("JSON")
+                                .auto(true)
+                                .data(objectMapper.writeValueAsString(event))
+                                .orderId(event.get("ord_no").toString())
+                                .publishedAt(ArgoDateUtil.getDate(event.get("ord_date").toString().replaceAll("\\.", "-")))
+                                .createdAt(new Date())
+                                .build();
+                        rawEventService.save(rawEvent);
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
                     }
+                }
             );
         } catch (
                 IOException e) {

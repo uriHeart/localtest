@@ -19,4 +19,6 @@ public class RawEventParam {
     private String publishedAt;
 
     private String orderId;
+
+    private String eventType;
 }

@@ -2,8 +2,11 @@ package com.argo.collect.domain.collector;
 
 import com.argo.collect.ArgoCollectorApplication;
 import com.argo.collect.domain.auth.AuthorityManager;
+import com.argo.collect.domain.event.EventConverter;
+import com.argo.common.domain.common.jpa.EventType;
 import com.argo.common.domain.common.util.ArgoDateUtil;
 import com.argo.common.domain.raw.RawEvent;
+import com.argo.common.domain.raw.RawEventRepository;
 import com.argo.common.domain.vendor.VendorChannel;
 import com.argo.common.domain.vendor.VendorService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -48,6 +51,12 @@ public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private RawEventRepository rawEventRepository;
+
+    @Autowired
+    private EventConverter eventConverter;
+
     @Override
     public boolean isSupport(String channel) {
         return false;
@@ -80,6 +89,9 @@ public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
 
 
         orderList.forEach(event -> {
+
+            EventType eventType = eventConverter.getEventType(event);
+            event.put("event_type",eventType.toString());
 
             String detailUrl = "https://bizest.musinsa.com/po/api/order/ord01/get_detail";
             String ORD_NO = event.get("ord_no").toString();
@@ -121,7 +133,6 @@ public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
 
     }
 
-
     public Map getUrlCallResult(String dataUrl,HttpHeaders headers,MultiValueMap<String, String> paramMap) throws IOException {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(paramMap, headers);
@@ -152,9 +163,9 @@ public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
                 .orderId(key)
                 .publishedAt(ArgoDateUtil.getDate(event.getPublishedAt().replaceAll("\\.", "-")))
                 .createdAt(new Date())
+                .event(event.getEventType())
                 .build();
-            rawEventService.save(rawEvent);
-
+            rawEventRepository.save(rawEvent);
         });
     }
 
@@ -163,13 +174,15 @@ public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
         HashMap<String, RawEventParam> mergedOrder = new HashMap<>();
         orderList.forEach(event -> {
             String orderId = String.valueOf(event.get("ord_no"));
-            String publishedAt = String.valueOf(event.get("ord_date"));
+            String publishedAt = String.valueOf(event.get("upd_date"));
+            String eventType = String.valueOf(event.get("event_type"));
             if (mergedOrder.containsKey(orderId)) {
                 mergedOrder.get(orderId).getDataRows().add(event);
             } else {
                 RawEventParam rawEventParam = new RawEventParam();
                 rawEventParam.setOrderId(orderId);
                 rawEventParam.setPublishedAt(publishedAt);
+                rawEventParam.setEventType(eventType);
                 rawEventParam.getDataRows().add(event);
                 mergedOrder.put(orderId, rawEventParam);
             }
