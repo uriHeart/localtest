@@ -69,7 +69,6 @@ public class AuthController {
             System.out.println(user.getLoginId());
             return new ResponseEntity<>(LoginResult.builder()
                     .success(true)
-                    .userId(user.getLoginId())
                     .vendorId(user.getVendorId())
                     .userStatus(user.getUserStatus())
                     .dashboardUrl("https://db.argoport.com/app/kibana#/dashboard/3416c9a0-0861-11ea-938e-293ce79f4c46?embed=true&_g=(refreshInterval%3A(pause%3A!f%2Cvalue%3A5000)%2Ctime%3A(from%3Anow-7d%2Cto%3Anow))")
@@ -88,6 +87,7 @@ public class AuthController {
             AuthUser user = (AuthUser)authentication.getDetails();
             return new ResponseEntity<>(LoginResult.builder()
                     .success(true)
+                    .userId(user.getLoginId())
                     .vendorId(user == null ? 0L : user.getVendorId())
                     .userStatus(user != null ? user.getUserStatus() : null)
                     .dashboardUrl("https://db.argoport.com/app/kibana#/dashboard/3416c9a0-0861-11ea-938e-293ce79f4c46?embed=true&_g=(refreshInterval%3A(pause%3A!f%2Cvalue%3A5000)%2Ctime%3A(from%3Anow-7d%2Cto%3Anow))")

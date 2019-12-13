@@ -31,11 +31,6 @@ public class VendorWorkplace implements SystemMetadata {
     @Column(name = "vendor_office_address")
     private String vendorOfficeAddress;
 
-    @Column(name = "vendor_warehouse_address")
-    private String vendorWarehouseAddress;
-
-    @Column(name = "vendor_store_address")
-    private String vendorStoreAddress;
 
     @Column(name = "vendor_nation_info")
     private String vendorNation;
