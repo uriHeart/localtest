@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExcelToCassandraDto {
 
-    private List<HashMap<String,String>> raw = new ArrayList<>();
+    private List<HashMap<String,Object>> raw = new ArrayList<>();
 
     private Date publishedAt;
 

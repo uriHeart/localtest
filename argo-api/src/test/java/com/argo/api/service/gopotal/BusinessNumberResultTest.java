@@ -3,7 +3,10 @@ package com.argo.api.service.gopotal;
 import com.google.common.collect.Lists;
 import org.junit.Assert;
 import org.junit.Test;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4b81c6ee3ba997ff2807b784209579eabc7dc2ed
 
 public class BusinessNumberResultTest {
 
