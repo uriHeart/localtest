@@ -1,5 +1,4 @@
 package com.argo.common.domain.address.vworld;
-
 import com.argo.common.configuration.ArgoBizException;
 import com.argo.common.domain.address.AbstractAddressRefiner;
 import com.argo.common.domain.address.OriginalAddressDto;

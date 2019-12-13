@@ -14,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 @EntityListeners( { CreatedAtListener.class, UpdatedAtListener.class } )
-public class VendorWorkplace {
+public class VendorWorkplace implements SystemMetadata {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendor_workplace_id_seq")
     @SequenceGenerator(name = "vendor_workplace_id_seq", sequenceName = "vendor_workplace_id_seq", allocationSize = 1)
@@ -24,6 +24,9 @@ public class VendorWorkplace {
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="vendor_id")
     private Vendor vendor;
+
+    @Column(name = "type")
+    private String type;
 
     @Column(name = "vendor_office_address")
     private String vendorOfficeAddress;
@@ -36,4 +39,12 @@ public class VendorWorkplace {
 
     @Column(name = "vendor_nation_info")
     private String vendorNation;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false)
+    private Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at", nullable = false)
+    private Date updatedAt;
 }
