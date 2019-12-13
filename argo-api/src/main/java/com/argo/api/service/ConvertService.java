@@ -482,22 +482,20 @@ public class ConvertService {
         List<Map<String,Object>> result = new ArrayList<>();
 
         excelList.forEach(
-                excel ->{
-                    Map<String, Object> excelInfo = excel.getSourceAsMap();
-                    excelInfo.put("id",excel.getId());
-                    excelInfo.put("channelId",excelInfo.get("channelId").toString());
-                    excelInfo.put("vendorId",excelInfo.get("vendorId").toString());
-                    result.add(excelInfo);
-                }
+            excel ->{
+                Map<String, Object> excelInfo = excel.getSourceAsMap();
+                excelInfo.put("id",excel.getId());
+                excelInfo.put("channelId",excelInfo.get("channelId").toString());
+                excelInfo.put("vendorId",excelInfo.get("vendorId").toString());
+                result.add(excelInfo);
+            }
         );
 
         return result;
     }
 
     public boolean existsExcel(String id) throws IOException {
-        GetRequest getRequest = new GetRequest(
-                excelIndex,
-                id);
+        GetRequest getRequest = new GetRequest(excelIndex,id);
         getRequest.fetchSourceContext(new FetchSourceContext(false));
         getRequest.storedFields("_none_");
         boolean exists = esClient.exists(getRequest, RequestOptions.DEFAULT);
