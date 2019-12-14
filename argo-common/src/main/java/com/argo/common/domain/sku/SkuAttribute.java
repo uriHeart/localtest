@@ -24,6 +24,7 @@ public class SkuAttribute implements SystemMetadata {
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="sku_id")
+    @ToString.Exclude
     private Sku sku;
 
     @Column(name = "attribute_key")

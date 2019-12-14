@@ -6,6 +6,7 @@ import com.argo.common.domain.common.jpa.UpdatedAtListener;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +43,12 @@ public class Sku implements SystemMetadata {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "sku", fetch=FetchType.LAZY)
+    private List<SkuAttribute> skuAttributes = new ArrayList<>();
+
+    @Column(name = "vendor_id", nullable = false)
+    private Long vendorId;
 
     @Column(name = "description")
     private String description;

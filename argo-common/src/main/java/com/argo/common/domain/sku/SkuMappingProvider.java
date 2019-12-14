@@ -55,6 +55,7 @@ public class SkuMappingProvider {
 
         skuRepository.findAll().forEach(s -> skuData.put(s.getSkuId(), SkuData.builder()
                 .skuId(s.getSkuId())
+                .vendorId(s.getVendorId())
                 .name(s.getName())
                 .barcode(s.getBarcode())
                 .brand(s.getBrand())
