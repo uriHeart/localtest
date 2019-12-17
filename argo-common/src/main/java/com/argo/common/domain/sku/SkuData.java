@@ -13,6 +13,7 @@ public class SkuData {
     private final static String ATTR_COLOR = "COLOR";
     private final static String ATTR_SIZE = "SIZE";
     private Long skuId;
+    private Long vendorId;
     private String name;
     private String brand;
     private String barcode;
