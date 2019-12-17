@@ -4,14 +4,18 @@ package com.argo.api.service;
 import com.argo.api.domain.excel.ChannelExcelMapping;
 import com.argo.api.domain.excel.ChannelExcelMappingService;
 import com.argo.api.domain.excel.ExcelToCassandraDto;
-import com.argo.common.domain.common.util.ArgoDateUtil;
+import com.argo.common.configuration.ArgoBizException;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.raw.RawEventService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.elasticsearch.action.ActionListener;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -35,11 +39,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Mono;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -66,6 +72,9 @@ public class ConvertService {
 
     @Autowired
     HttpSession httpSession;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     private RestHighLevelClient esClient;
 
@@ -209,8 +218,8 @@ public class ConvertService {
                             long value = Math.round(cell.getNumericCellValue());
                             stringCellValue = String.valueOf(value);
 
-                        }catch (IllegalStateException e){
-                            stringCellValue = cell.getStringCellValue();
+                        }catch (Exception e){
+                            stringCellValue = cell.getCellFormula();
                         }
 
                         rowDataList.add(stringCellValue);
@@ -320,17 +329,18 @@ public class ConvertService {
     }
 
 
-    public void saveToCassandra(List<HashMap<String,String>> jsonData, Long channelId, Long vendorId) {
+    public void saveToCassandra(ArrayList<HashMap<String,Object>> jsonData, Long channelId, Long vendorId) {
+        SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         HashMap<String, ExcelToCassandraDto> cassandraJsonData = new HashMap<>();
 
         jsonData.forEach(jsonRaw ->{
-            String key = jsonRaw.get("orderId");
+            String key = jsonRaw.get("orderId").toString();
             if(cassandraJsonData.containsKey(key)){
                 cassandraJsonData.get(key).getRaw().add(jsonRaw);
             }else {
                 ExcelToCassandraDto excelRow = new ExcelToCassandraDto();
-                String publishedAtString = jsonRaw.get("publishedAt");
+                String publishedAtString = jsonRaw.get("publishedAt").toString();
 
                 Date publishedAt = null;
 
@@ -339,12 +349,9 @@ public class ConvertService {
                 }
 
                 try {
-                    //엑셀입력형식이 다를경우
-                    //publishedAt = java.sql.Date.valueOf(LocalDate.parse(publishedAtString, DateTimeFormatter.BASIC_ISO_DATE));
-                    publishedAt = ArgoDateUtil.parseDateString(publishedAtString);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    publishedAt = new Date();
+                    publishedAt = transFormat.parse(publishedAtString);
+                } catch (ParseException e) {
+                    throw new ArgoBizException("published date 형식이 일치하지 않습니다.");
                 }
 
                 excelRow.setPublishedAt(publishedAt);
@@ -377,28 +384,79 @@ public class ConvertService {
         });
     }
 
-    public RestStatus saveToEs(String id, List<HashMap<String, Object>> jsonData,Long vendorId) throws IOException {
+    public RestStatus saveToEs(String id, List<HashMap<String, Object>> jsonData,Long vendorId,Long channelId) throws IOException {
 
         String dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         IndexRequest request = new IndexRequest(excelIndex);
 
         HashMap<String, Object> data = new HashMap<>();
-        data.put("upLoadDate",dateTime);
-        data.put("@timeStamp",Instant.now().getEpochSecond());
-        data.put("excelData",jsonData);
-        data.put("fileName",id);
-        data.put("vendorId",vendorId);
+        data.put("upLoadDate", dateTime);
+        data.put("@timeStamp", Instant.now().getEpochSecond());
+        data.put("excelData", jsonData);
+        data.put("fileName", id);
+        data.put("vendorId", vendorId);
+        data.put("channelId", channelId);
 
 
         request.source(gson.toJson(data), XContentType.JSON).id(id);
 
         IndexResponse response = esClient.index(request, RequestOptions.DEFAULT);
         CountRequest countRequest = new CountRequest(excelIndex);
-        CountResponse countResponse =  esClient.count(countRequest, RequestOptions.DEFAULT);
+        CountResponse countResponse = esClient.count(countRequest, RequestOptions.DEFAULT);
         log.info(String.valueOf(countResponse.getCount()));
         return response.status();
     }
+
+//    public RestStatus saveToEs(String id, List<HashMap<String, Object>> jsonData,Long vendorId,Long channelId) throws IOException {
+//
+//        String dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+//
+//        IndexRequest request = new IndexRequest(excelIndex);
+//
+//        HashMap<String, Object> data = new HashMap<>();
+//        data.put("upLoadDate",dateTime);
+//        data.put("@timeStamp",Instant.now().getEpochSecond());
+//        data.put("fileName",id);
+//
+//        List<HashMap<String,Object>> rowDatakeyList = new ArrayList<>();
+//        HashMap<String,Boolean> dupChk = new HashMap<>();
+//
+//        jsonData.forEach(sheetData ->{
+//            List<HashMap<String,String>> rowData = (List<HashMap<String, String>>) sheetData.get("sheetData");
+//            rowData.forEach(row-> {
+//                HashMap<String,Object> rowDatakey = new HashMap<>();
+//                rowDatakey.put("vendorId",vendorId);
+//                rowDatakey.put("channelId",channelId);
+//
+//                row.forEach( (key,value)->{
+//                    if("orderId".equals(key)){
+//                        rowDatakey.put("orderId",value);
+//                    }else if("publishedAt".equals(key)){
+//                        rowDatakey.put("publishedAt",value);
+//                    }
+//                });
+//
+//                if(!dupChk.containsKey(rowDatakey.get("orderId"))){
+//                    dupChk.put(rowDatakey.get("orderId").toString(),true);
+//                    rowDatakeyList.add(rowDatakey);
+//                }
+//            });
+//        });
+//
+//        //key
+//        data.put("rowDatakeyList",rowDatakeyList);
+//        data.put("sheetHeader",jsonData.get(0).get("sheetHeader"));
+//        data.put("sheetName",id.split(".")[0]);
+//
+//        request.source(gson.toJson(data), XContentType.JSON).id(id);
+//
+//        IndexResponse response = esClient.index(request, RequestOptions.DEFAULT);
+//        CountRequest countRequest = new CountRequest(excelIndex);
+//        CountResponse countResponse =  esClient.count(countRequest, RequestOptions.DEFAULT);
+//        log.info(String.valueOf(countResponse.getCount()));
+//        return response.status();
+//    }
 
     public List<Map<String,Object>> getExcelList(String userId) throws IOException {
 
@@ -410,7 +468,7 @@ public class ConvertService {
         searchSourceBuilder.query(matchAll);
 
         searchSourceBuilder.size(1000);
-        searchSourceBuilder.fetchSource(new String[]{"upLoadDate", "fileName"},new String[]{""});
+        searchSourceBuilder.fetchSource(new String[]{"upLoadDate", "fileName","channelId","vendorId"},new String[]{""});
         searchSourceBuilder.sort(new FieldSortBuilder("@timeStamp").order(SortOrder.DESC));
 
         SearchRequest searchRequest = new SearchRequest();
@@ -426,6 +484,8 @@ public class ConvertService {
                 excel ->{
                     Map<String, Object> excelInfo = excel.getSourceAsMap();
                     excelInfo.put("id",excel.getId());
+                    excelInfo.put("channelId",excelInfo.get("channelId"));
+                    excelInfo.put("vendorId",excelInfo.get("vendorId"));
                     result.add(excelInfo);
                 }
         );
@@ -434,16 +494,13 @@ public class ConvertService {
     }
 
     public boolean existsExcel(String id) throws IOException {
-        GetRequest getRequest = new GetRequest(
-                excelIndex,
-                id);
+        GetRequest getRequest = new GetRequest(excelIndex,id);
         getRequest.fetchSourceContext(new FetchSourceContext(false));
         getRequest.storedFields("_none_");
         boolean exists = esClient.exists(getRequest, RequestOptions.DEFAULT);
 
         return exists;
     }
-
 
     public ArrayList<HashMap<String,HashMap<String,Object>>> getExcelMainText(String indexId) throws IOException {
         GetRequest getRequest = new GetRequest(excelIndex,indexId);
@@ -455,26 +512,135 @@ public class ConvertService {
     }
 
 
-    public List<HashMap<String, String>> addExcelFactor(List<HashMap<String, Object>> convertExcelData,Long ChannelId){
-        List<HashMap<String,String>> sheetData = (List<HashMap<String, String>>) convertExcelData.get(0).get("sheetData");
+//    public Map getExcelMainText(String indexId) throws IOException {
+//        GetRequest getRequest = new GetRequest(excelIndex,indexId);
+//        GetResponse getResponse = esClient.get(getRequest, RequestOptions.DEFAULT);
+//        Map data =  getResponse.getSourceAsMap();
+//        List<HashMap> rowDatakeyList = (List<HashMap>) data.get("rowDatakeyList");
+//        List<HashMap> rowDataList = new ArrayList<>();
+//        rowDatakeyList.forEach(row ->{
+//
+//            Long vandorId = Long.parseLong(row.get("vendorId").toString());
+//            Long channelId = Long.parseLong(row.get("channelId").toString());
+//            String orderId = row.get("orderId").toString();
+//            Date publishedAt = ArgoDateUtil.getDateBy24H(row.get("publishedAt").toString());
+//
+//            RawEvent rawEvent = rawEventService.getRawEvent(vandorId,channelId,orderId,publishedAt);
+//
+//            String rawData = null;
+//
+//            if(rawEvent != null){
+//                rawData = rawEvent.getData();
+//            }
+//            Map raw = null;
+//            try {
+//                raw = objectMapper.readValue(rawData, Map.class);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            rowDataList.addAll((Collection<? extends HashMap>) raw.get("datas"));
+//        });
+//
+//        Map result = new HashMap();
+//        result.put("sheetData",rowDataList);
+//        result.put("sheetHeader",data.get("sheetHeader"));
+//        result.put("sheetName",data.get("sheetName"));
+//
+//        return result;
+//    }
+
+
+    public ArrayList<HashMap<String, Object>> addExcelFactor(ArrayList<HashMap<String, Object>> excelData,Long ChannelId) throws ArgoBizException{
         List<ChannelExcelMapping> channelExcelMappings = channelExcelMappingService.getChannelExcelMapping(ChannelId);
-        sheetData.forEach(row ->{
-            channelExcelMappings.forEach( factor ->{
+
+        excelData.forEach(row -> {
+            channelExcelMappings.forEach(factor -> {
                 StringBuilder factorValue = new StringBuilder();
                 factor.getExcelFactorInfo().forEach(excelFactorInfo -> {
                     //factor를 만들 정보가 없는 엑셀은 UUID 를 사용한다.
-                    if(excelFactorInfo.getColumnNo()== 0){
+                    if (excelFactorInfo.getColumnNo() == 0) {
                         factorValue.append(UUID.randomUUID().toString());
-                    }else{
+                    } else {
                         factorValue.append(row.get(excelFactorInfo.getColumnName()));
                     }
                 });
-                row.put(factor.getFactorId(),factorValue.toString());
+                row.put(factor.getFactorId(), factorValue.toString());
             });
         });
 
+        return excelData;
+    }
+
+
+    public List<HashMap<String, String>> addExcelFactorCheck(List<HashMap<String, Object>> convertExcelData,Long ChannelId) throws ArgoBizException {
+        SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        List<HashMap<String,String>> sheetData = (List<HashMap<String, String>>) convertExcelData.get(0).get("sheetData");
+        List<ChannelExcelMapping> channelExcelMappings = channelExcelMappingService.getChannelExcelMapping(ChannelId);
+
+        if(channelExcelMappings.size()==0){
+            throw new ArgoBizException("채널 맵핑 정보가 없습니다.");
+        }
+
+        HashMap<String,String> checkMap = new HashMap<>();
+
+        sheetData.forEach(row -> {
+            channelExcelMappings.forEach(factor -> {
+                StringBuilder factorValue = new StringBuilder();
+                factor.getExcelFactorInfo().forEach(excelFactorInfo -> {
+                    factorValue.append(row.get(excelFactorInfo.getColumnName()));
+                });
+                checkMap.put(factor.getFactorId(), factorValue.toString());
+            });
+
+            //엑셀에 추가된 rawdata key 속성 검증
+            String publishedAtString = checkMap.get("publishedAt");
+
+            Date publishedAt = null;
+            if(publishedAtString.split(" ").length==1){
+                publishedAtString += " 00:00:00";
+            }
+            try {
+                publishedAt = transFormat.parse(publishedAtString);
+
+            } catch (Exception e) {
+                throw new ArgoBizException("엑셀 형식이 일치하지 않습니다. 업로드 채널정보를 확인해주세요.");
+            }
+        });
 
         return sheetData;
     }
 
+
+    public Mono<RestStatus> deleteIndex(String docId) {
+
+        DeleteRequest request = new DeleteRequest(excelIndex,docId);
+
+        return Mono.create(sink -> {
+            esClient.deleteAsync(request, RequestOptions.DEFAULT, new ActionListener<DeleteResponse>() {
+                @Override
+                public void onResponse(DeleteResponse deleteIndexResponse) {
+                    sink.success(deleteIndexResponse.status());
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    log.error("index delete error: {}",e);
+                    sink.error(e);
+                }
+            });
+
+        });
+    }
+
+    public ArrayList<HashMap<String, Object>> getEventList(String docId) throws IOException {
+        GetRequest request = new GetRequest(excelIndex,docId);
+
+        GetResponse getResponse = esClient.get(request, RequestOptions.DEFAULT);
+        ArrayList<HashMap<String,ArrayList<HashMap<String,Object>>>> data = (ArrayList<HashMap<String, ArrayList<HashMap<String, Object>>>>) getResponse.getSourceAsMap().get("excelData");
+        ArrayList<HashMap<String, Object>> result =  data.get(0).get("sheetData");
+
+        return result;
+    }
 }

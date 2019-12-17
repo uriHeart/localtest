@@ -1,10 +1,8 @@
 package com.argo.api.service.gopotal;
 
-import static org.junit.Assert.*;
-
+import com.google.common.collect.Lists;
 import org.junit.Assert;
 import org.junit.Test;
-import org.testng.collections.Lists;
 
 public class BusinessNumberResultTest {
 

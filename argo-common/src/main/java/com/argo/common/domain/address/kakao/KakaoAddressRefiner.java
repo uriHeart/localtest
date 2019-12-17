@@ -40,7 +40,19 @@ public class KakaoAddressRefiner extends AbstractAddressRefiner {
         String refineUrl = url + "?query=" + address;
 
         HttpEntity request = new HttpEntity<>(headers);
-        String dataResult = restTemplate.exchange(refineUrl, HttpMethod.GET, request, String.class).getBody();
+        String dataResult;
+
+        try {
+            dataResult = restTemplate.exchange(refineUrl, HttpMethod.GET, request, String.class).getBody();
+        } catch (Exception e) {
+            dataResult = null;
+            log.warn("정제할 수 없는 주소 : {}", address);
+        }
+
+        if (dataResult == null)  {
+            return null;
+        }
+
         try {
             Map result = objectMapper.readValue(dataResult, Map.class);
 

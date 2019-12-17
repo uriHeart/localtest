@@ -1,0 +1,211 @@
+		inquiry_privacy : function() {
+			var ff = document.ord01_detail_f1;
+			var id = getCookie("puser[id]");
+			var p_user_ord_cnt = getCookie("p_user_ord_cnt");
+			var data = p_user_ord_cnt.split("|");
+			var mgr_id = data[0];
+			var cnt = data[1];
+
+			if(mgr_id == id && cnt > 100){
+				if(!confirm("개인정보를 조회하겠습니까? 조회이력은 자동으로 기록되고 있습니다.")){
+					return false;
+				}
+			}
+
+			$.ajax({
+				type: "POST",
+				url: "/po/api/order/ord01/inquiry_privacy",
+				data: "ORD_NO="+ ff.ORD_NO.value,
+				success: function(msg) {
+					eval("var json = " + msg);
+					var cd = json.cd;
+					var msg = json.msg;
+
+					if(cd == "1") {		//정상 처리
+						if(ord01_detail_layout_type == "layer") {
+							app_ord01_order.get_user_info(ff.ORD_NO.value, ff.USER_ID.value);
+						} else {
+							document.location.reload();
+						}
+					} else {
+						alert("인증 시 오류가 발생하였습니다.다시 시도하여 주시기 바랍니다.");
+					}
+				}
+			});
+		},
+		get_user_info : function(ord_no, user_id) {
+			$.ajax({
+				type: "POST",
+				url: "/po/api/order/ord01/get_user_info",
+				data: "ORD_NO=" + ord_no + "&USER_ID=" + user_id,
+				success: function(msg) {
+					eval("var json = " + msg);
+					if(json.length > 0) {
+						if($("#o_user_nm").parents(".splitcontent").find(".btn_accordion_panel").hasClass('btn_toggle_panel')) {
+							app_ord01_order.list_data.USER_NM = json[0].user_nm;
+						}
+
+						app_ord01_order.list_data.USER_NM = json[0].user_nm;
+						app_ord01_order.list_data.PHONE = json[0].phone;
+						app_ord01_order.list_data.MOBILE = json[0].mobile;
+						app_ord01_order.list_data.EMAIL = json[0].email;
+
+						if($("#r_nm_span").parents(".splitcontent").find(".btn_accordion_panel").hasClass('btn_toggle_panel')) {
+							app_ord01_receiver.list_data.R_NM = json[0].user_nm;
+						}
+
+						app_ord01_receiver.list_data.R_NM = json[0].user_nm;
+						app_ord01_receiver.list_data.R_PHONE = json[0].r_phone;
+						app_ord01_receiver.list_data.R_MOBILE = json[0].r_mobile;
+						app_ord01_receiver.list_data.R_ADDR = json[0].r_addr1 + json[0].r_addr2;
+					}
+				}
+			});
+		},
+		close : function() {
+			if(ord01_detail_layout_type == "layer") {
+				closeLayer($("form[name='f2']"));
+			} else if(ord01_detail_layout_type == "popup") {
+				self.close();
+			} else if(ord01_detail_layout_type == "view") {
+				if(document.referrer) {
+					document.location.href = document.referrer;
+				} else {
+					document.location.href = "/po/order/ord01";
+				}
+			}
+		}
+	}
+});
+
+
+
+
+
+
+
+
+
+
+
+--마스킹 전문
+Request URL: https://bizest.musinsa.com/po/api/order/ord01/get_detail
+Request Method: POST
+Status Code: 200
+Remote Address: 104.74.241.244:443
+Referrer Policy: no-referrer-when-downgrade
+cache-control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+content-encoding: gzip
+content-length: 2667
+content-type: text/html; charset=UTF-8
+date: Mon, 02 Dec 2019 07:54:09 GMT
+expires: Thu, 19 Nov 1981 08:52:00 GMT
+p3p: CP="CAO DSP LAW CUR ADM DEV TAI PSA IVAo CONo HISo OTP OUR DEL LEG SAMo UNI COM PUR NAV INT STA"
+pragma: no-cache
+server: nginx
+set-cookie: AWSALB=iHAaFary5Jf/yp4s2df8+/bRfqHWvOSlI5tXbBJLSF8rpLEIQZK8DbmWC/y56mnRgcLy5m89wYVnWLxSl7KE9sISKAuos4xiEqGvU/US5wbUBY+CtPMAwtTODJZu; Expires=Mon, 09 Dec 2019 07:54:09 GMT; Path=/
+set-cookie: biz_tm=1575273249; path=/po/; domain=bizest.musinsa.com
+status: 200
+vary: Accept-Encoding
+
+req header
+
+:authority: bizest.musinsa.com
+:method: POST
+:path: /po/api/order/ord01/get_detail
+:scheme: https
+accept: */*
+accept-encoding: gzip, deflate, br
+accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7,ja;q=0.6
+content-length: 45
+content-type: application/x-www-form-urlencoded; charset=UTF-8
+cookie: biz_rtk=eded9073b87e1e8259a9a197ef859fd05091e4fe; biz_atk=Pm5ZLdVtD1lTt6ltrbkYRrzriQN17T%2Ff2pff2j3gFWHaFSFYayCYIpCKYyUOp8jws72hDGRIeiLO%2Fj3mq5bCAKAi7taJN6R4%2BsyvQomhE2Yw1sZsz31EpfyPiHwY6J9DMvRjArLMDRnCA15HHDxRRFldWEVcAtEYXOGvoyVWm61dx5FcY2k2dqWtl0a%2FX6aziYopxaZ0fyYiU3wKPlJfT0cho5oVYT6ZMxwhCL4u%2BOsNbkqnUEPoCXvjoN%2FVRROoR%2BViBHI5RVP8OwJ5T03NB2RN4uKbH41X7c0UGgmOL%2BIGXh0WywILtCcVgDELWGPpX9mi0zszY70lRC60KaawXU6JwveZbauHAICaMDSk1ipULaeZXKpYjrRTinvK4Jps82KOPzBdi1IKaMfgxHEnhOZYd8c8Q92%2FeGoK%2BwjQeYMgXac%2BEiQZXKxVi2sl2ign; biz_tm=1575273248; tr[vid]=5da01778e41e7; _gcl_au=1.1.1386227716.1570772859; _ga=GA1.2.1596978150.1570772860; _fbp=fb.1.1570772859940.979356952; _hjid=c6347f06-64f5-4955-ab7d-5e9d59ac4388; cto_lwid=85bd3f19-b8a1-473e-b2a3-2706a4829006; puser[id]=goal; _gid=GA1.2.87954577.1575263164; PHPSESSID=846e3gr8o3hq1pbh5rsas7c855; mss_service=M; tr[vd]=1575271780; tr[vc]=1; ls_gn=1127058; PHPSESSID=9ce9cc2751d557b76aefdb0d7cf60129;
+p_user_ord_no=goal%7C201911290141467633; p_user_ord_cnt=goal%7C5; AWSALB=a7dCY8YAvsqfYzjovXSOw/vPFsSoofn1dtlONI1i8rLpBlNEKrylqra1JVgyhmEC8ZcwcrEpq45x9CyoeYwnFKjL6B0Ib913G2uBKEccMe1XNh6bvhLy/Zk6/w0f
+
+origin: https://bizest.musinsa.com
+referer: https://bizest.musinsa.com/po/order/ord01/detail?ORD_NO=201911290045225286&ORD_OPT_NO=44527136&LAYOUT_TYPE=popup
+sec-fetch-mode: cors
+sec-fetch-site: same-origin
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36
+x-requested-with: XMLHttpRequest
+ORD_NO: 201911290045225286
+ORD_OPT_NO: 44527136
+
+
+--마스킹  쿠키
+Request Cookies					1152
+AWSALB	a7dCY8YAvsqfYzjovXSOw/vPFsSoofn1dtlONI1i8rLpBlNEKrylqra1JVgyhmEC8ZcwcrEpq45x9CyoeYwnFKjL6B0Ib913G2uBKEccMe1XNh6bvhLy/Zk6/w0f	N/A	N/A	N/A	131
+PHPSESSID	846e3gr8o3hq1pbh5rsas7c855	N/A	N/A	N/A	38
+PHPSESSID	9ce9cc2751d557b76aefdb0d7cf60129	N/A	N/A	N/A	44
+_fbp	fb.1.1570772859940.979356952	N/A	N/A	N/A	35
+_ga	GA1.2.1596978150.1570772860	N/A	N/A	N/A	33
+_gcl_au	1.1.1386227716.1570772859	N/A	N/A	N/A	35
+_gid	GA1.2.87954577.1575263164	N/A	N/A	N/A	32
+_hjid	c6347f06-64f5-4955-ab7d-5e9d59ac4388	N/A	N/A	N/A	44
+biz_atk	Pm5ZLdVtD1lTt6ltrbkYRrzriQN17T%2Ff2pff2j3gFWHaFSFYayCYIpCKYyUOp8jws72hDGRIeiLO%2Fj3mq5bCAKAi7taJN6R4%2BsyvQomhE2Yw1sZsz31EpfyPiHwY6J9DMvRjArLMDRnCA15HHDxRRFldWEVcAtEYXOGvoyVWm61dx5FcY2k2dqWtl0a%2FX6aziYopxaZ0fyYiU3wKPlJfT0cho5oVYT6ZMxwhCL4u%2BOsNbkqnUEPoCXvjoN%2FVRROoR%2BViBHI5RVP8OwJ5T03NB2RN4uKbH41X7c0UGgmOL%2BIGXh0WywILtCcVgDELWGPpX9mi0zszY70lRC60KaawXU6JwveZbauHAICaMDSk1ipULaeZXKpYjrRTinvK4Jps82KOPzBdi1IKaMfgxHEnhOZYd8c8Q92%2FeGoK%2BwjQeYMgXac%2BEiQZXKxVi2sl2ign	N/A	N/A	N/A	480
+biz_rtk	eded9073b87e1e8259a9a197ef859fd05091e4fe	N/A	N/A	N/A	50
+biz_tm	1575273248	N/A	N/A	N/A	19
+cto_lwid	85bd3f19-b8a1-473e-b2a3-2706a4829006	N/A	N/A	N/A	47
+ls_gn	1127058	N/A	N/A	N/A	15
+mss_service	M	N/A	N/A	N/A	15
+p_user_ord_cnt	goal%7C5	N/A	N/A	N/A	25
+p_user_ord_no	goal%7C201911290141467633	N/A	N/A	N/A	41
+puser[id]	goal	N/A	N/A	N/A	16
+tr[vc]	1	N/A	N/A	N/A	10
+tr[vd]	1575271780	N/A	N/A	N/A	19
+tr[vid]	5da01778e41e7	N/A	N/A	N/A	23
+Response Cookies					234
+AWSALB	iHAaFary5Jf/yp4s2df8+/bRfqHWvOSlI5tXbBJLSF8rpLEIQZK8DbmWC/y56mnRgcLy5m89wYVnWLxSl7KE9sISKAuos4xiEqGvU/US5wbUBY+CtPMAwtTODJZu		/	2019-12-09T07:54:09.000Z	179
+biz_tm	1575273249	bizest.musinsa.com	/po/	Session	55
+
+
+
+
+--마스킹 해제 전문
+Request URL: https://bizest.musinsa.com/po/api/order/ord01/get_detail
+Request Method: POST
+Status Code: 200
+Remote Address: 104.74.241.244:443
+Referrer Policy: no-referrer-when-downgrade
+cache-control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+content-encoding: gzip
+content-length: 2689
+content-type: text/html; charset=UTF-8
+date: Mon, 02 Dec 2019 07:54:39 GMT
+expires: Thu, 19 Nov 1981 08:52:00 GMT
+p3p: CP="CAO DSP LAW CUR ADM DEV TAI PSA IVAo CONo HISo OTP OUR DEL LEG SAMo UNI COM PUR NAV INT STA"
+pragma: no-cache
+server: nginx
+set-cookie: AWSALB=D0N1aEoaVaKp1J2iOyNizuU0BiEVGquY1hYAMzjXMAA/lrRy2M9YXAD7Af5zLoh5ixCNLt04r9vMEUFURUcXo96LReafc4CgqByWe6bMsb80k3oFDaQ10HuLorLI; Expires=Mon, 09 Dec 2019 07:54:39 GMT; Path=/
+set-cookie: biz_tm=1575273279; path=/po/; domain=bizest.musinsa.com
+status: 200
+vary: Accept-Encoding
+
+req header
+:authority: bizest.musinsa.com
+:method: POST
+:path: /po/api/order/ord01/get_detail
+:scheme: https
+accept: */*
+accept-encoding: gzip, deflate, br
+accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7,ja;q=0.6
+content-length: 45
+content-type: application/x-www-form-urlencoded; charset=UTF-8
+cookie: biz_rtk=eded9073b87e1e8259a9a197ef859fd05091e4fe; biz_atk=Pm5ZLdVtD1lTt6ltrbkYRrzriQN17T%2Ff2pff2j3gFWHaFSFYayCYIpCKYyUOp8jws72hDGRIeiLO%2Fj3mq5bCAKAi7taJN6R4%2BsyvQomhE2Yw1sZsz31EpfyPiHwY6J9DMvRjArLMDRnCA15HHDxRRFldWEVcAtEYXOGvoyVWm61dx5FcY2k2dqWtl0a%2FX6aziYopxaZ0fyYiU3wKPlJfT0cho5oVYT6ZMxwhCL4u%2BOsNbkqnUEPoCXvjoN%2FVRROoR%2BViBHI5RVP8OwJ5T03NB2RN4uKbH41X7c0UGgmOL%2BIGXh0WywILtCcVgDELWGPpX9mi0zszY70lRC60KaawXU6JwveZbauHAICaMDSk1ipULaeZXKpYjrRTinvK4Jps82KOPzBdi1IKaMfgxHEnhOZYd8c8Q92%2FeGoK%2BwjQeYMgXac%2BEiQZXKxVi2sl2ign; biz_tm=1575273279; tr[vid]=5da01778e41e7; _gcl_au=1.1.1386227716.1570772859; _ga=GA1.2.1596978150.1570772860; _fbp=fb.1.1570772859940.979356952; _hjid=c6347f06-64f5-4955-ab7d-5e9d59ac4388; cto_lwid=85bd3f19-b8a1-473e-b2a3-2706a4829006; puser[id]=goal; _gid=GA1.2.87954577.1575263164; PHPSESSID=846e3gr8o3hq1pbh5rsas7c855; mss_service=M; tr[vd]=1575271780; tr[vc]=1; ls_gn=1127058; PHPSESSID=9ce9cc2751d557b76aefdb0d7cf60129;
+ p_user_ord_no=goal%7C201911290045225286; p_user_ord_cnt=goal%7C6; AWSALB=ogIH/iDRcMj6GLUz3U5yqmsu2b6lT4DsKgbzEd4nEhcXQzzi697onefT1/lO26Ni3KitnAUJ220np01PLs5BJKWbFLPBOzCoZG5Ggcr66G5xGUO5TfwOAvDfF5vw
+
+origin: https://bizest.musinsa.com
+referer: https://bizest.musinsa.com/po/order/ord01/detail?ORD_NO=201911290045225286&ORD_OPT_NO=44527136&LAYOUT_TYPE=popup
+sec-fetch-mode: cors
+sec-fetch-site: same-origin
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36
+x-requested-with: XMLHttpRequest
+ORD_NO: 201911290045225286
+ORD_OPT_NO: 44527136
+﻿
+​
+--마스킹해제 쿠키
+Request Cookies					0
+Response Cookies					234
+AWSALB	D0N1aEoaVaKp1J2iOyNizuU0BiEVGquY1hYAMzjXMAA/lrRy2M9YXAD7Af5zLoh5ixCNLt04r9vMEUFURUcXo96LReafc4CgqByWe6bMsb80k3oFDaQ10HuLorLI		/	2019-12-09T07:54:39.000Z	179
+biz_tm	1575273279	bizest.musinsa.com	/po/	Session	55
