@@ -9,4 +9,5 @@ public class MainBoardReply {
     public Long boardId; //;
     public String user_email; //
     public String post;
+    public Date createdAt;
 }

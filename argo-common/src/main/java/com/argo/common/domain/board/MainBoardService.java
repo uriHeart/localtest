@@ -72,6 +72,7 @@ public class MainBoardService {
             replyList.boardId = mainboard.getBoardId();
             replyList.user_email = mainboard.getUserEmail();
             replyList.post = mainboard.getPost();
+            replyList.createdAt = mainboard.getCreatedAt();
             shortenList.add(replyList);
         }
         return shortenList;

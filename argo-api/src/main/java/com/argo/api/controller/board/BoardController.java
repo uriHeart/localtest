@@ -108,11 +108,12 @@ public class BoardController {
     //게시물 삭제
     @GetMapping(value= "/read/delete/{boardId}")
     public ResponseEntity<BoardReturnParam> deleteBoard(@PathVariable Long boardId) throws Exception {
+        System.out.println(boardId);
         try {
             MainBoard target = mainBoardRepository.findMainBoardByBoardId(boardId);
             target.setDeleted(true);
             mainBoardRepository.saveAndFlush(target);
-
+            System.out.print(target);
             return new ResponseEntity<>(BoardReturnParam.builder()
                     .success(true)
                     .deleted(target.isDeleted())
