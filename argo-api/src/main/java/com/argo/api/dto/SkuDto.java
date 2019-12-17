@@ -1,10 +1,14 @@
 package com.argo.api.dto;
 
 import com.argo.common.domain.sku.Sku;
+import com.argo.common.domain.sku.SkuAttribute;
 import com.argo.common.domain.sku.SkuVo;
 import lombok.ToString;
+import org.apache.commons.compress.utils.Lists;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ToString
 public class SkuDto {
@@ -60,6 +64,13 @@ public class SkuDto {
 
     public String getBrand() {
         return skuVo.getBrand();
+    }
+
+    public List<SkuAttributeDto> getSkuAttributes() {
+        return skuVo.getSkuAttributes().stream()
+                .map(SkuAttributeDto::new)
+                .collect(Collectors.toList());
+//        return Lists.newArrayList();
     }
 
     public Date getCreatedAt() {

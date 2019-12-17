@@ -64,10 +64,9 @@ public class SkuVo {
     }
 
     public List<SkuAttributeVo> getSkuAttributes() {
-//        return sku.getSkuAttributes().stream()
-//                .map(SkuAttributeVo::new)
-//                .collect(Collectors.toList());
-        return Lists.newArrayList();
+        return sku.getSkuAttributes().stream()
+                .map(SkuAttributeVo::new)
+                .collect(Collectors.toList());
     }
 
     public Date getCreatedAt() {

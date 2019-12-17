@@ -6,8 +6,8 @@ import com.argo.common.domain.sku.SkuVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -24,9 +24,13 @@ public class SkuController {
         this.skuService = skuService;
     }
 
-    @GetMapping("/skuList/{vendorId}")
-    public List<SkuDto> getSkuList(@PathVariable("vendorId") Long vendorId) {
-        List<SkuVo> skuList = skuService.findByVendorId(vendorId);
+    @PostMapping("/skuList")
+    public List<SkuDto> getSkuList(
+            @RequestParam Long vendorId,
+            @RequestParam Long fromSkuId,
+            @RequestParam Long limit
+    ) {
+        List<SkuVo> skuList = skuService.findByVendorId(vendorId, fromSkuId, limit);
 
         return skuList.stream()
                 .map(SkuDto::new)

@@ -7,5 +7,4 @@ import java.util.List;
 
 @Repository
 public interface SkuRepository extends JpaRepository<Sku, Long>, SkuRepositoryCustom {
-//    public List<Sku> findByVendorId(Long vendorId);
 }

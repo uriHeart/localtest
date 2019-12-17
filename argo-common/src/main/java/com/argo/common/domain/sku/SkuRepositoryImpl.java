@@ -5,6 +5,7 @@ import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SkuRepositoryImpl extends ArgoQueryDslRepositorySupport implements SkuRepositoryCustom {
     private QSku qSku = QSku.sku;
@@ -15,9 +16,13 @@ public class SkuRepositoryImpl extends ArgoQueryDslRepositorySupport implements 
     }
 
     @Override
-    public List<Sku> findByVendorId(Long vendorId) {
+    public List<Sku> findByVendorId(Long vendorId, Long fromSkuId, Long limit) {
         return from(qSku)
                 .innerJoin(qSku.skuAttributes, qSkuAttribute).fetchJoin()
-                .select(qSku).fetch();
+                .where(qSku.skuId.goe(fromSkuId))
+                .limit(limit)
+                .select(qSku).fetch().stream()
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

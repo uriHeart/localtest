@@ -3,6 +3,7 @@ package com.argo.common.domain.sku;
 import com.argo.common.domain.common.jpa.CreatedAtListener;
 import com.argo.common.domain.common.jpa.SystemMetadata;
 import com.argo.common.domain.common.jpa.UpdatedAtListener;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -44,8 +45,10 @@ public class Sku implements SystemMetadata {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "sku", fetch=FetchType.LAZY)
-    private List<SkuAttribute> skuAttributes = new ArrayList<>();
+    @OneToMany(mappedBy = "sku", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+    @JsonManagedReference
+    @ToString.Exclude
+    private List<SkuAttribute> skuAttributes;
 
     @Column(name = "vendor_id", nullable = false)
     private Long vendorId;
