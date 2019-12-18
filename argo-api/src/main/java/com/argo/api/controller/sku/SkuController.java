@@ -24,7 +24,7 @@ public class SkuController {
         this.skuService = skuService;
     }
 
-    @PostMapping("/skuList")
+    @PostMapping(path = "/skuList")
     public List<SkuDto> getSkuList(
             @RequestParam Long vendorId,
             @RequestParam Long fromSkuId,
