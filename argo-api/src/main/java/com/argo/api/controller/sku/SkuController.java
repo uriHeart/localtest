@@ -5,10 +5,7 @@ import com.argo.common.domain.sku.SkuService;
 import com.argo.common.domain.sku.SkuVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +21,8 @@ public class SkuController {
         this.skuService = skuService;
     }
 
-    @PostMapping("/skuList")
+    @PostMapping(path = "/skuList")
+    @ResponseBody
     public List<SkuDto> getSkuList(
             @RequestParam Long vendorId,
             @RequestParam Long fromSkuId,
