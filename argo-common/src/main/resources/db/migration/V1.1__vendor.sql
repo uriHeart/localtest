@@ -111,17 +111,6 @@ CREATE TABLE channel_vendor_accounts (
   CONSTRAINT channel_vendor_accounts_uk01 UNIQUE (vendor_id, sales_channel_id)
 );
 
-CREATE TABLE vendor_workplace_id (
-    vendor_workplace_id SERIAL,
-    vendorOfficeAddress VARCHAR(500),
-    vendorWarehouseAddress VARCHAR(500),
-    vendorNationalInfo VARCHAR(500),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT vendor_workplace_seq PRIMARY KEY (vendor_workplace_id),
-    CONSTRAINT vendor_channels_uk0 UNIQUE (vendor_id, vendor_workplace_id)
-);
-
 
 INSERT INTO channel_vendor_accounts (vendor_id, sales_channel_id, credential_id, credential_password) VALUES
 (1, 1, '/dYXT/o6bVw0anv8hg5YWg==', '/EjrfGgL4AMixXEZxvqRSQ=='),

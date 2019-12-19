@@ -2,7 +2,10 @@ package com.argo.common.domain.vendor;
 import com.argo.common.domain.common.jpa.CreatedAtListener;
 import com.argo.common.domain.common.jpa.SystemMetadata;
 import com.argo.common.domain.common.jpa.UpdatedAtListener;
+import com.datastax.driver.core.DataType;
 import lombok.*;
+import org.springframework.data.cassandra.core.mapping.CassandraType;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -28,12 +31,35 @@ public class VendorWorkplace implements SystemMetadata {
     @Column(name = "type")
     private String type;
 
-    @Column(name = "vendor_office_address")
-    private String vendorOfficeAddress;
+    @Column(name = "full_address")
+    private String fullAddress;
 
+    @Column(name = "jibun_address")
+    private String jibunAddress;
 
-    @Column(name = "vendor_nation_info")
-    private String vendorNation;
+    @Column(name = "jibun_address_english")
+    private String jibunAddressEnglish;
+
+    @Column(name = "road_address")
+    private String roadAddress;
+
+    @Column(name = "road_address_english")
+    private String roadAddressEnglish;
+
+    @Column(name = "post_code_6_digits")
+    private String postCode;
+
+    @Column(name = "zip_code_5_digits")
+    private String zipCode;
+
+    @Column(name = "national_info")
+    private String nationlInfo;
+
+    @Column(name = "latitude")
+    private Double latitude;
+
+    @Column(name = "longitude")
+    private Double longitude;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)
