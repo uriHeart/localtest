@@ -1,5 +1,6 @@
 package com.argo.common.domain.vendor;
 
+import com.argo.common.configuration.ArgoBizException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,9 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.xml.ws.Response;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -59,7 +62,7 @@ public class VendorWorkplaceService {
                .build(), HttpStatus.OK);
     }
 
-    public ResponseEntity<VendorWorkplaceReturnParam> addWorkPlace(VendorWorkplaceReceiveParam receiveParam) {
+    public ResponseEntity<VendorWorkplaceReturnParam> addWorkPlace(VendorWorkplaceReceiveParam receiveParam) throws IOException {
 //        VendorWorkplace workplace =
 //                VendorWorkplace.builder()
 //                .vendor(vendorService.getVendor(receiveParam.getVendorId()))
@@ -76,15 +79,7 @@ public class VendorWorkplaceService {
 //                .build();
 //        vendorWorkplaceRepository.saveAndFlush(workplace);
         VendorWorkplace workplace = receiveParamToWorkPlace(receiveParam);
-        ObjectMapper objectMapper = new ObjectMapper();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.add("Authorization", accessKey);
-        String refineUrl = url + "?query=" + receiveParam.getJibunAddress();
-        HttpEntity request = new HttpEntity<>(headers);
-        String dataResult;
-        dataResult = restTemplate.exchange(refineUrl, HttpMethod.GET, request, String.class).getBody();
-        System.out.println(dataResult);
+
 //        try {
 //        dataResult = restTemplate.exchange(refineUrl, HttpMethod.GET, request, String.class).getBody();
 //        } catch (Exception e) {
@@ -102,6 +97,27 @@ public class VendorWorkplaceService {
 
     public VendorWorkplace receiveParamToWorkPlace(VendorWorkplaceReceiveParam receiveParam) {
         VendorWorkplace newWorkplace = new VendorWorkplace();
+        ObjectMapper objectMapper = new ObjectMapper();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("Authorization", accessKey);
+        String refineUrl = url + "?query=" + receiveParam.getJibunAddress();
+        HttpEntity request = new HttpEntity<>(headers);
+        String dataResult;
+        Double latitude;
+        Double longitude;
+        try {
+            dataResult = restTemplate.exchange(refineUrl, HttpMethod.GET, request, String.class).getBody();
+            System.out.println(dataResult);
+            Map result = objectMapper.readValue(dataResult, Map.class);
+            List<Map> docs = (ArrayList) result.get("documents");
+            Map doc = docs.get(0);
+            latitude = Double.parseDouble((String) doc.get("y"));
+            longitude = Double.parseDouble((String) doc.get("x"));
+        } catch(IOException exception) {
+            throw new ArgoBizException("위도 경도 검색 실패");
+        }
+
         newWorkplace.setVendor(vendorService.getVendor(receiveParam.getVendorId()));
         newWorkplace.setType(receiveParam.getType());
         newWorkplace.setZipCode(receiveParam.getZipCode());
@@ -109,6 +125,8 @@ public class VendorWorkplaceService {
         newWorkplace.setFullAddress(receiveParam.getFullAddress());
         newWorkplace.setJibunAddress(receiveParam.getJibunAddress());
         newWorkplace.setJibunAddressEnglish(receiveParam.getJibunAddressEnglish());
+        newWorkplace.setLatitude(latitude);
+        newWorkplace.setLongitude(longitude);
         newWorkplace.setRoadAddress(receiveParam.getRoadAddress());
         newWorkplace.setRoadAddressEnglish(receiveParam.getRoadAddressEnglish());
         newWorkplace.setNationlInfo(receiveParam.getNationalInfo());

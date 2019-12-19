@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.io.InvalidObjectException;
+
 @Builder
 @Data
 @NoArgsConstructor
@@ -28,7 +31,7 @@ public class WorkplaceController {
     }
 
     @PostMapping(value= "/addworkplace")
-    public ResponseEntity<VendorWorkplaceReturnParam> addWorkPlace(@RequestBody VendorWorkplaceReceiveParam receiveParam) {
+    public ResponseEntity<VendorWorkplaceReturnParam> addWorkPlace(@RequestBody VendorWorkplaceReceiveParam receiveParam) throws IOException {
         System.out.println(receiveParam);
         return vendorWorkPlaceService.addWorkPlace(receiveParam);
     }
