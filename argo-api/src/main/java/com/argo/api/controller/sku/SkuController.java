@@ -8,11 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
 @CrossOrigin(origins = "*")
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/sku")
 @RestController
 public class SkuController {
     private SkuService skuService;
@@ -22,7 +23,7 @@ public class SkuController {
         this.skuService = skuService;
     }
 
-    @PostMapping(path = "/skuList")
+    @GetMapping(path = "/list")
     @ResponseBody
     public List<SkuDto> getSkuList(
             @RequestParam Long vendorId,
@@ -35,4 +36,10 @@ public class SkuController {
                 .map(SkuDto::new)
                 .collect(Collectors.toList());
     }
+
+//    @PostMapping("/save")
+//    @ResponseBody
+//    public Optional<SkuDto> saveSku() {
+//        return Optional.empty();
+//    }
 }
