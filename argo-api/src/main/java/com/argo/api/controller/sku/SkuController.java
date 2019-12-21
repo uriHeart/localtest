@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @CrossOrigin(origins = "*")
+@RequestMapping(value = "/api")
 @RestController
 public class SkuController {
     private SkuService skuService;
