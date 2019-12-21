@@ -1,6 +1,4 @@
 package com.argo.common.domain.vendor;
-
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;

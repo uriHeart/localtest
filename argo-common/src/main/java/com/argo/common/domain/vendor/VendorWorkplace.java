@@ -2,6 +2,7 @@ package com.argo.common.domain.vendor;
 import com.argo.common.domain.common.jpa.CreatedAtListener;
 import com.argo.common.domain.common.jpa.SystemMetadata;
 import com.argo.common.domain.common.jpa.UpdatedAtListener;
+import com.argo.common.domain.vendor.Vendor;
 import com.datastax.driver.core.DataType;
 import lombok.*;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
@@ -19,8 +20,8 @@ import java.util.Date;
 @EntityListeners( { CreatedAtListener.class, UpdatedAtListener.class } )
 public class VendorWorkplace implements SystemMetadata {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendor_workplace_id_seq")
-    @SequenceGenerator(name = "vendor_workplace_id_seq", sequenceName = "vendor_workplace_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendor_workplace_vendor_workplace_id_seq")
+    @SequenceGenerator(name = "vendor_workplace_vendor_workplace_id_seq", sequenceName = "vendor_workplace_vendor_workplace_id_seq", allocationSize = 1)
     @Column(name = "vendor_workplace_id", nullable = false)
     private Long vendorWorkplaceId;
 
