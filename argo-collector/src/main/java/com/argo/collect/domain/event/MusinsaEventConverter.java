@@ -24,7 +24,7 @@ public class MusinsaEventConverter implements EventConverter {
         if(source.get("ord_state").equals("출고요청")||source.get("ord_state").equals("출고처리중")) return EventType.RELEASE_REQUEST;
         if(source.get("ord_state").equals("출고완료")) return EventType.RELEASE;
         if(source.get("ord_state").equals("배송시작")) return EventType.DELIVERY;
-        if(source.get("ord_state").equals("배송완료")||source.get("ord_state").equals("구매확정")) return EventType.DELIVERY_END;
+        if(source.get("ord_state").equals("배송완료")||source.get("ord_state").equals("구매확정")) return EventType.DELIVERY_COMPLETE;
 
         return EventType.OTHER;
     }

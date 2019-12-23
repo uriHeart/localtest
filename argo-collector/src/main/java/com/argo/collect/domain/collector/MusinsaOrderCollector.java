@@ -48,7 +48,7 @@ public class MusinsaOrderCollector extends AbstractOrderCollector {
 
     @Override
     public boolean isSupport(String channel) {
-        return false;
+        return "MUSINSA".equals(channel);
     }
 
     @Override
