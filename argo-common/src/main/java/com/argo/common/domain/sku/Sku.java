@@ -3,9 +3,11 @@ package com.argo.common.domain.sku;
 import com.argo.common.domain.common.jpa.CreatedAtListener;
 import com.argo.common.domain.common.jpa.SystemMetadata;
 import com.argo.common.domain.common.jpa.UpdatedAtListener;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +44,14 @@ public class Sku implements SystemMetadata {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "sku", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+    @JsonManagedReference
+    @ToString.Exclude
+    private List<SkuAttribute> skuAttributes;
+
+    @Column(name = "vendor_id", nullable = false)
+    private Long vendorId;
 
     @Column(name = "description")
     private String description;

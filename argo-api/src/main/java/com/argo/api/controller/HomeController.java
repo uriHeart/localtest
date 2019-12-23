@@ -51,6 +51,12 @@ public class HomeController {
         return "home";
     }
 
+    @GetMapping("/test")
+    public String testHello() {
+        return "hello";
+    }
+
+
     @GetMapping("/order/testMail")
     public void testMail() {
         emailService.sendSimpleMessage("syy0320@gmail.com", "Test Email", "Argo Test");
