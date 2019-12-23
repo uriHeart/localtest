@@ -39,9 +39,10 @@ public class ConvertController {
                                              @RequestParam("channelId")Long channelId,
                                              @RequestParam("vendorId")Long vendorId) throws IOException, ArgoBizException {
         //엑셀저장
-        File excel = convertService.excelUpload(parts);
-
         try{
+
+            File excel = convertService.excelUpload(parts);
+
             //엑셀데이터 json변환  List<엑셀sheet List<레코드 >
             List<HashMap<String, Object>> jsonData = convertService.excelToJson(excel);
 
@@ -51,7 +52,7 @@ public class ConvertController {
             RestStatus restStatus = convertService.saveToEs(excel.getName(), jsonData,vendorId,channelId);
 
 
-        }catch (ArgoBizException e){
+        }catch (ArgoBizException  e){
             return new ResponseEntity<>(ArgoResponse.builder().message(e.getMessage()).build(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -109,12 +110,15 @@ public class ConvertController {
 
     @PutMapping(value="/excel/event/confirm")
     public @ResponseBody ResponseEntity<ArgoResponse> eventConfirm(@RequestParam String docId,Long channelId,Long vendorId) throws IOException {
-        ArrayList<HashMap<String,Object>> eventData = convertService.getEventList(docId);
+        try {
+            ArrayList<HashMap<String, Object>> eventData = convertService.getEventList(docId);
 
-        ArrayList<HashMap<String,Object>> factorAddJsonData = convertService.addExcelFactor(eventData,channelId);
-        //카산드라에 raw데이터 저장
-        convertService.saveToCassandra(factorAddJsonData,channelId,vendorId);
-
+            ArrayList<HashMap<String, Object>> factorAddJsonData = convertService.addExcelFactor(eventData, channelId);
+            //카산드라에 raw데이터 저장
+            convertService.saveToCassandra(factorAddJsonData, channelId, vendorId);
+        }catch (ArgoBizException e){
+            return new ResponseEntity<>(ArgoResponse.builder().message(e.getMessage()).build(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return new ResponseEntity<>(ArgoResponse.builder().message("ok").build(), HttpStatus.ACCEPTED);
     }
 
