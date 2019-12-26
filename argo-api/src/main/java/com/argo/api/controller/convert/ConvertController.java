@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Mono;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
@@ -115,18 +114,22 @@ public class ConvertController {
 
     @PutMapping(value="/excel/event/confirm")
     public @ResponseBody ResponseEntity<ArgoResponse> eventConfirm(@RequestParam String docId,Long channelId,Long vendorId) throws IOException {
-        ArrayList<HashMap<String,Object>> eventData = convertService.getEventList(docId);
 
-        ArrayList<HashMap<String,Object>> factorAddJsonData = convertService.addExcelFactor(eventData,channelId);
-        //카산드라에 raw데이터 저장
-        convertService.saveToCassandra(factorAddJsonData,channelId,vendorId);
+       try{
+            ArrayList<HashMap<String,Object>> eventData = convertService.getEventList(docId);
+
+            ArrayList<HashMap<String,Object>> factorAddJsonData = convertService.addExcelFactor(eventData,channelId);
+            //카산드라에 raw데이터 저장
+            convertService.saveToCassandra(factorAddJsonData,channelId,vendorId);
 
 
-        //컨펌으로 상태변경
-        ManualOrder manualOrder = manualOrderService.getManualOrder(vendorId,docId);
-        manualOrder.setStatus("CONFIRM");
-        manualOrderService.save(manualOrder);
-
+            //컨펌으로 상태변경
+            ManualOrder manualOrder = manualOrderService.getManualOrder(vendorId,docId);
+            manualOrder.setStatus("CONFIRM");
+            manualOrderService.save(manualOrder);
+        }catch (ArgoBizException e){
+            return new ResponseEntity<>(ArgoResponse.builder().message(e.getMessage()).build(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return new ResponseEntity<>(ArgoResponse.builder().message("ok").build(), HttpStatus.ACCEPTED);
     }
 
