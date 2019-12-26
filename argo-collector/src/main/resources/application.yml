@@ -51,7 +51,8 @@ spring:
 
 webdriver:
   chrome:
-    driver: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome
+    driver: /home/ec2-user/chromedriver
+  id: webdriver.chrome.driver
 
   profiles:
     active: local
@@ -62,7 +63,7 @@ server:
 
 file:
   upload:
-    default-path: C:\attachments
+    default-path: /Users/ags0688/Documents/attachements
     index: excel_upload
 
 elasticsearch:
