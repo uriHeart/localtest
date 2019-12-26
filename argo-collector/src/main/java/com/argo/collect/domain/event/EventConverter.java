@@ -6,6 +6,6 @@ import java.util.Map;
 
 public interface EventConverter {
     boolean isSupport(String channel);
-    public EventType getEventType(Map source);
+    EventType getEventType(Map source);
 
 }

@@ -16,15 +16,18 @@ public class MusinsaEventConverter implements EventConverter {
     @Override
     public EventType getEventType(Map source) {
 
-        if(source.get("clm_state")!=null && source.get("clm_state").equals("교환완료")) return EventType.EXCHANGE;
-        if(source.get("clm_state")!=null && source.get("clm_state").equals("환불완료")) return EventType.RETURN;
-        if(source.get("ord_state").equals("입금예정")) return EventType.ORDER;
-        if(source.get("ord_state").equals("주문취소")||source.get("ord_state").equals("결제오류")) return EventType.CANCEL;
-        if(source.get("ord_state").equals("입금확인")) return EventType.PAYMENT_COMPLETE;
-        if(source.get("ord_state").equals("출고요청")||source.get("ord_state").equals("출고처리중")) return EventType.RELEASE_REQUEST;
-        if(source.get("ord_state").equals("출고완료")) return EventType.RELEASE;
-        if(source.get("ord_state").equals("배송시작")) return EventType.DELIVERY;
-        if(source.get("ord_state").equals("배송완료")||source.get("ord_state").equals("구매확정")) return EventType.DELIVERY_COMPLETE;
+        String clmState = String.valueOf(source.get("clm_state"));
+        String ordState = String.valueOf(source.get("ord_state"));
+
+        if("교환완료".equals(clmState)) return EventType.EXCHANGE;
+        if("환불완료".equals(clmState)) return EventType.RETURN;
+        if("입금예정".equals(ordState)) return EventType.ORDER;
+        if("주문취소".equals(ordState) || "결제오류".equals(ordState)) return EventType.CANCEL;
+        if("입금확인".equals(ordState)) return EventType.PAYMENT_COMPLETE;
+        if("출고요청".equals(ordState) || "출고처리중".equals(ordState)) return EventType.RELEASE_REQUEST;
+        if("출고완료".equals(ordState)) return EventType.RELEASE;
+        if("배송시작".equals(ordState)) return EventType.DELIVERY;
+        if("배송완료".equals(ordState) || "구매확정".equals(ordState)) return EventType.DELIVERY_COMPLETE;
 
         return EventType.OTHER;
     }

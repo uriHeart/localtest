@@ -7,11 +7,10 @@ import com.argo.common.domain.common.util.ArgoDateUtil;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.raw.RawEventRepository;
 import com.argo.common.domain.vendor.VendorChannel;
-import com.argo.common.domain.vendor.VendorService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -29,22 +28,17 @@ import java.util.Map;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class MusinsaOrderCollector extends AbstractOrderCollector {
 
-    @Autowired
-    private VendorService vendorService;
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-    @Autowired
-    private RawEventRepository rawEventRepository;
+    private final RawEventRepository rawEventRepository;
 
-    @Autowired
-    private EventConverter eventConverter;
+    private final List<EventConverter> eventConverter;
 
     @Override
     public boolean isSupport(String channel) {
@@ -79,7 +73,12 @@ public class MusinsaOrderCollector extends AbstractOrderCollector {
 
         orderList.forEach(event -> {
 
-            EventType eventType = eventConverter.getEventType(event);
+            EventType eventType = eventConverter.stream()
+                                    .filter(converter -> converter.isSupport(channel.getSalesChannel().getCode()))
+                                    .map(converter -> converter.getEventType(event))
+                                    .findFirst()
+                                    .orElse(EventType.OTHER);
+
             event.put("event_type",eventType.toString());
 
             String detailUrl = "https://bizest.musinsa.com/po/api/order/ord01/get_detail";
