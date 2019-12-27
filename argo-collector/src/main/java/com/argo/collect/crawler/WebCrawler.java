@@ -30,7 +30,7 @@ public class WebCrawler {
 
     @PostConstruct
     private void init() throws IOException {
-        System.setProperty("webdriver.chrome.driver", "/Users/austin/Downloads/chromedriver");
+        //System.setProperty("webdriver.chrome.driver", "/Users/austin/Downloads/chromedriver");
     }
 
     public void vendorCrawling(String vendorCode, String saleChannelCode) throws IOException, InterruptedException {

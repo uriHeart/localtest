@@ -1,11 +1,13 @@
 package com.argo.api.controller.convert;
 
 import com.argo.api.common.ArgoResponse;
+import com.argo.api.domain.excel.ManualOrder;
+import com.argo.api.domain.excel.ManualOrderService;
 import com.argo.api.service.ConvertService;
 import com.argo.common.configuration.ArgoBizException;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.rest.RestStatus;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +21,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @Slf4j
+@AllArgsConstructor
 public class ConvertController {
 
-    @Autowired
-    ConvertService convertService;
+    private final ConvertService convertService;
 
-    @Autowired
-    HttpSession httpSession;
+    private final HttpSession httpSession;
+
+    private final ManualOrderService manualOrderService;
 
     @RequestMapping(value="/excelUpload",
             method = RequestMethod.POST,
@@ -37,6 +39,7 @@ public class ConvertController {
     public @ResponseBody
     ResponseEntity<ArgoResponse> excelUpload(@RequestParam("file")MultipartFile parts,
                                              @RequestParam("channelId")Long channelId,
+                                             @RequestParam("channelName")String channelName,
                                              @RequestParam("vendorId")Long vendorId) throws IOException, ArgoBizException {
         //엑셀저장
         File excel = convertService.excelUpload(parts);
@@ -45,16 +48,17 @@ public class ConvertController {
             //엑셀데이터 json변환  List<엑셀sheet List<레코드 >
             List<HashMap<String, Object>> jsonData = convertService.excelToJson(excel);
 
+            //rdb저장
+            manualOrderService.saveExcelStatus(excel.getName(),vendorId,channelId,channelName);
+
             //엑셀 맵핑 체크
             convertService.addExcelFactorCheck(jsonData,channelId);
 
             RestStatus restStatus = convertService.saveToEs(excel.getName(), jsonData,vendorId,channelId);
 
-
         }catch (ArgoBizException e){
             return new ResponseEntity<>(ArgoResponse.builder().message(e.getMessage()).build(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
 
         return new ResponseEntity<>(ArgoResponse.builder().message("ok").build(), HttpStatus.ACCEPTED);
     }
@@ -70,12 +74,10 @@ public class ConvertController {
 
     @GetMapping(value="/excel/list",
             produces = "application/json; charset=utf8")
-    public @ResponseBody List<Map<String,Object>> getUploadList() throws IOException {
-        //TODO userId에 해당하는 업로드파일만 조회
-        //HttpSession session = req.getSession();
-        //String userId = (String)session.getAttribute("userId");
-        List<Map<String,Object>> excelList = convertService.getExcelList("");
-        return excelList;
+    public @ResponseBody List<ManualOrder> getUploadList(@RequestParam Long vendorId) {
+//        httpSession.getAttribute("vendorId")
+//        List<Map<String,Object>> excelList = convertService.getExcelList("");
+        return manualOrderService.getExcelList(vendorId);
     }
 
     @RequestMapping(value="/excel/detail",
@@ -102,20 +104,34 @@ public class ConvertController {
 //    }
 
     @DeleteMapping(value="/excel/delete")
-    public @ResponseBody Mono<RestStatus> deleteIndex(@RequestParam String docId){
+    public @ResponseBody Mono<RestStatus> deleteIndex(@RequestParam String docId,@RequestParam Long vendorId){
+
+        manualOrderService.deleteExcel(docId,vendorId);
         Mono<RestStatus> restStatus = convertService.deleteIndex(docId);
+
         return restStatus;
     }
 
     @PutMapping(value="/excel/event/confirm")
     public @ResponseBody ResponseEntity<ArgoResponse> eventConfirm(@RequestParam String docId,Long channelId,Long vendorId) throws IOException {
-        ArrayList<HashMap<String,Object>> eventData = convertService.getEventList(docId);
 
-        ArrayList<HashMap<String,Object>> factorAddJsonData = convertService.addExcelFactor(eventData,channelId);
-        //카산드라에 raw데이터 저장
-        convertService.saveToCassandra(factorAddJsonData,channelId,vendorId);
+       try{
+            ArrayList<HashMap<String,Object>> eventData = convertService.getEventList(docId);
 
+            ArrayList<HashMap<String,Object>> factorAddJsonData = convertService.addExcelFactor(eventData,channelId);
+            //카산드라에 raw데이터 저장
+            convertService.saveToCassandra(factorAddJsonData,channelId,vendorId);
+
+
+            //컨펌으로 상태변경
+            ManualOrder manualOrder = manualOrderService.getManualOrder(vendorId,docId);
+            manualOrder.setStatus("CONFIRM");
+            manualOrderService.save(manualOrder);
+        }catch (ArgoBizException e){
+            return new ResponseEntity<>(ArgoResponse.builder().message(e.getMessage()).build(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return new ResponseEntity<>(ArgoResponse.builder().message("ok").build(), HttpStatus.ACCEPTED);
     }
+
 
 }
