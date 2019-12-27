@@ -8,7 +8,10 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class VendorWorkplaceReceiveParam {
     private Long vendorId; //;
-    private String type;
+//    private String type;
+    private Long typeNum;
+    private String etcType;
+    private String workplaceName;
     private String fullAddress;
     private String jibunAddress;
     private String jibunAddressEnglish;

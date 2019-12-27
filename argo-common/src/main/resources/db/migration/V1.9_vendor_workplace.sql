@@ -1,7 +1,9 @@
 CREATE TABLE vendor_workplace (
     vendor_workplace_id SERIAL,
     vendor_id SERIAL,
-    type VARCHAR(100),
+    type VARCHAR(50),
+    etc_type VARCHAR(200),
+    workplace_name VARCHAR(300),
     full_address VARCHAR(500),
     jibun_address VARCHAR(300),
     jibun_address_english VARCHAR(300),

@@ -22,7 +22,8 @@ public class AddUserForm {
         newSeller.setUserName(this.managerName);
         newSeller.setCompanyName(this.company);
         newSeller.setPhoneNumber(this.phoneNumber);
-        newSeller.setStatus(UserStatus.INITIALIZED);
+//        newSeller.setStatus(UserStatus.valueOf("INITIALIZED"));
+//        UserStatus.valueOf(UserStatus.INITIALIZED())
         return newSeller;
     }
 }

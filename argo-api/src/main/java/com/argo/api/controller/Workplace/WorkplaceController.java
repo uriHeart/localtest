@@ -25,8 +25,6 @@ public class WorkplaceController {
     @Autowired
     VendorWorkplaceService vendorWorkplaceService;
 
-
-
     @GetMapping(value = "/list/{vendorId}")
     public ResponseEntity<VendorWorkplaceReturnParam> findWorkPlaces(@PathVariable Long vendorId) {
         System.out.println("error");

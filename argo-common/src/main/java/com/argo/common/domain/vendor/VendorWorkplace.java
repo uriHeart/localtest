@@ -2,6 +2,7 @@ package com.argo.common.domain.vendor;
 import com.argo.common.domain.common.jpa.CreatedAtListener;
 import com.argo.common.domain.common.jpa.SystemMetadata;
 import com.argo.common.domain.common.jpa.UpdatedAtListener;
+import com.argo.common.domain.user.UserStatus;
 import com.argo.common.domain.vendor.Vendor;
 import com.datastax.driver.core.DataType;
 import lombok.*;
@@ -29,8 +30,18 @@ public class VendorWorkplace implements SystemMetadata {
     @JoinColumn(name="vendor_id")
     private Vendor vendor;
 
-    @Column(name = "type")
-    private String type;
+//    @Column(name = "type")
+//    private String type;
+    //enum
+
+    @Enumerated(EnumType.STRING)
+    private VendorWorkplaceType type;
+
+    @Column(name = "etc_type")
+    private String etcType;
+
+    @Column(name = "workplace_name")
+    private String workplaceName;
 
     @Column(name = "full_address")
     private String fullAddress;
