@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
-@NoArgsConstructor
 public class workplaceTypeFilter {
     //Front에서 종류 번호로 받을 것.
     public VendorWorkplaceType receiverFilter(Long typeNum) {
@@ -20,7 +18,7 @@ public class workplaceTypeFilter {
             return VendorWorkplaceType.ETC;
         }
     }
-    public String toKorean(VendorWorkplaceType type, String etcType) {
+    public String toKorean(VendorWorkplaceType type, String etcDetail) {
         if (type == VendorWorkplaceType.WAREHOUSE) {
             return "물류창고";
         } else if (type == VendorWorkplaceType.STORE) {
@@ -28,7 +26,7 @@ public class workplaceTypeFilter {
         } else if (type == VendorWorkplaceType.OFFICE) {
             return "사무실";
         } else {
-            return "기타" + " (" + etcType + ")";
+            return "기타" + " (" + etcDetail + ")";
         }
     };
 

@@ -37,11 +37,14 @@ public class VendorWorkplace implements SystemMetadata {
     @Enumerated(EnumType.STRING)
     private VendorWorkplaceType type;
 
-    @Column(name = "etc_type")
-    private String etcType;
+    @Column(name = "etc_detail")
+    private String etcDetail;
 
     @Column(name = "workplace_name")
     private String workplaceName;
+
+    @Column(name = "deleted")
+    private boolean deleted;
 
     @Column(name = "full_address")
     private String fullAddress;

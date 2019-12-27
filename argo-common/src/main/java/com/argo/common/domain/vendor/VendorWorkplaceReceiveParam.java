@@ -10,7 +10,7 @@ public class VendorWorkplaceReceiveParam {
     private Long vendorId; //;
 //    private String type;
     private Long typeNum;
-    private String etcType;
+    private String etcDetail;
     private String workplaceName;
     private String fullAddress;
     private String jibunAddress;

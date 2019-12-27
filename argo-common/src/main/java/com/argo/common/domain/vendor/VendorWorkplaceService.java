@@ -39,7 +39,7 @@ public class VendorWorkplaceService {
 
     public ResponseEntity<VendorWorkplaceReturnParam> getListPerVendor(Long vendorId) {
         List<VendorWorkplace> ListOfWorkplaces =
-                vendorWorkplaceRepository.findAllByVendorOrderByType(vendorService.getVendor(vendorId));
+                vendorWorkplaceRepository.findAllByVendorAndDeletedIsFalse(vendorService.getVendor(vendorId));
 
 //        String vendorName = vendorService.getVendor(vendorId).getName();
 //        System.out.println(vendorName);
@@ -47,8 +47,8 @@ public class VendorWorkplaceService {
         List<VendorWorkplaceShorten> returnList = new ArrayList<>();
         for (VendorWorkplace workplace : ListOfWorkplaces) {
             VendorWorkplaceShorten shorten = new VendorWorkplaceShorten();
-            log.info(" receive type : {}", workplaceTypeFilter.toKorean(workplace.getType(), workplace.getEtcType()));
-            shorten.setType(workplaceTypeFilter.toKorean(workplace.getType(), workplace.getEtcType()));
+            log.info(" receive type : {}", workplaceTypeFilter.toKorean(workplace.getType(), workplace.getEtcDetail()));
+            shorten.setType(workplaceTypeFilter.toKorean(workplace.getType(), workplace.getEtcDetail()));
             shorten.setWorkplaceName(workplace.getWorkplaceName());
             shorten.setAddress(workplace.getFullAddress());
             shorten.setCreatedAt(workplace.getCreatedAt());
@@ -91,6 +91,8 @@ public class VendorWorkplaceService {
                 .builder()
                 .vendorId(newWorkplace.getVendor().getVendorId())
                 .success(true)
+                .latitude(latitude)
+                .longitude(longitude)
                 .build(), HttpStatus.OK);
     }
 
@@ -100,7 +102,7 @@ public class VendorWorkplaceService {
         log.info(" receive type : {}", receiveParam.getTypeNum());
         log.info(" refined type : {}", workplaceTypeFilter.receiverFilter(receiveParam.getTypeNum()));
         newWorkplace.setType(workplaceTypeFilter.receiverFilter(receiveParam.getTypeNum()));
-        newWorkplace.setEtcType(receiveParam.getEtcType());
+        newWorkplace.setEtcDetail(receiveParam.getEtcDetail());
         if (receiveParam.getWorkplaceName().equals("")) {
             newWorkplace.setWorkplaceName("N/A");
         } else {
