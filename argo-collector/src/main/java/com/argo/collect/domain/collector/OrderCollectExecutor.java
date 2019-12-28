@@ -1,6 +1,6 @@
 package com.argo.collect.domain.collector;
 
-import com.argo.collect.domain.enums.SalesChannel;
+import com.argo.common.domain.notification.Notifier;
 import com.argo.common.domain.vendor.VendorChannel;
 import com.argo.common.domain.vendor.VendorService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +20,9 @@ public class OrderCollectExecutor {
     @Autowired
     private VendorService vendorService;
 
+    @Autowired
+    private Notifier notifier;
+
     private boolean collectRun = false;
 
     @Scheduled(cron = "0 0/2 * * * *")
@@ -38,6 +41,8 @@ public class OrderCollectExecutor {
                             }
                         });
             }
+        } catch (Exception e) {
+            notifier.send(e);
         } finally {
             setRun(false);
         }

@@ -1,6 +1,8 @@
 package com.argo.collect.domain.collector;
 
 import com.argo.collect.domain.auth.AuthorityManager;
+import com.argo.collect.domain.enums.SalesChannel;
+import com.argo.common.configuration.ArgoBizException;
 import com.argo.common.domain.channel.ChannelCollectInfo;
 import com.argo.common.domain.channel.SalesChannelService;
 import com.argo.common.domain.raw.RawEventService;
@@ -36,9 +38,8 @@ public abstract class AbstractOrderCollector implements OrderCollector {
                     .collectParam(objectMapper.readValue(info.getCollectParam(), Map.class))
                     .build();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ArgoBizException(e.getMessage());
         }
-        return null;
     }
 
     protected List<CollectParam> getCollectInfoList(VendorChannel channel) {

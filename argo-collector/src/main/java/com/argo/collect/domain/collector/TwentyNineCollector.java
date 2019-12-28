@@ -1,6 +1,7 @@
 package com.argo.collect.domain.collector;
 
 import com.argo.collect.domain.auth.AuthorityManager;
+import com.argo.common.configuration.ArgoBizException;
 import com.argo.common.domain.common.util.ArgoDateUtil;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.vendor.VendorChannel;
@@ -71,13 +72,13 @@ public class TwentyNineCollector extends AbstractOrderCollector {
                                     .build();
                             rawEventService.save(rawEvent);
                         } catch (JsonProcessingException e) {
-                            e.printStackTrace();
+                            throw new ArgoBizException(e.getMessage());
                         }
                     }
             );
             log.info("data - {}", rawEvents);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ArgoBizException(e.getMessage());
         }
     }
 }

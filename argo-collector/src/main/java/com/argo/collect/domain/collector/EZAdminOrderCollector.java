@@ -2,6 +2,7 @@ package com.argo.collect.domain.collector;
 
 import com.argo.collect.domain.auth.AuthorityManager;
 import com.argo.collect.domain.enums.SalesChannel;
+import com.argo.common.configuration.ArgoBizException;
 import com.argo.common.domain.common.util.ArgoDateUtil;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.vendor.VendorChannel;
@@ -94,7 +95,7 @@ public class EZAdminOrderCollector extends AbstractOrderCollector {
                                 .build();
                         rawEventService.save(rawEvent);
                     } catch (JsonProcessingException e) {
-                        e.printStackTrace();
+                        throw new ArgoBizException(e.getMessage());
                     }
                 }
         );
@@ -117,7 +118,7 @@ public class EZAdminOrderCollector extends AbstractOrderCollector {
                         dataRows.add(objectMapper.readValue(item.get("data_row").toString(), Map.class));
                         item.remove("data_row");
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        throw new ArgoBizException(e.getMessage());
                     }
                 }
         );
@@ -148,9 +149,8 @@ public class EZAdminOrderCollector extends AbstractOrderCollector {
         try {
             return objectMapper.readValue(result, Map.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ArgoBizException(e.getMessage());
         }
-        return null;
     }
 
 }
