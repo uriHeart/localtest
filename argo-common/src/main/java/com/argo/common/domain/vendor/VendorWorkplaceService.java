@@ -39,18 +39,22 @@ public class VendorWorkplaceService {
 
     public ResponseEntity<VendorWorkplaceReturnParam> getListPerVendor(Long vendorId) {
         List<VendorWorkplace> ListOfWorkplaces =
-                vendorWorkplaceRepository.findAllByVendorAndDeletedIsFalse(vendorService.getVendor(vendorId));
+                vendorWorkplaceRepository.findAllByVendorAndDeletedIsFalseOrderByCreatedAtDesc(vendorService.getVendor(vendorId));
 
-//        String vendorName = vendorService.getVendor(vendorId).getName();
-//        System.out.println(vendorName);
-//        System.out.println(vendorId);
         List<VendorWorkplaceShorten> returnList = new ArrayList<>();
         for (VendorWorkplace workplace : ListOfWorkplaces) {
             VendorWorkplaceShorten shorten = new VendorWorkplaceShorten();
             log.info(" receive type : {}", workplaceTypeFilter.toKorean(workplace.getType(), workplace.getEtcDetail()));
+            shorten.setWorkplaceId(workplace.getVendorWorkplaceId());
             shorten.setType(workplaceTypeFilter.toKorean(workplace.getType(), workplace.getEtcDetail()));
-            shorten.setWorkplaceName(workplace.getWorkplaceName());
+            if (workplace.getWorkplaceName().equals("")) {
+                shorten.setWorkplaceName("N/A");
+            } else {
+                shorten.setWorkplaceName(workplace.getWorkplaceName());
+            }
             shorten.setAddress(workplace.getFullAddress());
+            shorten.setLatitude(workplace.getLatitude());
+            shorten.setLongitude(workplace.getLongitude());
             shorten.setCreatedAt(workplace.getCreatedAt());
             returnList.add(shorten);
         }
@@ -61,8 +65,32 @@ public class VendorWorkplaceService {
                 .build(), HttpStatus.OK);
     }
 
+    public ResponseEntity<VendorWorkplaceReturnParam> fullMap(Long vendorId) {
+
+        List<VendorWorkplace> ListOfWorkplaces =
+                vendorWorkplaceRepository.findAllByVendorAndDeletedIsFalseOrderByCreatedAtDesc(vendorService.getVendor(vendorId));
+        List<VendorWorkplaceMapData> mapDataList = new ArrayList<>();
+        for (VendorWorkplace workplace : ListOfWorkplaces) {
+            VendorWorkplaceMapData mapData = new VendorWorkplaceMapData();
+            mapData.setVendorWorkplaceId(workplace.getVendorWorkplaceId());
+            mapData.setWorkplaceName(workplace.getWorkplaceName());
+            mapData.setFullAddress(workplace.getFullAddress());
+            mapData.setLatitude(workplace.getLatitude());
+            mapData.setLongitude(workplace.getLongitude());
+            mapDataList.add(mapData);
+        }
+
+        return new ResponseEntity<>(VendorWorkplaceReturnParam
+                .builder()
+                .success(true)
+                .vendorId(vendorId)
+                .mapData(mapDataList)
+                .build(), HttpStatus.OK);
+    }
+
     public ResponseEntity<VendorWorkplaceReturnParam> addWorkPlace(VendorWorkplaceReceiveParam receiveParam) {
-        System.out.println(receiveParam);
+        log.info(" receiver : {}", receiveParam);
+        /* 빌더 vs Object.set */
 //        VendorWorkplace workplace =
 //                VendorWorkplace.builder()
 //                        .vendor(vendorService.getVendor(receiveParam.getVendorId()))
@@ -80,34 +108,43 @@ public class VendorWorkplaceService {
 //        vendorWorkplaceRepository.saveAndFlush(workplace);
 //        VendorWorkplace workplace = receiveParamToWorkPlace(receiveParam);
 //
-        VendorWorkplace newWorkplace = receiveParamToWorkPlace(receiveParam);
-        RefinedAddressDto refinedAddress = kakaoAddressRefiner.refine(receiveParam.getJibunAddress()).getRefinedAddress();
-        Double latitude = refinedAddress.getLatitude();
-        Double longitude = refinedAddress.getLongitude();
-        newWorkplace.setLatitude(latitude);
-        newWorkplace.setLongitude(longitude);
-        vendorWorkplaceRepository.saveAndFlush(newWorkplace);
-        return new ResponseEntity<>(VendorWorkplaceReturnParam
-                .builder()
-                .vendorId(newWorkplace.getVendor().getVendorId())
-                .success(true)
-                .latitude(latitude)
-                .longitude(longitude)
-                .build(), HttpStatus.OK);
+
+        try {
+            RefinedAddressDto refinedAddress = kakaoAddressRefiner.refine(receiveParam.getJibunAddress()).getRefinedAddress();
+            Double latitude = refinedAddress.getLatitude();
+            Double longitude = refinedAddress.getLongitude();
+            VendorWorkplace newWorkplace = receiveParamToWorkPlace(receiveParam);
+            newWorkplace.setLatitude(latitude);
+            newWorkplace.setLongitude(longitude);
+            vendorWorkplaceRepository.saveAndFlush(newWorkplace);
+            return new ResponseEntity<>(VendorWorkplaceReturnParam
+                    .builder()
+                    .vendorId(newWorkplace.getVendor().getVendorId())
+                    .workplaceId(newWorkplace.getVendorWorkplaceId())
+                    .success(true)
+                    .latitude(latitude)
+                    .longitude(longitude)
+                    .build(), HttpStatus.OK);
+
+        } catch (ArgoBizException e) {
+            return new ResponseEntity<>(VendorWorkplaceReturnParam.builder().message(e.getMessage()).build(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     public VendorWorkplace receiveParamToWorkPlace(VendorWorkplaceReceiveParam receiveParam) {
+        /* N/A 로 넣을지? */
+//        if (receiveParam.getWorkplaceName().equals("")) {
+//            newWorkplace.setWorkplaceName("N/A");
+//        } else {
+//            newWorkplace.setWorkplaceName(receiveParam.getWorkplaceName());
+//        }
         VendorWorkplace newWorkplace = new VendorWorkplace();
         newWorkplace.setVendor(vendorService.getVendor(receiveParam.getVendorId()));
         log.info(" receive type : {}", receiveParam.getTypeNum());
         log.info(" refined type : {}", workplaceTypeFilter.receiverFilter(receiveParam.getTypeNum()));
         newWorkplace.setType(workplaceTypeFilter.receiverFilter(receiveParam.getTypeNum()));
         newWorkplace.setEtcDetail(receiveParam.getEtcDetail());
-        if (receiveParam.getWorkplaceName().equals("")) {
-            newWorkplace.setWorkplaceName("N/A");
-        } else {
-            newWorkplace.setWorkplaceName(receiveParam.getWorkplaceName());
-        }
+        newWorkplace.setWorkplaceName(receiveParam.getWorkplaceName());
         newWorkplace.setZipCode(receiveParam.getZipCode());
         newWorkplace.setPostCode(receiveParam.getPostCode());
         newWorkplace.setFullAddress(receiveParam.getFullAddress());

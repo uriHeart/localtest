@@ -8,6 +8,6 @@ public interface VendorWorkplaceRepository extends JpaRepository<VendorWorkplace
 //    VendorWorkplace findVendorWorkplaceByVendorWorkplaceId(Long vendorWorkplaceId);
 //    List<VendorWorkplace>
     VendorWorkplace findByVendorOrderByType(Vendor vendor);
-    List<VendorWorkplace> findAllByVendorAndDeletedIsFalse(Vendor vendor);
+    List<VendorWorkplace> findAllByVendorAndDeletedIsFalseOrderByCreatedAtDesc(Vendor vendor);
     VendorWorkplace findByVendorWorkplaceId(Long vendorWorkplaceId);
 }

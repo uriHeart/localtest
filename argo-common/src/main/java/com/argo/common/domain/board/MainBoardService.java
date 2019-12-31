@@ -39,7 +39,7 @@ public class MainBoardService {
 //            JSONArray newArray = new JSONArray(list);
 //            jsonArray.put(newArray);
 //        }
-        List<MainBoardShorten> shortenList = listForList(mainBoardRepository.findAllByParentIsNullAndDeletedIsFalseOrderByCreatedAt());
+        List<MainBoardShorten> shortenList = listForList(mainBoardRepository.findAllByParentIsNullAndDeletedIsFalseOrderByCreatedAtDesc());
         return new ResponseEntity<>(BoardReturnParam.builder()
                 .success(true)
                 .rowData(shortenList).build(), HttpStatus.OK);

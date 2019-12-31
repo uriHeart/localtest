@@ -26,7 +26,11 @@ public class workplaceTypeFilter {
         } else if (type == VendorWorkplaceType.OFFICE) {
             return "사무실";
         } else {
-            return "기타" + " (" + etcDetail + ")";
+            if (!etcDetail.equals("")) {
+                return "기타" + " (" + etcDetail + ")";
+            } else {
+                return "기타";
+            }
         }
     };
 

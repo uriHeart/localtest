@@ -1,5 +1,6 @@
 package com.argo.common.domain.vendor;
 
+import com.argo.common.domain.order.doc.Location;
 import lombok.*;
 
 import java.util.List;
@@ -11,8 +12,12 @@ import java.util.List;
 public class VendorWorkplaceReturnParam {
     private boolean success;
     private Long vendorId; //
+    private Long workplaceId;
     private String vendorName; // front에 보여야할지...
     private Double longitude;
     private Double latitude; // location object 만드는 대신 그냥 simple 하게 이렇게 넘겨줌.
+//    private Location location;
+    private String message;
     private List<VendorWorkplaceShorten> rowData;
+    private List<VendorWorkplaceMapData> mapData;
 }

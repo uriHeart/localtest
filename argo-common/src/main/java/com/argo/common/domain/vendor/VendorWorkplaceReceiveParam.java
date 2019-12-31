@@ -9,6 +9,7 @@ import lombok.*;
 public class VendorWorkplaceReceiveParam {
     private Long vendorId; //;
 //    private String type;
+    private Long workplaceId;
     private Long typeNum;
     private String etcDetail;
     private String workplaceName;
@@ -21,4 +22,6 @@ public class VendorWorkplaceReceiveParam {
     private String zipCode;
     private String postCode;
     private String nationalInfo;
+    private Double latitude; // PutMapping
+    private Double longitude; // PutMapping
 }
