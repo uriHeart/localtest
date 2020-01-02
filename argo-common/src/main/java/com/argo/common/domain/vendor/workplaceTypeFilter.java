@@ -1,8 +1,9 @@
 package com.argo.common.domain.vendor;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class workplaceTypeFilter {
@@ -34,4 +35,11 @@ public class workplaceTypeFilter {
         }
     };
 
+    public List<EnumElem> listEnum() {
+        List list = new ArrayList<EnumElem>();
+        for (Long i = 1L; i <= 4; i ++) {
+            list.add(new EnumElem(receiverFilter(i), toKorean(receiverFilter(i), ""), i));
+        }
+        return list;
+    }
 }

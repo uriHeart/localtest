@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @Builder
 @Data
@@ -29,6 +30,10 @@ public class WorkplaceController {
 
     @Autowired
     KakaoAddressRefiner kakaoAddressRefiner;
+
+    @Autowired
+    workplaceTypeFilter workplaceTypeFilter;
+
 
     @GetMapping(value = "/list/{vendorId}")
     public ResponseEntity<VendorWorkplaceReturnParam> findWorkPlaces(@PathVariable Long vendorId) {
@@ -83,5 +88,10 @@ public class WorkplaceController {
                 .success(true)
                 .workplaceId(target.getVendorWorkplaceId())
                 .build(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/enum")
+    public List<EnumElem> returnEnum() {
+        return workplaceTypeFilter.listEnum();
     }
 }

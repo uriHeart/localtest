@@ -1,5 +1,9 @@
 package com.argo.common.domain.vendor;
 
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public enum VendorWorkplaceType {
     WAREHOUSE, //물류창고 (1)
     STORE, //매장 (2)
