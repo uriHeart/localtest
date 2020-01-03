@@ -6,8 +6,8 @@ import java.util.Date;
 
 @Data
 public class MainBoardReply {
-    public Long boardId; //;
-    public String user_email; //
-    public String post;
-    public Date createdAt;
+    private Long boardId; //;
+    private String userEmail; //
+    private String post;
+    private Date createdAt;
 }

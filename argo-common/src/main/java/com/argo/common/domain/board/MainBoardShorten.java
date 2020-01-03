@@ -9,10 +9,10 @@ import java.util.List;
 
 @Data
 public class MainBoardShorten {
-    public Long boardId; //;
-    public String user_email; //
-    public String post;
-    public String title; //
-    public Date createdAt; //
-    public Date updatedAt;
+    private Long boardId; //;
+    private String userEmail; //
+    private String post;
+    private String title; //
+    private Date createdAt; //
+    private Date updatedAt;
 }

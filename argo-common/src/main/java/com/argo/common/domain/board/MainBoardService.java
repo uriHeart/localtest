@@ -1,5 +1,6 @@
 package com.argo.common.domain.board;
 
+import com.argo.common.configuration.ArgoBizException;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +21,7 @@ import javax.xml.ws.Response;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -32,13 +34,6 @@ public class MainBoardService {
 
     /** retrives all undeleted list **/
     public ResponseEntity<BoardReturnParam> getNotDeletedList() {
-//        List<List<Object>> target;
-//        List<List<Object>> originalList = mainBoardRepository.findList();
-//        JSONArray jsonArray = new JSONArray();
-//        for (List<Object> list: originalList) {
-//            JSONArray newArray = new JSONArray(list);
-//            jsonArray.put(newArray);
-//        }
         List<MainBoardShorten> shortenList = listForList(mainBoardRepository.findAllByParentIsNullAndDeletedIsFalseOrderByCreatedAt());
         return new ResponseEntity<>(BoardReturnParam.builder()
                 .success(true)
@@ -52,11 +47,11 @@ public class MainBoardService {
             if (mainboard.isDeleted()) {
                 continue;
             };
-            MainBoardShorten shorten = new MainBoardShorten();
-            shorten.boardId = mainboard.getBoardId();
-            shorten.user_email = mainboard.getUserEmail();
-            shorten.title = mainboard.getTitle();
-            shorten.createdAt = mainboard.getCreatedAt();
+            MainBoardShorten shorten= new MainBoardShorten();
+            shorten.setBoardId(mainboard.getBoardId());
+            shorten.setUserEmail(mainboard.getUserEmail());
+            shorten.setTitle(mainboard.getTitle());
+            shorten.setCreatedAt(mainboard.getCreatedAt());
             shortenList.add(shorten);
         }
         return shortenList;
@@ -69,10 +64,10 @@ public class MainBoardService {
                 continue;
             };
             MainBoardReply replyList = new MainBoardReply();
-            replyList.boardId = mainboard.getBoardId();
-            replyList.user_email = mainboard.getUserEmail();
-            replyList.post = mainboard.getPost();
-            replyList.createdAt = mainboard.getCreatedAt();
+            replyList.setBoardId(mainboard.getBoardId());
+            replyList.setUserEmail(mainboard.getUserEmail());
+            replyList.setPost(mainboard.getPost());
+            replyList.setCreatedAt(mainboard.getCreatedAt());
             shortenList.add(replyList);
         }
         return shortenList;
@@ -86,7 +81,7 @@ public class MainBoardService {
         return new ResponseEntity<>(BoardReturnParam.builder()
                 .success(true)
                 .boardId(selectedBoard.getBoardId())
-                .user_email(selectedBoard.getUserEmail())
+                .userEmail(selectedBoard.getUserEmail())
                 .title(selectedBoard.getTitle())
                 .post(selectedBoard.getPost())
                 .replies(replyList)
@@ -102,13 +97,12 @@ public class MainBoardService {
            throw new InvalidInputException();
        }
         try {
-            //need exceptionHandlingmethod
             MainBoard newPost = BoardParamToMainBoard(boardParam);
             mainBoardRepository.save(newPost);
             return new ResponseEntity<>(BoardReturnParam.builder()
                     .success(true)
                     .boardId(newPost.getBoardId())
-                    .user_email(boardParam.getUser_email())
+                    .userEmail(boardParam.getUserEmail())
                     .title(boardParam.getTitle())
                     .post(newPost.getPost())
                     .build(), HttpStatus.OK);
@@ -125,7 +119,7 @@ public class MainBoardService {
         String post = boardParam.getPost().replace("<p>", "");
         post = post.replace("</p>", "");
         MainBoard newBoard = new MainBoard();
-        newBoard.setUserEmail(boardParam.getUser_email());
+        newBoard.setUserEmail(boardParam.getUserEmail());
         newBoard.setTitle(boardParam.getTitle());
         newBoard.setPost(post);
         return newBoard;
@@ -133,7 +127,7 @@ public class MainBoardService {
 
     public MainBoard BoardParamToReply(BoardReceiverParam boardParam) {
         MainBoard newBoard = new MainBoard();
-        newBoard.setUserEmail(boardParam.getUser_email());
+        newBoard.setUserEmail(boardParam.getUserEmail());
         newBoard.setTitle("답글");
         newBoard.setPost(boardParam.getPost());
         newBoard.setParent(boardParam.getParent());
@@ -155,7 +149,7 @@ public class MainBoardService {
             return new ResponseEntity<>(BoardReturnParam.builder()
                     .success(true)
                     .boardId(parent)
-                    .user_email(boardParam.getUser_email())
+                    .userEmail(boardParam.getUserEmail())
                     .title(boardParam.getTitle())
                     .post(selectedBoard.getPost())
                     .reply(boardParam.getPost())
@@ -172,14 +166,30 @@ public class MainBoardService {
         return mainBoardRepository.existsMainBoardByBoardId(boardId);
     }
 
-    public void deleteBoardByBoardId(Long boardId) {
-//        getBoardById(boardId).Delete(boardId);
-        mainBoardRepository.findMainBoardByBoardId(boardId).setDeleted(true);
-//        RESTART_AFTER = "ALTER SEQUENCE main_board_board_id_seq RESTART WITH" + boardId;
-//        mainBoardRepository.resetBoardIdAfterDelete();
-//        RESTART_AFTER = "";
+    public ResponseEntity<BoardReturnParam> modify(BoardReceiverParam newPost) {
+        MainBoard targetBoard = mainBoardRepository.findMainBoardByBoardId(newPost.getBoardId());
+        targetBoard.setTitle(newPost.getTitle());
+        targetBoard.setPost(newPost.getPost());
+        targetBoard.setUserEmail(newPost.getUserEmail());
+        targetBoard.setUpdatedAt(new Date());
+        mainBoardRepository.save(targetBoard);
+        return new ResponseEntity<>(BoardReturnParam.builder()
+                .success(true)
+                .boardId(targetBoard.getBoardId())
+                .build(), HttpStatus.OK);
     }
 
-
-
+    public ResponseEntity<BoardReturnParam> delete(Long boardId) throws ArgoBizException {
+        try {
+            MainBoard target = mainBoardRepository.findMainBoardByBoardId(boardId);
+            target.setDeleted(true);
+            mainBoardRepository.saveAndFlush(target);
+            return new ResponseEntity<>(BoardReturnParam.builder()
+                    .success(true)
+                    .deleted(target.isDeleted())
+                    .build(), HttpStatus.OK);
+        } catch (RuntimeException E) {
+            throw new RuntimeException("no board of such id has been detected");
+        }
+    }
 }
