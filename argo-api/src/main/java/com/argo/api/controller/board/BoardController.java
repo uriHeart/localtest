@@ -35,11 +35,11 @@ public class BoardController {
         return mainBoardRepository.findAll();
     }
 
+
      /** need specification while retrieving the whole list**/
     @GetMapping(value = "/list")
     @ResponseBody
     public ResponseEntity<BoardReturnParam> getList() {
-
         return mainBoardService.getNotDeletedList();
     }
 
@@ -60,7 +60,6 @@ public class BoardController {
     }
 
     //게시글 등록
-    // send Serial board_id at the creation stage //
     @PostMapping(value = "/post/save")
     public ResponseEntity<BoardReturnParam> addNewPostBoard(@RequestBody BoardReceiverParam newPost) throws InvalidInputException {
         log.info(" sample param : {}", newPost.toString());
@@ -81,6 +80,7 @@ public class BoardController {
     }
 
 
+    //필요?
     @GetMapping(value = "/list/check/{boardId}")
     public boolean assertExists(@PathVariable Long boardId) {
         if (mainBoardService.assertExists(boardId)) {

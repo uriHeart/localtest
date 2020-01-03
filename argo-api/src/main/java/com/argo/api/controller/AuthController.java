@@ -66,7 +66,6 @@ public class AuthController {
         if (user == null) {
             return new ResponseEntity<>(LoginResult.builder().success(false).message("로그인이 되지 않았습니다.").build(), HttpStatus.OK);
         } else {
-            System.out.println(user.getLoginId());
             return new ResponseEntity<>(LoginResult.builder()
                     .success(true)
                     .vendorId(user.getVendorId())

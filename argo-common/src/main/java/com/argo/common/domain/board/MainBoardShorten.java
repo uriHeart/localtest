@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
+@Builder
 public class MainBoardShorten {
     private Long boardId; //;
     private String userEmail; //
@@ -15,4 +16,13 @@ public class MainBoardShorten {
     private String title; //
     private Date createdAt; //
     private Date updatedAt;
+
+    public static MainBoardShorten from(MainBoard data) {
+        return MainBoardShorten.builder()
+                .boardId(data.getBoardId())
+                .userEmail(data.getUserEmail())
+                .title(data.getTitle())
+                .createdAt(data.getCreatedAt())
+                .build();
+    }
 }
