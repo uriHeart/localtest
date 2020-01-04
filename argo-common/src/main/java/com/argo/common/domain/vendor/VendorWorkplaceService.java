@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -37,6 +38,7 @@ public class VendorWorkplaceService {
     workplaceTypeFilter workplaceTypeFilter;
 
 
+    //stream 불가.
     public ResponseEntity<VendorWorkplaceReturnParam> getListPerVendor(Long vendorId) {
         List<VendorWorkplace> ListOfWorkplaces =
                 vendorWorkplaceRepository.findAllByVendorAndDeletedIsFalseOrderByCreatedAtDesc(vendorService.getVendor(vendorId));
@@ -48,10 +50,15 @@ public class VendorWorkplaceService {
             shorten.setWorkplaceId(workplace.getVendorWorkplaceId());
             shorten.setType(workplaceTypeFilter.toKorean(workplace.getType(), workplace.getEtcDetail()));
             shorten.setWorkplaceName(workplace.getWorkplaceName());
-            /* if user_address == null ,then admin 코드필요 */
             shorten.setAddress(workplace.getFullAddress());
-            shorten.setLatitude(workplace.getAdminSelectedLatitude());
-            shorten.setLongitude(workplace.getAdminSelectedLongitude());
+            Double latitude = workplace.getUserSelectedLatitude();
+            Double longitude = workplace.getUserSelectedLongitude();
+            if (latitude == null || longitude == null) {
+                latitude = workplace.getAdminSelectedLatitude();
+                longitude = workplace.getAdminSelectedLongitude();
+            }
+            shorten.setLatitude(latitude);
+            shorten.setLongitude(longitude);
             shorten.setCreatedAt(workplace.getCreatedAt());
             returnList.add(shorten);
         }
@@ -66,18 +73,7 @@ public class VendorWorkplaceService {
         log.info("vendor ID is : {} ", vendorId);
         List<VendorWorkplace> ListOfWorkplaces =
                 vendorWorkplaceRepository.findAllByVendorAndDeletedIsFalseOrderByCreatedAtDesc(vendorService.getVendor(vendorId));
-        List<VendorWorkplaceMapData> mapDataList = new ArrayList<>();
-        for (VendorWorkplace workplace : ListOfWorkplaces) {
-            VendorWorkplaceMapData mapData = new VendorWorkplaceMapData();
-            mapData.setVendorWorkplaceId(workplace.getVendorWorkplaceId());
-            mapData.setWorkplaceName(workplace.getWorkplaceName());
-            mapData.setFullAddress(workplace.getFullAddress());
-            //STREAM 으로 바꾸고 latitude longitude (user 꺼 priority)
-            mapData.setLatitude(workplace.getAdminSelectedLatitude());
-            mapData.setLongitude(workplace.getAdminSelectedLongitude());
-            mapDataList.add(mapData);
-        }
-
+        List<VendorWorkplaceMapData> mapDataList = ListOfWorkplaces.stream().map(VendorWorkplaceMapData::from).collect(Collectors.toList());
         return new ResponseEntity<>(VendorWorkplaceReturnParam
                 .builder()
                 .success(true)
@@ -90,12 +86,8 @@ public class VendorWorkplaceService {
         return vendorWorkplaceRepository.existsVendorWorkplaceByHashCodeEqualsAndDeletedIsFalse(hashCode);
     }
     public ResponseEntity<VendorWorkplaceReturnParam> addWorkPlace(VendorWorkplaceReceiveParam receiveParam) {
-        log.info(" receiver : {}", receiveParam);
         Integer targetHashCode = receiveParam.getTypeNum().toString().hashCode() + receiveParam.getFullAddress().hashCode() + receiveParam.getWorkplaceName().hashCode();
-        log.info(" 타입 해쉬 : {}", receiveParam.getTypeNum().toString().hashCode());
-        log.info(" 주소 해쉬 : {}", receiveParam.getFullAddress().hashCode());
-        log.info(" 이름 해쉬 : {}", receiveParam.getWorkplaceName().hashCode());
-        log.info(" receiver : {}", targetHashCode);
+        log.info("hashCode : {}", targetHashCode);
         if (validate(targetHashCode)) {
             return new ResponseEntity<>(VendorWorkplaceReturnParam.builder()
                     .success(false)
@@ -118,16 +110,8 @@ public class VendorWorkplaceService {
     }
 
     private VendorWorkplace receiveParamToWorkPlace(VendorWorkplaceReceiveParam receiveParam) {
-        /* N/A 로 넣을지? */
-//        if (receiveParam.getWorkplaceName().equals("")) {
-//            newWorkplace.setWorkplaceName("N/A");
-//        } else {
-//            newWorkplace.setWorkplaceName(receiveParam.getWorkplaceName());
-//        }
-        log.info(" receiver is : {}", receiveParam);
         VendorWorkplace newWorkplace = new VendorWorkplace();
         newWorkplace.setVendor(vendorService.getVendor(receiveParam.getVendorId()));
-        log.info(" receive type : {}", receiveParam.getTypeNum());
         log.info(" refined type : {}", workplaceTypeFilter.receiverFilter(receiveParam.getTypeNum()));
         newWorkplace.setType(workplaceTypeFilter.receiverFilter(receiveParam.getTypeNum()));
         newWorkplace.setEtcDetail(receiveParam.getEtcDetail());

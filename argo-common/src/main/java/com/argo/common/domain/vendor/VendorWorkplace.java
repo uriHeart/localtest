@@ -30,10 +30,6 @@ public class VendorWorkplace implements SystemMetadata {
     @JoinColumn(name="vendor_id")
     private Vendor vendor;
 
-//    @Column(name = "type")
-//    private String type;
-    //enum
-
     @Enumerated(EnumType.STRING)
     private VendorWorkplaceType type;
 
