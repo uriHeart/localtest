@@ -15,6 +15,6 @@ import java.util.List;
 public interface MainBoardRepository extends JpaRepository<MainBoard, Long> {
     MainBoard findMainBoardByBoardId(Long boardId);
     boolean existsMainBoardByBoardId(Long boardId);
-    List<MainBoard> findAllByParentIsNullAndDeletedIsFalseOrderByCreatedAt();
+    List<MainBoard> findAllByParentIsNullAndDeletedIsFalseOrderByCreatedAtDesc();
     List<MainBoard> findAllByDeletedIsFalseAndParentEqualsOrderByCreatedAt(Long boardId);
 }

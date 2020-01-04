@@ -20,8 +20,8 @@ public class MainBoardShorten {
     public static MainBoardShorten from(MainBoard data) {
         return MainBoardShorten.builder()
                 .boardId(data.getBoardId())
-                .userEmail(data.getUserEmail())
                 .title(data.getTitle())
+                .userEmail(data.getUserEmail())
                 .createdAt(data.getCreatedAt())
                 .build();
     }

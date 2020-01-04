@@ -36,25 +36,27 @@ public class MainBoardService {
 
     /** retrives all undeleted list **/
     public ResponseEntity<BoardReturnParam> getNotDeletedList() {
-        List<MainBoardShorten> shortenList = listForList(mainBoardRepository.findAllByParentIsNullAndDeletedIsFalseOrderByCreatedAt());
+        List<MainBoardShorten> shortenList = listForList(mainBoardRepository.findAllByParentIsNullAndDeletedIsFalseOrderByCreatedAtDesc());
+        System.out.println(shortenList);
         return new ResponseEntity<>(BoardReturnParam.builder()
                 .success(true)
-                .rowData(shortenList).build(), HttpStatus.OK);
+                .rowData(shortenList)
+                .build(), HttpStatus.OK);
     }
 
 
     public List<MainBoardShorten> listForList(List<MainBoard> originalList) {
-        return originalList.stream().filter(m -> !m.isDeleted())
-                .map(MainBoardShorten::from).collect(Collectors.toList());
+        return originalList.stream().map(MainBoardShorten::from).collect(Collectors.toList());
     }
 
     public List<MainBoardReply> listForReplyList(List<MainBoard> originalList) {
-        return originalList.stream().filter(m -> !m.isDeleted()).map(MainBoardReply::from).collect(Collectors.toList());
+        return originalList.stream().map(MainBoardReply::from).collect(Collectors.toList());
     }
 
     public ResponseEntity<BoardReturnParam> readBoard(Long boardId) {
         MainBoard selectedBoard = mainBoardRepository.findMainBoardByBoardId(boardId);
         List<MainBoardReply> replyList = listForReplyList(mainBoardRepository.findAllByDeletedIsFalseAndParentEqualsOrderByCreatedAt(selectedBoard.getBoardId()));
+        System.out.println(replyList);
         return new ResponseEntity<>(BoardReturnParam.builder()
                 .success(true)
                 .boardId(selectedBoard.getBoardId())
@@ -87,12 +89,12 @@ public class MainBoardService {
 
 
     public MainBoard BoardParamToMainBoard(BoardReceiverParam boardParam) {
-        String post = boardParam.getPost().replace("<p>", "");
-        post = post.replace("</p>", "");
+//        String post = boardParam.getPost().replace("<p>", "");
+//        post = post.replace("</p>", "");
         MainBoard newBoard = new MainBoard();
         newBoard.setUserEmail(boardParam.getUserEmail());
         newBoard.setTitle(boardParam.getTitle());
-        newBoard.setPost(post);
+        newBoard.setPost(boardParam.getPost());
         return newBoard;
     }
 
@@ -110,11 +112,14 @@ public class MainBoardService {
         try {
             Long parent = boardParam.getParent();
             MainBoard selectedBoard = mainBoardRepository.findMainBoardByBoardId(parent);
+            System.out.println(parent);
+            System.out.println(selectedBoard);
             MainBoard newReply = BoardParamToReply(boardParam);
             mainBoardRepository.save(newReply);
-            newReply.setBoardId(0L);
-            newReply.setParent(boardParam.getBoardId());
-            List<MainBoardReply> replyList = listForReplyList(mainBoardRepository.findAllByDeletedIsFalseAndParentEqualsOrderByCreatedAt(selectedBoard.getBoardId()));
+            List<MainBoard> list = mainBoardRepository.findAllByDeletedIsFalseAndParentEqualsOrderByCreatedAt(selectedBoard.getBoardId());
+            System.out.println(list);
+            List<MainBoardReply> replyList = listForReplyList(list);
+            System.out.println(replyList);
             return new ResponseEntity<>(BoardReturnParam.builder()
                     .success(true)
                     .boardId(parent)

@@ -46,9 +46,6 @@ public class BoardController {
     //읽기
     @GetMapping(value = "/read/{boardId}")
     public ResponseEntity<BoardReturnParam> findBoard(@PathVariable Long boardId) throws RuntimeException {
-        if (!assertExists(boardId) || boardId == null) {
-            throw new RuntimeException("잚못된 boardId 입니다");
-        }
         return mainBoardService.readBoard(boardId);
     }
 
@@ -81,11 +78,11 @@ public class BoardController {
 
 
     //필요?
-    @GetMapping(value = "/list/check/{boardId}")
-    public boolean assertExists(@PathVariable Long boardId) {
-        if (mainBoardService.assertExists(boardId)) {
-            return true;
-        };
-        return false;
-    }
+//    @GetMapping(value = "/list/check/{boardId}")
+//    public boolean assertExists(@PathVariable Long boardId) {
+//        if (mainBoardService.assertExists(boardId)) {
+//            return true;
+//        };
+//        return false;
+//    }
 }
