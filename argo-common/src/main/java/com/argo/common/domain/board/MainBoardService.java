@@ -112,14 +112,10 @@ public class MainBoardService {
         try {
             Long parent = boardParam.getParent();
             MainBoard selectedBoard = mainBoardRepository.findMainBoardByBoardId(parent);
-            System.out.println(parent);
-            System.out.println(selectedBoard);
             MainBoard newReply = BoardParamToReply(boardParam);
             mainBoardRepository.save(newReply);
             List<MainBoard> list = mainBoardRepository.findAllByDeletedIsFalseAndParentEqualsOrderByCreatedAt(selectedBoard.getBoardId());
-            System.out.println(list);
             List<MainBoardReply> replyList = listForReplyList(list);
-            System.out.println(replyList);
             return new ResponseEntity<>(BoardReturnParam.builder()
                     .success(true)
                     .boardId(parent)
@@ -136,12 +132,6 @@ public class MainBoardService {
                     .build(), HttpStatus.OK);
         }
     }
-
-
-    public boolean assertExists(Long boardId) {
-        return mainBoardRepository.existsMainBoardByBoardId(boardId);
-    }
-
 
     @Transactional(readOnly = false)
     public ResponseEntity<BoardReturnParam> modify(BoardReceiverParam newPost) {

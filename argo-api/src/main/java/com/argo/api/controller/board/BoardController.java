@@ -75,14 +75,4 @@ public class BoardController {
         System.out.println(boardId);
         return mainBoardService.delete(boardId);
     }
-
-
-    //필요?
-//    @GetMapping(value = "/list/check/{boardId}")
-//    public boolean assertExists(@PathVariable Long boardId) {
-//        if (mainBoardService.assertExists(boardId)) {
-//            return true;
-//        };
-//        return false;
-//    }
 }
