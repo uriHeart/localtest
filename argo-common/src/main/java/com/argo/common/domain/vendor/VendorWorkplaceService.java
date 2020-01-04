@@ -47,14 +47,11 @@ public class VendorWorkplaceService {
             log.info(" receive type : {}", workplaceTypeFilter.toKorean(workplace.getType(), workplace.getEtcDetail()));
             shorten.setWorkplaceId(workplace.getVendorWorkplaceId());
             shorten.setType(workplaceTypeFilter.toKorean(workplace.getType(), workplace.getEtcDetail()));
-            if (workplace.getWorkplaceName().equals("")) {
-                shorten.setWorkplaceName("N/A");
-            } else {
-                shorten.setWorkplaceName(workplace.getWorkplaceName());
-            }
+            shorten.setWorkplaceName(workplace.getWorkplaceName());
+            /* if user_address == null ,then admin 코드필요 */
             shorten.setAddress(workplace.getFullAddress());
-            shorten.setLatitude(workplace.getLatitude());
-            shorten.setLongitude(workplace.getLongitude());
+            shorten.setLatitude(workplace.getAdminSelectedLatitude());
+            shorten.setLongitude(workplace.getAdminSelectedLongitude());
             shorten.setCreatedAt(workplace.getCreatedAt());
             returnList.add(shorten);
         }
@@ -66,7 +63,7 @@ public class VendorWorkplaceService {
     }
 
     public ResponseEntity<VendorWorkplaceReturnParam> fullMap(Long vendorId) {
-
+        log.info("vendor ID is : {} ", vendorId);
         List<VendorWorkplace> ListOfWorkplaces =
                 vendorWorkplaceRepository.findAllByVendorAndDeletedIsFalseOrderByCreatedAtDesc(vendorService.getVendor(vendorId));
         List<VendorWorkplaceMapData> mapDataList = new ArrayList<>();
@@ -75,8 +72,9 @@ public class VendorWorkplaceService {
             mapData.setVendorWorkplaceId(workplace.getVendorWorkplaceId());
             mapData.setWorkplaceName(workplace.getWorkplaceName());
             mapData.setFullAddress(workplace.getFullAddress());
-            mapData.setLatitude(workplace.getLatitude());
-            mapData.setLongitude(workplace.getLongitude());
+            //STREAM 으로 바꾸고 latitude longitude (user 꺼 priority)
+            mapData.setLatitude(workplace.getAdminSelectedLatitude());
+            mapData.setLongitude(workplace.getAdminSelectedLongitude());
             mapDataList.add(mapData);
         }
 
@@ -88,56 +86,45 @@ public class VendorWorkplaceService {
                 .build(), HttpStatus.OK);
     }
 
+    private Boolean validate(Integer hashCode) {
+        return vendorWorkplaceRepository.existsVendorWorkplaceByHashCodeEqualsAndDeletedIsFalse(hashCode);
+    }
     public ResponseEntity<VendorWorkplaceReturnParam> addWorkPlace(VendorWorkplaceReceiveParam receiveParam) {
         log.info(" receiver : {}", receiveParam);
-        /* 빌더 vs Object.set */
-//        VendorWorkplace workplace =
-//                VendorWorkplace.builder()
-//                        .vendor(vendorService.getVendor(receiveParam.getVendorId()))
-//                        .fullAddress(receiveParam.getFullAddress())
-//                        .type(receiveParam.getType())
-//                        .jibunAddress(receiveParam.getJibunAddress())
-//                        .jibunAddressEnglish(receiveParam.getJibunAddressEnglish())
-//                        .roadAddress(receiveParam.getRoadAddress())
-//                        .roadAddressEnglish(receiveParam.getRoadAddressEnglish())
-//                        .postCode(receiveParam.getPostCode())
-//                        .zipCode(receiveParam.getZipCode())
-//                        .nationlInfo(receiveParam.getNationalInfo())
-//                        .createdAt(new Date())
-//                        .build();
-//        vendorWorkplaceRepository.saveAndFlush(workplace);
-//        VendorWorkplace workplace = receiveParamToWorkPlace(receiveParam);
-//
-
+        Integer targetHashCode = receiveParam.getTypeNum().toString().hashCode() + receiveParam.getFullAddress().hashCode() + receiveParam.getWorkplaceName().hashCode();
+        log.info(" 타입 해쉬 : {}", receiveParam.getTypeNum().toString().hashCode());
+        log.info(" 주소 해쉬 : {}", receiveParam.getFullAddress().hashCode());
+        log.info(" 이름 해쉬 : {}", receiveParam.getWorkplaceName().hashCode());
+        log.info(" receiver : {}", targetHashCode);
+        if (validate(targetHashCode)) {
+            return new ResponseEntity<>(VendorWorkplaceReturnParam.builder()
+                    .success(false)
+                    .message("이미 등록된 작업장입니다")
+                    .build(), HttpStatus.OK);
+        }
         try {
-            RefinedAddressDto refinedAddress = kakaoAddressRefiner.refine(receiveParam.getJibunAddress()).getRefinedAddress();
-            Double latitude = refinedAddress.getLatitude();
-            Double longitude = refinedAddress.getLongitude();
             VendorWorkplace newWorkplace = receiveParamToWorkPlace(receiveParam);
-            newWorkplace.setLatitude(latitude);
-            newWorkplace.setLongitude(longitude);
+            newWorkplace.setHashCode(targetHashCode);
             vendorWorkplaceRepository.saveAndFlush(newWorkplace);
             return new ResponseEntity<>(VendorWorkplaceReturnParam
                     .builder()
                     .vendorId(newWorkplace.getVendor().getVendorId())
                     .workplaceId(newWorkplace.getVendorWorkplaceId())
                     .success(true)
-                    .latitude(latitude)
-                    .longitude(longitude)
                     .build(), HttpStatus.OK);
-
         } catch (ArgoBizException e) {
-            return new ResponseEntity<>(VendorWorkplaceReturnParam.builder().message(e.getMessage()).build(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(VendorWorkplaceReturnParam.builder().success(false).build(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public VendorWorkplace receiveParamToWorkPlace(VendorWorkplaceReceiveParam receiveParam) {
+    private VendorWorkplace receiveParamToWorkPlace(VendorWorkplaceReceiveParam receiveParam) {
         /* N/A 로 넣을지? */
 //        if (receiveParam.getWorkplaceName().equals("")) {
 //            newWorkplace.setWorkplaceName("N/A");
 //        } else {
 //            newWorkplace.setWorkplaceName(receiveParam.getWorkplaceName());
 //        }
+        log.info(" receiver is : {}", receiveParam);
         VendorWorkplace newWorkplace = new VendorWorkplace();
         newWorkplace.setVendor(vendorService.getVendor(receiveParam.getVendorId()));
         log.info(" receive type : {}", receiveParam.getTypeNum());
@@ -150,9 +137,50 @@ public class VendorWorkplaceService {
         newWorkplace.setFullAddress(receiveParam.getFullAddress());
         newWorkplace.setJibunAddress(receiveParam.getJibunAddress());
         newWorkplace.setJibunAddressEnglish(receiveParam.getJibunAddressEnglish());
+        newWorkplace.setAdminSelectedLatitude(receiveParam.getAdminSelectedLatitude());
+        newWorkplace.setAdminSelectedLongitude(receiveParam.getAdminSelectedLongitude());
+        newWorkplace.setUserSelectedLatitude(receiveParam.getUserSelectedLatitude());
+        newWorkplace.setUserSelectedLongitude(receiveParam.getUserSelectedLongitude());
         newWorkplace.setRoadAddress(receiveParam.getRoadAddress());
         newWorkplace.setRoadAddressEnglish(receiveParam.getRoadAddressEnglish());
         newWorkplace.setNationlInfo(receiveParam.getNationalInfo());
         return newWorkplace;
+    }
+
+    public ResponseEntity<VendorWorkplaceReturnParam> getLocation(String address) {
+        try {
+            RefinedAddressDto refinedAddress = kakaoAddressRefiner.refine(address).getRefinedAddress();
+            Double latitude = refinedAddress.getLatitude();
+            Double longitude = refinedAddress.getLongitude();
+            log.info("admin_latitude {}", latitude);
+            log.info("admin_longitude {}", longitude);
+            return new ResponseEntity<>(VendorWorkplaceReturnParam
+                    .builder()
+                    .success(true)
+                    .latitude(latitude)
+                    .longitude(longitude)
+                    .build(), HttpStatus.OK);
+
+        } catch (ArgoBizException e) {
+            return new ResponseEntity<>(VendorWorkplaceReturnParam.builder().success(false).message(e.getMessage()).build(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<VendorWorkplaceReturnParam> viewEachMap(Long workplaceId) {
+        VendorWorkplace target = vendorWorkplaceRepository.findByVendorWorkplaceId(workplaceId);
+        Double latitude = target.getUserSelectedLatitude();
+        Double longitude = target.getUserSelectedLongitude();
+        // 사용자 지정 좌표가 없을시 admin 꺼로 대체
+        if (latitude == null || longitude == null) {
+            latitude = target.getAdminSelectedLatitude();
+            longitude = target.getAdminSelectedLongitude();
+        }
+        return new ResponseEntity<>(VendorWorkplaceReturnParam
+                .builder()
+                .workplaceId(workplaceId)
+                .latitude(latitude)
+                .longitude(longitude)
+                .build(), HttpStatus.OK
+        );
     }
 }

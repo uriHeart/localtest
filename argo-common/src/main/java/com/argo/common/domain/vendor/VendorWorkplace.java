@@ -70,11 +70,20 @@ public class VendorWorkplace implements SystemMetadata {
     @Column(name = "national_info")
     private String nationlInfo;
 
-    @Column(name = "latitude")
-    private Double latitude;
+    @Column(name = "admin_selected_latitude")
+    private Double adminSelectedLatitude;
 
-    @Column(name = "longitude")
-    private Double longitude;
+    @Column(name = "admin_selected_longitude")
+    private Double adminSelectedLongitude;
+
+    @Column(name = "user_selected_latitude")
+    private Double userSelectedLatitude;
+
+    @Column(name = "user_selected_longitude")
+    private Double userSelectedLongitude;
+
+    @Column(name = "hash_code")
+    private Integer hashCode;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)

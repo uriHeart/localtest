@@ -22,6 +22,8 @@ public class VendorWorkplaceReceiveParam {
     private String zipCode;
     private String postCode;
     private String nationalInfo;
-    private Double latitude; // PutMapping
-    private Double longitude; // PutMapping
+    private Double adminSelectedLatitude; // PutMapping
+    private Double adminSelectedLongitude; // PutMapping
+    private Double userSelectedLatitude;
+    private Double userSelectedLongitude;
 }

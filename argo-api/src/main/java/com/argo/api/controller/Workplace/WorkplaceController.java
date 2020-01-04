@@ -43,17 +43,7 @@ public class WorkplaceController {
 
     @GetMapping(value = "/map/{workplaceId}")
     public ResponseEntity<VendorWorkplaceReturnParam> viewMap(@PathVariable Long workplaceId) {
-        VendorWorkplace target = vendorWorkplaceRepository.findByVendorWorkplaceId(workplaceId);
-        Double latitude = target.getLatitude();
-        Double longitude = target.getLongitude();
-
-        return new ResponseEntity<>(VendorWorkplaceReturnParam
-                .builder()
-                .workplaceId(workplaceId)
-                .latitude(latitude)
-                .longitude(longitude)
-                .build(), HttpStatus.OK
-        );
+        return vendorWorkplaceService.viewEachMap(workplaceId);
     }
 
     @GetMapping(value = "/fullMap/{vendorId}")
@@ -77,21 +67,28 @@ public class WorkplaceController {
         return vendorWorkplaceService.addWorkPlace(receiveParam);
     }
 
-    @PutMapping(value="/addworkplace/location")
-    public ResponseEntity<VendorWorkplaceReturnParam> updateLocation(@RequestParam Long workplaceId, Double latitude, Double longitude) {
-        VendorWorkplace target = vendorWorkplaceRepository.findByVendorWorkplaceId(workplaceId);
-        target.setLatitude(latitude);
-        target.setLongitude(longitude);
-        vendorWorkplaceRepository.saveAndFlush(target);
-        return new ResponseEntity<>(VendorWorkplaceReturnParam
-                .builder()
-                .success(true)
-                .workplaceId(target.getVendorWorkplaceId())
-                .build(), HttpStatus.OK);
-    }
+//    @PutMapping(value="/addworkplace/location")
+//    public ResponseEntity<VendorWorkplaceReturnParam> updateLocation(@RequestParam Long workplaceId, Double latitude, Double longitude) {
+//        VendorWorkplace target = vendorWorkplaceRepository.findByVendorWorkplaceId(workplaceId);
+//        target.setLatitude(latitude);
+//        target.setLongitude(longitude);
+//        vendorWorkplaceRepository.saveAndFlush(target);
+//        return new ResponseEntity<>(VendorWorkplaceReturnParam
+//                .builder()
+//                .success(true)
+//                .workplaceId(target.getVendorWorkplaceId())
+//                .build(), HttpStatus.OK);
+//    }
 
     @GetMapping(value = "/enum")
     public List<EnumElem> returnEnum() {
         return workplaceTypeFilter.listEnum();
+    }
+
+    //Get Mapping 으로는 request param을 받을 수 없는것인지.
+    @PutMapping(value= "/location")
+    public ResponseEntity<VendorWorkplaceReturnParam> getLocation(@RequestParam String address) {
+        System.out.println("get loc");
+        return vendorWorkplaceService.getLocation(address);
     }
 }
