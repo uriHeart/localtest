@@ -52,14 +52,8 @@ public class WorkplaceController {
     }
 
     @GetMapping(value = "/delete/{workplaceId}")
-    public ResponseEntity<VendorWorkplaceReturnParam> findWorkplaces(@PathVariable Long workplaceId) {
-        VendorWorkplace target = vendorWorkplaceRepository.findByVendorWorkplaceId(workplaceId);
-        target.setDeleted(true);
-        vendorWorkplaceRepository.saveAndFlush(target);
-        return new ResponseEntity<>(VendorWorkplaceReturnParam
-                .builder()
-                .success(true)
-                .build(), HttpStatus.OK);
+    public ResponseEntity<VendorWorkplaceReturnParam> delete(@PathVariable Long workplaceId) {
+        return vendorWorkplaceService.delete(workplaceId);
     }
 
     @PostMapping(value= "/addworkplace")

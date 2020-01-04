@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -73,7 +74,8 @@ public class VendorWorkplaceService {
         log.info("vendor ID is : {} ", vendorId);
         List<VendorWorkplace> ListOfWorkplaces =
                 vendorWorkplaceRepository.findAllByVendorAndDeletedIsFalseOrderByCreatedAtDesc(vendorService.getVendor(vendorId));
-        List<VendorWorkplaceMapData> mapDataList = ListOfWorkplaces.stream().map(VendorWorkplaceMapData::from).collect(Collectors.toList());
+        List<VendorWorkplaceMapData> mapDataList = ListOfWorkplaces.stream().filter(w -> !w.isDeleted()).map(VendorWorkplaceMapData::from).collect(Collectors.toList());
+        log.info("mapdata: {} ", mapDataList);
         return new ResponseEntity<>(VendorWorkplaceReturnParam
                 .builder()
                 .success(true)
@@ -85,6 +87,8 @@ public class VendorWorkplaceService {
     private Boolean validate(Integer hashCode) {
         return vendorWorkplaceRepository.existsVendorWorkplaceByHashCodeEqualsAndDeletedIsFalse(hashCode);
     }
+
+    @Transactional(readOnly = false)
     public ResponseEntity<VendorWorkplaceReturnParam> addWorkPlace(VendorWorkplaceReceiveParam receiveParam) {
         Integer targetHashCode = receiveParam.getTypeNum().toString().hashCode() + receiveParam.getFullAddress().hashCode() + receiveParam.getWorkplaceName().hashCode();
         log.info("hashCode : {}", targetHashCode);
@@ -97,7 +101,7 @@ public class VendorWorkplaceService {
         try {
             VendorWorkplace newWorkplace = receiveParamToWorkPlace(receiveParam);
             newWorkplace.setHashCode(targetHashCode);
-            vendorWorkplaceRepository.saveAndFlush(newWorkplace);
+            vendorWorkplaceRepository.save(newWorkplace);
             return new ResponseEntity<>(VendorWorkplaceReturnParam
                     .builder()
                     .vendorId(newWorkplace.getVendor().getVendorId())
@@ -166,5 +170,16 @@ public class VendorWorkplaceService {
                 .longitude(longitude)
                 .build(), HttpStatus.OK
         );
+    }
+
+    @Transactional(readOnly = false)
+    public ResponseEntity<VendorWorkplaceReturnParam> delete(Long workplaceId) {
+        VendorWorkplace target = vendorWorkplaceRepository.findByVendorWorkplaceId(workplaceId);
+        target.setDeleted(true);
+        vendorWorkplaceRepository.save(target);
+        return new ResponseEntity<>(VendorWorkplaceReturnParam
+                .builder()
+                .success(true)
+                .build(), HttpStatus.OK);
     }
 }
