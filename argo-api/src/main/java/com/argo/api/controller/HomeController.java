@@ -1,6 +1,7 @@
 package com.argo.api.controller;
 
 import com.argo.common.domain.common.email.EmailService;
+import com.argo.common.domain.notification.Notifier;
 import com.argo.common.domain.order.ArgoOrder;
 import com.argo.common.domain.order.OrderAddress;
 import com.argo.common.domain.order.OrderService;
@@ -13,6 +14,7 @@ import com.argo.common.domain.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
@@ -35,6 +37,9 @@ public class HomeController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    Notifier notifier;
 
     @GetMapping(value = "/order/rawEventConversionTest")
     @ResponseStatus(value = HttpStatus.OK)
@@ -59,5 +64,10 @@ public class HomeController {
     @GetMapping("/order/testMail")
     public void testMail() {
         emailService.sendSimpleMessage("syy0320@gmail.com", "Test Email", "Argo Test");
+    }
+
+    @PostMapping("/notification")
+    public void testNotification() {
+        notifier.send("슬랙 노티 테스트 - " + System.currentTimeMillis());
     }
 }
