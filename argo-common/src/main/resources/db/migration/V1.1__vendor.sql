@@ -97,9 +97,6 @@ INSERT INTO vendor_channels (vendor_id, sales_channel_id, enabled, auto_collecti
 (1, 18, true, false, null)
 ;
 
-
-
-
  -- vendor_channel_accounts 로 이름 변경
 
 CREATE TABLE channel_vendor_accounts (
@@ -113,6 +110,8 @@ CREATE TABLE channel_vendor_accounts (
   CONSTRAINT channel_vendor_accounts_pk PRIMARY KEY (channel_vendor_account_id),
   CONSTRAINT channel_vendor_accounts_uk01 UNIQUE (vendor_id, sales_channel_id)
 );
+
+
 
 INSERT INTO channel_vendor_accounts (vendor_id, sales_channel_id, credential_id, credential_password) VALUES
 (1, 1, '/dYXT/o6bVw0anv8hg5YWg==', '/EjrfGgL4AMixXEZxvqRSQ=='),

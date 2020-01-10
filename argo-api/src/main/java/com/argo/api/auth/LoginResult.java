@@ -19,3 +19,4 @@ public class LoginResult {
     private String dashboardUrl;
     private String totalDashboardUrl;
 }
+

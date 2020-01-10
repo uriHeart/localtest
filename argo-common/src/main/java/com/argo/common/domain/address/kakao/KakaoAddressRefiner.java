@@ -55,7 +55,6 @@ public class KakaoAddressRefiner extends AbstractAddressRefiner {
 
         try {
             Map result = objectMapper.readValue(dataResult, Map.class);
-
             Map meta = (Map) result.get("meta");
             if ((Integer)meta.get("total_count") == 1) {
                 List<Map> docs = (ArrayList) result.get("documents");

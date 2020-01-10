@@ -12,9 +12,7 @@ import org.springframework.security.core.SpringSecurityCoreVersion;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AuthUser implements GrantedAuthority {
-
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
-
     private String loginId;
     private String userName;
     private String password;
