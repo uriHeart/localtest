@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -31,11 +32,9 @@ public class Notifier {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
-        map.add("text", message);
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
-        String result = restTemplate.postForObject(slackHookUrl, request , String.class);
+        HttpEntity<NotiParam> request = new HttpEntity<>(NotiParam.builder().text(message).build(), headers);
+        ResponseEntity<String> result = restTemplate.postForEntity(slackHookUrl, request , String.class);
 
         log.info("send result : {}", result);
     }
