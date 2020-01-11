@@ -2,6 +2,7 @@ package com.argo.collect.domain.collector;
 
 import com.argo.collect.ArgoCollectorApplication;
 import com.argo.collect.domain.auth.AuthorityManager;
+import com.argo.common.domain.channel.SalesChannel;
 import com.argo.common.domain.common.util.ArgoDateUtil;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.vendor.VendorChannel;
@@ -42,7 +43,7 @@ public class Cafe24OrderCollectorTest extends AbstractOrderCollector {
     private VendorService vendorService;
 
     @Override
-    public boolean isSupport(String channel) {
+    public boolean isSupport(SalesChannel channel) {
         return false;
     }
 

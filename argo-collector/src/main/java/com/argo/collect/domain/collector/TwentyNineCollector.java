@@ -2,6 +2,7 @@ package com.argo.collect.domain.collector;
 
 import com.argo.collect.domain.auth.AuthorityManager;
 import com.argo.common.configuration.ArgoBizException;
+import com.argo.common.domain.channel.SalesChannel;
 import com.argo.common.domain.common.util.ArgoDateUtil;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.vendor.VendorChannel;
@@ -13,8 +14,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -28,8 +27,8 @@ import java.util.Map;
 public class TwentyNineCollector extends AbstractOrderCollector {
 
     @Override
-    public boolean isSupport(String channel) {
-        return "TWENTY_NINE_CM".equals(channel);
+    public boolean isSupport(SalesChannel channel) {
+        return "TWENTY_NINE_CM".equals(channel.getCode());
     }
 
     @Override
