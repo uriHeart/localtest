@@ -2,6 +2,7 @@ package com.argo.collect.domain.collector;
 
 import com.argo.collect.ArgoCollectorApplication;
 import com.argo.collect.domain.collector.ssg.SsgRawEventParam;
+import com.argo.common.domain.channel.SalesChannel;
 import com.argo.common.domain.common.jpa.EventType;
 import com.argo.common.domain.common.util.ArgoDateUtil;
 import com.argo.common.domain.raw.RawEvent;
@@ -43,7 +44,7 @@ public class SsgOrderCollectorTest extends AbstractOrderCollector {
     private VendorService vendorService;
 
     @Override
-    public boolean isSupport(String channel) {
+    public boolean isSupport(SalesChannel channel) {
         return false;
     }
 

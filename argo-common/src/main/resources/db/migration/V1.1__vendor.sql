@@ -112,6 +112,7 @@ CREATE TABLE channel_vendor_accounts (
 );
 
 
+
 INSERT INTO channel_vendor_accounts (vendor_id, sales_channel_id, credential_id, credential_password) VALUES
 (1, 1, '/dYXT/o6bVw0anv8hg5YWg==', '/EjrfGgL4AMixXEZxvqRSQ=='),
 (1, 2, 'MmEFpXSLYkDpmzKSwkE3Jg==','BqzHi4A7eW1G0RD1whEKRA==');

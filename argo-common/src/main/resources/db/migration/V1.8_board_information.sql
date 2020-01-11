@@ -15,8 +15,4 @@ ALTER TABLE main_board owner to argo;
 
 INSERT INTO main_board (user_email, title, post)
 VALUES ('ghdeowls206@gmail.com', 'sampletitle', 'samplepost');
-
-INSERT INTO main_board (user_email, title, post)
-VALUES ('sample_email2', 'sampletitle', 'samplepost');
-
 SELECT * FROM main_board;

@@ -13,13 +13,13 @@ import java.util.List;
 public class BoardReturnParam {
     private boolean success;
     private Long boardId; //;
-    private String user_email; //
+    private String userEmail; //
     private String title; //
     private String post; //
     private String message;  //NEED TO ADD EXCEPTION MESSAGE
     private Long parent; //DEFAULT NULL
     private boolean deleted;
-    private boolean admin_reply; //DEFAULT false
+    private boolean adminReply; //DEFAULT false
     private List<MainBoardShorten> rowData;
     private List<MainBoardReply> replies;
     private String reply;

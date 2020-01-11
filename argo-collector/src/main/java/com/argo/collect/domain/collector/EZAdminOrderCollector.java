@@ -1,19 +1,18 @@
 package com.argo.collect.domain.collector;
 
 import com.argo.collect.domain.auth.AuthorityManager;
-import com.argo.collect.domain.enums.SalesChannel;
+import com.argo.common.configuration.ArgoBizException;
+import com.argo.common.domain.channel.SalesChannel;
 import com.argo.common.domain.common.util.ArgoDateUtil;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.vendor.VendorChannel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -30,10 +29,11 @@ public class EZAdminOrderCollector extends AbstractOrderCollector {
 
     private static final int ROW_SIZE = 50;
     private static final int MAX_ROW = 500;
+    private static final Set EXCLUDED_TARGETS = ImmutableSet.of("플레이어", "무신사");
 
     @Override
-    public boolean isSupport(String channel) {
-        return "EZ_ADMIN".equals(channel);
+    public boolean isSupport(SalesChannel channel) {
+        return "EZ_ADMIN".equals(channel.getCode());
     }
 
     @Override
@@ -81,20 +81,23 @@ public class EZAdminOrderCollector extends AbstractOrderCollector {
                         String collectDate = dataRow.get("collect_date").toString() + " " + dataRow.get("collect_time").toString();
                         String orderDate = dataRow.get("order_date").toString() + " " + dataRow.get("order_time").toString();
                         String orderId = order.get("order_id").toString();
+                        String channelName = dataRow.get("shop_name").toString();
 
-                        RawEvent rawEvent = RawEvent.builder()
-                                .vendorId(channel.getVendor().getVendorId())
-                                .channelId(channel.getSalesChannel().getSalesChannelId())
-                                .format("JSON")
-                                .auto(true)
-                                .data(objectMapper.writeValueAsString(order))
-                                .orderId(orderId.startsWith("C") ? orderId.substring(1) : orderId)
-                                .publishedAt(ArgoDateUtil.getDate(orderDate.startsWith("0000-00-00") ? collectDate : orderDate))
-                                .createdAt(new Date())
-                                .build();
-                        rawEventService.save(rawEvent);
+                        if (!EXCLUDED_TARGETS.contains(channelName)) {
+                            RawEvent rawEvent = RawEvent.builder()
+                                    .vendorId(channel.getVendor().getVendorId())
+                                    .channelId(channel.getSalesChannel().getSalesChannelId())
+                                    .format("JSON")
+                                    .auto(true)
+                                    .data(objectMapper.writeValueAsString(order))
+                                    .orderId(orderId.startsWith("C") ? orderId.substring(1) : orderId)
+                                    .publishedAt(ArgoDateUtil.getDate(orderDate.startsWith("0000-00-00") ? collectDate : orderDate))
+                                    .createdAt(new Date())
+                                    .build();
+                            rawEventService.save(rawEvent);
+                        }
                     } catch (JsonProcessingException e) {
-                        e.printStackTrace();
+                        throw new ArgoBizException(e.getMessage());
                     }
                 }
         );
@@ -117,7 +120,7 @@ public class EZAdminOrderCollector extends AbstractOrderCollector {
                         dataRows.add(objectMapper.readValue(item.get("data_row").toString(), Map.class));
                         item.remove("data_row");
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        throw new ArgoBizException(e.getMessage());
                     }
                 }
         );
@@ -148,9 +151,8 @@ public class EZAdminOrderCollector extends AbstractOrderCollector {
         try {
             return objectMapper.readValue(result, Map.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ArgoBizException(e.getMessage());
         }
-        return null;
     }
 
 }

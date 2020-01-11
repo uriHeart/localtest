@@ -65,7 +65,4 @@ public class MainBoard implements SystemMetadata {
     public void replied() {
         this.replied = true;
     }
-
-    // need implementation along with the replyboard
-    public void newQuestion(Long boardId) {}
 }

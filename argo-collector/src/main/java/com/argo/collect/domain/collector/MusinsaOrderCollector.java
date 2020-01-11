@@ -2,6 +2,7 @@ package com.argo.collect.domain.collector;
 
 import com.argo.collect.domain.auth.AuthorityManager;
 import com.argo.collect.domain.event.EventConverter;
+import com.argo.common.domain.channel.SalesChannel;
 import com.argo.common.domain.common.jpa.EventType;
 import com.argo.common.domain.common.util.ArgoDateUtil;
 import com.argo.common.domain.raw.RawEvent;
@@ -41,8 +42,8 @@ public class MusinsaOrderCollector extends AbstractOrderCollector {
     private final List<EventConverter> eventConverter;
 
     @Override
-    public boolean isSupport(String channel) {
-        return "MUSINSA".equals(channel);
+    public boolean isSupport(SalesChannel channel) {
+        return "MUSINSA".equals(channel.getCode());
     }
 
     @Override

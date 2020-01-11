@@ -1,5 +1,6 @@
 package com.argo.common.domain.board;
 
+import com.argo.common.configuration.ArgoBizException;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.eclipse.jdt.core.compiler.InvalidInputException;
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +22,9 @@ import javax.xml.ws.Response;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -32,61 +36,31 @@ public class MainBoardService {
 
     /** retrives all undeleted list **/
     public ResponseEntity<BoardReturnParam> getNotDeletedList() {
-//        List<List<Object>> target;
-//        List<List<Object>> originalList = mainBoardRepository.findList();
-//        JSONArray jsonArray = new JSONArray();
-//        for (List<Object> list: originalList) {
-//            JSONArray newArray = new JSONArray(list);
-//            jsonArray.put(newArray);
-//        }
         List<MainBoardShorten> shortenList = listForList(mainBoardRepository.findAllByParentIsNullAndDeletedIsFalseOrderByCreatedAtDesc());
+        System.out.println(shortenList);
         return new ResponseEntity<>(BoardReturnParam.builder()
                 .success(true)
-                .rowData(shortenList).build(), HttpStatus.OK);
+                .rowData(shortenList)
+                .build(), HttpStatus.OK);
     }
 
 
-    public static List<MainBoardShorten> listForList(List<MainBoard> originalList) {
-        ArrayList<MainBoardShorten> shortenList = new ArrayList<>();
-        for (MainBoard mainboard : originalList) {
-            if (mainboard.isDeleted()) {
-                continue;
-            };
-            MainBoardShorten shorten = new MainBoardShorten();
-            shorten.boardId = mainboard.getBoardId();
-            shorten.user_email = mainboard.getUserEmail();
-            shorten.title = mainboard.getTitle();
-            shorten.createdAt = mainboard.getCreatedAt();
-            shortenList.add(shorten);
-        }
-        return shortenList;
+    public List<MainBoardShorten> listForList(List<MainBoard> originalList) {
+        return originalList.stream().map(MainBoardShorten::from).collect(Collectors.toList());
     }
 
-    public static List<MainBoardReply> listforReplyList(List<MainBoard> originalList) {
-        ArrayList<MainBoardReply> shortenList = new ArrayList<>();
-        for (MainBoard mainboard : originalList) {
-            if (mainboard.isDeleted()) {
-                continue;
-            };
-            MainBoardReply replyList = new MainBoardReply();
-            replyList.boardId = mainboard.getBoardId();
-            replyList.user_email = mainboard.getUserEmail();
-            replyList.post = mainboard.getPost();
-            replyList.createdAt = mainboard.getCreatedAt();
-            shortenList.add(replyList);
-        }
-        return shortenList;
+    public List<MainBoardReply> listForReplyList(List<MainBoard> originalList) {
+        return originalList.stream().map(MainBoardReply::from).collect(Collectors.toList());
     }
-
 
     public ResponseEntity<BoardReturnParam> readBoard(Long boardId) {
         MainBoard selectedBoard = mainBoardRepository.findMainBoardByBoardId(boardId);
-        List<MainBoardReply> replyList = listforReplyList(mainBoardRepository.findAllByDeletedIsFalseAndParentEqualsOrderByCreatedAt(selectedBoard.getBoardId()));
+        List<MainBoardReply> replyList = listForReplyList(mainBoardRepository.findAllByDeletedIsFalseAndParentEqualsOrderByCreatedAt(selectedBoard.getBoardId()));
         System.out.println(replyList);
         return new ResponseEntity<>(BoardReturnParam.builder()
                 .success(true)
                 .boardId(selectedBoard.getBoardId())
-                .user_email(selectedBoard.getUserEmail())
+                .userEmail(selectedBoard.getUserEmail())
                 .title(selectedBoard.getTitle())
                 .post(selectedBoard.getPost())
                 .replies(replyList)
@@ -97,65 +71,55 @@ public class MainBoardService {
 
 
     /** can't understand why ResponseEntity<BoardReturnParam does not work **/
+    @Transactional(readOnly = false)
     public ResponseEntity<BoardReturnParam> addNewPostBoard(BoardReceiverParam boardParam) throws InvalidInputException {
         if (boardParam.getPost().length() > 9999 || boardParam.getTitle().length() > 300) {
-           throw new InvalidInputException();
-       }
-        try {
-            //need exceptionHandlingmethod
-            MainBoard newPost = BoardParamToMainBoard(boardParam);
-            mainBoardRepository.save(newPost);
-            return new ResponseEntity<>(BoardReturnParam.builder()
-                    .success(true)
-                    .boardId(newPost.getBoardId())
-                    .user_email(boardParam.getUser_email())
-                    .title(boardParam.getTitle())
-                    .post(newPost.getPost())
-                    .build(), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(BoardReturnParam.builder()
-                    .success(false)
-                    .message(e.getMessage())
-                    .build(), HttpStatus.OK);
+            throw new InvalidInputException("제목 또는 글 숫자가 너무 깁니다");
         }
+        MainBoard newPost = BoardParamToMainBoard(boardParam);
+        mainBoardRepository.save(newPost);
+        return new ResponseEntity<>(BoardReturnParam.builder()
+                .success(true)
+                .boardId(newPost.getBoardId())
+                .userEmail(boardParam.getUserEmail())
+                .title(boardParam.getTitle())
+                .post(newPost.getPost())
+                .build(), HttpStatus.OK);
     }
 
 
     public MainBoard BoardParamToMainBoard(BoardReceiverParam boardParam) {
-        String post = boardParam.getPost().replace("<p>", "");
-        post = post.replace("</p>", "");
+//        String post = boardParam.getPost().replace("<p>", "");
+//        post = post.replace("</p>", "");
         MainBoard newBoard = new MainBoard();
-        newBoard.setUserEmail(boardParam.getUser_email());
+        newBoard.setUserEmail(boardParam.getUserEmail());
         newBoard.setTitle(boardParam.getTitle());
-        newBoard.setPost(post);
+        newBoard.setPost(boardParam.getPost());
         return newBoard;
     }
 
     public MainBoard BoardParamToReply(BoardReceiverParam boardParam) {
         MainBoard newBoard = new MainBoard();
-        newBoard.setUserEmail(boardParam.getUser_email());
+        newBoard.setUserEmail(boardParam.getUserEmail());
         newBoard.setTitle("답글");
         newBoard.setPost(boardParam.getPost());
         newBoard.setParent(boardParam.getParent());
-        //if admin_reply setadminreply(true). not, false)
         return newBoard;
     }
 
-    // board id sequence 에 적용 절대 안되야함. Admin인지 아닌지 구분해야함
+    @Transactional(readOnly = false)
     public ResponseEntity<BoardReturnParam> addNewReply(BoardReceiverParam boardParam) throws InvalidInputException {
         try {
-            //need exceptionHandlingmethod
             Long parent = boardParam.getParent();
             MainBoard selectedBoard = mainBoardRepository.findMainBoardByBoardId(parent);
             MainBoard newReply = BoardParamToReply(boardParam);
             mainBoardRepository.save(newReply);
-            newReply.setBoardId(0L);
-            newReply.setParent(boardParam.getBoardId());
-            List<MainBoardReply> replyList = listforReplyList(mainBoardRepository.findAllByDeletedIsFalseAndParentEqualsOrderByCreatedAt(selectedBoard.getBoardId()));
+            List<MainBoard> list = mainBoardRepository.findAllByDeletedIsFalseAndParentEqualsOrderByCreatedAt(selectedBoard.getBoardId());
+            List<MainBoardReply> replyList = listForReplyList(list);
             return new ResponseEntity<>(BoardReturnParam.builder()
                     .success(true)
                     .boardId(parent)
-                    .user_email(boardParam.getUser_email())
+                    .userEmail(boardParam.getUserEmail())
                     .title(boardParam.getTitle())
                     .post(selectedBoard.getPost())
                     .reply(boardParam.getPost())
@@ -168,18 +132,33 @@ public class MainBoardService {
                     .build(), HttpStatus.OK);
         }
     }
-        public boolean assertExists(Long boardId) {
-        return mainBoardRepository.existsMainBoardByBoardId(boardId);
+
+    @Transactional(readOnly = false)
+    public ResponseEntity<BoardReturnParam> modify(BoardReceiverParam newPost) {
+        MainBoard targetBoard = mainBoardRepository.findMainBoardByBoardId(newPost.getBoardId());
+        targetBoard.setTitle(newPost.getTitle());
+        targetBoard.setPost(newPost.getPost());
+        targetBoard.setUserEmail(newPost.getUserEmail());
+        targetBoard.setUpdatedAt(new Date());
+        mainBoardRepository.save(targetBoard);
+        return new ResponseEntity<>(BoardReturnParam.builder()
+                .success(true)
+                .boardId(targetBoard.getBoardId())
+                .build(), HttpStatus.OK);
     }
 
-    public void deleteBoardByBoardId(Long boardId) {
-//        getBoardById(boardId).Delete(boardId);
-        mainBoardRepository.findMainBoardByBoardId(boardId).setDeleted(true);
-//        RESTART_AFTER = "ALTER SEQUENCE main_board_board_id_seq RESTART WITH" + boardId;
-//        mainBoardRepository.resetBoardIdAfterDelete();
-//        RESTART_AFTER = "";
+    @Transactional(readOnly = false)
+    public ResponseEntity<BoardReturnParam> delete(Long boardId) throws ArgoBizException {
+        try {
+            MainBoard target = mainBoardRepository.findMainBoardByBoardId(boardId);
+            target.setDeleted(true);
+            mainBoardRepository.save(target);
+            return new ResponseEntity<>(BoardReturnParam.builder()
+                    .success(true)
+                    .deleted(target.isDeleted())
+                    .build(), HttpStatus.OK);
+        } catch (RuntimeException E) {
+            throw new RuntimeException("no board of such id has been detected");
+        }
     }
-
-
-
 }

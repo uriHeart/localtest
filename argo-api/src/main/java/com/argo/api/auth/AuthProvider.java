@@ -34,10 +34,6 @@ public class AuthProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) {
         try {
             String loginId = authentication.getName();
-            System.out.println(authentication);
-            System.out.println(authentication.getCredentials());
-            System.out.println(httpSession);
-            System.out.println(httpSession.getAttribute("_RSA_WEB_Key_"));
             String password = rsaDecrypter.decryptRsa(authentication.getCredentials().toString(), httpSession.getAttribute("_RSA_WEB_Key_").toString());
             ArgoUser user = Optional.ofNullable(userService.getUserByLoginId(loginId)).orElseThrow(new ApiException("등록된 사용자가 아닙니다."));
             AuthUser authUser = modelMapper.map(user, AuthUser.class);

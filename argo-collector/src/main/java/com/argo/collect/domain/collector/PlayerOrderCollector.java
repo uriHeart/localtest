@@ -1,7 +1,8 @@
 package com.argo.collect.domain.collector;
 
 import com.argo.collect.domain.auth.AuthorityManager;
-import com.argo.collect.domain.enums.SalesChannel;
+import com.argo.common.configuration.ArgoBizException;
+import com.argo.common.domain.channel.SalesChannel;
 import com.argo.common.domain.common.util.ArgoDateUtil;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.vendor.VendorChannel;
@@ -21,15 +22,14 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Slf4j
 @Service
 public class PlayerOrderCollector extends AbstractOrderCollector {
 
     @Override
-    public boolean isSupport(String channel) {
-        return "PLAYER".equals(channel);
+    public boolean isSupport(SalesChannel channel) {
+        return "PLAYER".equals(channel.getCode());
     }
 
     @Override
@@ -70,13 +70,13 @@ public class PlayerOrderCollector extends AbstractOrderCollector {
                                     .build();
                             rawEventService.save(rawEvent);
                         } catch (JsonProcessingException e) {
-                            e.printStackTrace();
+                            throw new ArgoBizException(e.getMessage());
                         }
                     }
             );
             log.info("data - {}", rawEvents);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ArgoBizException(e.getMessage());
         }
     }
 }

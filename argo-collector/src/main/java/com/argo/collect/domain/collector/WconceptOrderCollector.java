@@ -2,6 +2,7 @@ package com.argo.collect.domain.collector;
 
 import com.argo.collect.domain.auth.AuthorityManager;
 import com.argo.collect.domain.event.EventConverter;
+import com.argo.common.domain.channel.SalesChannel;
 import com.argo.common.domain.common.jpa.EventType;
 import com.argo.common.domain.common.util.ArgoDateUtil;
 import com.argo.common.domain.raw.RawEvent;
@@ -45,8 +46,8 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
     private RawEventRepository rawEventRepository;
 
     @Override
-    public boolean isSupport(String channel) {
-        return "W_CONCEPT".equals(channel);
+    public boolean isSupport(SalesChannel channel) {
+        return "W_CONCEPT".equals(channel.getCode());
     }
 
     @Override
