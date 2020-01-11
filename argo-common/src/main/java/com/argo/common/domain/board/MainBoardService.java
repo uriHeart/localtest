@@ -74,8 +74,8 @@ public class MainBoardService {
     @Transactional(readOnly = false)
     public ResponseEntity<BoardReturnParam> addNewPostBoard(BoardReceiverParam boardParam) throws InvalidInputException {
         if (boardParam.getPost().length() > 9999 || boardParam.getTitle().length() > 300) {
-           throw new InvalidInputException("제목 또는 글 숫자가 너무 깁니다");
-       }
+            throw new InvalidInputException("제목 또는 글 숫자가 너무 깁니다");
+        }
         MainBoard newPost = BoardParamToMainBoard(boardParam);
         mainBoardRepository.save(newPost);
         return new ResponseEntity<>(BoardReturnParam.builder()

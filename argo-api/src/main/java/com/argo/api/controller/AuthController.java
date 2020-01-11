@@ -48,6 +48,8 @@ public class AuthController {
     }
 
     private AuthUser get() {
+        long threadId = Thread.currentThread().getId();
+        log.info("=====" + threadId + "=======");
         try {
             if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().isEmpty()) {
                 return null;
@@ -69,6 +71,7 @@ public class AuthController {
             return new ResponseEntity<>(LoginResult.builder()
                     .success(true)
                     .vendorId(user.getVendorId())
+                    .userId(user.getLoginId())
                     .userStatus(user.getUserStatus())
                     .dashboardUrl("https://db.argoport.com/app/kibana#/dashboard/3416c9a0-0861-11ea-938e-293ce79f4c46?embed=true&_g=(refreshInterval%3A(pause%3A!f%2Cvalue%3A5000)%2Ctime%3A(from%3Anow-7d%2Cto%3Anow))")
                     .totalDashboardUrl("https://db.argoport.com/app/kibana#/dashboard/85687930-086f-11ea-938e-293ce79f4c46?embed=true&_g=(filters%3A!()%2CrefreshInterval%3A(pause%3A!f%2Cvalue%3A5000)%2Ctime%3A(from%3Anow-1y%2Cto%3Anow))")
@@ -80,15 +83,17 @@ public class AuthController {
     public ResponseEntity<LoginResult> login(@RequestBody LoginParams params, HttpSession httpSession) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(params.getLoginId(), params.getPassword());
         try {
+            long threadId = Thread.currentThread().getId();
+            log.info("=====" + threadId + "=======");
             Authentication authentication = authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
             AuthUser user = (AuthUser)authentication.getDetails();
             return new ResponseEntity<>(LoginResult.builder()
                     .success(true)
-                    .userId(user.getLoginId())
                     .vendorId(user == null ? 0L : user.getVendorId())
                     .userStatus(user != null ? user.getUserStatus() : null)
+                    .userId(user.getLoginId())
                     .dashboardUrl("https://db.argoport.com/app/kibana#/dashboard/3416c9a0-0861-11ea-938e-293ce79f4c46?embed=true&_g=(refreshInterval%3A(pause%3A!f%2Cvalue%3A5000)%2Ctime%3A(from%3Anow-7d%2Cto%3Anow))")
                     .totalDashboardUrl("https://db.argoport.com/app/kibana#/dashboard/85687930-086f-11ea-938e-293ce79f4c46?embed=true&_g=(filters%3A!()%2CrefreshInterval%3A(pause%3A!f%2Cvalue%3A5000)%2Ctime%3A(from%3Anow-1y%2Cto%3Anow))")
                     .build(), HttpStatus.OK);
