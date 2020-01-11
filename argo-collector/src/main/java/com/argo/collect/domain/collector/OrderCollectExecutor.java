@@ -36,7 +36,7 @@ public class OrderCollectExecutor {
             for (VendorChannel channel : vendorService.autoCollectingTargets()) {
                 collectors.forEach(
                         c -> {
-                            if (c.isSupport(channel.getSalesChannel().getCode())) {
+                            if (c.isSupport(channel.getSalesChannel())) {
                                 c.collect(channel);
                             }
                         });

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class workplaceTypeFilter {
+public class WorkplaceTypeFilter {
     //Front에서 종류 번호로 받을 것.
     public VendorWorkplaceType receiverFilter(Long typeNum) {
         if (typeNum == 1) {
