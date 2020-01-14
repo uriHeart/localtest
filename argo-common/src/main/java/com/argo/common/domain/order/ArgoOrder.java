@@ -81,6 +81,13 @@ public class ArgoOrder extends TargetData {
     @CassandraType(type = DataType.Name.BIGINT)
     private Long totalAmount;
 
+    @Column("parent_order_id")
+    @CassandraType(type = DataType.Name.TEXT)
+    private String parentOrderId;
+
+    //TO_DO
+    //refundAmount
+
     public OrderMetadata getMetadata() {
         if (this.metadata == null) {
             return OrderMetadata.builder().build();

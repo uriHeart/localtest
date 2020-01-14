@@ -1,12 +1,12 @@
 package com.argo.collect.domain.collector;
 
 import com.argo.collect.domain.auth.AuthorityManager;
+import com.argo.collect.domain.collector.claim.MusinsaClaimHandler;
 import com.argo.collect.domain.event.EventConverter;
 import com.argo.common.domain.channel.SalesChannel;
 import com.argo.common.domain.common.jpa.EventType;
 import com.argo.common.domain.common.util.ArgoDateUtil;
 import com.argo.common.domain.raw.RawEvent;
-import com.argo.common.domain.raw.RawEventRepository;
 import com.argo.common.domain.vendor.VendorChannel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,10 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -37,9 +34,9 @@ public class MusinsaOrderCollector extends AbstractOrderCollector {
 
     private final ObjectMapper objectMapper;
 
-    private final RawEventRepository rawEventRepository;
-
     private final List<EventConverter> eventConverter;
+
+    private final List<MusinsaClaimHandler> claimHandlers;
 
     @Override
     public boolean isSupport(SalesChannel channel) {
@@ -62,30 +59,29 @@ public class MusinsaOrderCollector extends AbstractOrderCollector {
         map.add("S_SDATE", ArgoDateUtil.getDateString(LocalDate.now().minusMonths(1)));
         map.add("S_EDATE", ArgoDateUtil.getDateString(LocalDate.now()));
         map.add("MENU_ID", "/po/order/ord01");
+        map.add("LIMIT", "1000");
+
+
 
         //수집대상 호출부분
-        List<Map> orderList =null;
+        List<Map> eventList =null;
         try {
-            orderList = (List<Map>) this.getUrlCallResult(dataUrl,headers,map).get("data");
+            eventList = (List<Map>) this.getUrlCallResult(dataUrl,headers,map).get("data");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        List<Map> claimList =new ArrayList<>();
 
-        orderList.forEach(event -> {
+        eventList.forEach(event -> {
 
-            EventType eventType = eventConverter.stream()
-                                    .filter(converter -> converter.isSupport(channel.getSalesChannel().getCode()))
-                                    .map(converter -> converter.getEventType(event))
-                                    .findFirst()
-                                    .orElse(EventType.OTHER);
 
-            event.put("event_type",eventType.toString());
-
+            //상세데이터조회
             String detailUrl = "https://bizest.musinsa.com/po/api/order/ord01/get_detail";
             String ORD_NO = event.get("ord_no").toString();
             String ORD_OPT_NO = event.get("ord_opt_no").toString();
 
+            //마스킹해제 파라미터
             String p_user_ord_cnt = "p_user_ord_cnt=goal%7C6";
             String p_user_ord_no = "p_user_ord_no=goal%7C"+ORD_NO;
 
@@ -111,15 +107,51 @@ public class MusinsaOrderCollector extends AbstractOrderCollector {
 
             //오더별로 묶여진 pay
             Map payment = (Map) orderDetail.get("payment");
-
             event.putAll(payment);
+
+            //claim
+            Map claimData = (Map) orderDetail.get("claim");
+            //불필요 기준데이터 삭제
+            claimData.remove("BANK_CODES");
+            claimData.remove("CLM_REASONS");
+
+            event.putAll(claimData);
+
+            Map claim = claimHandlers
+                    .stream()
+                    .filter(s ->s.isClaim(event))
+                    .map(s -> s.makeClaim(event))
+                    .findFirst()
+                    .orElse(null)
+                    ;
+            if(claim!=null && !claim.isEmpty()) claimList.add(claim);
 
         });
 
-        HashMap<String, RawEventParam> mergedOrder = this.mergeRawEvent(orderList);
+        eventList.addAll(claimList);
+
+        this.eventConvert(eventList,channel);
+
+        HashMap<String, RawEventParam> mergedOrder = this.mergeRawEvent(eventList);
 
         this.saveRawData(mergedOrder, channel);
 
+    }
+
+    public List<Map> eventConvert(List<Map> eventList,VendorChannel channel){
+
+        eventList.forEach(event ->{
+            //이벤트 타입변환
+            EventType eventType = eventConverter.stream()
+                    .filter(converter -> converter.isSupport(channel.getSalesChannel().getCode()))
+                    .map(converter -> converter.getEventType(event))
+                    .findFirst()
+                    .orElse(EventType.OTHER);
+
+            event.put("event_type",eventType.toString());
+        });
+
+        return eventList;
     }
 
     public Map getUrlCallResult(String dataUrl, HttpHeaders headers, MultiValueMap<String, String> paramMap) throws IOException {
@@ -144,17 +176,17 @@ public class MusinsaOrderCollector extends AbstractOrderCollector {
             }
 
             RawEvent rawEvent = RawEvent.builder()
-                .vendorId(channel.getVendor().getVendorId())
-                .channelId(channel.getSalesChannel().getSalesChannelId())
-                .format("JSON")
-                .auto(true)
-                .data(eventToJson)
-                .orderId(key)
-                .publishedAt(ArgoDateUtil.getDate(event.getPublishedAt().replaceAll("\\.", "-")))
-                .createdAt(new Date())
-                .event(event.getEventType())
-                .build();
-            rawEventRepository.save(rawEvent);
+                    .vendorId(channel.getVendor().getVendorId())
+                    .channelId(channel.getSalesChannel().getSalesChannelId())
+                    .format("JSON")
+                    .auto(true)
+                    .data(eventToJson)
+                    .orderId(key)
+                    .publishedAt(ArgoDateUtil.getDate(event.getPublishedAt().replaceAll("\\.", "-")))
+                    .createdAt(new Date())
+                    .event(event.getEventType())
+                    .build();
+            rawEventService.save(rawEvent);
         });
     }
 

@@ -13,4 +13,9 @@ public class VendorChannelService {
     public List<VendorChannel> listAllByEnabled() {
         return vendorChannelRepository.findByEnabled(true);
     }
+
+    public VendorChannel save(VendorChannel vendorChannel){
+        return vendorChannelRepository.save(vendorChannel);
+    }
+
 }

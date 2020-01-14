@@ -16,6 +16,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,13 +74,13 @@ public class DataConversionService implements ApplicationContextAware {
             conversionRules.stream().forEach(rule -> applyConversionRule(rule, jsonNode, targetInstance));
             return targetInstance;
         } else {
-           List list = Lists.newArrayList();
-           String listRef = template.getListReference();
-           ObjectNode originalObjNode = (ObjectNode) jsonNode;
-           JsonNode arrNode = jsonNode.findValue(template.getListReference());
-           originalObjNode.findParent(listRef).remove(listRef);
-           if(arrNode.isArray()) {
-               for (JsonNode node : arrNode) {
+            List list = Lists.newArrayList();
+            String listRef = template.getListReference();
+            ObjectNode originalObjNode = (ObjectNode) jsonNode;
+            JsonNode arrNode = jsonNode.findValue(template.getListReference());
+            originalObjNode.findParent(listRef).remove(listRef);
+            if(arrNode.isArray()) {
+                for (JsonNode node : arrNode) {
                     ObjectNode objNode = (ObjectNode) node;
                     objNode.set("originalData", originalObjNode);
                     Object targetInstance = ClassUtils.newInstance(targetClass);
@@ -89,7 +90,7 @@ public class DataConversionService implements ApplicationContextAware {
             } else {
                 throw new IllegalStateException("List Reference : " + template.getListReference() + " is not an array format");
             }
-           return list;
+            return list;
         }
     }
 
@@ -151,7 +152,7 @@ public class DataConversionService implements ApplicationContextAware {
             case AGGREGATE:
                 Double doubleSum = jsonNode.findValues(conversionRule.getSourceField())
                         .stream()
-                        .mapToDouble(node -> Double.valueOf(node.asText()))
+                        .mapToDouble(node -> Double.valueOf(StringUtils.isEmpty(node.asText())?"0":node.asText()))
                         .sum();
 
                 if(fieldType.equals(Long.class) || fieldType.equals(long.class)) {

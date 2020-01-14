@@ -19,6 +19,11 @@ import com.argo.common.domain.common.data.conversion.template.kasina.online.orde
 import com.argo.common.domain.common.data.conversion.template.kasina.online.order.KasinaOnlineOrderMetadataConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.kasina.online.vendoritem.KasinaOnlineOrderVendorItemLifecycleConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.kasina.online.vendoritem.KasinaOnlineOrderVendorItemMetadataConversionTemplate;
+import com.argo.common.domain.common.data.conversion.template.musinsa.address.*;
+import com.argo.common.domain.common.data.conversion.template.musinsa.order.MusinsaArgoOrderConversionTemplate;
+import com.argo.common.domain.common.data.conversion.template.musinsa.order.MusinsaOrderMetadataConversionTemplate;
+import com.argo.common.domain.common.data.conversion.template.musinsa.vendoritem.MusinsaOrderVendorItemLifecycleConversionTemplate;
+import com.argo.common.domain.common.data.conversion.template.musinsa.vendoritem.MusinsaOrderVendorItemMetadataConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.offline.flagship.order.FlagshipArgoOrderConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.offline.flagship.order.FlagshipOrderMetadataConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.offline.flagship.vendoritem.FlagshipOrderVendorItemLifecycleConversionTemplate;
@@ -27,6 +32,11 @@ import com.argo.common.domain.common.data.conversion.template.offline.hyundai.or
 import com.argo.common.domain.common.data.conversion.template.offline.hyundai.order.HyundaiOrderMetadataConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.offline.hyundai.vendoritem.HyundaiOrderVendorItemLifecycleConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.offline.hyundai.vendoritem.HyundaiOrderVendorItemMetadataConversionTemplate;
+import com.argo.common.domain.common.data.conversion.template.player.address.*;
+import com.argo.common.domain.common.data.conversion.template.player.order.PlayerArgoOrderConversionTemplate;
+import com.argo.common.domain.common.data.conversion.template.player.order.PlayerOrderMetadataConversionTemplate;
+import com.argo.common.domain.common.data.conversion.template.player.vendorItem.PlayerOrderVendorItemLifecycleConversionTemplate;
+import com.argo.common.domain.common.data.conversion.template.player.vendorItem.PlayerOrderVendorItemMetadataConversionTemplate;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,7 +55,6 @@ public class ConversionTemplateService {
 
     //@Autowired
     //private ReactiveConversionTemplateRepository reactiveConversionTemplateRepository;
-
 
     public void save(ConversionTemplate conversionTemplate) {
         if (conversionTemplate == null) {
@@ -150,10 +159,50 @@ public class ConversionTemplateService {
                 return getHyundaiOrderVendorItemLifecycleTemplate();
             case "19-ORDER-OrderVendorItemMetadata-com.argo.common.domain.order.vendoritem.OrderVendorItemMetadata":
                 return getHyundaiOrderVendorItemMetadataTemplate();
+
+            //musinsa
+            case "8-com.argo.common.domain.order.ArgoOrder":
+                return getMusinsaArgoOrderTemplate();
+            case "8-OrderMetadata-com.argo.common.domain.order.OrderMetadata":
+                return getMusinsaArgoOrderMetadataTemplate();
+            case "8-com.argo.common.domain.order.OrderAddress":
+                return getMusinsaOrderAddressTemplate();
+            case "8-OriginalAddress-com.argo.common.domain.order.OriginalAddress":
+                return getMusinsaOriginalAddressTemplate();
+            case "8-Orderer-com.argo.common.domain.order.Orderer":
+                return getMusinsaOrdererTemplate();
+            case "8-Recipient-com.argo.common.domain.order.Recipient":
+                return getMusinsaRecipientTemplate();
+            case "8-DeliveryRequest-com.argo.common.domain.order.DeliveryRequest":
+                return getMusinsaDeliveryRequestTemplate();
+            case "8-com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle":
+                return getMusinsaOrderVendorItemLifecycleTemplate();
+            case "8-OrderVendorItemMetadata-com.argo.common.domain.order.vendoritem.OrderVendorItemMetadata":
+                return getMusinsaOrderVendorItemMetadataTemplate();
+
+            //player
+            case "1-com.argo.common.domain.order.ArgoOrder":
+                return getPlayerArgoOrderTemplate();
+            case "1-OrderMetadata-com.argo.common.domain.order.OrderMetadata":
+                return getPlayerArgoOrderMetadataTemplate();
+            case "1-com.argo.common.domain.order.OrderAddress":
+                return getPlayerOrderAddressTemplate();
+            case "1-OriginalAddress-com.argo.common.domain.order.OriginalAddress":
+                return getPlayerOriginalAddressTemplate();
+            case "1-Orderer-com.argo.common.domain.order.Orderer":
+                return getPlayerOrdererTemplate();
+            case "1-Recipient-com.argo.common.domain.order.Recipient":
+                return getPlayerRecipientTemplate();
+            case "1-DeliveryRequest-com.argo.common.domain.order.DeliveryRequest":
+                return getPlayerDeliveryRequestTemplate();
+            case "1-com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle":
+                return getPlayerOrderVendorItemLifecycleTemplate();
+            case "1-OrderVendorItemMetadata-com.argo.common.domain.order.vendoritem.OrderVendorItemMetadata":
+                return getPlayerOrderVendorItemMetadataTemplate();
         }
         return null;
     }
-    
+
     // EZAdmin Templates
     public ConversionTemplate getEZAdminArgoOrderTemplate() { return EZAdminArgoOrderConversionTemplate.getArgoOrderTemplate(); }
 
@@ -172,7 +221,7 @@ public class ConversionTemplateService {
     public ConversionTemplate getEZAdminOrderVendorItemLifecycleTemplate() { return EZAdminOrderVendorItemLifecycleConversionTemplate.getOrderVendorItemLifecycleTemplate(); }
 
     public ConversionTemplate getEZAdminOrderVendorItemMetadataTemplate() { return EZAdminOrderVendorItemMetadataConversionTemplate.getOrderVendorItemMetadataTemplate(); }
-    
+
     // KasinaOnline Templates
     public ConversionTemplate getKasinaOnlineArgoOrderTemplate() { return KasinaOnlineArgoOrderConversionTemplate.getArgoOrderTemplate(); }
 
@@ -205,7 +254,7 @@ public class ConversionTemplateService {
     public ConversionTemplate getBeakerArgoOrderTemplate() {return BeakerArgoOrderConversionTemplate.getArgoOrderTemplate();}
 
     public ConversionTemplate getBeakerArgoOrderMetadataTemplate() {return BeakerOrderMetadataConversionTemplate.getOrderMetadataTemplate(); }
-    
+
     public ConversionTemplate getBeakerOrderVendorItemLifecycleTemplate(){ return BeakerOrderVendorItemLifecycleConversionTemplate.getOrderVendorItemLifecycleTemplate(); }
 
     public ConversionTemplate getBeakerOrderVendorItemMetadataTemplate(){ return BeakerOrderVendorItemMetadataConversionTemplate.getOrderVendorItemMetadataTemplate(); }
@@ -228,6 +277,30 @@ public class ConversionTemplateService {
 
     public ConversionTemplate getHyundaiOrderVendorItemMetadataTemplate(){ return HyundaiOrderVendorItemMetadataConversionTemplate.getOrderVendorItemMetadataTemplate(); }
 
+
+    //MUSINSA Templates
+    public ConversionTemplate getMusinsaArgoOrderTemplate(){return MusinsaArgoOrderConversionTemplate.getArgoOrderTemplate();}
+    public ConversionTemplate getMusinsaArgoOrderMetadataTemplate(){return MusinsaOrderMetadataConversionTemplate.getOrderMetadataTemplate();}
+    public ConversionTemplate getMusinsaOrderVendorItemLifecycleTemplate(){ return MusinsaOrderVendorItemLifecycleConversionTemplate.getOrderVendorItemLifecycleTemplate(); }
+    public ConversionTemplate getMusinsaOrderVendorItemMetadataTemplate(){ return MusinsaOrderVendorItemMetadataConversionTemplate.getOrderVendorItemMetadataTemplate(); }
+    public ConversionTemplate getMusinsaOrderAddressTemplate() { return MusinsaOrderAddressConversionTemplate.getOrderAddressTemplate(); }
+    public ConversionTemplate getMusinsaOriginalAddressTemplate() { return MusinsaOriginalAddressConversionTemplate.getOriginalAddressTemplate(); }
+    public ConversionTemplate getMusinsaOrdererTemplate() { return MusinsaOrdererConversionTemplate.getOrdererTemplate(); }
+    public ConversionTemplate getMusinsaRecipientTemplate() { return MusinsaRecipientConversionTemplate.getRecipientTemplate(); }
+    public ConversionTemplate getMusinsaDeliveryRequestTemplate() { return MusinsaDeliveryRequestConversionTemplate.getDeliveryRequestTemplate(); }
+
+    //Player
+    public ConversionTemplate getPlayerArgoOrderTemplate(){return PlayerArgoOrderConversionTemplate.getArgoOrderTemplate();}
+    public ConversionTemplate getPlayerArgoOrderMetadataTemplate(){return PlayerOrderMetadataConversionTemplate.getOrderMetadataTemplate();}
+    public ConversionTemplate getPlayerOrderVendorItemLifecycleTemplate(){ return PlayerOrderVendorItemLifecycleConversionTemplate.getOrderVendorItemLifecycleTemplate(); }
+    public ConversionTemplate getPlayerOrderVendorItemMetadataTemplate(){ return PlayerOrderVendorItemMetadataConversionTemplate.getOrderVendorItemMetadataTemplate(); }
+    public ConversionTemplate getPlayerOrderAddressTemplate() { return PlayerOrderAddressConversionTemplate.getOrderAddressTemplate(); }
+    public ConversionTemplate getPlayerOriginalAddressTemplate() { return PlayerOriginalAddressConversionTemplate.getOriginalAddressTemplate(); }
+    public ConversionTemplate getPlayerOrdererTemplate() { return PlayerOrdererConversionTemplate.getOrdererTemplate(); }
+    public ConversionTemplate getPlayerRecipientTemplate() { return PlayerRecipientConversionTemplate.getRecipientTemplate(); }
+    public ConversionTemplate getPlayerDeliveryRequestTemplate() { return PlayerDeliveryRequestConversionTemplate.getDeliveryRequestTemplate(); }
+
+
     public Map<String, ConversionTemplate> getRawEventConversionTemplateMap(SourceData sourceData) {
         Map templateMap = new HashMap<String, ConversionTemplate>();
 
@@ -240,7 +313,7 @@ public class ConversionTemplateService {
                 argoOrderTemplate = getEZAdminArgoOrderTemplate();
                 orderAddressTemplate = getEZAdminOrderAddressTemplate();
                 vendorItemLifecycleTemplate = getEZAdminOrderVendorItemLifecycleTemplate();
-    
+
                 templateMap.put(argoOrderTemplate.getTargetId(), argoOrderTemplate);
                 templateMap.put(orderAddressTemplate.getTargetId(), orderAddressTemplate);
                 templateMap.put(vendorItemLifecycleTemplate.getTargetId(), vendorItemLifecycleTemplate);
@@ -262,7 +335,7 @@ public class ConversionTemplateService {
                 templateMap.put(argoOrderTemplate.getTargetId(), argoOrderTemplate);
                 templateMap.put(vendorItemLifecycleTemplate.getTargetId(), vendorItemLifecycleTemplate);
                 break;
-                
+
             case "17-ORDER":
                 argoOrderTemplate = getBeakerArgoOrderTemplate();
                 vendorItemLifecycleTemplate = getBeakerOrderVendorItemLifecycleTemplate();
@@ -285,6 +358,24 @@ public class ConversionTemplateService {
 
                 templateMap.put(argoOrderTemplate.getTargetId(), argoOrderTemplate);
                 templateMap.put(vendorItemLifecycleTemplate.getTargetId(), vendorItemLifecycleTemplate);
+                break;
+
+            case "8":
+                argoOrderTemplate = getMusinsaArgoOrderTemplate();
+                orderAddressTemplate = getMusinsaOrderAddressTemplate();
+                vendorItemLifecycleTemplate = getMusinsaOrderVendorItemLifecycleTemplate();
+                templateMap.put(vendorItemLifecycleTemplate.getTargetId(), vendorItemLifecycleTemplate);
+                templateMap.put(orderAddressTemplate.getTargetId(), orderAddressTemplate);
+                templateMap.put(argoOrderTemplate.getTargetId(), argoOrderTemplate);
+                break;
+
+            case "1":
+                argoOrderTemplate = getPlayerArgoOrderTemplate();
+                orderAddressTemplate = getPlayerOrderAddressTemplate();
+                vendorItemLifecycleTemplate = getPlayerOrderVendorItemLifecycleTemplate();
+                templateMap.put(vendorItemLifecycleTemplate.getTargetId(), vendorItemLifecycleTemplate);
+                templateMap.put(orderAddressTemplate.getTargetId(), orderAddressTemplate);
+                templateMap.put(argoOrderTemplate.getTargetId(), argoOrderTemplate);
                 break;
         }
         return templateMap;

@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>파트너</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3" />
+
+    <link rel='shortcut icon' href='/favicon.ico' />
+    <link rel="stylesheet" media="all" href="/po/application/views/css/jquery/jquery-ui-1.11.0.css?20170407" />
+    <link rel="stylesheet" media="all" href="/po/application/views/css/style.css?201700919" />
+    <link rel="stylesheet" media="all" href="/po/application/views/css/responsive.css?20170707" />
+
+    <script type="text/javascript" src="/po/application/views/js/jquery-1.11.1-ui-1.11.0-ujs-3.1.4.js?20170407"></script>
+    <script type="text/javascript" src="/po/application/views/js/jquery.ui.touch-punch.min.js"></script>
+    <script type="text/javascript" src="/po/application/views/js/jquery.bxslider.js"></script>
+    <script type="text/javascript" src="/po/application/views/js/clipboard-js.js"></script>
+    <script type="text/javascript" src="/po/application/views/js/datepicker-ko.js?20170206"></script>
+    <script type="text/javascript" src="/po/application/views/js/application.js?20170918"></script>
+    <script type="text/javascript" src="/po/application/views/js/responsive.js?20170726"></script>
+    <script type="text/javascript" src="/po/application/views/js/common.js?20170919_9"></script>
+
+    <script type="text/javascript" src="/po/share/uix2tools.js?20170919_1"></script>
+    <script type="text/javascript" src="/po/share/auto_complete.js?20170731"></script>
+    <script type="text/javascript" src="/po/application/views/js/highcharts/highcharts.js"></script>
+
+    <!-- vue js //-->
+    <script src="/xf/vue/dist/vue-2.3.3.min.js"></script>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        var event_drag = "";
+        var app_yn = "N";
+
+        $(document).ready(function() {
+            // 리스트 검색영역 여닫기
+            $(document).on("click", "#btn_close_search", function() {
+                $(".box-materials-form").fadeToggle("fast").promise().done(function(){
+                    if($(".box-materials-form").css("display") == "none") {
+                        $("#btn_close_search").html("열기");
+                    } else {
+                        $("#btn_close_search").html("닫기");
+                    }
+                    setListHeight();
+                });
+            });
+
+            /*
+            $(".btn_modify").click(function() {
+                $(".box-btn-modify .box_modify_btn").fadeToggle("fast");
+            });
+            */
+            /*더보기 영역 토글*/
+            $(document).on("click", ".btn-extra-fn", function() {
+                if($(".wrapper-list-info .box-extra-fn-btn").hasClass("extra-fn-disp")) {
+                    $(".wrapper-list-info .box-extra-fn-btn").toggleClass("extra-fn-disp");
+                } else {
+                    $(".box-list-fn-contents").toggleClass("fn-contents-disp");
+                }
+                var dir = ($(this).find("span").text() == "↑") ? "↓" : "↑"  ;
+                $(this).find("span").text(dir);
+            });
+
+
+            $("body").click(function() {
+                $("#context-menu").hide();
+            });
+
+            $(document).on("touchmove",".nav-new-object",function() {
+                $(".menu-children").hide();
+            });
+
+            // 상단 공지사항 슬라이드
+            if(!checkMobile()){
+                $("#top_notice_list").bxSlider({
+                    auto : true,
+                    pager : false,
+                    speed : 700,
+                    mode : 'vertical',
+                    nextSelector: '#top-notice-next',
+                    prevSelector: '#top-notice-prev',
+                    nextText: '<img src="/po/application/views/images/btn_down_default.gif" alt="next" />',
+                    prevText: '<img src="/po/application/views/images/btn_up_default.gif" alt="prev" />'
+                });
+            }
+        });
+        //]]>
+    </script>
+
+    <script type="text/javascript" src="/xf/lib/jslib.js?20170731"></script><script type="text/javascript" src="/po/application/views/js/ckeditor/ckeditor.js?20170801"></script>
+    <script type="text/javascript" src="/po/application/views/js/ckeditor/init_ckeditor.js?20170801"></script>
+    <script type="text/javascript">
+        var prd02_detail_layout_type = "popup";
+
+        function setSamePrdname() {
+            $("input[name='GOODS_NM_ENG']").val($("input[name='GOODS_NM']").val()) ;
+        }
+
+        function helpWonga() {
+            var msg = "";
+
+            msg += "# 공급업체 상품의 경우 \n\n";
+            msg += "    - 최초 등록인 경우 원가입력 가능 (저장 후 수정 불가능)\n";
+            msg += "    - 이후에 입고를 통한 [재고확정] 된 원가금액이 현 상품에 자동반영\n";
+            msg += "    - 입력항목 우측의 [평균]은 현재 남아있는 재고의 개당 평균원가                     \n";
+            msg += "    - 상품관리 리스트 화면에서의 [평균]으로 표시 됨\n\n\n";
+            msg += "# 입점업체 상품의 경우 \n\n";
+            msg += "    - 언제라도 원가입력/변경 가능\n";
+            msg += "    - 원가가 변경되면 현재 남아있는 모든 재고의 원가금액도 변경 됨                      \n";
+            msg += "    - 입점업체(partner) 관리화면에서는 원가변경이 불가능\n";
+
+            alert( msg );
+        }
+
+        function openPrdSearch(){
+            popGoods('/po/popup/pop_goods?CALLBACK=prd02DetailSetGoods');
+        }
+
+        function prd02DetailSetGoods(goods_no, goods_nm, styleno){
+            if(document.prd02_detail_form.CMD.value == "addcmd"){
+                var goods = goods_no[0].split("|");
+                prdCopy(goods[0],goods[1]);
+            } else {
+
+                var ff = document.prd02_detail_form;
+                ar_val = goods_no[0].split("|");
+                ff.GOODS_NO.value = ar_val[0];
+                ff.GOODS_SUB.value = ar_val[1];
+
+                if(prd02_detail_layout_type == "layer") {
+
+                } else {
+                    location.href = '/po/prd/prd02?GOODS_NO=' + ar_val[0] + "&GOODS_SUB=" ;
+                }
+            }
+        }
+
+        function prdCopy(goods_no, goods_sub) {
+            if(prd02_detail_layout_type == "layer") {
+                var url = '/po/prd/prd02/detail?CMD=add&GOODS_NO=' + goods_no + '&GOODS_SUB=' + goods_sub + '&CP=Y';
+                openWindows("m_layer", "prd_detail", url, 1400, 800, 0, 0, true, false, true, true, false, true);
+            } else {
+                document.location.href = '/po/prd/prd02/detail?CMD=add&LAYOUT_TYPE=popup&GOODS_NO=' + goods_no + '&GOODS_SUB=' + goods_sub + '&CP=Y';
+            }
+        }
+
+        function cbOption() {
+            var goods_no = document.prd02_detail_form.GOODS_NO.value;
+            var goods_sub = document.prd02_detail_form.GOODS_SUB.value;
+
+            if(prd02_detail_layout_type == "layer") {
+                closePrd02Detail();
+                popPrdDetail(goods_no, goods_sub);
+            } else {
+                document.location.reload();
+            }
+        }
+
+        // 전시카테고리 추가
+        function prd02DetailSetDCategory(idx, text,mx_len) {
+            prd02DetailSetCategory(idx, text, mx_len, 'd');
+        }
+
+        function prd02DetailSetICategory(idx, text,mx_len) {
+            prd02DetailSetCategory(idx,text,mx_len, 'I');
+        }
+
+        function prd02DetailSetCategory(idx, text, mx_len, type) {
+            var seq, ar ,ar_txt;
+            ar_txt = text.split('>');
+            if(idx.length < mx_len){
+                alert("최하단에서만 등록 가능합니다");
+                return false;
+            }
+
+            if(type == "d") {
+                var obj = $("#prd02_detail_form input[name='disp_cate_option']");
+                var input_nm = "disp_cate_option";
+                var checkbox_nm = "disp_cate_chk";
+            } else {
+                var obj = $("#prd02_detail_form input[name='item_cate_option']");
+                var input_nm = "item_cate_option";
+                var checkbox_nm = "item_cate_chk";
+            }
+
+            if(obj.length > 0) {
+                alert("카테고리는 하나만 등록이 가능합니다.");
+                return false;
+            }
+
+            for(i = 0; i < obj.length; i++) {
+                ar = obj.eq(i).val().split('|');
+                if(ar[0] == idx) {
+                    if($("#category_pop").length > 0) {
+                        categorySelClose();
+                    } else {
+                        category_pop.close();
+                    }
+
+                    alert("중복되는 카테고리가 존재합니다.");
+                    return false;
+                }
+            }
+
+            seq = 1;
+            if(obj.length > 0) {
+                ar = obj.val().split('|');
+                seq = parseInt(ar[1]) - 1;
+            }
+
+            // 카테고리 뎁스
+            var add_len = ar_txt.length;
+            var cat_txt = "";
+            var contents = "";
+            var obj_cnt = obj.length;
+
+            for(i = 0; i < add_len; i++) {
+                if(i != 0)	{
+                    cat_txt = cat_txt + ">";
+                }
+                cat_txt = cat_txt + ar_txt[i];
+
+                contents += "<tr class=\"even cate-data\">";
+                contents += "<input type=\"hidden\" value=\"" + idx.substring(0,(i*3)+3) + "|" + seq + "|" + "Y" + "|" + add_len +"\" name=\"" + input_nm + "\">";
+                contents += "<td class=\"align-center\"><label><input type=\"checkbox\" name=\"" + checkbox_nm + "\"/><i></i></label></td>";
+                if( i == 0) {
+                    contents += "<td><span class='simple-info-target'>" + cat_txt + "</span></td>";
+                } else {
+                    contents += "<td>" + cat_txt + "</td>";
+                }
+                contents += "<td class=\"align-center\">Y</td>";
+                contents += "</tr>";
+
+                if(type == "d") {
+                    $("#prd02_detail_form input[name='REP_CAT_CD']").val(idx);
+                } else {
+                    $("#prd02_detail_form input[name='ITEM_CAT_CD']").val(idx);
+                }
+                obj_cnt++;
+            }
+
+            if(type == "d") {
+                if(obj.length == 0) {
+                    $("#D_CATEGORY").html(contents);
+                } else {
+                    $("#D_CATEGORY").append(contents);
+                }
+            } else {
+                if(obj.length == 0) {
+                    $("#U_CATEGORY").html(contents);
+                } else {
+                    $("#U_CATEGORY").append(contents);
+                }
+            }
+            return false;
+        }
+
+        function chkEmptyCategory(type) {
+            var contents = "";
+            var obj = "";
+            if(type == "d") {
+                obj = $("#D_CATEGORY > tr");
+            } else {
+                obj = $("#U_CATEGORY > tr");
+            }
+
+            if(obj.length == 0) {
+                contents += "<tr class=\"even\">";
+                contents += "<td class=\"align-center\" colspan=\"3\">===  카테고리를 추가해 주십시오. ===</td>";
+                contents += "</tr>";
+
+                if(type == "d") {
+                    $("#D_CATEGORY").append(contents);
+                } else {
+                    $("#U_CATEGORY").append(contents);
+                }
+            }
+        }
+
+        // 카테고리 삭제
+        function delCategory(type, isAll) {
+            var ar, ar2, idx, idx2;
+            var obj = "";
+            var obj2 = "";
+            var obj3 = "";
+
+            if(type == "d") {
+                obj = $("#prd02_detail_form input[name='disp_cate_chk']");
+                obj2 = $("#prd02_detail_form input[name='disp_cate_option']");
+                obj3 = $("#prd02_detail_form input[name='disp_rep_yn']");
+            } else {
+                obj = $("#prd02_detail_form input[name='item_cate_chk']");
+                obj2 = $("#prd02_detail_form input[name='item_cate_option']");
+                obj3 = $("#prd02_detail_form input[name='item_rep_yn']");
+            }
+
+            for(var i = 0; i < obj.length; i++) {
+                if(obj.eq(i).is(":checked")) {
+                    var val = obj2.eq(i).val();
+                    ar = val.split("|");
+
+                    if(isAll) {
+                        idx = ar[0].substring(0,3);
+                    } else {
+                        idx = ar[0];
+                    }
+
+                    for(var j = obj.length-1; j >= 0; j--) {
+                        var val = obj2.eq(j).val();
+                        ar2 = val.split('|');
+
+                        if(isAll) {
+                            idx2 = ar2[0].substring(0,3);
+                        } else {
+                            idx2 = ar2[0].substring(0, idx.length);
+                        }
+
+                        if(idx == idx2) {
+                            var tr = obj.eq(j).closest('tr');
+                            if(obj3.eq(j).val() == "Y") {
+                                if(type == "d") {
+                                    $("#prd02_detail_form input[name='REP_CAT_CD']").val('');
+                                } else {
+                                    $("#prd02_detail_form input[name='ITEM_CAT_CD']").val('');
+                                }
+                            }
+                            tr.remove();
+                        }
+                    }
+                }
+            }
+        }
+
+        // 전체 선택/해제
+        function allCheck(obj, type) {
+            if(type == "d") {
+                if($(obj).is(":checked")) {
+                    $("#prd02_detail_form input[name='disp_cate_chk']").prop("checked", true);
+                } else {
+                    $("#prd02_detail_form input[name='disp_cate_chk']").prop("checked", false);
+                }
+            } else if(type == "i") {
+                if($(obj).is(":checked")) {
+                    $("#prd02_detail_form input[name='item_cate_chk']").prop("checked", true);
+                } else {
+                    $("#prd02_detail_form input[name='item_cate_chk']").prop("checked", false);
+                }
+            }
+        }
+
+        function popMultiOption(goods_no, goods_sub) {
+            url = "/po/popup/pop_multiOption?GOODS_NO="+goods_no + "&GOODS_SUB="+goods_sub;
+            openWindows("layer", "pop_multi_option", url, 1100, 800, 0, 0, true, true, true, true, true, true);
+        }
+
+        function manageOptions() {
+            var goods_no = $("input[name='GOODS_NO']").val();
+            var goods_sub = $("input[name='GOODS_SUB']").val();
+
+            var url = "/po/popup/pop_option?GOODS_NO="+goods_no+ "&GOODS_SUB="+goods_sub;
+            openWindows("layer", "pop_option", url, "300", "400", 0, 0, true, true, true, false, true, true);
+        }
+
+        // 커멘드
+        function detail_cmder(cmd) {
+            var ff = document.prd02_detail_form;
+
+            if(cmd == "mod_qty") {			// 옵션 미사용 상품 재고 수량 변경
+                changeQtyNoneOption(cmd);
+            } else if( cmd == "stock") {			// 입고
+                var goods_no = ff.GOODS_NO.value;
+                var goods_sub = ff.GOODS_SUB.value;
+                popStockIn(goods_no, goods_sub);
+            } else if(cmd == "d_category") {
+                category_pop = popCategory('d','', 'prd02DetailSetDCategory');
+            } else if(cmd == "u_category") {
+                category_pop = popCategory("i", "PT=ITEM", 'prd02DetailSetICategory');
+            } else if(cmd == "pop_goods") {			// 관련 상품 추가
+                popGoods("/po/popup/pop_goods?ISMT=Y&S_GOODS_STAT=40&CALLBACK=prd02DetailSetGoods&LAYOUT_TYPE=popup");
+            } else if(cmd == "copy"){
+                copyGoods();
+            } else if(cmd == "editcmd" || cmd == "addcmd") {
+                if(Validate(cmd)) {
+                    saveCmd(cmd);
+                }
+            }
+        }
+
+        function Validate(cmd){
+
+            var ff = document.prd02_detail_form;
+            if( ff.REP_CAT_CD.value == "" ){
+                alert("대표카테고리를 선택해 주십시오.");
+                return false;
+            }
+
+            choiceCategory($("#prd02_detail_form input[name='disp_cate_option']"), $("#prd02_detail_form input[name='D_CATEGORY_S']"), true);
+            choiceCategory($("#prd02_detail_form input[name='item_cate_option']"), $("#prd02_detail_form input[name='U_CATEGORY_S']"), true);
+
+            if (ff.GOODS_NM.value == "") {
+                alert("상품명을 입력해 주십시오.");
+                ff.GOODS_NM.focus();
+                return false;
+            }
+            if (ff.GOODS_NM.value.match(/[',|]/)) {
+                alert("상품명에 특수문자(\',|)를 입력할 수 없습니다.");
+                ff.GOODS_NM.focus();
+                return false;
+            }
+            if (ff.GOODS_NM_ENG.value == "") {
+                alert("제조사 상품명을 입력해 주십시오.");
+                ff.GOODS_NM_ENG.focus();
+                return false;
+            }
+            if(ff.SALE_STAT_CL.value == "") {
+                alert("상품상태를 선택해 주십시오.");
+                ff.SALE_STAT_CL.focus();
+                return false;
+            }
+            if(ff.S_OPT_KIND_CD.selectedIndex == 0) {
+                alert("품목을 선택해 주십시오.");
+                ff.S_OPT_KIND_CD.focus();
+                return false;
+            }
+            if (ff.S_BRAND_NM.value == "" || ff.S_BRAND_CD.value == "") {
+                alert("브랜드를 선택해 주십시오.");
+                ff.S_BRAND_NM.focus();
+                return false;
+            }
+            if(ff.STYLE_NO.value == "") {
+                alert("스타일넘버를 입력해 주십시오.");
+                ff.STYLE_NO.focus();
+                return false;
+            }
+            if( ff.BAESONG_KIND.value == "" ){
+                alert("배송업체를 선택해 주십시오.");
+                ff.BAESONG_KIND.focus();
+                return false;
+            }
+            if(ff.BAESONG_INFO.value == "" ) {
+                alert("배송지역를 선택해 주십시오.");
+                ff.BAESONG_INFO.focus();
+                return false;
+            }
+            if (ff.PRICE.value == "0") {
+                alert("정상가를 입력해 주십시오.");
+                ff.PRICE.focus();
+                return false;
+            }
+            strPrice = ff.PRICE.value;
+            var altstrPrice = strPrice.replace(/,/g,"");
+            if(ff.PRICE.value == "0" && altstrPrice < 100) {
+                alert("판매가는 최소 100원이상 입력해야 합니다.");
+                ff.PRICE.focus();
+                return false;
+            }
+
+            if (ff.WONGA_EX.value == "") {
+                alert("원가를 입력해 주십시오.");
+                ff.PRICE.focus();
+                return false;
+            }
+
+            if(ff.COM_TYPE.value != "1"){
+                if (ff.WONGA.value == "") {
+                    alert("원가(VAT별도)를 입력해 주십시오.");
+                    ff.WONGA.focus();
+                    return false;
+                }
+            }
+            /* 원산지 체크 2012-11-14 : jjs */
+            if( ff.ORG_NM.value == "" ) {
+                alert("원산지를 입력해 주세요.");
+                ff.ORG_NM.focus();
+                return false;
+            }
+
+            var goods_cont = CKEDITOR.instances.goods_cont_editor.getData();
+
+            goods_cont = goods_cont.replace(/\&lt\;/g, "<");
+            goods_cont = goods_cont.replace(/\&gt\;/g, ">");
+            goods_cont = goods_cont.replace(/\&quot\;/g, "\"");
+
+            $("input[name='GOODS_CONT']").val(goods_cont);
+
+            var opinion = CKEDITOR.instances.opinion_editor.getData();
+
+            opinion = opinion.replace(/\&lt\;/g, "<");
+            opinion = opinion.replace(/\&gt\;/g, ">");
+            opinion = opinion.replace(/\&quot\;/g, "\"");
+
+            $("input[name='OPINION']").val(opinion);
+
+            var size_info = CKEDITOR.instances.size_info_editor.getData();
+
+            size_info = size_info.replace(/\&lt\;/g, "<");
+            size_info = size_info.replace(/\&gt\;/g, ">");
+            size_info = size_info.replace(/\&quot\;/g, "\"");
+
+            $("input[name='SIZE_INFO']").val(size_info);
+            return true;
+        }
+
+        function saveCmd(cmd){
+            showProcessingLayer();
+            var param = formData2QueryString(document.prd02_detail_form);
+            $.ajax({
+                type: "POST",
+                url: "/po/prd/prd02/prd_list_command",
+                data : param,
+                success: function(msg) {
+                    if(msg){
+                        if( document.prd02_detail_form.CB_FUNC.value != "" ){
+                            if(opener) {
+                                eval("opener." + document.prd02_detail_form.CB_FUNC.value + "();");
+                                self.close();
+                            }
+                        } else {
+                            if(msg == 1) {
+                                if(prd02_detail_layout_type == "layer") {
+                                    closePrd02Detail();
+                                    searchList('');
+                                } else {
+                                    var url = "/po/prd/prd02/detail?CMD=edit&GOODS_NO=" + document.prd02_detail_form.GOODS_NO.value + "&GOODS_SUB=" + document.prd02_detail_form.GOODS_SUB.value + "&LAYOUT_TYPE=" + prd02_detail_layout_type;
+                                    document.location.href = url;
+                                }
+                            } else if(msg == 0) {
+                                alert("[상품수정 실패] 다시 시도하여 주시기 바랍니다.");
+                                hideProcessingLayer();
+                            } else {
+                                var val = msg;
+                                var a_val = val.split("-");
+                                if(prd02_detail_layout_type == "layer") {
+                                    closePrd02Detail();
+                                    searchList('');
+                                } else {
+                                    var url = "/po/prd/prd02/detail?CMD=edit&GOODS_NO=" + a_val[0] + "&GOODS_SUB=" + a_val[1] + "&LAYOUT_TYPE=" + prd02_detail_layout_type;
+                                    document.location.href = url;
+                                }
+                            }
+                        }
+                    } else {
+                        alert("[상품등록 실패] 다시 시도하여 주시기 바랍니다.");
+                        hideProcessingLayer();
+                    }
+                }
+            });
+        }
+
+        function choiceCategory(selObj, inputObj, isDef ) {
+            var value = "";
+            var text = "";
+            var is_def_cnt = 0;
+
+            for(var i = 0; i < selObj.length; i++) {
+                value += (i == 0) ? selObj.eq(i).val() : "\t" + selObj.eq(i).val();
+            }
+
+            if(isDef) {
+                for(i = 1; i < selObj.length; i++) {
+                    var option = selObj.eq(i).val();
+                    if(option.substring(0,3) == "001") {
+                        is_def_cnt++;
+                    }
+                }
+                if(is_def_cnt >= 1){
+                    document.prd02_detail_form.IS_DEF_D_CATEGORY.value = "1";
+                }
+            }
+            inputObj.val(value);
+        }
+
+        function SetInObj(o){
+            var ff = document.prd02_detail_form;
+            var objPrice = ff.IN_PRICE.value;
+            var objMargin = ff.IN_MARGIN.value;
+            var objWonga = ff.IN_WONGA.value;
+            var objComType = ff.COM_TYPE.value;
+
+            var objCmd = ff.CMD.value;
+            var objMarginType = ff.MARGIN_TYPE.value;
+            var price = unComma(objPrice.value);
+            var margin = unComma(objMargin.value);
+            var wonga = unComma(objWonga.value);
+
+            if(objComType.value == 2){ // 입점업체
+                if(price && margin ){
+                    var price_ex = price / 1.1;
+                    var wonga_ex = parseInt(Math.round(price * (1-margin/100)),10);
+                    ff.IN_WONGA.value = Comma(wonga_ex);
+                }
+
+            }else if(objComType.value == 1){ // 공급업체
+
+                if(objCmd.value != "editcmd"){
+                    if(price && margin){
+                        var price_ex = price / 1.1;
+                        var wonga_ex = parseInt(Math.round(price * (1-margin/100)),10);
+                        var wonga = Math.round(wonga_ex / 1.1);
+                        ff.IN_WONGA.value = Comma(wonga_ex);
+                    }
+                }else{
+                    if(wonga){
+                        if(o.name == "IN_MARGIN"){
+                            price = parseInt(Math.round(wonga / (1-margin/100)),10);
+                            ff.IN_PRICE.value = Comma(price);
+                        }else if(o.name == "IN_PRICE"){
+                            prf = Math.round(parseFloat(((price-wonga)/price)*100,10));
+                            ff.IN_MARGIN.value = Comma(prf);
+                        }
+                    }
+                }
+            }
+        }
+
+        // 신버전
+        function ApplyValue() {
+            var ff = document.prd02_detail_form;
+            var objPrice = ff.IN_PRICE;
+            var objWonga = ff.IN_WONGA;
+            var objMargin = ff.IN_MARGIN;
+            var objMarginType = ff.MARGIN_TYPE;
+            var objComType = ff.COM_TYPE;
+            var objCmd = ff.CMD;
+
+            if(objMarginType.value == ""){
+                alert("업체의 수수료 지정방식을 선택하셔야 합니다.");
+                return false;
+            }
+
+            var pay_fee = objMargin.value;
+            var price = unComma(objPrice.value);
+            var price_ex_vat = price/1.1;
+            ff.PRICE.value = Comma(price);
+            ff.PRICE_EX_VAT.value = Comma(parseInt(Math.round(price_ex_vat),10));
+            ff.MARGIN.value = objMargin.value;
+
+
+            if(objComType.value == 2){
+                if(objMarginType.value == "FEE"){
+                    var wonga_ex = parseInt(Math.round(price * (1-pay_fee/100)),10);
+                    var wonga = Math.round(wonga_ex / 1.1);
+                    ff.WONGA.value = Comma(wonga);
+                    ff.WONGA_EX.value = Comma(wonga_ex);
+                }else{
+                    var wonga_ex = unComma(objWonga.value);
+                    var wonga = Math.round(wonga_ex / 1.1);
+                    ff.WONGA.value = Comma(wonga);
+                    ff.WONGA_EX.value = Comma(wonga_ex);
+                }
+            }else if(objComType.value == 1){
+
+                if(objCmd.value != "editcmd"){
+                    var wonga_ex = parseInt(Math.round(price * (1-pay_fee/100)),10);
+                    var wonga = Math.round(wonga_ex / 1.1);
+                    ff.WONGA.value = Comma(wonga);
+                    ff.WONGA_EX.value = Comma(wonga_ex);
+                }
+            }
+        }
+
+        function closePrd02Detail() {
+            if(prd02_detail_layout_type == "layer") {
+                hideProcessingLayer();
+                closeLayer($("form[name='prd02_detail_form']"));
+            } else {
+                self.close();
+            }
+        }
+
+        function imageUpload(type) {
+            showProcessingLayer();
+            if(type == "basic") {
+                document.prd02_detail_upload_form.submit();
+            } else if(type == "extra") {
+                document.prd02_detail_upload_form2.submit();
+            } else if(type == "goods_cont") {
+                document.prd02_detail_goods_cont_upload_form.submit();
+            } else if(type == "opinion") {
+                document.prd02_detail_opinion_upload_form.submit();
+            } else if(type == "size_info") {
+                document.prd02_detail_size_info_upload_form.submit();
+            }
+        }
+
+        // 이미지 업로드 후 실행
+        function SetImage(result, message, file_url) {
+            var contents = "";
+            if(result) {
+                if(message == "goods_cont") {	// 상품 설명 이미지 업로드
+                    setEditor(message, file_url);
+                } else if(message == "opinion") {
+                    setEditor(message, file_url);
+                } else if(message == "size_info") {
+                    setEditor(message, file_url);
+                } else if(message == "BASIC_IMG") {
+                    if($("#box_basic_list_img").find("li.img_li").length > 0) {
+                        $("#basic_img").attr("src",file_url.replace("_500", "_150") + "?" + Math.random());
+                    } else {
+                        contents += "<li class=\"img_li\" onmouseup=\"setMainImg('basic_img'); return false;\">";
+                        contents += "<div class=\"box-img\">"
+                        contents += "<img id='basic_img' src=\"" + file_url.replace("_500", "_150") + "?" + Math.random() + "\"><span class=\"align\"></span>";
+                        contents += "</div>";
+                        contents += "</li>";
+                        $("#box_basic_list_img").prepend(contents);
+                    }
+                    $("input[name='BASIC_ORG_IMG']").val(file_url);
+                    setMainImg('basic_img');
+                } else if(message == "EXTRA_IMG") {
+                    if($("#box_extra_list_img").find("li.img_li").length > 0) {
+                        $("#extra_img").attr("src",file_url.replace("_342", "_150") + "?" + Math.random());
+                    } else {
+                        contents += "<li class=\"img_li\" onmouseup=\"setMainImg('extra_img'); return false;\">";
+                        contents += "<div class=\"box-img\">"
+                        contents += "<img id='extra_img' src=\"" + file_url.replace("_342", "_150") + "?" + Math.random() + "\"><span class=\"align\"></span>";
+                        contents += "</div>";
+                        contents += "</li>";
+                        $("#box_extra_list_img").prepend(contents);
+                    }
+                    $("input[name='EXTRA_ORG_IMG']").val(file_url);
+                    setMainImg("extra_img");
+                }
+            }
+            hideProcessingLayer();
+        }
+
+        // 상품 상세 설명 처리 함수
+        function setEditor(type, file_url) {
+
+            var a_file_url = file_url.split("|");
+
+            var img_tag = "";
+            for(var i=0; i<a_file_url.length; i++) {
+                var img_src = (a_file_url[i] != undefined) ? a_file_url[i] : "";
+                if(img_src != "") {
+                    img_tag += "<img src=\"" + a_file_url[i] + "\" />";
+                }
+            }
+
+            //CK editor에 넣기
+            if(img_tag != "") {
+                if(type == "goods_cont") {
+                    var content = CKEDITOR.instances.goods_cont_editor.getData(); //객체가져오기
+                } else if(type == "opinion") {
+                    var content = CKEDITOR.instances.opinion_editor.getData(); //객체가져오기
+                } else if(type == "size_info") {
+                    var content = CKEDITOR.instances.size_info_editor.getData(); //객체가져오기
+                }
+
+                content = content.replace(/\&lt\;/g, "<");
+                content = content.replace(/\&gt\;/g, ">");
+                content = content.replace(/\&quot\;/g, "\"");
+
+                content += img_tag;
+
+                if(type == "goods_cont") {
+                    CKEDITOR.instances.goods_cont_editor.setData(content);
+                } else if(type == "opinion") {
+                    CKEDITOR.instances.opinion_editor.setData(content);
+                } else if(type == "size_info") {
+                    CKEDITOR.instances.size_info_editor.setData(content);
+                }
+            }
+        }
+
+        // 이미지 선택
+        function setMainImg(id) {
+            var contents = "";
+
+            if($(".box-main-img").find("img").length > 0) {
+            } else {
+                contents += "<a href=\"javascript:void(0);\">";
+                contents += "<img src=\"\" alt=\"\" id=\"main_img\"><span class=\"align\"></span>";
+                contents += "</a>";
+                $(".box-main-img").html(contents);
+            }
+
+            var src = $("#"+id).attr("src");
+            var re_src = "";
+            var type = "";
+            if(id == "basic_img") {
+                re_src = src.replace("_150", "_320") + "?" + Math.random();
+                type = "basic";
+            } else if(id == "extra_img") {
+                re_src = src.replace("_150", "_342") + "?" + Math.random();
+                type = "extra";
+            }
+
+            $("#main_img").attr("src", re_src);
+            $("#main_img").attr("type", type);
+        }
+
+        // 이미지 삭제
+        function deleteImg() {
+            if(confirm("정말 삭제 하시겠습니까?")) {
+                var ff = document.prd02_detail_form;
+                var param = "GOODS_NO=" + ff.GOODS_NO.value + "&GOODS_SUB=" + ff.GOODS_SUB.value + "&TYPE=" + $("#main_img").attr("type") + "&BASIC_ORG_IMG=" + encodeURI($("input[name='BASIC_ORG_IMG']").val()) + "&EXTRA_ORG_IMG=" + encodeURI($("input[name='EXTRA_ORG_IMG']").val());
+                $.ajax({
+                    type: "POST",
+                    url: "/po/prd/prd02/delete_image",
+                    data : param,
+                    success: function(msg) {
+                        if(msg == "1") {
+                            if($("#main_img").attr("type") == "basic") {
+                                $("#box_basic_list_img").find("li.img_li").remove();
+                                if($("#box_extra_list_img").find("li.img_li").length > 0) {
+                                    setMainImg('extra_img');
+                                } else {
+                                    $(".box-main-img").html("<div class=\"box-empty\"><span>이미지를 등록해주세요.</span></div>");
+                                }
+                            } else if($("#main_img").attr("type") == "extra") {
+                                $("#box_extra_list_img").find("li.img_li").remove();
+                                if($("#box_basic_list_img").find("li.img_li").length > 0) {
+                                    setMainImg('basic_img');
+                                } else {
+                                    $(".box-main-img").html("<div class=\"box-empty\"><span>이미지를 등록해주세요.</span></div>");
+                                }
+                            }
+                        } else {
+                            alert("이미지 삭제에 실패 하였습니다.");
+                            return false;
+                        }
+                    }
+                });
+            }
+        }
+
+
+        function editorUpload(type) {
+            if(type == "goods_cont") {
+                $("#goods_cont_file").trigger("click");
+            } else if(type == "opinion") {
+                $("#opinion_file").trigger("click");
+            } else if(type == "size_info") {
+                $("#size_info_file").trigger("click");
+            }
+        }
+
+
+        function showClaimDiv(id){
+            jQuery("#claim_row").show();
+            jQuery("#TXT_MSG").val("");
+
+            if(id == "REFUND"){
+                jQuery("#claim_refund").show();
+                jQuery("#claim_change").hide();
+                jQuery("#TXT_MSG").attr("readonly", true);
+            }else if(id == "CHANGE"){
+                jQuery("#claim_refund").hide();
+                jQuery("#claim_change").show();
+                jQuery("#TXT_MSG").attr("readonly", true);
+            } else {
+                jQuery("#claim_row").hide();
+                jQuery("#claim_refund").hide();
+                jQuery("#claim_change").hide();
+                jQuery("#TXT_MSG").attr("readonly", false);
+            }
+        }
+
+        function clm_txt_check()
+        {
+            ff = document.f1;
+
+            if(ff.REQ_CLAIM_GUBUN[2].checked)
+            {
+                $("#TXT_MSG").attr("readonly", false);
+            }
+            else
+            {
+
+                jQuery("#TXT_MSG").val("");
+                $("#TXT_MSG").attr("readonly", true);
+                alert('클레임 내용은 임으로 작성할 수 없습니다.\n클레임 구분을 선택하신 후 상세 항목 입력란에 입력해 주십시오.');
+            }
+        }
+
+        function CheckForm(obj, target){
+            if(obj.checked){
+                target.value = "";
+                target.readOnly = false;
+                target.className = "input";
+            }else{
+                target.value = "";
+                target.className = "input-disable";
+                target.readOnly = true;
+            }
+        }
+
+        function CheckClaimStr(obj){
+            var claim = document.f1.MSG;
+            if(! obj.checked){
+                if(claim.value.indexOf(obj.value) != -1){
+                    var idx_start = claim.value.indexOf(obj.value);
+                    var idx_end = claim.value.indexOf(" / ",idx_start);
+                    var pre_str = claim.value.substr(0,idx_start);
+                    var post_str = claim.value.substr(idx_end+3, claim.value.length);
+                    claim.value = pre_str + post_str;
+                }
+            }
+        }
+
+        function apply_claim(type){
+            var type = getRadioButton(document.f1.REQ_CLAIM_GUBUN);
+            var f1 = document.f1;
+            var str = "";
+
+            if(type == "REFUND"){
+                str += "반품관련 / ";
+            }else if(type=="CHANGE"){
+                str += "품절관련 / ";
+            }else{
+                str += "기타 / ";
+            }
+
+            if(type == "REFUND"){
+
+                if(f1.CHK1.checked){
+                    if(f1.CHK1_VAL.value != ""){
+                        str += f1.CHK1.value + "(" + f1.CHK1_VAL.value +") / ";
+                    }else{
+                        alert("택배사를 입력해 주십시오.");
+                        f1.CHK1_VAL.focus();
+                        return;
+                    }
+                }else{
+                    alert("택배사를 입력해 주십시오.");
+                    return;
+                }
+
+                if( ! f1.CHK5.checked && ! f1.CHK3.checked){
+                    alert("선불/착불 여부를 선택해 주십시오.");
+                    return;
+                }
+                if(f1.CHK3.checked){
+                    str += f1.CHK3.value + " / ";
+                }
+
+                if(f1.CHK5.checked){
+                    str += f1.CHK5.value;
+                    if(f1.CHK5_VAL.value != ""){
+                        str += "(" + f1.CHK5_VAL.value +") / ";
+                    }else{
+                        alert("동봉액을 입력해 주십시오.");
+                        return;
+                    }
+                }
+
+                if(f1.CHK7.checked){
+                    str += f1.CHK7.value;
+                    if(f1.CHK7_VAL.value != ""){
+                        str += "("+ f1.CHK7_VAL.value +") / ";
+                    }
+                }
+
+                if(! f1.CHK2.checked && ! f1.CHK4.checked){
+                    alert("상품이상 유/무를 선택해 주십시오.");
+                    return;
+                }
+
+                if(f1.CHK2.checked){
+                    str += f1.CHK2.value + " / ";
+                }
+                if(f1.CHK4.checked){
+                    str += f1.CHK4.value;
+                    if(f1.CHK4_VAL.value != ""){
+                        str += "("+ f1.CHK4_VAL.value +") / ";
+                    }else{
+                        alert("상품이상 사유를 입력해 주십시오.");
+                        return;
+                    }
+                }
+
+                if(f1.CHK6.checked){
+                    if(f1.CHK6_VAL.value != ""){
+                        str += f1.CHK6.value + "(" + f1.CHK6_VAL.value +") / ";
+                    }else{
+                        alert("환불정보를 입력해 주십시오.");
+                        f1.CHK6_VAL.focus();
+                        return;
+                    }
+                }else{
+                    alert("환불정보를 선택해 주십시오.");
+                    return;
+                }
+
+                if(f1.CHK8.checked){
+                    str += f1.CHK8.value + " / ";
+                }
+                if(f1.CHK9.checked){
+                    str += f1.CHK9.value;
+                    if(f1.CHK9_VAL.value != ""){
+                        str += "("+ f1.CHK9_VAL.value +") / ";
+                    }else{
+                        alert("기타 사유를 입력해 주십시오.");
+                        return;
+                    }
+                }
+
+            }else if(type=="CHANGE"){
+
+                if(f1.CHK11.checked){
+                    str += f1.CHK11.value + " / ";
+                }
+                if(f1.CHK12.checked){
+                    str += f1.CHK12.value + " / ";
+                }
+                if(f1.CHK13.checked){
+                    str += f1.CHK13.value + " / ";
+                }
+                if(! f1.CHK14.checked && ! f1.CHK15.checked && ! f1.CHK16.checked){
+
+                }
+                if(f1.CHK14.checked){
+                    str += f1.CHK14.value + " / ";
+                }
+                if(f1.CHK15.checked){
+                    str += f1.CHK15.value + " / ";
+                }
+                if(f1.CHK16.checked){
+                    if(f1.CHK16_VAL.value != ""){
+                        str += f1.CHK16.value + "(" + f1.CHK16_VAL.value +") / ";
+                    }else{
+                        alert("환불정보를 입력해 주십시오.");
+                        f1.CHK16_VAL.focus();
+                        return;
+                    }
+                }
+                if(f1.CHK17.checked){
+                    if(f1.CHK17_VAL.value != ""){
+                        str += f1.CHK17.value + "(" + f1.CHK17_VAL.value +") / ";
+                    }else{
+                        alert("기타사유를 입력해 주십시오.");
+                        f1.CHK17_VAL.focus();
+                        return;
+                    }
+                }
+            }
+            f1.MSG.value = str;
+        }
+
+        function SaveClaimMsg() {
+
+            if(jQuery("#TXT_MSG").val() == ""){
+                alert("클레임 내역을 입력해 주십시오.");
+                jQuery("#TXT_MSG").focus();
+                return;
+            }
+
+            //$("BTN_CLAIM_MSG").disabled = true;
+            //var req_claim_gubun = getRadioButton(document.f1.REQ_CLAIM_GUBUN);
+            jQuery("#claimmsgcmd").val("claimmsgcmd");
+
+            /*
+            var param = "CMD=claimmsgcmd";
+            param += "&ORD_OPT_NO=" + jQuery("#ORD_OPT_NO").val();
+            param += "&CLM_NO=" + jQuery("#CLM_NO").val();
+            param += "&MSG=" + urlEncode(jQuery("#TXT_MSG").value);
+            param += "&ORD_STATE=" + jQuery("#ORD_STATE").value;
+            param += "&ORD_NO=" + jQuery("#ORD_NO").value;
+            param += "&REQ_CLAIM_GUBUN=" + req_claim_gubun;
+            param += "&UID=" + Math.random();
+            */
+
+            jQuery.ajax({
+                type: "POST",
+                url: "/po/order/ord01/ClaimMessageSave",
+                data : jQuery("#f1").serializeArray(),
+                dataType : "json",
+                success: function(data) {
+                    if (data.status=="1") {
+                        window.location.reload();
+                    } else {
+                        aler("다시 시도해주세요.");
+                    }
+
+                    // 로딩 레이어 숨김
+                    hideLoadingLayer();
+                }
+            });
+        }
+
+    </script>
+</head>
+
+<body class="page-view">
+<div class="wrapper">
+    <div class="wrapper2">
+        <div class="main close-side">
+            <div id="content" class="wrap-content">
+
+                <div class="box-list-title">
+                    <h2>주문상세내역</h2>
+                    <div class="box-btn-right">
+                        <!--
+                        <a href="#" class="btn-big-important" onclick="detail_cmder('detailcmd'); return false;"><strong>저장</strong></a>
+                        <a href="#" class="btn-big-default" onclick="openPrdSearch(); return false;"><strong>불러오기</strong></a>
+                         -->
+                        <a href="#" class="btn-big-default" onclick="self.close(); return false;"><strong>닫기</strong></a>
+                    </div>
+                </div>
+
+                <div class="issue">
+                    <form name="f1" method="post" enctype="multipart/form-data" id="f1">
+                        <input type="hidden" name="x" value="x">
+                        <input type="hidden" id="CMD" name="CMD" value="detailcmd">
+                        <input type="hidden" name="IS_SUB" value="">
+                        <input type="hidden" name="SPECIAL_YN" value="">
+                        <input type="hidden" name="CP" value="">
+                        <input type="hidden" name="GOODS_NO" value="1446336">
+                        <input type="hidden" name="GOODS_SUB" value="0">
+                        <input type="hidden" name="CB_FUNC" value="">
+                        <input type="hidden" name="ISHTML" value="1">
+                        <input type="hidden" name="IS_DEF_D_CATEGORY" value="0"><!-- 일반카테고리를 선택했는지 -->
+                        <input type="hidden" name="D_CATEGORY_S" value=""><!-- 전시카테고리 string 으로 넘기기 위해서 -->
+                        <input type="hidden" name="OLD_D_CATEGORY_S" value=""><!-- 구전시카테고리 string 으로 넘기기 위해서 -->
+                        <input type="hidden" name="B_CATEGORY_S" value=""><!-- 베스트카테고리 string 으로 넘기기 위해서 -->
+                        <input type="hidden" name="U_CATEGORY_S" value=""><!-- 용도카테고리 string 으로 넘기기 위해서 -->
+                        <input type="hidden" name="D_CATEGORY_ZERO" value=""><!-- 순서를 0으로 했는지 -->
+                        <input type="hidden" name="OLD_D_CATEGORY_ZERO" value=""><!-- 순서를 0으로 했는지 -->
+                        <input type="hidden" name="B_CATEGORY_ZERO" value=""><!-- 순서를 0으로 했는지 -->
+                        <input type="hidden" name="U_CATEGORY_ZERO" value=""><!-- 순서를 0으로 했는지 -->
+
+                        <!-- 멀티 가격 옵션 -->
+                        <input type="hidden" name="cols_count" value="" />
+                        <input type="hidden" name="opt_price_type" value="" />
+
+                        <input type="hidden" id="ORD_NO" name="ORD_NO" value="20191017195084f2fe">
+                        <input type="hidden" id="ORD_OPT_NO" name="ORD_OPT_NO" value="13931018">
+                        <input type="hidden" id="ORD_STATE" name="ORD_STATE" value="30">
+                        <input type="hidden" id="P_ORD_OPT_NO" name="P_ORD_OPT_NO" value="">
+                        <input type="hidden" name="EXTTEL" value="">
+                        <input type="hidden" name="USER_ID" value="jj***333">
+                        <input type="hidden" name="USER_NM" value="전상준">
+                        <input type="hidden" name="MOBILE" value="010-5622-7333">
+
+                        <input type="hidden" name="GHOST_USE" value="Y">
+                        <input type="hidden" name="ESCW_USE" value="O">
+                        <input type="hidden" name="TNO" value="INIMX_VBNKgplayer00120191018083144635788">
+                        <input type="hidden" name="ST_CD" value="">
+
+                        <input type="hidden" id="CLM_NO" name="CLM_NO" value="">
+                        <input type="hidden" name="PREV_CLM_STATE" value="0">
+
+
+                        <!-- s:주문자정보 -->
+                        <div class="splitcontent">
+                            <h3 class="box-panel-title"><img src="/po/application/views/images/icon_views_info.png" alt="상품정보"> 주문자정보
+                                <a class="btn-accordion-panel" href="#" onclick="togglePanel(this);return false;"></a>
+                            </h3>
+                            <div class="box-panel">
+                                <div class="box-attribute">
+                                    <ul class="box-attribute-list">
+                                        <li style="padding:10px;">
+                                            <table class="list">
+                                                <tbody>
+                                                <tr>
+                                                    <th width="130" class="align-center">주문번호</th>
+                                                    <td>20191017195084f2fe</td>
+                                                    <th width="130" class="align-center">주문자</th>
+                                                    <td>전상준</td>
+                                                    <th width="130" class="align-center">사용자아이디</th>
+                                                    <td>jj***333</td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="100" class="align-center">주문상태</th>
+                                                    <td><span class="ORD_STATE_30">출고완료</span></td>
+                                                    <th width="100" class="align-center">주문시간</th>
+                                                    <td>2019.10.18 08:31:44</td>
+                                                    <th width="100" class="align-center">판매처</th>
+                                                    <td>본사사이트</td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="100" class="align-center">전화</th>
+                                                    <td>02-939-1138</td>
+                                                    <th width="100" class="align-center">휴대전화</th>
+                                                    <td>010-5622-7333</td>
+                                                    <th width="100" class="align-center">이메일</th>
+                                                    <td>***</td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="100" class="align-center">유입경로</th>
+                                                    <td colspan="3"></td>
+                                                    <th width="100" class="align-center">개인통관고유부호</th>
+                                                    <td></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- e:주문자정보 -->
+
+                        <!-- s:수령자정보 -->
+                        <div class="splitcontent">
+                            <h3 class="box-panel-title"><img src="/po/application/views/images/icon_views_info.png" alt="상품정보"> 수령자정보
+                                <a class="btn-accordion-panel" href="#" onclick="togglePanel(this);return false;"></a>
+                            </h3>
+                            <div class="box-panel">
+                                <div class="box-attribute">
+                                    <ul class="box-attribute-list">
+                                        <li style="padding:10px;">
+                                            <table class="list">
+                                                <tbody>
+                                                <tr>
+                                                    <th width="130" class="align-center">수령자</th>
+                                                    <td>
+                                                        <a href="#" onclick="openWindow('/po/order/ord01/delivery?ORD_NO=20191017195084f2fe&ORD_OPT_NO=13931018','order_dlv','resizable=yes,scrollbars=yes', '779', '569');return false;" title="20191017195084f2fe 배송 정보 수정">전상준</a>
+                                                    </td>
+                                                    <th width="130" class="align-center">전화</th>
+                                                    <td>010-7581-7330</td>
+                                                    <th width="130" class="align-center">휴대전화</th>
+                                                    <td>010-7581-7330</td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="100" class="align-center">우편번호</th>
+                                                    <td>139-817</td>
+                                                    <th width="100" class="align-center">주소</th>
+                                                    <td colspan="3">(139-817) 서울 노원구 상계로 285 (상계동) 152번지  201호</td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="100" class="align-center">택배사</th>
+                                                    <td><a href="http://www.cjgls.co.kr/" target="_new">CJ택배</a></td>
+                                                    <th width="100" class="align-center">송장번호</th>
+                                                    <td>355328661682</td>
+                                                    <th width="100" class="align-center">배송완료일</th>
+                                                    <td>2019.10.18 11:16:34</td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="100" class="align-centeralign-center">배송메시지</th>
+                                                    <td colspan="5"></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- e:수령자정보 -->
+
+
+                        <!-- s:상품리스트 -->
+                        <div class="splitcontent">
+                            <h3 class="box-panel-title"><img src="/po/application/views/images/icon_views_info.png" alt="상품정보"> 상품
+                                <a class="btn-accordion-panel" href="#" onclick="togglePanel(this);return false;"></a>
+                            </h3>
+                            <div class="box-panel">
+                                <div class="box-attribute">
+                                    <!--
+                                    <div class="autoscroll">
+                                     -->
+                                    <ul class="box-attribute-list">
+                                        <li style="padding:10px;">
+                                            <table class="list">
+                                                <thead>
+                                                <tr class="hascontextmenu">
+                                                    <th width="70" class="align-center">상태</th>
+                                                    <th width="60" class="align-center">출고<br/>형태</th>
+                                                    <th width="60" class="align-center">출고<br/>구분</th>
+                                                    <th width="100" class="align-center">업체</th>
+                                                    <th width="100" class="align-center">스타일 넘버</th>
+                                                    <th colspan="2" width="*" class="align-center">상품명</th>
+                                                    <th width="90" class="align-center">옵션</th>
+                                                    <th width="60" class="align-center">수량<br/>(재고)</th>
+                                                    <th width="60" class="align-center">단가</th>
+                                                    <th width="60" class="align-center">판매가</th>
+                                                    <th width="60" class="align-center">쿠폰</th>
+                                                    <th width="60" class="align-center">배송비</th>
+                                                    <th width="60" class="align-center">환불액</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr class="choice">
+                                                    <td class="align-center">
+                                                        <a href="/webapps/order/ord01_detail.php?CMD=detail&ORD_OPT_NO=13931018&ORD_NO=20191017195084f2fe#GOODS">
+                                                            출고완료
+                                                        </a>
+                                                    </td>
+                                                    <td class="align-center">
+                                                        <a href="javascript:void(0);" onclick="openWindow('/po/order/ord01/status?ORD_NO=20191017195084f2fe&ORD_OPT_NO=13931018','order_dlv','resizable=yes,scrollbars=yes', '779', '569');return false;" title="주문상품 수정">정상</a>
+                                                    </td>
+                                                    <td class="align-center">정상</td>
+                                                    <td class="align-center">[위탁]왁티</td>
+                                                    <td class="align-center">G19SMB1PT02B</td>
+                                                    <td class="align-center">
+                                                        <a href="http://www.player.co.kr/mallfront/category/detail.php?goods_no=1446336&goods_sub=0" target="_blank">
+                                                            <img src="http://image.player.co.kr/goods_img1/20190227/1446336/1446336_a_100.jpg" height="40" width="40" border="0" align="middle">
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="javascript:;" onclick="PopPrdDetail2('1446336','0');" title="GOAL 스몰 로고 트랙팬츠 블랙 (SMALL LOGO TRACK PANTS - BLACK)">
+                                                            GOAL 스몰 로고 트랙팬츠 블랙...
+                                                        </a>
+                                                    </td>
+                                                    <td>M</td>
+                                                    <td class="align-center">
+                                                        1 <br>
+                                                        (<a href="javascript:;" onclick="popJaego('1446336','0','M');return false;">0</a>)
+                                                    </td>
+                                                    <td class="align-right">99,000</td>
+                                                    <td class="align-right">99,000</td>
+                                                    <td class="align-right" rowspan="1">0</td>
+                                                    <td class="align-right" rowspan="1">0</td>
+                                                    <td class="align-right" >0</td>
+                                                </tr>
+
+                                                </tbody>
+                                                <tfoot>
+                                                <tr>
+                                                    <td class="align-center">합계</td>
+                                                    <td class="total-discount" colspan="7">적립금 : 990원, 배송료 : 0원, 추가배송료 : 0원</td>
+                                                    <td class="price" colspan="3">99,000</td>
+                                                    <td class="price">0</td>
+                                                    <td class="price">0</td>
+                                                    <td class="price">0</td>
+                                                </tr>
+                                                </tfoot>
+                                            </table>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- e:상품리스트 -->
+
+
+                        <!-- s:클레임 -->
+                        <div class="splitcontent" id="app_ord01_claim">
+                            <h3 class="box-panel-title"><img src="/po/application/views/images/icon_views_info.png" alt="상품정보"> 클레임정보
+                                <a class="btn-accordion-panel" href="#" onclick="togglePanel(this);return false;"></a>
+                            </h3>
+                            <div class="box-panel">
+                                <div class="box-attribute">
+                                    <!--
+                                    <div class="autoscroll">
+                                     -->
+                                    <ul class="box-attribute-list">
+                                        <li style="padding:10px;">
+                                            <table class="list">
+                                                <tbody>
+                                                <tr>
+                                                    <th width="100" class="align-center">클레임상태<i class="icon-important"></i></th>
+                                                    <td style="color:red;font-weight:bold;">클레임없음</td>
+                                                    <th width="100" class="align-center">클레임사유<i class="icon-important"></i></th>
+                                                    <td></td>
+                                                    <th width="100" class="align-center">최종처리일</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="100" class="align-center">요청일자</th>
+                                                    <td> ()</td>
+                                                    <th width="100" class="align-center">처리중일자</th>
+                                                    <td> ()</td>
+                                                    <th width="100" class="align-center">완료일자</th>
+                                                    <td> ()</td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="100" class="align-center">환불여부<i class="icon-important"></i></th>
+                                                    <td>환불안함</td>
+                                                    <th width="100" class="align-center">환불금액</th>
+                                                    <td> 원</td>
+                                                    <th width="100" class="align-center">예금주</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="100" class="align-center">환불은행</th>
+                                                    <td></td>
+                                                    <th width="100" class="align-center">계좌번호</th>
+                                                    <td colspan="3"></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </li>
+                                    </ul>
+                                    <ul class="box-attribute-list">
+                                        <li style="padding:10px;">
+                                            <table class="list">
+                                                <thead>
+                                                <tr>
+                                                    <th width="100" class="align-center">유형</th>
+                                                    <th width="130" class="align-center">상태</th>
+                                                    <th width="130" class="align-center">접수일자</th>
+                                                    <th class="align-center">클레임내용</th>
+                                                    <th width="100" class="align-center">처리자</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr><td colspan="5" class="align-center">클레임 내용이 없습니다.</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </li>
+                                    </ul>
+                                    <ul class="box-attribute-list">
+                                        <li style="padding:10px;">
+                                            <table class="list">
+                                                <tbody>
+                                                <tr>
+                                                    <th width="100" class="align-center">클레임 구분</th>
+                                                    <td>
+                                                        <label for="rcg_r"><input type="radio" name="REQ_CLAIM_GUBUN" value="REFUND" onclick="showClaimDiv(this.value)" id="rcg_r"><i></i>반품관련</label>
+                                                        <label for="rcg_c"><input type="radio" name="REQ_CLAIM_GUBUN" value="CHANGE" onclick="showClaimDiv(this.value)" id="rcg_c"><i></i>품절관련</label>
+                                                        <label for="rcg_u"><input type="radio" name="REQ_CLAIM_GUBUN" value="undefined" onclick="showClaimDiv(this.value)" id="rcg_u"><i></i>기타</label>
+                                                        &nbsp;&nbsp;
+                                                        <input type="button" onclick="apply_claim();" value="클레임 내용에 적용" class="btn" style="width:120px;">
+                                                        <input type="button" onclick="document.f1.MSG.value='';" value="클레임 내용 초기화" class="btn" style="width:120px;">
+                                                    </td>
+                                                </tr>
+                                                <tr id="claim_row" style="display:none;">
+                                                    <th class="align-center">상세 항목</th>
+                                                    <td class="bd">
+                                                        <div id="claim_refund">
+                                                            <label><input type="checkbox" name="CHK1" value="택배사" onClick="CheckForm(this,document.f1.CHK1_VAL);CheckClaimStr(this);"><i></i>택배사</label>
+                                                            (<input type="text" name="CHK1_VAL" readonly class="input-disable" style="width:250px;">)
+                                                            <label><input type="checkbox" name="CHK3" value="선불" onclick="CheckClaimStr(this);"><i></i>선불</label>
+                                                            <label><input type="checkbox" name="CHK5" value="착불" onClick="CheckForm(this,document.f1.CHK5_VAL);CheckClaimStr(this);"><i></i>착불</label>
+                                                            (<input type="text" name="CHK5_VAL" readonly class="input-disable" value="금액(원)" style="width:250px;">)
+                                                            <label><input type="checkbox" name="CHK7" value="동봉액" onClick="CheckForm(this,document.f1.CHK7_VAL);CheckClaimStr(this);"><i></i>동봉액</label>
+                                                            <input type="text" name="CHK7_VAL" readonly class="input-disable" value="금액(원)" style="width:250px;"><br>
+
+                                                            <label><input type="checkbox" name="CHK2" value="상품이상무" onclick="CheckClaimStr(this);"><i></i>상품이상무</label>
+                                                            <label><input type="checkbox" name="CHK4" value="상품이상" onClick="CheckForm(this,document.f1.CHK4_VAL);CheckClaimStr(this);"><i></i>상품이상</label>
+                                                            (<input type="text" name="CHK4_VAL" readonly class="input-disable" style="width:550px;">)
+                                                            <br>
+                                                            <label><input type="checkbox" name="CHK8" value="사은품"  onclick="CheckClaimStr(this);"><i></i>사은품여부</label>
+                                                            <label><input type="checkbox" name="CHK6" value="환불정보" onClick="CheckForm(this,document.f1.CHK6_VAL);CheckClaimStr(this);" style="width:350px;"><i></i>환불정보</label>
+                                                            (<input type="text" name="CHK6_VAL" readonly class="input-disable" style="width:300px;" value="예금주, 은행, 계좌번호">)<br>
+                                                            <label><input type="checkbox" name="CHK9" value="기타" onClick="CheckForm(this,document.f1.CHK9_VAL);CheckClaimStr(this);"><i></i>기타</label>
+                                                            (<input type="text" name="CHK9_VAL" readonly class="input-disable" style="width:300px;" value="">)
+                                                        </div>
+                                                        <div id="claim_change">
+                                                            <label><input type="checkbox" name="CHK11" value="통화" onclick="CheckClaimStr(this);"><i></i>통화</label>
+                                                            <label><input type="checkbox" name="CHK12" value="통화안됨" onclick="CheckClaimStr(this);"><i></i>통화안됨</label>
+                                                            <label><input type="checkbox" name="CHK13" value="문자발송" onclick="CheckClaimStr(this);"><i></i>문자발송</label><br>
+                                                            <label><input type="checkbox" name="CHK14" value="교환요청" onclick="CheckClaimStr(this);"><i></i>교환요청</label>
+                                                            <label><input type="checkbox" name="CHK15" value="환불-카드" onclick="CheckClaimStr(this);"><i></i>환불-카드</label>
+                                                            <label><input type="checkbox" name="CHK16" value="환불-현금" onclick="CheckForm(this,document.f1.CHK16_VAL);CheckClaimStr(this);"><i></i>환불-현금</label>
+                                                            (<input type="text" name="CHK16_VAL" readonly class="input-disable" style="width:300px;" value="예금주, 은행, 계좌번호">)<br>
+
+                                                            <label><input type="checkbox" name="CHK17" value="기타" onclick="CheckForm(this,document.f1.CHK17_VAL);CheckClaimStr(this);"><i></i>기타</label>
+                                                            (<input type="text" name="CHK17_VAL" readonly class="input-disable" style="width:300px;" value="">)
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="100" class="align-center">클레임내용</th>
+                                                    <td>
+                                                        <textarea name="MSG" id="TXT_MSG" style="height:80px;width:800px;" onkeyup="clm_txt_check();" onkeydown="clm_txt_check();"  onclick="clm_txt_check();"></textarea>
+                                                        &nbsp;<input type="button" class="button" id="BTN_CLAIM_MSG" value="클레임내용등록" onclick="SaveClaimMsg();" style="width:110px;">
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- e:클레임 -->
+
+                        <!-- s:입점업체 기타정산 정보 -->
+                        <div class="splitcontent">
+                            <h3 class="box-panel-title"><img src="/po/application/views/images/icon_views_info.png" alt="상품정보"> 입점업체 기타정산 정보
+                                <a class="btn-accordion-panel" href="#" onclick="togglePanel(this);return false;"></a>
+                            </h3>
+                            <div class="box-panel">
+                                <div class="box-attribute">
+                                    <!--
+                                    <div class="autoscroll">
+                                     -->
+                                    <ul class="box-attribute-list">
+                                        <li style="padding:10px;">
+                                            <div style="text-align:right;">("<font color="blue">월별 입점업체정산</font>" 시 <font color="red">기타정산금액</font>에 반영됩니다.)</div>
+                                            <table class="list">
+                                                <thead>
+                                                <tr>
+                                                    <th width="12%" class="align-center">정산일자</th>
+                                                    <th width="45%" class="align-center">정산내용</th>
+                                                    <th width="15%" class="align-center">정산금액</th>
+                                                    <th width="13%" class="align-center">처리자</th>
+                                                    <th width="15%" class="align-center">등록일</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr><td colspan="5" class="align-center">기타 정산 내역이 없습니다.</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- e:입점업체 기타정산 정보 -->
+
+                        <!-- s:공급업체 정보 -->
+                        <div class="splitcontent">
+                            <h3 class="box-panel-title"><img src="/po/application/views/images/icon_views_info.png" alt="상품정보"> 공급업체 정보
+                                <a class="btn-accordion-panel" href="#" onclick="togglePanel(this);return false;"></a>
+                            </h3>
+                            <div class="box-panel">
+                                <div class="box-attribute">
+                                    <ul class="box-attribute-list">
+                                        <li style="padding:10px;">
+                                            <table class="list">
+                                                <tbody>
+                                                <tr>
+                                                    <th width="130" class="align-center">업체구분</th>
+                                                    <td>입점업체</td>
+                                                    <th width="130" class="align-center">업체</th>
+                                                    <td>[위탁]왁티</td>
+                                                    <th width="130" class="align-center">담당자</th>
+                                                    <td>윤성혜</td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="100" class="align-center">전화</th>
+                                                    <td>070-4334-2100</td>
+                                                    <th width="100" class="align-center">휴대전화</th>
+                                                    <td colspan="3">010-3309-8669</td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="100" class="align-center">주소</th>
+                                                    <td colspan="3">사업장 : (135-888) 서울특별시 강남구 압구정로10길 7 3층<br>반송지 : (06028) 경기 용인시 처인구 백암면 백봉리 937 만재물류</td>
+                                                    <th width="100" class="align-center">담당MD</th>
+                                                    <td>이재희</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- e:공급업체 정보 -->
+
+
+                        <!-- s:주문 처리일자 정보 -->
+                        <div class="splitcontent">
+                            <h3 class="box-panel-title"><img src="/po/application/views/images/icon_views_info.png" alt="상품정보"> 주문 처리일자 정보
+                                <a class="btn-accordion-panel" href="#" onclick="togglePanel(this);return false;"></a>
+                            </h3>
+                            <div class="box-panel">
+                                <div class="box-attribute">
+                                    <ul class="box-attribute-list">
+                                        <li style="padding:10px;">
+                                            <table class="list">
+                                                <tbody>
+                                                <tr>
+                                                    <th width="130" class="align-center">주문일자</th>
+                                                    <td>2019.10.18 08:31:44</td>
+                                                    <th width="130" class="align-center">입금일자</th>
+                                                    <td>2019.10.18 08:32:43</td>
+                                                    <th width="130" class="align-center">최종처리일자</th>
+                                                    <td>2019.10.18 11:16:34</td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="130" class="align-center">주문완료</th>
+                                                    <td>2019.10.18 08:32:43</td>
+                                                    <th width="130" class="align-center">상품준비중</th>
+                                                    <td>2019.10.18 10:44:12</td>
+                                                    <th width="130" class="align-center">상품출고완료</th>
+                                                    <td>2019.10.18 11:16:34</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- e:주문 처리일자 정보 -->
+
+
+                    </form>
+
+                    <div class="box-btn-bottom">
+                        <a href="#" class="btn-big-default" onclick="self.close(); return false;">닫기</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="display:none">
+    <form name="prd02_detail_goods_cont_upload_form" id="prd02_detail_goods_cont_upload_form" method="post" action="/po/prd/prd02/upload_detail_image" target="goods_cont_upload_target" enctype="multipart/form-data">
+        <input type="hidden" name="limit_width" value="900" />
+        <input type="hidden" name="type" value="goods_cont" />
+        <input type="file" name="Filedata[]" id="goods_cont_file" onchange="imageUpload('goods_cont');" class="comment-file-upload" multiple/>
+    </form>
+    <iframe name="goods_cont_upload_target" src="about:blank" style="display:none; width: 100%; height: 200px;"></iframe>
+
+    <form name="prd02_detail_opinion_upload_form" id="prd02_detail_opinion_upload_form" method="post" action="/po/prd/prd02/upload_detail_image" target="opinion_upload_target" enctype="multipart/form-data">
+        <input type="hidden" name="limit_width" value="900" />
+        <input type="hidden" name="type" value="opinion" />
+        <input type="file" name="Filedata[]" id="opinion_file" onchange="imageUpload('opinion');" class="comment-file-upload" multiple/>
+    </form>
+    <iframe name="opinion_upload_target" src="about:blank" style="display:none; width: 100%; height: 200px;"></iframe>
+
+    <form name="prd02_detail_size_info_upload_form" id="prd02_detail_size_info_upload_form" method="post" action="/po/prd/prd02/upload_detail_image" target="size_info_upload_target" enctype="multipart/form-data">
+        <input type="hidden" name="limit_width" value="900" />
+        <input type="hidden" name="type" value="size_info" />
+        <input type="file" name="Filedata[]" id="size_info_file" onchange="imageUpload('size_info');" class="comment-file-upload" multiple/>
+    </form>
+    <iframe name="size_info_upload_target" src="about:blank" style="display:none; width: 100%; height: 200px;"></iframe>
+</div>
+</body>
+</html>

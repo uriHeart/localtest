@@ -43,6 +43,7 @@ public class SsgOrderCollectorTest extends AbstractOrderCollector {
     @Autowired
     private VendorService vendorService;
 
+
     @Override
     public boolean isSupport(SalesChannel channel) {
         return false;

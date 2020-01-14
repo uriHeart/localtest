@@ -19,7 +19,7 @@ import java.util.Date;
 public class SkuMapping implements SystemMetadata {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="sku_seq")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="sku_seq")
     @SequenceGenerator(name="sku_mapping_seq", sequenceName="sku_mapping_seq", allocationSize=1)
     @Column(name = "sku_mapping_id", nullable = false)
     private Long skuMappingId;

@@ -1,0 +1,577 @@
+{
+  "mobile_yn": "N",
+  "order": {
+    "G_SHOP_DOMAIN": "bizest.musinsa.com",
+    "IMG_URL": "//image.msscdn.net",
+    "ORD_NO": "201910011059165294",
+    "ORD_OPT_NO": "40683367",
+    "ORD_DATE": "2019.10.01 11:00:38",
+    "ORD_KIND": "10",
+    "USER_ID": "guni07",
+    "USER_NM": "ZH*",
+    "PHONE": "010-****-1432",
+    "MOBILE": "010-****-1432",
+    "EMAIL": "zha***@naver.com",
+    "BLACK_YN": "",
+    "R_NM": "ZH*",
+    "R_PHONE": "010-****-1432",
+    "R_MOBILE": "010-****-1432",
+    "R_ZIPCODE": "14215",
+    "R_ADDR": "(14215) 경기도 광명시 철산동  172-1 ******",
+    "DLV_MSG": "빠른배송부탁드립니다",
+    "COM_ID": "goal",
+    "URL": null,
+    "ORD_STATE": "50",
+    "ORD_STATE_NM": "구매확정",
+    "DLV_NO": "355288784760",
+    "DLV_CD": "CJGLS",
+    "COM_DLV_CD": "CJGLS",
+    "DLV_NM": "CJ대한통운",
+    "MST_DLV_END_DATE": "2019.10.01 14:25:41",
+    "SALE_PLACE": "[판매]무신사",
+    "DLV_AMT": "2,500",
+    "ADD_DLV_FEE": "0",
+    "ADD_POINT": "0",
+    "DLV_START_DATE": "2019.10.01 11:00:39",
+    "DLV_PROC_DATE": "2019.10.01 13:21:12",
+    "DLV_END_DATE": "2019.10.01 14:25:41",
+    "DLV_REC_DATE": "2019.10.02 13:25",
+    "UPD_DATE": "2019.10.01 14:25:41",
+    "DLV_COMMENT": null,
+    "DLV_HOMEPAGE": "https://www.doortodoor.co.kr/parcel/doortodoor.do?fsp_action=PARC_ACT_002&fsp_cmd=retrieveInvNoACT&invc_no=",
+    "P_ORD_OPT_NO": null,
+    "COM_TYPE": "2",
+    "COM_TYPE_NM": "입점업체",
+    "COM_NM": "goal",
+    "LAST_LOGIN_DATE": "2020-01-13 21:40:19",
+    "STAFF_NM1": "박병주",
+    "STAFF_PHONE1": "070-4334-2100",
+    "STAFF_HP1": "010-5583-3858",
+    "COM_ADDRESS": "(06028) 서울특별시 강남구 압구정로10길 7 왁티",
+    "COM_ADDRESS_R": "(17180) 경기도 용인시 처인구 죽양대로912번길 46 만재물류",
+    "MD_NM": "주세준",
+    "RECEIPT": "",
+    "REFUND_AMT_ORG": "199000",
+    "CLM_SOLDOUT_TYPE": "2",
+    "CLM_SOLDOUT_TYPE_TXT": "환불",
+    "DLV_DUE_DAY": "",
+    "DLV_DUE_TYPE": "",
+    "COM_DLV_DUE_DAY": "0",
+    "QTY": "1",
+    "CLM_QTY": 1,
+    "CLM_DLV_AMT": "2500",
+    "P_ORD_NO": "",
+    "C_ORD_OPT_NO": "41724864",
+    "C_ORD_NO": "201910161145294532"
+  },
+  "penalty": {
+    "PENALTY": [],
+    "PENALTY_CNT": 0,
+    "PENALTY_ISSUE": [
+      {
+        "code_id": "1",
+        "code_val": "시스템 오류"
+      },
+      {
+        "code_id": "2",
+        "code_val": "송장 입력 오류"
+      },
+      {
+        "code_id": "3",
+        "code_val": "천재지변"
+      },
+      {
+        "code_id": "4",
+        "code_val": "택배사 사고"
+      },
+      {
+        "code_id": "5",
+        "code_val": "송장 미등록"
+      }
+    ],
+    "ISSUE_REQUEST_PERIOD": "N"
+  },
+  "goods_list": {
+    "ORDLIST": [
+      {
+        "ord_no": "201910011059165294",
+        "ord_opt_no": "40683367",
+        "state": "클레임무효",
+        "ord_state": "50",
+        "ord_kind": "정상",
+        "ord_type": "정상",
+        "head_desc": "",
+        "goods_no": "1127039",
+        "goods_sub": "0",
+        "goods_nm": "빅 골 윈드 자켓 (블랙)",
+        "goods_snm": "빅 골 윈드 자켓 (블랙)",
+        "img": "//image.msscdn.net/images/goods_img/20190823/1127039/1127039_1_50.jpg",
+        "com_nm": "goal",
+        "com_cnt": 1,
+        "style_no": "G19FMM1JK07_B",
+        "opt_val": "2XL",
+        "goods_opt": "2XL",
+        "price": "199000",
+        "qty": "1",
+        "wqty": "1",
+        "jaego_qty": "38",
+        "coupon_amt": "0",
+        "dlv_amt": "0",
+        "dlv_grp_amt": "0",
+        "refund_amt": "166340",
+        "choice_class": "choice",
+        "iserror": "N",
+        "goods_type": "P",
+        "opt_amt": "0",
+        "addopt_amt": "0",
+        "addopts": [],
+        "dlv_comment": null
+      }
+    ],
+    "ORDLIST_CNT": 1,
+    "ORDLIST2": [],
+    "ORDLIST2_CNT": 0,
+    "GOODS_NO": "1127039",
+    "GOODS_SUB": "0",
+    "SUM_AMT": 199000,
+    "SUM_DLV_AMT": 0,
+    "SUM_COUPON_AMT": 0,
+    "SUM_REFUND_AMT": 166340,
+    "SUM_ADD_POINT": 0
+  },
+  "payment": {
+    "PG_KIND": "kcp",
+    "PG_KIND_NM": "KCP",
+    "PAY_TYPE": "44",
+    "PAY_TYPE_NM": "핸드폰+적립금+쿠폰",
+    "PAY_AMT": "171340",
+    "PAY_POINT": "3980",
+    "PAY_NM": "ZHAOJUN",
+    "PAY_STAT": "1",
+    "PAY_STAT_NM": "입금완료",
+    "BANK_INPNM_TH": "입금자",
+    "BANK_INPNM": "",
+    "BANK_CODE": "",
+    "BANK_NUMBER": "",
+    "CARD_CODE": null,
+    "CARD_ISSCODE": null,
+    "CARD_QUOTA": null,
+    "CARD_APPR_NO": null,
+    "CARD_APPR_DM": "2019.10.01 11:00:39",
+    "CARD_TID": "20191001879038",
+    "CARD_MSG": "정상처리",
+    "ORD_DM": "2019.10.01 11:00:38",
+    "PAY_UPD_DM": "2019.10.01 11:00:39",
+    "PAY_YPOINT": "0",
+    "PAY_BAESONG": "0",
+    "CARD_NAME": null,
+    "NOINTF": null,
+    "GHOST_USE": "",
+    "ESCW_USE": "",
+    "TNO": "20191001879038",
+    "TNO_SHOW": "none",
+    "ST_CD": "",
+    "COUPON_AMT": "27860",
+    "DIFF_MONTH": "Y"
+  },
+  "claim": {
+    "CLM_NO": "7256784",
+    "CLM_STATE": "-30",
+    "CLM_STATES": {
+      "40": "교환요청",
+      "41": "환불요청",
+      "-30": "클레임무효"
+    },
+    "CLM_STATE_NM": "클레임무효",
+    "CLM_TYPE": "0",
+    "CLM_TYPE_CHECKS": "0",
+    "CLM_DLV_DAY": null,
+    "CLM_DLV_DAY_FORMAT": "1970-01-01",
+    "CLM_REASON": "15",
+    "CLM_REASON_VAL": "사이즈 맞지 않음(단순)",
+    "LAST_UP_DATE": "2019.10.17 18:20:53",
+    "REQ_DATE": "2019.10.16 11:45:22",
+    "REQ_NM": "안영아",
+    "PROC_DATE": null,
+    "PROC_NM": "",
+    "END_DATE": null,
+    "END_NM": "",
+    "REFUND_YN": "y",
+    "REFUND_AMT": "166340",
+    "REFUND_ACCOUNT": "핸드폰취소",
+    "REFUND_NM": "ZHAOJUN",
+    "REFUND_BANK": "핸드폰취소",
+    "REFUND_CERT_YN": "Y",
+    "DLV_DEDUCT": "0",
+    "IS_CLAIM": 1,
+    "ROWS_CLAIM": [
+      {
+        "memo": "환불요청 (고객요청)<br>반품보내지 않음/착불/0원",
+        "admin_nm": "시스템",
+        "regi_date": "19.10.02 22:11:10",
+        "alt": "",
+        "cs_form": "클레임",
+        "ord_state": "배송시작",
+        "clm_state": "환불요청",
+        "is_answer": "0",
+        "answer_yn": null,
+        "answer_id": null,
+        "answer_nm": null,
+        "answer_memo": null,
+        "answer_date": null,
+        "answer_is_partner": "0",
+        "memo_no": "12420357"
+      },
+      {
+        "memo": "고객 변심으로 인한 클레임 무효",
+        "admin_nm": "시스템",
+        "regi_date": "19.10.02 22:17:03",
+        "alt": "alt",
+        "cs_form": "클레임",
+        "ord_state": "배송시작",
+        "clm_state": "클레임무효",
+        "is_answer": "0",
+        "answer_yn": null,
+        "answer_id": null,
+        "answer_nm": null,
+        "answer_memo": null,
+        "answer_date": null,
+        "answer_is_partner": "0",
+        "memo_no": "12420422"
+      },
+      {
+        "memo": "환불요청 (고객요청)<br>반품보내지 않음/착불/0원",
+        "admin_nm": "시스템",
+        "regi_date": "19.10.02 22:35:21",
+        "alt": "",
+        "cs_form": "클레임",
+        "ord_state": "배송시작",
+        "clm_state": "환불요청",
+        "is_answer": "0",
+        "answer_yn": null,
+        "answer_id": null,
+        "answer_nm": null,
+        "answer_memo": null,
+        "answer_date": null,
+        "answer_is_partner": "0",
+        "memo_no": "12420584"
+      },
+      {
+        "memo": "택배접수안내 / 착불 /5000원차감후환불희망 / 환불희망계좌 -> 우리은행 , 1002757987975 ,  ZHAOJUN",
+        "admin_nm": "이동규",
+        "regi_date": "19.10.04 10:21:24",
+        "alt": "alt",
+        "cs_form": "클레임",
+        "ord_state": "배송완료",
+        "clm_state": "환불요청",
+        "is_answer": "0",
+        "answer_yn": "N",
+        "answer_id": null,
+        "answer_nm": null,
+        "answer_memo": null,
+        "answer_date": null,
+        "answer_is_partner": "0",
+        "memo_no": "12431692"
+      },
+      {
+        "memo": "반송장 : 841734362151 / 10일 도착확인 / 검수기간 안내",
+        "admin_nm": "조효정",
+        "regi_date": "19.10.11 13:20:42",
+        "alt": "",
+        "cs_form": "클레임",
+        "ord_state": "배송완료",
+        "clm_state": "환불요청",
+        "is_answer": "0",
+        "answer_yn": "N",
+        "answer_id": null,
+        "answer_nm": null,
+        "answer_memo": null,
+        "answer_date": null,
+        "answer_is_partner": "0",
+        "memo_no": "12584371"
+      },
+      {
+        "memo": "고객 직접 판매처 문의시 받은 상품 없다고 안내받았다고하심 / 841734362151 / 10일 도착확인 / 검수진행문의 / 업체 확인 후 전화희망",
+        "admin_nm": "이혜원2",
+        "regi_date": "19.10.15 14:29:48",
+        "alt": "alt",
+        "cs_form": "클레임",
+        "ord_state": "배송완료",
+        "clm_state": "환불요청",
+        "is_answer": "1",
+        "answer_yn": "Y",
+        "answer_id": "goal",
+        "answer_nm": "goal",
+        "answer_memo": "10월16일 제품 이상없이 수거완료되었습니다.",
+        "answer_date": "2019-10-16 14:06",
+        "answer_is_partner": "1",
+        "memo_no": "12671977"
+      },
+      {
+        "memo": "위클레임재인입/업체확인중안내/환불철회/XL로 교환희망/정상반입 확인되면 배송비계좌 문자안내",
+        "admin_nm": "안영아",
+        "regi_date": "19.10.16 11:45:09",
+        "alt": "",
+        "cs_form": "클레임",
+        "ord_state": "배송완료",
+        "clm_state": "환불요청",
+        "is_answer": "0",
+        "answer_yn": "N",
+        "answer_id": null,
+        "answer_nm": null,
+        "answer_memo": null,
+        "answer_date": null,
+        "answer_is_partner": "0",
+        "memo_no": "12700949"
+      },
+      {
+        "memo": "반품관련 / 택배사(CJ대한통운) / 선불 / 동봉액(0) / 상품이상무 / 기타(제품 이상 없이 반품 완료 . 교환제품 금일 출고예정.) / 반품수량(1) /",
+        "admin_nm": "goal",
+        "regi_date": "19.10.16 14:07:14",
+        "alt": "alt",
+        "cs_form": "클레임",
+        "ord_state": "배송완료",
+        "clm_state": "교환요청",
+        "is_answer": "0",
+        "answer_yn": "N",
+        "answer_id": null,
+        "answer_nm": null,
+        "answer_memo": null,
+        "answer_date": null,
+        "answer_is_partner": "0",
+        "memo_no": "12705117"
+      },
+      {
+        "memo": "재문의 / 자체교환 출고 진행하시는건지 확인부탁드립니다. 고객 xl로 교환희망하십니다.",
+        "admin_nm": "김효정",
+        "regi_date": "19.10.16 14:12:51",
+        "alt": "",
+        "cs_form": "클레임",
+        "ord_state": "배송완료",
+        "clm_state": "교환요청",
+        "is_answer": "1",
+        "answer_yn": "Y",
+        "answer_id": "mss_283",
+        "answer_nm": "한상덕",
+        "answer_memo": "-",
+        "answer_date": "2019-10-17 18:22",
+        "answer_is_partner": "1",
+        "memo_no": "12705327"
+      },
+      {
+        "memo": "위 클레임 확인필요 / 고객 배송비 미동봉 / 선불로 발송하지도 않았다고함 / 업체 교환상품 작일 출고예정이라는 클레임확인됨 / 착불로 입고된게 맞는지 확인하여 입금할 배송비, 계좌번호 문자발송희망 (류정아)",
+        "admin_nm": "황다경",
+        "regi_date": "19.10.17 13:41:22",
+        "alt": "alt",
+        "cs_form": "클레임",
+        "ord_state": "배송완료",
+        "clm_state": "교환요청",
+        "is_answer": "1",
+        "answer_yn": "Y",
+        "answer_id": "mss_284",
+        "answer_nm": "황다경",
+        "answer_memo": "-",
+        "answer_date": "2019-10-17 13:41",
+        "answer_is_partner": "0",
+        "memo_no": "12736385"
+      },
+      {
+        "memo": "위클레임재인입/고객 업체확인시 배송비 부담 안해도 된다고 안내받았다함/무상교환 여부 업체확인요망/고객 배송비 부담해야될경우 전화안내희망",
+        "admin_nm": "황다경",
+        "regi_date": "19.10.17 13:42:45",
+        "alt": "",
+        "cs_form": "클레임",
+        "ord_state": "배송완료",
+        "clm_state": "교환요청",
+        "is_answer": "1",
+        "answer_yn": "Y",
+        "answer_id": "mss_283",
+        "answer_nm": "한상덕",
+        "answer_memo": "CJ 355324221512 송장으로 업체측 자체적으로 출고완료 / 배송비는 고객님과 해결하였다고함",
+        "answer_date": "2019-10-17 18:22",
+        "answer_is_partner": "1",
+        "memo_no": "12736881"
+      }
+    ],
+    "ROWS_CLAIM_CNT": 11,
+    "BANK_CODES": {
+      "2": "산업은행",
+      "3": "기업은행",
+      "4": "국민은행",
+      "7": "수협",
+      "11": "농협중앙회",
+      "20": "우리은행",
+      "23": "SC",
+      "25": "서울은행",
+      "26": "신한은행",
+      "27": "시티은행",
+      "31": "대구은행",
+      "32": "부산은행",
+      "34": "광주은행",
+      "35": "제주은행",
+      "37": "전북은행",
+      "39": "경남은행",
+      "45": "새마을금고",
+      "48": "신협",
+      "53": "시티은행",
+      "71": "우체국",
+      "81": "하나은행",
+      "90": "카카오뱅크"
+    },
+    "CLM_REASONS": [
+      {
+        "code_id": "31",
+        "code_val": "[고   객]재결제",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "1",
+        "code_val": "[고   객]고객변심(스타일)",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "2",
+        "code_val": "[고   객]고객오류",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "3",
+        "code_val": "[고   객]중복주문",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "11",
+        "code_val": "[고   객]기타",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "25",
+        "code_val": "[고   객]미입금 취소",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "15",
+        "code_val": "[고   객]사이즈 맞지 않음(단순)",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "20",
+        "code_val": "[고   객]출하전 취소(변심환불)",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "21",
+        "code_val": "[고   객]출하전 취소(재주문)",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "22",
+        "code_val": "[고   객]출하전 취소(주문서변경)",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "30",
+        "code_val": "[판매자]A/S관련",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "24",
+        "code_val": "[판매자]퀄리티 불만",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "26",
+        "code_val": "[판매자]자식주문 무효화",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "50",
+        "code_val": "[판매자]결제 오류",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "4",
+        "code_val": "[판매자]품절",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "5",
+        "code_val": "[판매자]상품불량",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "6",
+        "code_val": "[판매자]시스템오류",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "7",
+        "code_val": "[판매자]오배송",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "9",
+        "code_val": "[판매자]배송지연",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "10",
+        "code_val": "[판매자]배송중분실",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "12",
+        "code_val": "[판매자]고객센터 불만족",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "13",
+        "code_val": "[판매자]업무 처리 지연",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "14",
+        "code_val": "[판매자]교환제품 품절",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "16",
+        "code_val": "[판매자]화면과 다름(색상)",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "17",
+        "code_val": "[판매자]화면과 다름(디자인)",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "18",
+        "code_val": "[판매자]화면과 다름(재질)",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "19",
+        "code_val": "[판매자]상세 실측 오류",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "23",
+        "code_val": "[판매자]화면과 다름(퀄리티)",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "27",
+        "code_val": "[판매자]예약배송",
+        "code_val3": "S"
+      }
+    ]
+  },
+  "account": {
+    "ROWS_ACCOUNT_ETC": [],
+    "ROWS_ACCOUNT_ETC_CNT": 0
+  },
+  "gift": {
+    "ROWS_GIFT": [],
+    "ROWS_GIFT_CNT": 0
+  }
+}

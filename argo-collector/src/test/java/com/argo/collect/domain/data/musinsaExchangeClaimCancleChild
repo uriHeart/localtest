@@ -1,0 +1,387 @@
+{
+  "mobile_yn": "N",
+  "order": {
+    "G_SHOP_DOMAIN": "bizest.musinsa.com",
+    "IMG_URL": "//image.msscdn.net",
+    "ORD_NO": "202001031747184616",
+    "ORD_OPT_NO": "47169369",
+    "ORD_DATE": "2020.01.03 17:47:18",
+    "ORD_KIND": "30",
+    "USER_ID": "show64",
+    "USER_NM": "김향*",
+    "PHONE": "010-****-8364",
+    "MOBILE": "010-****-8364",
+    "EMAIL": "sho***@naver.com",
+    "BLACK_YN": "",
+    "R_NM": "김향*",
+    "R_PHONE": "010-****-8364",
+    "R_MOBILE": "010-****-8364",
+    "R_ZIPCODE": "58739",
+    "R_ADDR": "(58739) 전라남도 목포시 남해로3번길  2 *",
+    "DLV_MSG": "",
+    "COM_ID": "goal",
+    "URL": null,
+    "ORD_STATE": "10",
+    "ORD_STATE_NM": "출고요청",
+    "DLV_NO": null,
+    "DLV_CD": null,
+    "COM_DLV_CD": "CJGLS",
+    "DLV_NM": "",
+    "MST_DLV_END_DATE": null,
+    "SALE_PLACE": "[판매]무신사",
+    "DLV_AMT": "2,500",
+    "ADD_DLV_FEE": "0",
+    "ADD_POINT": "0",
+    "DLV_START_DATE": null,
+    "DLV_PROC_DATE": null,
+    "DLV_END_DATE": null,
+    "DLV_REC_DATE": null,
+    "UPD_DATE": "2020.01.03 17:47:18",
+    "DLV_COMMENT": null,
+    "DLV_HOMEPAGE": null,
+    "P_ORD_OPT_NO": "46970700",
+    "COM_TYPE": "2",
+    "COM_TYPE_NM": "입점업체",
+    "COM_NM": "goal",
+    "LAST_LOGIN_DATE": "2020-01-13 21:40:19",
+    "STAFF_NM1": "박병주",
+    "STAFF_PHONE1": "070-4334-2100",
+    "STAFF_HP1": "010-5583-3858",
+    "COM_ADDRESS": "(06028) 서울특별시 강남구 압구정로10길 7 왁티",
+    "COM_ADDRESS_R": "(17180) 경기도 용인시 처인구 죽양대로912번길 46 만재물류",
+    "MD_NM": "주세준",
+    "RECEIPT": "",
+    "REFUND_AMT_ORG": "99000",
+    "CLM_SOLDOUT_TYPE": null,
+    "CLM_SOLDOUT_TYPE_TXT": null,
+    "DLV_DUE_DAY": "",
+    "DLV_DUE_TYPE": "R",
+    "COM_DLV_DUE_DAY": "0",
+    "QTY": "1",
+    "CLM_QTY": 1,
+    "CLM_DLV_AMT": "2500",
+    "P_ORD_NO": "201912311023093453",
+    "C_ORD_OPT_NO": "",
+    "C_ORD_NO": ""
+  },
+  "penalty": {
+    "PENALTY": [],
+    "PENALTY_CNT": 0,
+    "PENALTY_ISSUE": [
+      {
+        "code_id": "1",
+        "code_val": "시스템 오류"
+      },
+      {
+        "code_id": "2",
+        "code_val": "송장 입력 오류"
+      },
+      {
+        "code_id": "3",
+        "code_val": "천재지변"
+      },
+      {
+        "code_id": "4",
+        "code_val": "택배사 사고"
+      },
+      {
+        "code_id": "5",
+        "code_val": "송장 미등록"
+      }
+    ],
+    "ISSUE_REQUEST_PERIOD": "N"
+  },
+  "goods_list": {
+    "ORDLIST": [
+      {
+        "ord_no": "202001031747184616",
+        "ord_opt_no": "47169369",
+        "state": "환불완료",
+        "ord_state": "10",
+        "ord_kind": "출고보류",
+        "ord_type": "사용자 교환",
+        "head_desc": "",
+        "goods_no": "1253745",
+        "goods_sub": "0",
+        "goods_nm": "리브더골 후디 (레드)",
+        "goods_snm": "리브더골 후디 (레드)",
+        "img": "//image.msscdn.net/images/goods_img/20191218/1253745/1253745_1_50.jpg",
+        "com_nm": "goal",
+        "com_cnt": 1,
+        "style_no": "G19WMS1HD31R",
+        "opt_val": "XL",
+        "goods_opt": "XL",
+        "price": "99000",
+        "qty": "1",
+        "wqty": "1",
+        "jaego_qty": "30",
+        "coupon_amt": "0",
+        "dlv_amt": "0",
+        "dlv_grp_amt": "0",
+        "refund_amt": 0,
+        "choice_class": "choice",
+        "iserror": "N",
+        "goods_type": "P",
+        "opt_amt": "0",
+        "addopt_amt": "0",
+        "addopts": [],
+        "dlv_comment": null
+      }
+    ],
+    "ORDLIST_CNT": 1,
+    "ORDLIST2": [],
+    "ORDLIST2_CNT": 0,
+    "GOODS_NO": "1253745",
+    "GOODS_SUB": "0",
+    "SUM_AMT": 99000,
+    "SUM_DLV_AMT": 0,
+    "SUM_COUPON_AMT": 0,
+    "SUM_REFUND_AMT": 0,
+    "SUM_ADD_POINT": 0
+  },
+  "payment": {
+    "PG_KIND": "toss",
+    "PG_KIND_NM": "TOSS",
+    "PAY_TYPE": "28",
+    "PAY_TYPE_NM": "계좌이체+적립금+쿠폰",
+    "PAY_AMT": "75240",
+    "PAY_POINT": "10890",
+    "PAY_NM": "김향진",
+    "PAY_STAT": "1",
+    "PAY_STAT_NM": "입금완료",
+    "BANK_INPNM_TH": "입금자",
+    "BANK_INPNM": "",
+    "BANK_CODE": "",
+    "BANK_NUMBER": "",
+    "CARD_CODE": null,
+    "CARD_ISSCODE": null,
+    "CARD_QUOTA": null,
+    "CARD_APPR_NO": null,
+    "CARD_APPR_DM": null,
+    "CARD_TID": "WZ4LofeE5G0iNn9RDegV87",
+    "CARD_MSG": "상품수기판매",
+    "ORD_DM": "2020.01.03 17:47:18",
+    "PAY_UPD_DM": null,
+    "PAY_YPOINT": "0",
+    "PAY_BAESONG": "0",
+    "CARD_NAME": null,
+    "NOINTF": null,
+    "GHOST_USE": "",
+    "ESCW_USE": "N",
+    "TNO": "WZ4LofeE5G0iNn9RDegV87",
+    "TNO_SHOW": "none",
+    "ST_CD": "",
+    "COUPON_AMT": "9900",
+    "DIFF_MONTH": "N"
+  },
+  "claim": {
+    "CLM_NO": "8410809",
+    "CLM_STATE": "61",
+    "CLM_STATES": {
+      "61": "환불완료"
+    },
+    "CLM_STATE_NM": "환불완료",
+    "CLM_TYPE": null,
+    "CLM_TYPE_CHECKS": null,
+    "CLM_DLV_DAY": null,
+    "CLM_DLV_DAY_FORMAT": "1970-01-01",
+    "CLM_REASON": "26",
+    "CLM_REASON_VAL": "자식주문 무효화",
+    "LAST_UP_DATE": "2020.01.13 16:32:36",
+    "REQ_DATE": "2020.01.13 16:32:31",
+    "REQ_NM": "윤하윤",
+    "PROC_DATE": "2020.01.13 16:32:33",
+    "PROC_NM": "윤하윤",
+    "END_DATE": "2020.01.13 16:32:36",
+    "END_NM": "윤하윤",
+    "REFUND_YN": "n",
+    "REFUND_AMT": 0,
+    "REFUND_ACCOUNT": null,
+    "REFUND_NM": null,
+    "REFUND_BANK": null,
+    "REFUND_CERT_YN": "N",
+    "DLV_DEDUCT": "0",
+    "IS_CLAIM": 1,
+    "ROWS_CLAIM": [],
+    "ROWS_CLAIM_CNT": 0,
+    "BANK_CODES": {
+      "2": "산업은행",
+      "3": "기업은행",
+      "4": "국민은행",
+      "7": "수협",
+      "11": "농협중앙회",
+      "20": "우리은행",
+      "23": "SC",
+      "25": "서울은행",
+      "26": "신한은행",
+      "27": "시티은행",
+      "31": "대구은행",
+      "32": "부산은행",
+      "34": "광주은행",
+      "35": "제주은행",
+      "37": "전북은행",
+      "39": "경남은행",
+      "45": "새마을금고",
+      "48": "신협",
+      "53": "시티은행",
+      "71": "우체국",
+      "81": "하나은행",
+      "90": "카카오뱅크"
+    },
+    "CLM_REASONS": [
+      {
+        "code_id": "31",
+        "code_val": "[고   객]재결제",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "1",
+        "code_val": "[고   객]고객변심(스타일)",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "2",
+        "code_val": "[고   객]고객오류",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "3",
+        "code_val": "[고   객]중복주문",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "11",
+        "code_val": "[고   객]기타",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "25",
+        "code_val": "[고   객]미입금 취소",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "15",
+        "code_val": "[고   객]사이즈 맞지 않음(단순)",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "20",
+        "code_val": "[고   객]출하전 취소(변심환불)",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "21",
+        "code_val": "[고   객]출하전 취소(재주문)",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "22",
+        "code_val": "[고   객]출하전 취소(주문서변경)",
+        "code_val3": "U"
+      },
+      {
+        "code_id": "30",
+        "code_val": "[판매자]A/S관련",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "24",
+        "code_val": "[판매자]퀄리티 불만",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "26",
+        "code_val": "[판매자]자식주문 무효화",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "50",
+        "code_val": "[판매자]결제 오류",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "4",
+        "code_val": "[판매자]품절",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "5",
+        "code_val": "[판매자]상품불량",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "6",
+        "code_val": "[판매자]시스템오류",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "7",
+        "code_val": "[판매자]오배송",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "9",
+        "code_val": "[판매자]배송지연",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "10",
+        "code_val": "[판매자]배송중분실",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "12",
+        "code_val": "[판매자]고객센터 불만족",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "13",
+        "code_val": "[판매자]업무 처리 지연",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "14",
+        "code_val": "[판매자]교환제품 품절",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "16",
+        "code_val": "[판매자]화면과 다름(색상)",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "17",
+        "code_val": "[판매자]화면과 다름(디자인)",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "18",
+        "code_val": "[판매자]화면과 다름(재질)",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "19",
+        "code_val": "[판매자]상세 실측 오류",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "23",
+        "code_val": "[판매자]화면과 다름(퀄리티)",
+        "code_val3": "S"
+      },
+      {
+        "code_id": "27",
+        "code_val": "[판매자]예약배송",
+        "code_val3": "S"
+      }
+    ]
+  },
+  "account": {
+    "ROWS_ACCOUNT_ETC": [],
+    "ROWS_ACCOUNT_ETC_CNT": 0
+  },
+  "gift": {
+    "ROWS_GIFT": [],
+    "ROWS_GIFT_CNT": 0
+  }
+}

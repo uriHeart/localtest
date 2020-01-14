@@ -16,8 +16,9 @@ public class OrderMetadata extends TargetData {
     private Long totalQuantity;
     private Long totalPrice;
     private Long deliveryPrice;
-    private Long cancelPrice;
+    private Long cancelPrice; //환불금액
     private Long cancelDeliveryPrice;
     // private Date collectedAt; // dataRows.collect_date + dataRows.collect_time
     private Date orderedAt; // dataRows.order_date + dataRows.order_time
+    private String isRefund;
 }

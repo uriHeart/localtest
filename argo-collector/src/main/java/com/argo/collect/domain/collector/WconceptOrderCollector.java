@@ -81,7 +81,7 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
         //로그인 버튼 클릭
         driver.findElement(By.className("inputNo")).click();
         try {
-        Thread.sleep(2000);
+            Thread.sleep(2000);
 
             driver.findElement(By.className("close_btn")).click();
         }catch (Exception e){
@@ -182,16 +182,16 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
         List<Map> orderList = new ArrayList<>();
 
         trList
-            .stream()
-            .findFirst()
-            .map(tr -> {
-                List<WebElement> dtList = tr.findElements(By.tagName("td"));
-                dtList.forEach(td->{
-                    headerData.add(td.getText());
-                    System.out.println(td.getText());
-                });
-                return tr;
-            })
+                .stream()
+                .findFirst()
+                .map(tr -> {
+                    List<WebElement> dtList = tr.findElements(By.tagName("td"));
+                    dtList.forEach(td->{
+                        headerData.add(td.getText());
+                        System.out.println(td.getText());
+                    });
+                    return tr;
+                })
         ;
 
         trList.stream().skip(1).forEach(tr -> {
@@ -278,7 +278,7 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
                                     .map(converter ->converter.getEventType(order))
                                     .findFirst()
                                     .orElse(EventType.OTHER)
-                            );
+                    );
                     return order;
                 })
                 .collect(Collectors.toList());

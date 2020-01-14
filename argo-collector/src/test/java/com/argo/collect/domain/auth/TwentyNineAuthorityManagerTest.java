@@ -73,7 +73,7 @@ public class TwentyNineAuthorityManagerTest  {
         if (response.getBody() != null) {
             ObjectMapper objectMapper = new ObjectMapper();
             Map data = objectMapper.readValue(response.getBody(), Map.class);
-            log.info("data : {}", response.getBody());
+//            log.info("data : {}", response.getBody());
         }
     }
 }
