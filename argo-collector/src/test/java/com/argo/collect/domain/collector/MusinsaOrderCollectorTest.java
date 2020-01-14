@@ -28,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -135,14 +136,18 @@ public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
 
             event.putAll(claimData);
 
-            Map claim = claimHandlers
+            List<Map> claim = claimHandlers
                     .stream()
                     .filter(s ->s.isClaim(event))
                     .map(s -> s.makeClaim(event))
-                    .findFirst()
-                    .orElse(null)
+                    .collect(Collectors.toList())
                     ;
-            if(claim!=null && !claim.isEmpty()) claimList.add(claim);
+
+            claimList.addAll(claim
+                                .stream()
+                                .filter(s->s!=null && !s.isEmpty())
+                                .collect(Collectors.toList())
+            );
 
         });
 

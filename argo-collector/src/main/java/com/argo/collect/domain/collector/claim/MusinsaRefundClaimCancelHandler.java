@@ -21,6 +21,7 @@ public class MusinsaRefundClaimCancelHandler implements MusinsaClaimHandler{
     public Map makeClaim(Map rowData) {
         Map claimCancel = Maps.newHashMap(rowData);
 
+        claimCancel.put("upd_date",claimCancel.get("LAST_UP_DATE"));
         this.modifyOriginalData(rowData);
         return claimCancel;
     }

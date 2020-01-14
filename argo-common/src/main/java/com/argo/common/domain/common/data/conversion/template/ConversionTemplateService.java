@@ -360,7 +360,22 @@ public class ConversionTemplateService {
                 templateMap.put(vendorItemLifecycleTemplate.getTargetId(), vendorItemLifecycleTemplate);
                 break;
 
-            case "8":
+
+
+            case "8-ORDER":
+            case "8-CANCEL":
+            case "8-PAYMENT_COMPLETE":
+            case "8-RELEASE_REQUEST":
+            case "8-RELEASE":
+            case "8-DELIVERY":
+            case "8-DELIVERY_COMPLETE":
+            case "8-EXCHANGE_REQUEST":
+            case "8-EXCHANGE_PROCESS":
+            case "8-EXCHANGE":
+            case "8-RETURN_REQUEST":
+            case "8-RETURN":
+            case "8-RETURN_PROCESS":
+            case "8-OTHER":
                 argoOrderTemplate = getMusinsaArgoOrderTemplate();
                 orderAddressTemplate = getMusinsaOrderAddressTemplate();
                 vendorItemLifecycleTemplate = getMusinsaOrderVendorItemLifecycleTemplate();
@@ -369,7 +384,20 @@ public class ConversionTemplateService {
                 templateMap.put(argoOrderTemplate.getTargetId(), argoOrderTemplate);
                 break;
 
-            case "1":
+            case "1-ORDER":
+            case "1-CANCEL":
+            case "1-PAYMENT_COMPLETE":
+            case "1-RELEASE_REQUEST":
+            case "1-RELEASE":
+            case "1-DELIVERY":
+            case "1-DELIVERY_COMPLETE":
+            case "1-EXCHANGE_REQUEST":
+            case "1-EXCHANGE_PROCESS":
+            case "1-EXCHANGE":
+            case "1-RETURN_REQUEST":
+            case "1-RETURN":
+            case "1-RETURN_PROCESS":
+            case "1-OTHER":
                 argoOrderTemplate = getPlayerArgoOrderTemplate();
                 orderAddressTemplate = getPlayerOrderAddressTemplate();
                 vendorItemLifecycleTemplate = getPlayerOrderVendorItemLifecycleTemplate();

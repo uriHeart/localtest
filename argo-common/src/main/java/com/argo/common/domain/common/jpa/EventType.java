@@ -16,6 +16,7 @@ public enum EventType {
     RETURN_REQUEST("RETURN_REQUEST"),//환불요청
     RETURN_PROCESS("RETURN_PROCESS"),//환불처리
     RETURN("RETURN"), //환불완료
+    CLAIM_CANCEL("CLAIM_CANCEL"), //클레임무효
     OTHER("OTHER");
 
 

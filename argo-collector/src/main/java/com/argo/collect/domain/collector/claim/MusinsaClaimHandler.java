@@ -8,6 +8,6 @@ public interface MusinsaClaimHandler {
 
     Map makeClaim(Map rowData);
 
-    public void modifyOriginalData(Map rowData);
+    void modifyOriginalData(Map rowData);
 
 }

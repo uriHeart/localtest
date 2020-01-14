@@ -13,7 +13,10 @@ import java.util.Map;
 public class MusinsaExChangeReleaseHandler implements MusinsaClaimHandler{
     @Override
     public boolean isClaim(Map rowData) {
-        return !StringUtils.isEmpty(rowData.get("P_ORD_NO"));
+        String ordStateNm = String.valueOf(rowData.get("ORD_STATE_NM"));
+        String parentOrdNo = String.valueOf(rowData.get("P_ORD_NO"));
+
+        return "출고요청".equals(ordStateNm) && !StringUtils.isEmpty(parentOrdNo);
     }
 
 
