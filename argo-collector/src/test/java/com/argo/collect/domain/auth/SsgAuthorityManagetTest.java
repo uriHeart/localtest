@@ -11,15 +11,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 
-@Slf4j
-@RunWith(SpringRunner.class)
-@SpringBootTest(
-        properties = {
-                "value=test"
-        },
-        classes = {ArgoCollectorApplication.class},
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
+//@Slf4j
+//@RunWith(SpringRunner.class)
+//@SpringBootTest(
+//        properties = {
+//                "value=test"
+//        },
+//        classes = {ArgoCollectorApplication.class},
+//        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+//)
 public class SsgAuthorityManagetTest extends AbstractAuthorityManager {
 
     @Autowired

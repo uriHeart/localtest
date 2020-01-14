@@ -21,15 +21,15 @@ import java.net.URL;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Slf4j
-@RunWith(SpringRunner.class)
-@SpringBootTest(
-        properties = {
-                "value=test"
-        },
-        classes = {ArgoCollectorApplication.class},
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
+//@Slf4j
+//@RunWith(SpringRunner.class)
+//@SpringBootTest(
+//        properties = {
+//                "value=test"
+//        },
+//        classes = {ArgoCollectorApplication.class},
+//        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+//)
 public class Cafe24AuthorityManagerTest extends AbstractAuthorityManager {
 
     @Autowired

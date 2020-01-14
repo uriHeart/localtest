@@ -29,15 +29,15 @@ import java.util.List;
 import java.util.Map;
 
 
-@Slf4j
-@RunWith(SpringRunner.class)
-@SpringBootTest(
-        properties = {
-                "value=test"
-        },
-        classes = {ArgoCollectorApplication.class},
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
+//@Slf4j
+//@RunWith(SpringRunner.class)
+//@SpringBootTest(
+//        properties = {
+//                "value=test"
+//        },
+//        classes = {ArgoCollectorApplication.class},
+//        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+//)
 public class SsgOrderCollectorTest extends AbstractOrderCollector {
 
     @Autowired

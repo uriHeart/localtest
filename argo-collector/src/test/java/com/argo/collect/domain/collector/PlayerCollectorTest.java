@@ -42,13 +42,13 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RunWith(SpringRunner.class)
-@SpringBootTest(
-        properties = {
-                "value=test"
-        },
-        classes = {ArgoCollectorApplication.class},
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
+//@SpringBootTest(
+//        properties = {
+//                "value=test"
+//        },
+//        classes = {ArgoCollectorApplication.class},
+//        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+//)
 public class PlayerCollectorTest extends AbstractOrderCollector {
 
     @Autowired
