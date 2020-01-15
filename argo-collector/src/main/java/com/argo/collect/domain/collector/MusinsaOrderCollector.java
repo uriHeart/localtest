@@ -6,6 +6,7 @@ import com.argo.collect.domain.event.EventConverter;
 import com.argo.common.domain.channel.SalesChannel;
 import com.argo.common.domain.common.jpa.EventType;
 import com.argo.common.domain.common.util.ArgoDateUtil;
+import com.argo.common.domain.common.util.HashUtil;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.vendor.VendorChannel;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -23,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -60,6 +62,7 @@ public class MusinsaOrderCollector extends AbstractOrderCollector {
         map.add("S_EDATE", ArgoDateUtil.getDateString(LocalDate.now()));
         map.add("MENU_ID", "/po/order/ord01");
         map.add("LIMIT", "1000");
+
 
 
 
@@ -117,14 +120,18 @@ public class MusinsaOrderCollector extends AbstractOrderCollector {
 
             event.putAll(claimData);
 
-            Map claim = claimHandlers
+            List<Map> claim = claimHandlers
                     .stream()
                     .filter(s ->s.isClaim(event))
                     .map(s -> s.makeClaim(event))
-                    .findFirst()
-                    .orElse(null)
+                    .collect(Collectors.toList())
                     ;
-            if(claim!=null && !claim.isEmpty()) claimList.add(claim);
+
+            claimList.addAll(claim
+                    .stream()
+                    .filter(s->s!=null && !s.isEmpty())
+                    .collect(Collectors.toList())
+            );
 
         });
 
@@ -181,7 +188,7 @@ public class MusinsaOrderCollector extends AbstractOrderCollector {
                     .format("JSON")
                     .auto(true)
                     .data(eventToJson)
-                    .orderId(key)
+                    .orderId(event.getOrderId())
                     .publishedAt(ArgoDateUtil.getDate(event.getPublishedAt().replaceAll("\\.", "-")))
                     .createdAt(new Date())
                     .event(event.getEventType())
@@ -190,22 +197,25 @@ public class MusinsaOrderCollector extends AbstractOrderCollector {
         });
     }
 
-    public HashMap<String, RawEventParam> mergeRawEvent(List<Map> orderList){
+    public HashMap<String, RawEventParam> mergeRawEvent(List<Map> eventList){
 
         HashMap<String, RawEventParam> mergedOrder = new HashMap<>();
-        orderList.forEach(event -> {
+        eventList.forEach(event -> {
             String orderId = String.valueOf(event.get("ord_no"));
             String publishedAt = String.valueOf(event.get("upd_date"));
             String eventType = String.valueOf(event.get("event_type"));
-            if (mergedOrder.containsKey(orderId)) {
-                mergedOrder.get(orderId).getDataRows().add(event);
+
+            String mergeKey = HashUtil.sha256(orderId+publishedAt);
+
+            if (mergedOrder.containsKey(mergeKey)) {
+                mergedOrder.get(mergeKey).getDataRows().add(event);
             } else {
                 RawEventParam rawEventParam = new RawEventParam();
                 rawEventParam.setOrderId(orderId);
                 rawEventParam.setPublishedAt(publishedAt);
                 rawEventParam.setEventType(eventType);
                 rawEventParam.getDataRows().add(event);
-                mergedOrder.put(orderId, rawEventParam);
+                mergedOrder.put(mergeKey, rawEventParam);
             }
         });
 

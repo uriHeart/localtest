@@ -25,7 +25,7 @@ public class OrderCollectExecutor {
 
     private boolean collectRun = false;
 
-    @Scheduled(cron = "0 0/2 * * * *")
+    @Scheduled(cron = "0 0/1 * * * *")
     public void run() {
         if (isRun()) {
             log.info("Already Order Collecting ##### ");
@@ -36,9 +36,13 @@ public class OrderCollectExecutor {
             for (VendorChannel channel : vendorService.autoCollectingTargets()) {
                 collectors.forEach(
                         c -> {
-                            if (c.isSupport(channel.getSalesChannel())) {
-                                c.collect(channel);
+
+                            if(channel.getSalesChannel().getSalesChannelId()==1L){
+                                if (c.isSupport(channel.getSalesChannel())) {
+                                    c.collect(channel);
+                                }
                             }
+
                         });
             }
         } catch (Exception e) {

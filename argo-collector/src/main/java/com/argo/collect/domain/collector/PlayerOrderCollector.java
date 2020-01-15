@@ -65,7 +65,7 @@ public class PlayerOrderCollector extends AbstractOrderCollector {
         headers.add("Cookie", authorization);
 
         MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
-        map.add("S_SDATE", ArgoDateUtil.getDateString(LocalDate.now().minusMonths(2)));
+        map.add("S_SDATE", ArgoDateUtil.getDateString(LocalDate.now().minusMonths(1)));
         map.add("S_EDATE", ArgoDateUtil.getDateString(LocalDate.now()));
 
         //https://biz.player.co.kr/po/order/ord01/detail?ORD_NO=20191017195084f2fe&ORD_OPT_NO=13931018&LAYOUT_TYPE=popup
@@ -91,7 +91,7 @@ public class PlayerOrderCollector extends AbstractOrderCollector {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Document doc = Jsoup.parse(orderDetail);
+            Document doc =Jsoup.parse(orderDetail);
 
             //0:주문자 정보
             //1:수령자 정보
@@ -107,8 +107,8 @@ public class PlayerOrderCollector extends AbstractOrderCollector {
             event.putAll(this.getDetailData(tbodyList,3));
 
             try {
-                event.put("clm_message", tbodyList.get(4).childNodes().get(1).childNode(0).childNode(0));
-            }catch(NullPointerException e){
+                event.put("clm_message", tbodyList.get(4).childNodes().get(1).childNode(7).childNode(0));
+            }catch(Exception e){
                 log.info("no claim");
                 log.error(e.getMessage());
             }
@@ -165,7 +165,7 @@ public class PlayerOrderCollector extends AbstractOrderCollector {
     }
 
 
-    public List<Map> eventConvert(List<Map> eventList,VendorChannel channel){
+    public List<Map> eventConvert(List<Map> eventList, VendorChannel channel){
 
         eventList.forEach(event ->{
             //이벤트 타입변환

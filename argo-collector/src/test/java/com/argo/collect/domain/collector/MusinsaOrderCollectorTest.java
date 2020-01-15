@@ -30,15 +30,15 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-//@Slf4j
-//@RunWith(SpringRunner.class)
-//@SpringBootTest(
-//        properties = {
-//                "value=test"
-//        },
-//        classes = {ArgoCollectorApplication.class},
-//        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-//)
+@Slf4j
+@RunWith(SpringRunner.class)
+@SpringBootTest(
+        properties = {
+                "value=test"
+        },
+        classes = {ArgoCollectorApplication.class},
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+)
 public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
 
     @Autowired
@@ -75,8 +75,8 @@ public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
         headers.add("cookie", authorization);
 
         MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
-        map.add("S_SDATE", "2020-01-03 00:00:00");
-        map.add("S_EDATE", "2020-01-04 00:00:00");
+        map.add("S_SDATE", "2019-12-18 00:00:00");
+        map.add("S_EDATE", "2019-12-19 00:00:00");
         map.add("MENU_ID", "/po/order/ord01");
         map.add("LIMIT", "1000");
 
