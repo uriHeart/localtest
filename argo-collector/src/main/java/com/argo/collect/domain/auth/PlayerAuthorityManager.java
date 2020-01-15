@@ -2,7 +2,9 @@ package com.argo.collect.domain.auth;
 
 import com.argo.collect.domain.util.ArgoScriptEngineManager;
 import com.argo.common.domain.vendor.VendorChannel;
+import com.argo.common.domain.vendor.VendorChannelService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -22,9 +24,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class PlayerAuthorityManager extends AbstractAuthorityManager {
-    @Autowired
-    private ArgoScriptEngineManager scriptEngineManager;
+
+    private final VendorChannelService vendorChannelService;
+
+    private final ArgoScriptEngineManager scriptEngineManager;
 
     @Override
     public boolean isTargetChannel(String channel) {
@@ -53,11 +58,15 @@ public class PlayerAuthorityManager extends AbstractAuthorityManager {
             Map result = super.getResult(con.getInputStream(), false);
 
             if (result == null || !"1".equals(result.get("cd").toString())) {
+                channel.setAutoCollecting(false);
+                vendorChannelService.save(channel);
                 return null;
             }
 
             return con.getHeaderFields().get("Set-Cookie").stream().collect(Collectors.joining());
         } catch (IOException e) {
+            channel.setAutoCollecting(false);
+            vendorChannelService.save(channel);
             e.printStackTrace();
         }
 
