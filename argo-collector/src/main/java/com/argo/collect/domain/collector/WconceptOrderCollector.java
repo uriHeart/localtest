@@ -5,6 +5,7 @@ import com.argo.collect.domain.event.EventConverter;
 import com.argo.common.domain.channel.SalesChannel;
 import com.argo.common.domain.common.jpa.EventType;
 import com.argo.common.domain.common.util.ArgoDateUtil;
+import com.argo.common.domain.common.util.HashUtil;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.raw.RawEventRepository;
 import com.argo.common.domain.vendor.VendorChannel;
@@ -81,8 +82,14 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
         //로그인 버튼 클릭
         driver.findElement(By.className("inputNo")).click();
         try {
+            //비밀번호변경확인
             Thread.sleep(2000);
-
+            driver.findElement(By.className("close_btn")).click();
+        }catch (Exception e){
+            System.out.println("팝업창 없음으로 패스함");
+        }
+        try {
+            //공지사항
             driver.findElement(By.className("close_btn")).click();
         }catch (Exception e){
             System.out.println("팝업창 없음으로 패스함");
@@ -135,7 +142,8 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
         addrHeaderList.forEach(header -> {
             addrHeaderData.add(header.getText());
         });
-        addrHeaderData.add(21,"개인통관부호");
+
+        if(!addrHeaderData.isEmpty()) addrHeaderData.add(21,"개인통관부호");
 
         for(int i=3; i <= addrTrSize; i++ ){
             List<WebElement> tdList = driver.findElements(By.xpath("//*[@id=\"TreeInxDiv04\"]/table/tbody/tr["+i+"]/td"));
@@ -221,15 +229,18 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
             String orderId = String.valueOf(event.get(eventOrderId));
             String publishedAt = String.valueOf(event.get(eventPublishedAt));
             String eventType = String.valueOf(event.get("event_type"));
-            if (mergedOrder.containsKey(orderId)) {
-                mergedOrder.get(orderId).getDataRows().add(event);
+
+            String mergeKey = HashUtil.sha256(orderId+publishedAt);
+
+            if (mergedOrder.containsKey(mergeKey)) {
+                mergedOrder.get(mergeKey).getDataRows().add(event);
             } else {
                 RawEventParam rawEventParam = new RawEventParam();
                 rawEventParam.setOrderId(orderId);
                 rawEventParam.setPublishedAt(publishedAt);
                 rawEventParam.setEventType(eventType);
                 rawEventParam.getDataRows().add(event);
-                mergedOrder.put(orderId, rawEventParam);
+                mergedOrder.put(mergeKey, rawEventParam);
             }
         });
 
@@ -259,7 +270,7 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
                     .format("JSON")
                     .auto(true)
                     .data(eventToJson)
-                    .orderId(key)
+                    .orderId(event.getOrderId())
                     .publishedAt(ArgoDateUtil.getDate(publishedAt))
                     .createdAt(new Date())
                     .event(event.getEventType())

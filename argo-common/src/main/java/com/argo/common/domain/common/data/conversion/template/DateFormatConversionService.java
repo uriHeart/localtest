@@ -17,4 +17,11 @@ public class DateFormatConversionService {
     public Date convertDateFormat(String date){
         return ArgoDateUtil.getDate(date.replaceAll("\\.", "-"));
     }
+
+    @ConversionOperationMethod
+    public Date addTime(String date){
+        String dateTime = date+" 00:00:00";
+        return ArgoDateUtil.getDate(dateTime);
+    }
+
 }

@@ -37,6 +37,8 @@ import com.argo.common.domain.common.data.conversion.template.player.order.Playe
 import com.argo.common.domain.common.data.conversion.template.player.order.PlayerOrderMetadataConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.player.vendorItem.PlayerOrderVendorItemLifecycleConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.player.vendorItem.PlayerOrderVendorItemMetadataConversionTemplate;
+import com.argo.common.domain.common.data.conversion.template.wconcept.order.WconceptArgoOrderConversionTemplate;
+import com.argo.common.domain.common.data.conversion.template.wconcept.order.WconceptOrderMetadataConversionTemplate;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -160,6 +162,12 @@ public class ConversionTemplateService {
             case "19-ORDER-OrderVendorItemMetadata-com.argo.common.domain.order.vendoritem.OrderVendorItemMetadata":
                 return getHyundaiOrderVendorItemMetadataTemplate();
 
+            //Wconcept
+            case "6-com.argo.common.domain.order.ArgoOrder":
+                return getWconceptArgoOrderTemplate();
+            case "6-OrderMetadata-com.argo.common.domain.order.OrderMetadata":
+                return getWconceptArgoOrderMetadataTemplate();
+
             //musinsa
             case "8-com.argo.common.domain.order.ArgoOrder":
                 return getMusinsaArgoOrderTemplate();
@@ -277,6 +285,9 @@ public class ConversionTemplateService {
 
     public ConversionTemplate getHyundaiOrderVendorItemMetadataTemplate(){ return HyundaiOrderVendorItemMetadataConversionTemplate.getOrderVendorItemMetadataTemplate(); }
 
+    //Wconcept
+    public ConversionTemplate getWconceptArgoOrderTemplate(){return WconceptArgoOrderConversionTemplate.getArgoOrderTemplate();}
+    public ConversionTemplate getWconceptArgoOrderMetadataTemplate(){return WconceptOrderMetadataConversionTemplate.getOrderMetadataTemplate();}
 
     //MUSINSA Templates
     public ConversionTemplate getMusinsaArgoOrderTemplate(){return MusinsaArgoOrderConversionTemplate.getArgoOrderTemplate();}
@@ -360,6 +371,26 @@ public class ConversionTemplateService {
                 templateMap.put(vendorItemLifecycleTemplate.getTargetId(), vendorItemLifecycleTemplate);
                 break;
 
+
+
+            case "6-ORDER":
+            case "6-CANCEL":
+            case "6-PAYMENT_COMPLETE":
+            case "6-RELEASE_REQUEST":
+            case "6-RELEASE":
+            case "6-DELIVERY":
+            case "6-DELIVERY_COMPLETE":
+            case "6-EXCHANGE_REQUEST":
+            case "6-EXCHANGE_PROCESS":
+            case "6-EXCHANGE":
+            case "6-RETURN_REQUEST":
+            case "6-RETURN":
+            case "6-RETURN_PROCESS":
+            case "6-CLAIM_CANCEL":
+            case "6-OTHER":
+                argoOrderTemplate = getMusinsaArgoOrderTemplate();
+                templateMap.put(argoOrderTemplate.getTargetId(), argoOrderTemplate);
+                break;
 
 
             case "8-ORDER":

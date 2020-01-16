@@ -19,4 +19,13 @@ public class AmountFormatConversionService {
             }
         return Long.valueOf(amt);
     }
+
+    @ConversionOperationMethod
+    public Long replaceComa(String amount){
+        String amt = amount.replaceAll(",", "");
+        if(StringUtils.isEmpty(amt)){
+            amt="0";
+        }
+        return Long.valueOf(amt);
+    }
 }
