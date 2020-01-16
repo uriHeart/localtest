@@ -231,7 +231,7 @@ public class PlayerOrderCollector extends AbstractOrderCollector {
                     .format("JSON")
                     .auto(true)
                     .data(eventToJson)
-                    .orderId(key)
+                    .orderId(event.getOrderId())
                     .publishedAt(ArgoDateUtil.getDate(event.getPublishedAt().replaceAll("\\.", "-")))
                     .createdAt(new Date())
                     .event(event.getEventType())
