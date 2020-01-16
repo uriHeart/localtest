@@ -24,7 +24,7 @@ public class PlayerOrdererConversionTemplate {
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.DIRECT)
-                .sourceField("주문자")
+                .sourceField("user_nm")
                 .targetField("name")
                 .build());
 

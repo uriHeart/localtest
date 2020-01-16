@@ -18,7 +18,7 @@ public class MusinsaEventConverter implements EventConverter {
 
         String clmState = String.valueOf(source.get("clm_state"));
         String ordState = String.valueOf(source.get("ord_state"));
-
+        if("클레임무효".equals(clmState)) return EventType.CLAIM_CANCEL;
         if("교환요청".equals(clmState)) return EventType.EXCHANGE_REQUEST;
         if("환불요청".equals(clmState)) return EventType.RETURN_REQUEST;
         if("교환처리".equals(clmState)) return EventType.EXCHANGE_PROCESS;

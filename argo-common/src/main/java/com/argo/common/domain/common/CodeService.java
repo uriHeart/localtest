@@ -33,6 +33,7 @@ public class CodeService {
         status.put("RETURN_REQUEST", "환불요청");
         status.put("RETURN_PROCESS", "환불처리");
         status.put("RETURN", "환불완료");
+        status.put("CLAIM_CANCEL", "클레임무효");
         status.put("OTHER", "기타");
         codeGroups.put("orderStatus", status);
     }

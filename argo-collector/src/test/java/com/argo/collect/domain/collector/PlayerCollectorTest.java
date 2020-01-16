@@ -3,10 +3,13 @@ package com.argo.collect.domain.collector;
 
 import com.argo.collect.ArgoCollectorApplication;
 import com.argo.collect.domain.auth.AuthorityManager;
+import com.argo.collect.domain.collector.claim.MusinsaClaimHandler;
+import com.argo.collect.domain.collector.claim.PlayerClaimHandler;
 import com.argo.collect.domain.event.EventConverter;
 import com.argo.common.domain.channel.SalesChannel;
 import com.argo.common.domain.common.jpa.EventType;
 import com.argo.common.domain.common.util.ArgoDateUtil;
+import com.argo.common.domain.common.util.HashUtil;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.vendor.VendorChannel;
 import com.argo.common.domain.vendor.VendorService;
@@ -34,14 +37,11 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
-@Slf4j
-@RunWith(SpringRunner.class)
+//@Slf4j
+//@RunWith(SpringRunner.class)
 //@SpringBootTest(
 //        properties = {
 //                "value=test"
@@ -63,6 +63,9 @@ public class PlayerCollectorTest extends AbstractOrderCollector {
     @Autowired
     private List<EventConverter> eventConverter;
 
+    @Autowired
+    private List<PlayerClaimHandler> claimHandlers;
+
     @Override
     public boolean isSupport(SalesChannel channel) {
         return false;
@@ -81,7 +84,7 @@ public class PlayerCollectorTest extends AbstractOrderCollector {
         headers.add("Cookie", authorization);
 
         MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
-        map.add("S_SDATE", "2018-01-01 00:00:00");
+        map.add("S_SDATE", "2020-01-01 00:00:00");
 
         map.add("S_EDATE", ArgoDateUtil.getDateString(LocalDate.now()));
 
@@ -94,6 +97,8 @@ public class PlayerCollectorTest extends AbstractOrderCollector {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        List<Map> claimList =new ArrayList<>();
 
         eventList.forEach(event -> {
 
@@ -128,7 +133,22 @@ public class PlayerCollectorTest extends AbstractOrderCollector {
 
             event.putAll(this.getDetailData(tbodyList,8));
 
+            List<Map> claim = claimHandlers
+                    .stream()
+                    .filter(s ->s.isClaim(event))
+                    .map(s -> s.makeClaim(event))
+                    .collect(Collectors.toList())
+                    ;
+
+            claimList.addAll(claim
+                    .stream()
+                    .filter(s->s!=null && !s.isEmpty())
+                    .collect(Collectors.toList())
+            );
+
         });
+
+        eventList.addAll(claimList);
 
         this.eventConvert(eventList,channel);
 
@@ -251,15 +271,18 @@ public class PlayerCollectorTest extends AbstractOrderCollector {
             String orderId = String.valueOf(event.get("ord_no"));
             String publishedAt = String.valueOf(event.get("upd_date"));
             String eventType = String.valueOf(event.get("event_type"));
-            if (mergedOrder.containsKey(orderId)) {
-                mergedOrder.get(orderId).getDataRows().add(event);
+
+            String mergeKey = HashUtil.sha256(orderId+publishedAt);
+
+            if (mergedOrder.containsKey(mergeKey)) {
+                mergedOrder.get(mergeKey).getDataRows().add(event);
             } else {
                 RawEventParam rawEventParam = new RawEventParam();
                 rawEventParam.setOrderId(orderId);
                 rawEventParam.setPublishedAt(publishedAt);
                 rawEventParam.setEventType(eventType);
                 rawEventParam.getDataRows().add(event);
-                mergedOrder.put(orderId, rawEventParam);
+                mergedOrder.put(mergeKey, rawEventParam);
             }
         });
 

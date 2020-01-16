@@ -375,6 +375,7 @@ public class ConversionTemplateService {
             case "8-RETURN_REQUEST":
             case "8-RETURN":
             case "8-RETURN_PROCESS":
+            case "8-CLAIM_CANCEL":
             case "8-OTHER":
                 argoOrderTemplate = getMusinsaArgoOrderTemplate();
                 orderAddressTemplate = getMusinsaOrderAddressTemplate();
@@ -397,6 +398,7 @@ public class ConversionTemplateService {
             case "1-RETURN_REQUEST":
             case "1-RETURN":
             case "1-RETURN_PROCESS":
+            case "1-CLAIM_CANCEL":
             case "1-OTHER":
                 argoOrderTemplate = getPlayerArgoOrderTemplate();
                 orderAddressTemplate = getPlayerOrderAddressTemplate();

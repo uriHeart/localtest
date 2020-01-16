@@ -13,14 +13,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(
-        properties = {
-                "value=test"
-        },
-        classes = {ArgoCollectorApplication.class},
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
+//@RunWith(SpringRunner.class)
+//@SpringBootTest(
+//        properties = {
+//                "value=test"
+//        },
+//        classes = {ArgoCollectorApplication.class},
+//        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+//)
 public class EventTest {
 
     @Autowired

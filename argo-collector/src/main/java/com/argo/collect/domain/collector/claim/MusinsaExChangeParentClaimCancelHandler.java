@@ -21,9 +21,8 @@ public class MusinsaExChangeParentClaimCancelHandler implements MusinsaClaimHand
     public Map makeClaim(Map rowData) {
         Map claimCancel = Maps.newHashMap(rowData);
 
-        claimCancel.put("upd_date",claimCancel.get("LAST_UP_DATE"));
-        claimCancel.put("price","0");
-        claimCancel.put("qty", Integer.parseInt(String.valueOf(rowData.get("qty")))* -1);
+        claimCancel.put("upd_date", claimCancel.get("LAST_UP_DATE"));
+        claimCancel.put("price", "0");
 
         this.modifyOriginalData(rowData);
         return claimCancel;

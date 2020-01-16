@@ -30,15 +30,15 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Slf4j
-@RunWith(SpringRunner.class)
-@SpringBootTest(
-        properties = {
-                "value=test"
-        },
-        classes = {ArgoCollectorApplication.class},
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
+//@Slf4j
+//@RunWith(SpringRunner.class)
+//@SpringBootTest(
+//        properties = {
+//                "value=test"
+//        },
+//        classes = {ArgoCollectorApplication.class},
+//        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+//)
 public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
 
     @Autowired
@@ -75,8 +75,8 @@ public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
         headers.add("cookie", authorization);
 
         MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
-        map.add("S_SDATE", "2019-12-18 00:00:00");
-        map.add("S_EDATE", "2019-12-19 00:00:00");
+        map.add("S_SDATE", "2019-12-31 10:20:00");
+        map.add("S_EDATE", "2019-12-31 10:30:00");
         map.add("MENU_ID", "/po/order/ord01");
         map.add("LIMIT", "1000");
 
@@ -136,17 +136,19 @@ public class MusinsaOrderCollectorTest  extends AbstractOrderCollector {
 
             event.putAll(claimData);
 
-            List<Map> claim = claimHandlers
+            List<Map> claim =
+                    claimHandlers
                     .stream()
                     .filter(s ->s.isClaim(event))
                     .map(s -> s.makeClaim(event))
                     .collect(Collectors.toList())
                     ;
 
-            claimList.addAll(claim
-                                .stream()
-                                .filter(s->s!=null && !s.isEmpty())
-                                .collect(Collectors.toList())
+            claimList.addAll(
+                    claim
+                    .stream()
+                    .filter(s->s!=null && !s.isEmpty())
+                    .collect(Collectors.toList())
             );
 
         });

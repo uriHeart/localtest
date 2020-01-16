@@ -1,16 +1,19 @@
 package com.argo.collect.domain.collector;
 
 import com.argo.collect.domain.auth.AuthorityManager;
+import com.argo.collect.domain.collector.claim.PlayerClaimHandler;
 import com.argo.collect.domain.event.EventConverter;
 import com.argo.common.domain.channel.SalesChannel;
 import com.argo.common.domain.common.jpa.EventType;
 import com.argo.common.domain.common.util.ArgoDateUtil;
+import com.argo.common.domain.common.util.HashUtil;
 import com.argo.common.domain.raw.RawEvent;
 import com.argo.common.domain.vendor.VendorChannel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,26 +31,22 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class PlayerOrderCollector extends AbstractOrderCollector {
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-    @Autowired
-    private List<EventConverter> eventConverter;
+    private final List<EventConverter> eventConverter;
 
-    @Override
+    private final List<PlayerClaimHandler> claimHandlers;
+
     public boolean isSupport(SalesChannel channel) {
         return "PLAYER".equals(channel.getCode());
     }
@@ -65,10 +64,8 @@ public class PlayerOrderCollector extends AbstractOrderCollector {
         headers.add("Cookie", authorization);
 
         MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
-        map.add("S_SDATE", ArgoDateUtil.getDateString(LocalDate.now().minusMonths(1)));
+        map.add("S_SDATE", ArgoDateUtil.getDateString(LocalDate.now().minusMonths(1L)));
         map.add("S_EDATE", ArgoDateUtil.getDateString(LocalDate.now()));
-
-        //https://biz.player.co.kr/po/order/ord01/detail?ORD_NO=20191017195084f2fe&ORD_OPT_NO=13931018&LAYOUT_TYPE=popup
 
         //수집대상 호출부분
         List<Map> eventList =null;
@@ -78,12 +75,13 @@ public class PlayerOrderCollector extends AbstractOrderCollector {
             e.printStackTrace();
         }
 
+        List<Map> claimList =new ArrayList<>();
+
         eventList.forEach(event -> {
 
             String detailUrl = "https://biz.player.co.kr/po/order/ord01/detail";
             HttpHeaders detailHeaders = new HttpHeaders();
             detailHeaders.add("cookie", authorization);
-
 
             String orderDetail= null;
             try {
@@ -106,15 +104,27 @@ public class PlayerOrderCollector extends AbstractOrderCollector {
 
             event.putAll(this.getDetailData(tbodyList,3));
 
-            try {
-                event.put("clm_message", tbodyList.get(4).childNodes().get(1).childNode(7).childNode(0));
-            }catch(Exception e){
-                log.info("no claim");
-                log.error(e.getMessage());
-            }
+            //to_do outbound error
+            //event.put("clm_message",tbodyList.get(4).childNodes().get(1).childNode(0).childNode(0));
+
             event.putAll(this.getDetailData(tbodyList,8));
 
+            List<Map> claim = claimHandlers
+                    .stream()
+                    .filter(s ->s.isClaim(event))
+                    .map(s -> s.makeClaim(event))
+                    .collect(Collectors.toList())
+                    ;
+
+            claimList.addAll(claim
+                    .stream()
+                    .filter(s->s!=null && !s.isEmpty())
+                    .collect(Collectors.toList())
+            );
+
         });
+
+        eventList.addAll(claimList);
 
         this.eventConvert(eventList,channel);
 
@@ -237,15 +247,18 @@ public class PlayerOrderCollector extends AbstractOrderCollector {
             String orderId = String.valueOf(event.get("ord_no"));
             String publishedAt = String.valueOf(event.get("upd_date"));
             String eventType = String.valueOf(event.get("event_type"));
-            if (mergedOrder.containsKey(orderId)) {
-                mergedOrder.get(orderId).getDataRows().add(event);
+
+            String mergeKey = HashUtil.sha256(orderId+publishedAt);
+
+            if (mergedOrder.containsKey(mergeKey)) {
+                mergedOrder.get(mergeKey).getDataRows().add(event);
             } else {
                 RawEventParam rawEventParam = new RawEventParam();
                 rawEventParam.setOrderId(orderId);
                 rawEventParam.setPublishedAt(publishedAt);
                 rawEventParam.setEventType(eventType);
                 rawEventParam.getDataRows().add(event);
-                mergedOrder.put(orderId, rawEventParam);
+                mergedOrder.put(mergeKey, rawEventParam);
             }
         });
 

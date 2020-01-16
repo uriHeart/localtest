@@ -21,7 +21,7 @@ public class SeleniumTest {
 
     //Properties
     public static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
-    public static final String WEB_DRIVER_PATH = "C:\\project\\argo\\argo-collector\\src\\main\\resources\\driver\\chrome\\chromedriver.exe";
+    public static final String WEB_DRIVER_PATH = "C:\\project\\argo_server_prd\\argo-collector\\src\\main\\resources\\driver\\chrome\\chromedriver.exe";
 
 
     @Test
@@ -51,6 +51,13 @@ public class SeleniumTest {
         driver.findElement(By.className("inputNo")).click();
         Thread.sleep(2000);
         try {
+            //비밀번호 교체알림
+            driver.findElement(By.className("close_btn")).click();
+        }catch (Exception e){
+            System.out.println("팝업창 없음으로 패스함");
+        }
+        try {
+            //공지사항
             driver.findElement(By.className("close_btn")).click();
         }catch (Exception e){
             System.out.println("팝업창 없음으로 패스함");
@@ -99,7 +106,8 @@ public class SeleniumTest {
         addrHeaderList.forEach(header -> {
             addrHeaderData.add(header.getText());
         });
-        addrHeaderData.add(21,"개인통관부호");
+
+        if(!addrHeaderData.isEmpty()) addrHeaderData.add(21,"개인통관부호");
 
 
         for(int i=3; i <= addrTrSize; i++ ){

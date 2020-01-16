@@ -1,0 +1,433 @@
+<!--
+Request URL: http://pin.wconcept.co.kr/ShippingPin/iFrameLstShippingOrderVendorBottom.asp
+flag: submit
+vendorcd: 3004012
+vendorname: (unable to decode value)
+page:
+ordernolist:
+dealtypecd: 01
+orderpathidxnum:
+branchcd:
+strfrom: 2019-12-16
+strto: 2020-01-16
+orderno:
+sel1:
+searchword:
+
+-->
+
+<HTML>
+<HEAD>
+    <meta http-equiv=Content-type content="text/html; charset=euc-kr">
+    <meta http-equiv="X-UA-Compatible">
+    <TITLE>WCONCEPT SCM 에 오신걸 환영합니다</TITLE>
+    <META HTTP-EQUIV="imagetoolbar" CONTENT="no">
+    <meta http-equiv="X-UA-Compatible" content="IE=5">
+    <link rel="stylesheet" href="/include/css/admin.css" type="text/css">
+    <script language="javascript" src="/include/js/Common.js"></script>
+    <script language="javascript" src="/include/js/ajax.js"></script>
+</HEAD>
+<body topmargin="0" leftmargin="0" text="#000000"  bgcolor="#ffffff" width=100%>
+
+<script language="javascript" src="/include/js/Common.js"></script>
+<script language="javascript" src="/include/js/jquery-1.7.2.min.js"></script>
+<script language="javascript">
+    // 페이지 이동
+    function FuncGoPage(p_num) {
+        frmtype.page.value = p_num;
+        frmtype.submit();
+    }
+
+    // 전체선택
+    function FuncCheckAll(){
+        if (frminput.chkAll.value == "N") {
+            for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
+                eval("frminput.chk_" + ii).checked = true;
+
+                for (jj = 0; jj < parseInt(eval("frminput.itemcnt_" + ii).value) ; jj++ ){
+                    eval("frminput.chk_item_" + ii + "_" + jj).checked = true;
+                }
+            }
+
+            frminput.chknum.value = frminput.totnum.value;
+            frminput.chkAll.value = "Y";
+        } else {
+            for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
+                eval("frminput.chk_" + ii).checked = false;
+
+                for (jj = 0; jj < parseInt(eval("frminput.itemcnt_" + ii).value) ; jj++ ){
+                    eval("frminput.chk_item_" + ii + "_" + jj).checked = false;
+                }
+            }
+
+            frminput.chknum.value = 0;
+            frminput.chkAll.value = "N";
+        }
+    }
+
+    // 개별선택
+    function FuncCheckSelf(p_num) {
+        if (eval("frminput.chk_" + p_num).checked == true) {
+            frminput.chknum.value = parseInt(frminput.chknum.value) + 1;
+            for (jj = 0; jj < parseInt(eval("frminput.itemcnt_" + p_num).value) ; jj++ ){
+                eval("frminput.chk_item_" + p_num + "_" + jj).checked = true;
+            }
+        } else {
+            frminput.chknum.value = parseInt(frminput.chknum.value) - 1;
+            for (jj = 0; jj < parseInt(eval("frminput.itemcnt_" + p_num).value) ; jj++ ){
+                eval("frminput.chk_item_" + p_num + "_" + jj).checked = false;
+            }
+        }
+    }
+
+    // 상품 개별선택
+    function FuncCheckSelfItem(p_num, p_subnum, CssClassID, checkedval) {
+        if (CssClassID.length > 3) {
+            $("." + CssClassID).prop("checked", checkedval);
+        }
+
+        if ($("input:checkbox[name='chk_item_" + p_num + "_" + p_subnum + "']").is(":checked") == true) {
+            if ($("input:checkbox[name='chk_" + p_num + "']").is(":checked") == false) {
+                $("input:checkbox[name='chk_" + p_num + "']").prop("checked", true);
+                frminput.chknum.value = parseInt(frminput.chknum.value) + 1;
+            }
+        } else {
+            findchk = 0;
+            for (ii = 0; ii < parseInt(eval("frminput.itemcnt_" + p_num).value); ii++) {
+                if ($("input:checkbox[name='chk_item_" + p_num + "_" + ii + "']").is(":checked") == true) {
+                    findchk = 1;
+                }
+            }
+
+            if (findchk == 0) {
+                $("input:checkbox[name='chk_" + p_num + "']").prop("checked", false);
+                frminput.chknum.value = parseInt(frminput.chknum.value) - 1;
+            }
+        }
+    }
+
+    function FuncCheckForm(p_frm, p_type) {
+        if (parseInt(p_frm.chknum.value) == 0) {
+            alert("처리하실 주문을 선택하세요.");
+            return;
+        }
+
+        if(p_type == "01"){
+            for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
+                if (eval("frminput.chk_" + ii).checked == true){
+                    var itemcnt = 0;
+                    for (jj = 0; jj < parseInt(eval("frminput.itemcnt_" + ii).value) ; jj++ ){
+                        if(eval("frminput.chk_item_" + ii + "_" + jj).checked == true){
+                            itemcnt++;
+                        }
+                    }
+
+                    if(itemcnt == 0){
+                        alert("선택한 주문의 상품을 선택해 주십시오.");
+                        return;
+                    }
+                }
+            }
+
+            if (!confirm("[ " + p_frm.chknum.value + " ] 건에 대해 출고지시 처리를 하시겠습니까?")){
+                return;
+            }
+        }else if(p_type == "02"){		// 품절취소
+            for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
+                if (eval("frminput.chk_" + ii).checked == true){
+                    var itemcnt = 0;
+                    for (jj = 0; jj < parseInt(eval("frminput.itemcnt_" + ii).value) ; jj++ ){
+                        if(eval("frminput.chk_item_" + ii + "_" + jj).checked == true){
+                            if(eval("frminput.claimtypecd_" + ii + "_" + jj).value == ""){
+                                alert("취소사유를 선택해 주십시오.");
+                                eval("frminput.claimtypecd_" + ii + "_" + jj).focus();
+                                return;
+                            }
+
+                            itemcnt++;
+                        }
+                    }
+
+                    if(itemcnt == 0){
+                        alert("선택한 주문의 상품을 선택해 주십시오.");
+                        return;
+                    }
+                }
+            }
+
+            //if (!confirm("[ " + p_frm.chknum.value + " ] 건에 대해 품절취소 처리를 하시겠습니까?")){
+            if (!confirm("상품재고와 배송여부를 확인하셨습니까?\n취소 후에는 이전 상태로 원복할 수 없으니 주의해 주세요")){
+                return;
+            }
+        }else if(p_type == "03"){		// 품절취소 / 품절처리
+            for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
+                if (eval("frminput.chk_" + ii).checked == true){
+                    var itemcnt = 0;
+                    for (jj = 0; jj < parseInt(eval("frminput.itemcnt_" + ii).value) ; jj++ ){
+                        if(eval("frminput.chk_item_" + ii + "_" + jj).checked == true){
+                            if(eval("frminput.claimtypecd_" + ii + "_" + jj).value == ""){
+                                alert("취소사유를 선택해 주십시오.");
+                                eval("frminput.claimtypecd_" + ii + "_" + jj).focus();
+                                return;
+                            }
+
+                            itemcnt++;
+                        }
+                    }
+
+                    if(itemcnt == 0){
+                        alert("선택한 주문의 상품을 선택해 주십시오.");
+                        return;
+                    }
+                }
+            }
+
+            if (!confirm("[ " + p_frm.chknum.value + " ] 건에 대해 품절취소 및 품절처리를 하시겠습니까?")){
+                return;
+            }
+        }else{
+            alert("처리구분 누락");
+            return;
+        }
+
+        p_frm.strtype.value = p_type;
+        p_frm.submit();
+    }
+
+    function SetChangedValue(CssClassID, val) {
+        $("." + CssClassID).val(val);
+    }
+</script>
+<table border="0" cellpadding="0" cellspacing="0" bgcolor="#c3c4c4" style="height:100%; width: 100%">
+    <tr >
+        <td style="vertical-align:top;">
+            <div id="TreeInxDiv02" style="color:#FFFFFF; height: 754px;  background-color: #FFFFFF; ">
+
+                <form name="frmtype" method="post" action="/ShippingPin/iFrameLstShippingOrderVendorBottom.asp">
+                    <input type="hidden" name="flag" value="submit" />
+                    <input type="hidden" name="branchcd" value="" />
+                    <input type="hidden" name="strfrom" value="2019-12-16" />
+                    <input type="hidden" name="strto" value="2020-01-16" />
+                    <input type="hidden" name="vendorcd" value="3004012" />
+                    <input type="hidden" name="sel1" value="" />
+                    <input type="hidden" name="searchword" value="" />
+                    <input type="hidden" name="page" value="1" />
+                    <input type="hidden" name="maxdisp" value="20" />
+                    <input type="hidden" name="dealtypecd" value="01" />
+                    <input type="hidden" name="typecd" value="" />
+                    <input type="hidden" name="orderroute" value="R00000001" />
+                    <input type="hidden" name="orderpathidxnum" value="" />
+                </form>
+                <form name="frminput" method="post" action="iFrameBizLstShippingOrderVendorBottom.asp" target="iframeinput"> <!-- iframeinput -->
+                    <input type="hidden" name="strtype" value="01">
+                    <input type="hidden" name="totnum" value="2">
+                    <input type="hidden" name="chkAll" value="N" />
+                    <input type="hidden" name="chknum" value="0" />
+                    <table border="0" width="100%" cellpadding="0" cellspacing="1" bgcolor="#dddddd">
+                        <tr>
+                            <td>
+                                <table border="0" cellpadding="0" cellspacing="1" width="100%" bgcolor="#ffffff">
+                                    <tr height="30">
+                                        <td style="padding-left:10"><b>검색결과:&nbsp;&nbsp;2건 / 2개 / 100,000원 / (주문상품건수합계 / 수량합계 / 주문금액합계)</b></td>
+                                        <td align="center"><b>1</b> / 1 page&nbsp;&nbsp;&nbsp;&nbsp;<font color=gray>처음</font>&nbsp;&nbsp;<img src='http://image.wconcept.co.kr/images/common/btn_prew.gif' align='absmiddle' border='0' width='13' height='13'>&nbsp;&nbsp;&nbsp;<font color='red'><b>1</b></font>&nbsp;&nbsp;<img src='http://image.wconcept.co.kr/images/common/btn_next.gif' align='absmiddle' border='0' width='13' height='13'>&nbsp;<font color=gray>끝</font></td>
+                                    </tr>
+                                    <tr height="40">
+                                        <td>
+                                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                                <col width="30">
+                                                <col>
+                                                <tr>
+                                                    <td style="color:blue; padding-left:3px;">Tip : </td>
+                                                    <td style="color:blue;">   >> Tip :  결제완료에서는 사이트 내에서 고객 주문 취소가 가능합니다. 재고 확인 하신 후 <b>*주문확인*</b> 버튼을 클릭하여 상품준비중으로 주문상태를 변경해주세요.   </td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td style="color:blue;"><span style="color:red">주문확인이 지연되는 경우 주문취소 및 업체 불이익이 발생될 수 있습니다.</span> 재고가 없으신 경우 선택박스 체크 후 품절취소 버튼을 클릭하면 고객에게 SMS로 품절안내 됩니다.</td>
+                                                </tr>
+                                                <!--<tr>
+                                                    <td></td>
+                                                    <td style="color:red">출고예정 물품이 품절인 경우 주문만 취소하실 경우는 ‘품절취소’를, 주문취소와 상품품절처리(옵션전체품절)를 동시하실 경우는 ‘품절취소/상품품절처리’ 버튼을 클릭해주세요.</td>
+                                                </tr>-->
+                                            </table>
+                                        </td>
+                                        <td align="right" style="padding-right:5px;">
+                                            <!-- 출고지시를 주문확인으로 명칭 바꿈 by sun-hee,kim [2013.04.17]-->
+
+                                            <!-- 출고지시를 주문확인으로 명칭 바꿈 by sun-hee,kim [2013.04.17]-->
+                                            <input type="button" name="btn_save" style="background:#FFA500" class="box80" value="주문확인" onclick="FuncCheckForm(frminput,'01');"  >
+                                            <!--<input type="button" name="btn_all" class="box160" value="품절취소/상품품절처리" onclick="FuncCheckForm(frminput,'03');">-->
+                                            <input type="button" name="btn_cancel" class="box80" value="품절취소" onclick="FuncCheckForm(frminput,'02');"  >
+
+
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <div id="TreeInxDiv03" style="color:#FFFFFF; width:100%; height:679; overflow-x: scroll; overflow-y: scroll; overflow-x: auto; overflow-y: auto; background-color: #ffffff; ">
+                        <table cellspacing="0" cellpadding="0" width="1880" border="0">
+                            <col width="50" >
+                            <col width="80" >
+                            <col width="80" >
+                            <col width="80" >
+                            <col width="80" >
+                            <col width="50" >
+                            <col >
+                            <col width="120" >
+                            <col width="120" >
+                            <col width="100" /> <!-- 옵션3 -->
+
+                            <col width="50" ><!-- 상품유형 -->
+                            <col width="80" ><!-- 배송예정일 -->
+
+                            <col width="50" >
+
+                            <col width="80" />
+                            <col width="200" />
+
+                            <col width="80" >
+                            <col width="80" >
+                            <col width="100" >
+                            <col width="80" ><!-- 개인통관부호 -->
+
+                            <tr align="middle" valign="center">
+                                <td class="t_01">
+
+                                    <img src="http://image.wconcept.co.kr/images/admin/btn_all_on.gif" style="cursor:pointer" onclick="FuncCheckAll()" />
+
+                                </td>
+                                <td class="t_01">결제일자</td>
+                                <td class="t_01">주문번호</td>
+                                <td class="t_01">주문자</td>
+                                <td class="t_01">수취인</td>
+                                <td class="t_01">묶음</td>
+                                <td class="t_01">상품명</td>
+                                <td class="t_01">옵션1</td>
+                                <td class="t_01">옵션2</td>
+                                <td class="t_01">옵션3</td>
+
+                                <td class="t_01">상품유형</td>
+                                <td class="t_01">배송예정일</td>
+
+                                <td class="t_01">수량</td>
+
+                                <td class="t_01">세트판매가</td>
+                                <td class="t_01">세트명</td>
+
+                                <td class="t_01">금액</td>
+                                <td class="t_01">주문상태</td>
+                                <td class="t_01">취소사유</td>
+
+                                <td class="t_01">개인통관부호</td>
+                            </tr>
+
+                            <tr>
+
+                                <input type="hidden" name="idx_0" value="1" />
+                                <input type="hidden" name="orderno_0" value="U00102292" />
+                                <input type="hidden" name="itemcnt_0" value="1" />
+                                <td class="t_0k" title="선택" rowspan="1"><input type="checkbox" name="chk_0" value="Y" onclick="FuncCheckSelf(0);" /></td>
+                                <td class="t_0k" title="결제일" rowspan="1"><!-- 2020-01-16 -->2020-01-16 16:43:12</td>
+                                <td class="t_0k" title="주문번호" rowspan="1">U00102292</td>
+                                <td class="t_0k" title="주문자" rowspan="1">강은정</td>
+                                <td class="t_0k" title="수취인" rowspan="1">강은정</td>
+
+                                <input type="hidden" name="orderno_0_0" value="U00102292" />
+                                <input type="hidden" name="orderidxnum_0_0" value="9542890" />
+                                <input type="hidden" name="shippingidxnum_0_0" value="8851376" />
+                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_item_0_0" value="Y" onclick="FuncCheckSelfItem(0, 0, '_c_0', this.checked);"  /></td>
+                                <td class="t_0k_left" title="GOAL HEAVYWEIGHT SWEAT SHIRTS-BLACK" width="200"><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=35&itemcd=300793059" target="_blank"><nobr>GOAL HEAVYWEIGHT SWEAT SHIRTS-BLACK</a></td>
+                                <td class="t_0k_left" title="XL">XL&nbsp;</td>
+                                <td class="t_0k_left" title="">&nbsp;</td>
+                                <td class="t_0k_left" title="">&nbsp;</td>
+                                <td class="t_0k_left">일반상품&nbsp;</td><!-- 상품유형 -->
+                                <td class="t_0k_left">2020-01-20&nbsp;</td><!-- 배송예정일 -->
+                                <td class="t_0k" title="수량">1</td>
+
+                                <td class='t_0k' title='세트가'>&nbsp;</td>
+                                <td class='t_0k' title='세트상품명' style='text-align: left;'>&nbsp;</td>
+
+
+                                <td class="t_0k" title="판매가">45,000</td><!-- 판매가 -->
+                                <td class="t_0k" title="판매가합계">45,000</td><!-- 판매가합계 -->
+                                <td class="t_0k" title="취소사유"><input type="hidden" name="claimmaintypecd_0_0" value="03" />
+                                    <select name="claimtypecd_0_0" >
+                                        <option value="">==취소사유==</option>
+                                        <option value="05">품절</option>
+                                    </select>
+                                    <input type="hidden" name="claimtypeetc_0_0" value="" />
+                                </td>
+
+                                <td class="t_0k" title="판매가">&nbsp;</td>	<!-- 개인통관부호 -->
+                            </tr>
+
+
+                            <tr>
+
+                                <input type="hidden" name="idx_1" value="2" />
+                                <input type="hidden" name="orderno_1" value="U00102206" />
+                                <input type="hidden" name="itemcnt_1" value="1" />
+                                <td class="t_0k" title="선택" rowspan="1"><input type="checkbox" name="chk_1" value="Y" onclick="FuncCheckSelf(1);" /></td>
+                                <td class="t_0k" title="결제일" rowspan="1">2020-01-16 16:25:09</td>
+                                <td class="t_0k" title="주문번호" rowspan="1">U00102206</td>
+                                <td class="t_0k" title="주문자" rowspan="1">김연희</td>
+                                <td class="t_0k" title="수취인" rowspan="1">김연희</td>
+
+                                <input type="hidden" name="orderno_1_0" value="U00102206" />
+                                <input type="hidden" name="orderidxnum_1_0" value="9542778" />
+                                <input type="hidden" name="shippingidxnum_1_0" value="8851245" />
+                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_item_1_0" value="Y" onclick="FuncCheckSelfItem(1, 0, '_c_0', this.checked);"  /></td>
+                                <td class="t_0k_left" title="GOAL HEAVYWEIGHT HOODIE-BLACK" width="200"><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=38&itemcd=300793052" target="_blank"><nobr>GOAL HEAVYWEIGHT HOODIE-BLACK</a></td>
+                                <td class="t_0k_left" title="L">L&nbsp;</td>
+                                <td class="t_0k_left" title="">&nbsp;</td>
+                                <td class="t_0k_left" title="">&nbsp;</td>
+                                <td class="t_0k_left">일반상품&nbsp;</td><!-- 상품유형 -->
+                                <td class="t_0k_left">2020-01-20&nbsp;</td><!-- 배송예정일 -->
+                                <td class="t_0k" title="수량">1</td>
+
+                                <td class='t_0k' title='세트가'>&nbsp;</td>
+                                <td class='t_0k' title='세트상품명' style='text-align: left;'>&nbsp;</td>
+
+
+                                <td class="t_0k" title="판매가">55,000</td><!-- 판매가 -->
+                                <td class="t_0k" title="판매가합계">55,000</td><!-- 판매가합계 -->
+                                <td class="t_0k" title="취소사유"><input type="hidden" name="claimmaintypecd_1_0" value="03" />
+                                    <select name="claimtypecd_1_0" >
+                                        <option value="">==취소사유==</option>
+                                        <option value="05">품절</option>
+                                    </select>
+                                    <input type="hidden" name="claimtypeetc_1_0" value="" />
+                                </td>
+
+                                <td class="t_0k" title="판매가">&nbsp;</td>	<!-- 개인통관부호 -->
+                            </tr>
+
+
+
+                        </table>
+                </form>
+                <iframe name="iframeinput" frameborder="0" width="0" height="0" src=""></iframe>
+                <script language="javascript">
+                    window.onload = function() {
+                        fnresize();
+                    }
+
+                    function fnresize(){
+                        var wsize = document.body.clientWidth;
+                        var rwidth = parseInt(wsize);
+                        document.getElementById("TreeInxDiv03").style.width = rwidth;
+                    }
+
+                    window.onresize = function(event) {
+                        fnresize();
+                    };
+                </script>
+            </div>
+
+            </div>
+        </td>
+    </tr>
+</table>
+</BODY>
+</HTML>
