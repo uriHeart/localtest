@@ -43,9 +43,6 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private RawEventRepository rawEventRepository;
-
     @Override
     public boolean isSupport(SalesChannel channel) {
         return "W_CONCEPT".equals(channel.getCode());
@@ -275,7 +272,7 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
                     .createdAt(new Date())
                     .event(event.getEventType())
                     .build();
-            rawEventRepository.save(rawEvent);
+            rawEventService.save(rawEvent);
         });
     }
 
