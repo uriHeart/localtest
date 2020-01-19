@@ -22,6 +22,16 @@ public abstract class ArgoDateUtil {
         return null;
     }
 
+    public static Date getDateByTimeFormatHH(String param) {
+        SimpleDateFormat dt = new SimpleDateFormat("yyyyy-MM-dd HH:mm:ss");
+        try {
+            return dt.parse(param);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static String getDateString(LocalDate localDate) {
         return localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }

@@ -60,7 +60,7 @@ public class MusinsaOrderMetadataConversionTemplate {
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.OPERATION)
                 .operatorClass("dateFormatConversionService")
-                .operatorMethod("convertDateFormat")
+                .operatorMethod("convertDateFormatUTC")
                 .operatorParams(dateFormatParam)
                 .targetField("orderedAt")
                 .build());
