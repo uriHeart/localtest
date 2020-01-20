@@ -1,0 +1,978 @@
+<!--
+Request URL: http://pin.wconcept.co.kr/ShippingPin/iFrameLstShippingOrderReadyVendorBottom_NEW.asp
+
+flag: submit
+vendorcd: 3004012
+vendorname: (unable to decode value)
+page:
+dealtypecd: 01
+orderpathidxnum:
+branchcd:
+strfrom: 2019-10-20
+strto: 2020-01-20
+orderno:
+sel1:
+searchword:
+typecd:
+ex_date_yn:
+
+-->
+<HTML>
+<HEAD>
+    <meta http-equiv=Content-type content="text/html; charset=euc-kr">
+    <meta http-equiv="X-UA-Compatible">
+    <TITLE>WCONCEPT SCM 에 오신걸 환영합니다</TITLE>
+    <META HTTP-EQUIV="imagetoolbar" CONTENT="no">
+    <meta http-equiv="X-UA-Compatible" content="IE=5">
+    <link rel="stylesheet" href="/include/css/admin.css" type="text/css">
+    <script language="javascript" src="/include/js/Common.js"></script>
+    <script language="javascript" src="/include/js/ajax.js"></script>
+</HEAD>
+<body topmargin="0" leftmargin="0" text="#000000"  bgcolor="#ffffff" width=100%>
+
+<style type="text/css">
+    .tableContainer {
+        scrollbar-face-color: #FFFFFF;
+        scrollbar-highlight-color:#FFFFFF;
+        scrollbar-3dlight-color:#666666;
+        scrollbar-shadow-color:#666666;
+        scrollbar-darkshadow-color: #FFFFFF;
+        scrollbar-track-color: #FFFFFF;
+        scrollbar-arrow-color:#333333;
+    }
+</style>
+<script language="javascript" src="/include/js/Common.js"></script>
+<script language="javascript">
+
+    // 배송가능일 날짜 설정
+    function FuncSetShipdate(p_num, p_obj) {
+
+        showModalDialog('/include/popup/CalendarFrame.asp?num=' + p_num + '&setdate=' + p_obj.value, window, 'resizable: no; help: no; status: no; scroll: no; ');
+    }
+
+
+
+
+
+    function fncLPAD(num)
+    {
+        if(parseInt(num)<10) {
+            return '0'+num;
+        } else {
+            return ''+num;
+        }
+    }
+
+    //날짜 세팅
+    function FuncSetResult() {
+
+
+        var today = "";
+        var chknum = contents1;
+        var chkdate = "";
+        var p_num = "";
+        var p_subnum = "";
+        TmpeValue = chknum.split("_");
+        p_num = TmpeValue[0];
+        p_subnum = TmpeValue[1];
+        chkdate = contents2 + "-" + contents3 + "-" + contents4;
+
+        var now = new Date();
+        today = now.getYear()+'-'+fncLPAD((now.getMonth()+1))+'-'+ (String(now.getDate()).length == 1 ? 0 + String(now.getDate()) : String(now.getDate())) ;
+
+        if (chkdate < today) {
+            alert( "배송가능일이 현재 날자보다 이전 일자로 지정할 수 없습니다." );
+            return;
+        }
+
+        if(FuncChkVendorClosedDay(chkdate)){
+            if ( p_num == 1 ) {
+                frminput.setdate.value = chkdate;
+                //frmexpectdate.expectshipdate.value = chkdate;
+            } else {
+                frminput.setdate.value = chkdate;
+                eval("frminput.expectshipdate_" + p_subnum).value = chkdate;
+                frmexpectdate.expectshipdate.value = chkdate;
+
+                eval("c.expectshipdate_" + p_subnum).fireEvent('onchange', document.createEventObject());
+            }
+        }
+    }
+
+    // 페이지 이동
+    function FuncGoPage(p_num) {
+        frmtype.page.value = p_num;
+        frmtype.submit();
+    }
+
+    function FuncChkVendorClosedDay(chkdate){
+        var retMsg;
+        var vendorcd = '3004012';
+
+        $.ajax({
+            type: 'POST',
+            url: 'Ajax_ChkVendorClosedDay.asp',
+            data: {'vendorcd': vendorcd, 'chkdate': chkdate},
+            async: false,
+            contentType: 'application/x-www-form-urlencoded; charset=euc-kr;',
+            success: function(result) {
+                retMsg = result;
+            }
+        });
+
+        if(retMsg != ""){
+            alert(retMsg);
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    // 전체선택
+    function FuncCheckAll(){
+        if (frminput.chkAll.value == "N")
+        {
+            for (ii = 0; ii < parseInt(frminput.totnum.value); ii++)
+            {
+                eval("frminput.chk_" + ii).checked = true;
+
+                $("#orderitem" + ii + " td").each(function (idx) {
+                    $(this).css("background-color", "#FFFFD2");
+                });
+
+                $("#orderitemdetail" +ii+ " td").each(function (idx) {
+                    $(this).css("background-color", "#FFFFD2");
+                });
+
+                //$("#orderitem" + ii).css("background-color","#FFFFD2");
+                //$("#orderitemdetail" + ii).css("background-color","#FFFFD2");
+            }
+
+            frminput.chknum.value = frminput.totnum.value;
+            frminput.chkAll.value = "Y";
+        }
+        else
+        {
+            for (ii = 0; ii < parseInt(frminput.totnum.value); ii++)
+            {
+                eval("frminput.chk_" + ii).checked = false;
+
+                $("#orderitem" + ii + " td").each(function (idx) {
+                    $(this).css("background-color", "#FFFFFF");
+                });
+
+                $("#orderitemdetail" +ii+ " td").each(function (idx) {
+                    $(this).css("background-color", "#FFFFFF");
+                });
+
+                //$("#orderitem" + ii).css("background-color","#FFFFFF");
+                //$("#orderitemdetail" + ii).css("background-color","#FFFFFF");
+            }
+
+            frminput.chknum.value = 0;
+            frminput.chkAll.value = "N";
+        }
+    }
+
+    // 개별선택
+    function FuncCheckSelf(p_num, CssClassID) {
+        if (CssClassID.length > 0) {
+            if ($("input:checkbox[name='chk_" + p_num + "']").is(":checked") == true) {
+                $("." + CssClassID).prop("checked", true);
+            }
+            else {
+                $("." + CssClassID).prop("checked", false);
+            }
+        }
+
+        if ($("input:checkbox[name='chk_" + p_num + "']").is(":checked") == true) {
+            //$("#orderitem" + p_num).css("background-color","#FFFFD2");
+            //$("#orderitemdetail" + p_num).css("background-color","#FFFFD2");
+        }
+        else {
+            //$("#orderitem" + p_num).css("background-color","#FFFFFF");
+            //$("#orderitemdetail" + p_num).css("background-color","#FFFFFF");
+        }
+        /*
+                if (eval("frminput.chk_" + p_num).checked == true) {
+                    $("#orderitem" + p_num).css("background-color","#FFFFD2");
+                    $("#orderitemdetail" + p_num).css("background-color","#FFFFD2");
+                } else {
+                    $("#orderitem" + p_num).css("background-color","#FFFFFF");
+                    $("#orderitemdetail" + p_num).css("background-color","#FFFFFF");
+                }
+        */
+        var chkcnt = 0;
+        for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
+            if($("input:checkbox[name='chk_" + ii + "']").is(":checked") == true){
+                //if(eval("frminput.chk_" + ii).checked == true){
+                chkcnt++;
+            }
+        }
+
+        frminput.chknum.value = chkcnt;
+    }
+
+    //트림공백제거
+    String.prototype.trim = function()
+    {
+        return this.replace(/(^[ \\f\\n\\r\\t]*)|([ \\f\\n\\r\\t]*$)/g, "");
+    }
+
+    function FuncCheckForm(p_frm, p_type) {
+        if (parseInt(p_frm.chknum.value) == 0) {
+            alert("처리하실 주문을 선택하세요.");
+            return;
+        }
+
+        if(p_type == "04"){
+            for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
+                if (eval("frminput.chk_" + ii).checked == true){
+                    if(eval("frminput.transcode_" + ii).value == ""){
+                        alert("택배사를 선택해 주십시오.");
+                        eval("frminput.transcode_" + ii).focus();
+                        return;
+                    }
+
+                    // .trim() 공백제거 적용 by sun-hee,kim [2013-07-23]
+                    if(eval("frminput.invoiceno_" + ii).value.trim() == ""){
+                        alert("송장번호를 입력해 주십시오.");
+                        eval("frminput.invoiceno_" + ii).focus();
+                        return;
+                    }
+                }
+            }
+            if (!confirm("[ " + p_frm.chknum.value + " ] 건에 대해 송장등록 처리를 하시겠습니까?")){
+                return;
+            }
+        }else if(p_type == "05"){		// 품절취소
+            for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
+                if (eval("frminput.chk_" + ii).checked == true){
+                    if(eval("frminput.claimtypecd_" + ii).value == ""){
+                        alert("취소사유를 선택해 주십시오.");
+                        eval("frminput.claimtypecd_" + ii).focus();
+                        return;
+                    }
+                }
+            }
+
+            //if (!confirm("[ " + p_frm.chknum.value + " ] 건에 대해 품절취소 처리를 하시겠습니까?")){
+            if (!confirm("배송내역 및 재고 확인 모두 완료하셨습니까?\n확인 처리 후에는 변경이 불가합니다")){
+                return;
+            }
+        }else if(p_type == "03"){		// 품절취소 / 품절처리
+            for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
+                if (eval("frminput.chk_" + ii).checked == true){
+                    if(eval("frminput.claimtypecd_" + ii).value == ""){
+                        alert("취소사유를 선택해 주십시오.");
+                        eval("frminput.claimtypecd_" + ii).focus();
+                        return;
+                    }
+                }
+            }
+
+            if (!confirm("[ " + p_frm.chknum.value + " ] 건에 대해 품절취소 및 품절처리를 하시겠습니까?")){
+                return;
+            }
+        }else{
+            alert("처리구분 누락");
+            return;
+        }
+
+        p_frm.strtype.value = p_type;
+        p_frm.submit();
+    }
+
+    // 배송가능일 수정
+    function UpdateExpectDate(p_frm, p_orderidxnum, p_shippingidxnum, p_num, p_subnum){
+        if(eval("p_frm.expectshipdate_" + p_num + "_" + p_subnum).value == ""){
+            alert("배송가능일을 선택해 주십시오.");
+            return;
+        }
+
+        if(!confirm("배송가능일을 수정하시겠습니까?")){
+            return;
+        }
+
+        frmexpectdate.orderidxnum.value = p_orderidxnum;
+        frmexpectdate.shippingidxnum.value = p_shippingidxnum;
+        frmexpectdate.expectshipdate.value = eval("p_frm.expectshipdate_" + p_num + "_" + p_subnum).value
+        frmexpectdate.action = "iFrameBizShippingExpectDateUpdate.asp";
+        frmexpectdate.submit();
+
+    }
+
+    // 송장업로드용 엑셀다운로드
+    function FuncExcelDownLoad(){
+        if(!confirm("다운로드 되는 엑셀파일을 이용하여 배송처리를 하시려는 경우에는 \n\n반드시\n\n송장정보를 입력하신 후 [파일]-[다른이름으로 저장] 메뉴를 이용하여 \n\n[Microsoft Excel 통합문서 (.xls)] 형태로 저장하셔야 사용이 가능합니다.\n\n엑셀파일을 다운로드하시겠습니까?")){
+            return;
+        }
+        frmexcel.submit();
+    }
+
+    // 송장엑셀 업로드
+    function FuncExcelUpload(){
+        showModalDialog("PopExcelUploadShippingOrderReadyFrame.asp", window, "dialogWidth: 1200px; dialogHeight: 700px; resizable: no; help: no; status: no; scroll: no;");
+    }
+
+    // 송장업로드용 엑셀다운로드_NEW
+    function FuncExcelDownLoad_NEW(){
+        frmexcel.target = "_blank";
+        frmexcel.action = "/excel/Exl_LstShippingOrderReadyDownLoad_NEW.asp";
+        if(!confirm("해당 엑셀파일을 이용하여 배송처리 하시는 경우에는\n송장정보 입력 후 \'Excel 97 - 2003  통합문서\' 형식으로 저장하셔야\n일괄 업로드에서 파일등록이 되오니 참고부탁드립니다.\n\n엑셀파일을 다운로드 하시겠습니까?")){
+            return;
+        }
+        frmexcel.submit();
+    }
+
+    // 송장엑셀 업로드_NEW
+    function FuncExcelUpload_NEW(){
+        showModalDialog("PopExcelUploadShippingOrderReadyVendorFrame_NEW.asp", window, "dialogWidth: 1200px; dialogHeight: 700px; resizable: no; help: no; status: no; scroll: no;");
+    }
+
+    // 업로드방법매뉴얼팝업_NEW
+    function FuncExcelUploadmenual_NEW(){
+        window.open("http://pin.wconcept.co.kr/include/Popup/IframeBizFileDown.asp?typenum=3&filename=송장일괄등록도움말 2016.01.pdf", "menual", "");
+    }
+
+    // 엑셀업로드 처리후
+    function FuncReload(){
+        top.FuncSearch();
+    }
+
+    //상품정보 수정팝업
+    function FuncModProduct(p_mediumcd, p_categorycd, p_itemcd) {
+        window.open('/Product/PopModProductFrame.asp?mediumcd=' + p_mediumcd + '&categorycd=' + p_categorycd + '&itemcd=' + p_itemcd);
+        //showModalDialog('PopModProductFrame.asp?branchcd=&mediumcd=' + p_mediumcd + '&categorycd=' + p_categorycd + '&itemcd=' + p_itemcd, window, 'resizable: no; help: no; status: no; scroll: no; ');
+    }
+
+    //배송가능일 일괄지정 by ywkwon 2012.06.28
+    function setExpectShipdateChecked() {
+        /*if ( setdate == "" ) {
+            alert( "일괄 설정할 배송가능일을 선택해주십시오." );
+            return;
+        }*/
+
+        setdate = frminput.setdate.value;
+
+        if (setdate == "")
+        {
+            alert( "일괄 설정할 항목을 입력해주세요." );
+            return false;
+        }
+
+        chkcnt = 0;
+        for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
+            if (eval("frminput.chk_" + ii).checked == true) {
+                chkcnt++;
+            }
+        }
+
+        if( parseInt(chkcnt) == 0 ) {
+            alert( "선택된 내역이 없습니다." );
+            return false;
+        }
+
+        for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
+            if (eval("frminput.chk_" + ii).checked == true){
+                if (setdate != ""){
+                    eval("frminput.expectshipdate_" + ii).value = setdate;
+                }
+            }
+        }
+        //alert( "선택 항목이 일괄 설정되었습니다.\n[일괄 수정] 버튼을 클릭하셔야 실제로 수정이됩니다." );
+    }
+
+    // 배송가능일 일괄수정 by ywkwon 2012.06.29
+    function updateExpectShipdateChecked( setexpectshipdate, inum, vendorcd ) {
+
+        /*if (vendorcd == "")
+        {
+            alert("일괄수정일 경우 공급사 검색은 필수사항입니다.");
+            return;
+        }*/
+
+        var setchk = setExpectShipdateChecked();
+        var str_notice = "";
+        if (setchk == false)
+        {
+            return;
+        }
+
+        var setchk = 0;
+        for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
+            if (eval("frminput.chk_" + ii).checked == true ){
+                setchk++;
+            }
+        }
+
+        if (setchk < 1)
+        {
+            alert( "선택된 내역이 없습니다." );
+            return;
+        }
+
+        if(!confirm("배송가능일을 일괄수정하시겠습니까?")){
+            return;
+        }
+
+        orderidxnumlist = "";
+        shippingidxnumlist = "";
+        expectdatelist = "";
+        nowshipdatelist ="";
+        succCnt = 0;
+        failCnt = 0;
+        for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
+            if (eval("frminput.chk_" + ii).checked == true ){
+                if($('#ExpDtchgCnt_' + ii).val() < 2){
+                    splitChar = ",";
+
+                    orderidxnumlist = orderidxnumlist + eval("frminput.orderidxnum_" + ii).value + splitChar;
+                    shippingidxnumlist = shippingidxnumlist + eval("frminput.shippingidxnum_" + ii).value + splitChar;
+                    expectdatelist = expectdatelist + eval("frminput.expectshipdate_" + ii).value + splitChar;
+                    nowshipdatelist  = nowshipdatelist + eval("frminput.nowshipdates_" + ii).value + splitChar;
+                    succCnt = succCnt + 1;
+                }else{
+                    eval("frminput.chk_" + ii).checked = false;
+                    failCnt = failCnt + 1;
+                }
+            }
+        }
+
+        if (succCnt > 0){
+            if(failCnt > 0){
+                if (confirm("배송가능일 변경 횟수 초과 (2회) 내역을 제외하고 변경처리됩니다.\n추가 변경을 원하시면 운영팀으로 문의 바랍니다.")){
+                    UpdateBatchAll(orderidxnumlist, shippingidxnumlist, expectdatelist, nowshipdatelist);
+                }
+            }else{
+                UpdateBatchAll(orderidxnumlist, shippingidxnumlist, expectdatelist, nowshipdatelist);
+            }
+
+        }else{
+            alert("배송가능일 변경 횟수 초과 (2회)\n추가 변경을 원하시면 운영팀으로 문의바랍니다.");
+            return;
+        }
+
+
+
+        /*if ( setexpectshipdate != '1' ) {
+            frmexpectdate.expectshipdate.value = eval( "frminput."+setexpectshipdate ).value;
+        }*/
+
+        //UpdateExpectDateMulti( orderidxnumlist, shippingidxnumlist, p_vendorcd );
+
+    }
+
+    // 배송가능일 여러개 수정
+    function UpdateExpectDateMulti(p_orderidxnum, p_shippingidxnum, p_vendorcd){
+
+
+        if(!confirm("배송가능일을 수정하시겠습니까?")){
+            return;
+        }
+
+
+        /*
+            frmexpectdate.action = "iFrameBizShippingExpectDateUpdateMulti.asp"
+            frmexpectdate.orderidxnum.value = p_orderidxnum;
+            frmexpectdate.shippingidxnum.value = p_shippingidxnum;
+            frmexpectdate.expectshipdate.value = frminput.setdate.value;
+            frmexpectdate.vendorcd.value = p_vendorcd;
+            frmexpectdate.submit();
+            frmexpectdate.action = "iFrameBizShippingExpectDateUpdate.asp";
+        */
+    }
+
+    // 송장 엑셀등록 팝업
+    function FuncUploadExcel( ctype ) {
+        var gourl = "";
+        if ( parseInt(ctype) == 1 ) {
+            gourl = "/shipping/PopInvoiceUploadFrame.asp";
+        } else if ( parseInt(ctype) == 2 ) {
+            gourl = "/shipping/PopInvoiceUploadFrameWconcept.asp";
+        }
+        showModalDialog(gourl, window, 'resizable: no; help: no; status: no; scroll: no; dialogWidth:900px; ');
+    }
+
+    function funcChkInvoiceNO(p_frm){
+        if(!FuncString(p_frm.value)){
+            alert("특수문자를 제외하고 입력해주세요");
+            p_frm.value = "";
+            p_frm.focus();
+        }
+    }
+
+    function FuncViewOrder(p_orderno) {
+        window.open('/include/Popup/ViewOrderMaster.asp?orderno=' + p_orderno, 'winordermaster', 'toolbars=no,scrollbars=yes,status=no,width=1100px,height=650px,top=1,left=1');
+    }
+</script>
+<script language="javascript" src="/include/js/jquery-1.7.2.min.js"></script>
+<script language="javascript">
+    <!--
+    function dataOnScroll() {
+        TreeInxDiv03.scrollTop = TreeInxDiv04.scrollTop;
+    }
+
+    // 주문내역 마우스액션
+    function funcColor2(p_rownum,p_num){
+        if(p_num == "1"){
+            if ($("#orderitem" +p_rownum + " td").eq(0).css("background-color") == "#ffffff") {
+                $("#orderitem" +p_rownum + " td").each(function (idx) {
+                    $(this).css("background-color", "#b2ebf4");
+                });
+
+                $("#orderitemdetail" +p_rownum + " td").each(function (idx) {
+                    $(this).css("background-color", "#b2ebf4");
+                });
+            }
+        }
+        else {
+            if ($("#orderitem" +p_rownum + " td").eq(0).css("background-color") == "#b2ebf4") {
+                $("#orderitem" +p_rownum + " td").each(function (idx) {
+                    $(this).css("background-color", "#ffffff");
+                });
+
+                $("#orderitemdetail" +p_rownum + " td").each(function (idx) {
+                    $(this).css("background-color", "#ffffff");
+                });
+            }
+        }
+        /*
+              if(p_num == "1"){
+                if($("#orderitem_1_" +p_rownum).css("background-color") == "#ffffff"){
+                  $("#orderitem_1_" +p_rownum).css("background-color", "#b2ebf4");
+                  $("#orderitem_2_" +p_rownum).css("background-color", "#b2ebf4");
+                  $("#orderitem_3_" +p_rownum).css("background-color", "#b2ebf4");
+                  $("#orderitemdetail" +p_rownum).css("background-color", "#b2ebf4");
+                }
+              }else{
+                if($("#orderitem_1_" +p_rownum).css("background-color") == "#b2ebf4"){
+                  $("#orderitem_1_" +p_rownum).css("background-color", "#ffffff");
+                  $("#orderitem_2_" +p_rownum).css("background-color", "#ffffff");
+                  $("#orderitem_3_" +p_rownum).css("background-color", "#ffffff");
+                  $("#orderitemdetail" +p_rownum).css("background-color", "#ffffff");
+                }
+              }
+        */
+    }
+
+    function updateExpectShipdateUpdate(ordidxs, shipidxs, edates, iRow, nowshipdates){
+        var chgCnt = $('#ExpDtchgCnt_' + iRow).val();
+        if (chgCnt >= 2)
+        {
+            alert("배송가능일 변경 횟수 초과 (2회)\n 추가 변경을 원하시면 운영팀으로 문의바랍니다.");
+            return;
+        }
+
+        if(!confirm("배송가능일을 수정하시겠습니까?")){
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: 'Ajax_BizShippingManageShipDateUpdate.asp',
+            data: {'orderidxnums': ordidxs, 'shippingidxnums': shipidxs, 'expectshipdates': edates, 'nowshipdates' : nowshipdates},
+            contentType: 'application/x-www-form-urlencoded; charset=euc-kr;',
+            success: function(result) {
+                if(result == "0")
+                {
+                    $('#ExpDtchgCnt_'+iRow).val(parseInt($('#ExpDtchgCnt_'+iRow).val()) + 1);
+                    alert("수정되었습니다");
+                    //parent.FuncSearch();
+                }else{
+                    alert("잘못된 접근입니다.");
+                    //parent.location.href= "/logout.asp";
+                }
+            }
+        });
+    }
+    /*
+        function updateExpectShipdateUpdate(ordidxs, shipidxs, edates){
+          if(!confirm("배송가능일을 수정하시겠습니까?")){
+            return;
+          }
+
+          $.ajax({
+            type: 'POST',
+            url: 'Ajax_BizShippingManageShipDateUpdate.asp',
+            data: {'orderidxnums': ordidxs, 'shippingidxnums': shipidxs, 'expectshipdates': edates},
+            contentType: 'application/x-www-form-urlencoded; charset=euc-kr;',
+            success: function(result) {
+              if(result == "0")
+              {
+                alert("수정되었습니다");
+                //parent.FuncSearch();
+              }else{
+                alert("잘못된 접근입니다.");
+                //parent.location.href= "/logout.asp";
+              }
+            }
+          });
+        }
+    */
+    function funcCopyItemname(iRow){
+        if(event.ctrlKey == true && event.keyCode == "67"){
+            var itemnm = $("#itemnm_" + iRow).val();
+            window.clipboardData.setData("Text", itemnm);
+        }
+    }
+
+    function UpdateBatchAll(ordidxs, shipidxs, edates, nowshipdates){
+        $.ajax({
+            type: 'POST',
+            url: 'Ajax_BizShippingManageShipDateUpdate.asp',
+            data: {'orderidxnums': ordidxs, 'shippingidxnums': shipidxs, 'expectshipdates': escape(edates), 'nowshipdates' : escape(nowshipdates)},
+            contentType: 'application/x-www-form-urlencoded; charset=euc-kr;',
+            success: function(result) {
+                if(result == "0")
+                {
+                    alert("수정되었습니다");
+                    top.FuncSearch();
+                }else{
+                    alert("잘못된 접근입니다.");
+                    top.location.href= "/logout.asp";
+                }
+            }
+        });
+    }
+
+    function SetChangedValue(CssClassID, val) {
+        $("." + CssClassID).val(val);
+    }
+    //-->
+</script>
+
+<table border="0" cellpadding="0" cellspacing="0" bgcolor="#c3c4c4" style="height:100%; width: 100%; table-layout:fixed;">
+    <tr >
+        <td style="vertical-align:top;">
+            <div id="TreeInxDiv02" style="color:#FFFFFF; height: 800px;  background-color: #FFFFFF; "><!--hidden -->
+
+                <form name="frmtype" method="post" action="/ShippingPin/iFrameLstShippingOrderReadyVendorBottom_NEW.asp">
+                    <input type="hidden" name="flag" value="submit" />
+                    <input type="hidden" name="branchcd" value="" />
+                    <input type="hidden" name="strfrom" value="2019-10-20" />
+                    <input type="hidden" name="strto" value="2020-01-20" />
+                    <input type="hidden" name="orderno" value="" />
+                    <input type="hidden" name="vendorcd" value="3004012" />
+                    <input type="hidden" name="sel1" value="" />
+                    <input type="hidden" name="searchword" value="" />
+                    <input type="hidden" name="page" value="1" />
+                    <input type="hidden" name="dealtypecd" value="01" />
+                    <input type="hidden" name="orderroute" value="" />
+                    <input type="hidden" name="orderpathidxnum" value="" />
+                    <input type="hidden" name="ex_date_yn" value="" />
+                    <input type="hidden" name="res_sdate" value="" />
+                </form>
+                <form name="frminput" method="post" action="iFrameBizLstShippingOrderReadyVendorBottom.asp" ><!-- iframeinput -->
+                    <input type="hidden" name="strtype" value="01">
+                    <input type="hidden" name="totnum" value="1">
+                    <input type="hidden" name="chkAll" value="N" />
+                    <input type="hidden" name="chknum" value="0" />
+                    <table border="0" width="100%" cellpadding="0" cellspacing="0" bgcolor="#dddddd">
+                        <tr>
+                            <td>
+                                <table border="0" cellpadding="0" cellspacing="1" width="100%" bgcolor="#ffffff">
+                                    <tr height="30">
+                                        <td style="padding-left:10"><b>검색결과:&nbsp;&nbsp;1건 / 1개 / 55,000원 / (주문상품건수합계 / 수량합계 / 주문금액합계)</b></td>
+                                        <td align="center"><b>1</b> / 1 page&nbsp;&nbsp;&nbsp;&nbsp;<font color=gray>처음</font>&nbsp;&nbsp;<img src='http://image.wconcept.co.kr/images/common/btn_prew.gif' align='absmiddle' border='0' width='13' height='13'>&nbsp;&nbsp;&nbsp;<font color='red'><b>1</b></font>&nbsp;&nbsp;<img src='http://image.wconcept.co.kr/images/common/btn_next.gif' align='absmiddle' border='0' width='13' height='13'>&nbsp;<font color=gray>끝</font></td>
+                                    </tr>
+                                    <tr height="30">
+                                        <td colspan="2" width="100%">
+                                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                                <col width="30">
+                                                <col>
+                                                <!-- <tr>
+                                                    <td style="color:blue;vertical-align:top">Tip : </td>
+                                                    <td style="color:blue;">▶ 배송가능일 지정시 고객에게 SMS가 발송되니 정확한 배송일자를 지정해주세요.<br>▶ 배송가능일은 2회만 변경 가능하고, 그 외 변경시에는 운영팀을 통해 변경을 요청해주시기 바랍니다.</td>
+                                                </tr> -->
+                                                <tr>
+                                                    <td style="color:blue;vertical-align:top;">Tip : </td>
+                                                    <td><span style="color:blue;">배송가능일은 2회까지 변경 가능하고, SMS로 배송일시가 안내되오니 정확한 배송일자를 입력해 주세요. 지연이 발생되면 반드시 고객에게 사전안내를 하시기 바랍니다.<br>변경회수를 초과한 건에 대해 배송가능일 추가 변경을 원하시면, 운영팀에 요청바랍니다.</span><!-- &nbsp;<span style="color:red;">(* 관리자 PRS는 회수제한 없음, SMS발송없음)</span> --></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="color:blue;">&nbsp;</td>
+                                                    <td style="color:blue;">송장일괄업로드 가능한 최대건수는  200개이며 업로드 시 주의부탁드립니다. </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>&nbsp;</td>
+                                                    <td style="border-top:solid 1px #f0f0f0;padding-top:5px;padding-bottom:5px;">
+
+                                                        배송가능일 : <input type=text size=10 class="input" name="setdate" readOnly >
+                                                        <img src="/images/admin/calendar.gif" border=0 style="cursor:pointer;" align="absmiddle" onclick="FuncSetShipdate(1,frminput.setdate);" >
+
+                                                        <input type="button" onclick="updateExpectShipdateChecked( '1', '0', '3004012');" value="일괄 수정" class="box80" >
+                                                        </span>
+                                                        <input type="button" name="btn_save" class="box100" value="송장번호 저장" onclick="FuncCheckForm(frminput,'04');" >
+                                                    </td>
+                                                    <td>
+                                                        <input type="button" name="btn_exceldown"  class="box120" style="background:#FFA500" value="송장등록 엑셀다운" onclick="FuncExcelDownLoad_NEW();">
+                                                        <input type="button" name="btn_excelupload" class="box120" style="background:#FFA500" value="송장 일괄 업로드" onclick="FuncExcelUpload_NEW();"  >
+                                                        <input type="button" name="btn_exceldown"  class="box130" style="background:#2F9D27" value="송장 일괄등록 도움말" onclick="FuncExcelUploadmenual_NEW();"  >
+                                                    </td>
+                                                    <td align="right" style="padding-right:15px">
+                                                        <input type="button" name="btn_cancel" class="box80" value="품절취소" onclick="FuncCheckForm(frminput,'05');"  >
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td width="800" valign="_top">
+                                <div class="tableContainer" id="TreeInxDiv03" style="color:#FFFFFF; width:800px; height:145px; overflow-x: scroll; overflow-y: hidden; background-color:#FFFFFF; " onScroll="dataOnScroll()">
+                                    <table border="0" cellpadding="0" cellspacing="1" width="100%"  bgcolor="#c3c4c4" height="85">
+                                        <col width="40"><!--전체선택-->
+                                        <col width="90"><!--결제일자-->
+                                        <col width="60"><!--주문번호-->
+                                        <col width="90"><!--주문자-->
+                                        <col width="90"><!--수취인-->
+                                        <col width="80"><!--요청유형-->
+                                        <col width="350"><!--상품명-->
+                                        <tr align="center" bgcolor="#e6e6e6" height="30">
+                                            <td rowspan="2"><img src="http://image.wconcept.co.kr/images/admin/btn_all_on.gif" style="cursor:pointer" onclick="FuncCheckAll()" /></td>
+                                            <td colspan="6">주문 기본정보</td>
+                                        </tr>
+                                        <tr align="center" bgcolor="#e6e6e6">
+                                            <td>결제일자<br>(교환출고지시)</td>
+                                            <td>주문번호</td>
+                                            <td>주문자</td>
+                                            <td>수취인</td>
+                                            <td>요청유형</td>
+                                            <td>상품명</td>
+                                        </tr>
+
+                                        <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px" onmouseover="javascript:funcColor2(0, 1);" onmouseout="javascript:funcColor2(0, 2);">
+                                            <td align="center"><input type="checkbox" name="chk_0" value="Y" onclick="FuncCheckSelf(0, '_5_0');" ></td>
+
+                                            <td align="center">2020-01-18 11:12:23</td>
+                                            <td align="center">
+                                                U00111261
+                                            </td>
+                                            <td align="center">류미애</td>
+                                            <td align="center">류미애</td>
+
+                                            <td align="center" id="orderitem_2_0">
+
+                                                <font color="blue">
+                                                    상품배송</font>
+                                            </td>
+                                            <td style="padding-left:5px" title="GOAL HEAVYWEIGHT HOODIE-BLACK" id="orderitem_3_0">
+
+                                                <input type="hidden" id="itemnm_0" value="GOAL HEAVYWEIGHT HOODIE-BLACK">
+                                                <a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?itemcd=300793052" target="_blank">GOAL HEAVYWEIGHT HOODIE-BLACK</a>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                </div>
+                            </td>
+                            <td style="padding-left:3px;">
+                                <div class="tableContainer" id="TreeInxDiv04" style="color:#FFFFFF; width:100%; height:145px; overflow-x: scroll; overflow-y: scroll; background-color:#FFFFFF; " onScroll="dataOnScroll()">
+                                    <table border="0" cellpadding="0" cellspacing="1" width="2780"  bgcolor="#c3c4c4" height="85">
+                                        <col width="140"><!--옵션1-->
+                                        <col width="100"><!--옵션2-->
+                                        <col width="100"><!--옵션3-->
+                                        <col width="40"><!--수량-->
+                                        <col width="80"><!--상품유형-->
+                                        <col width="80"> <!-- 세트가 -->
+                                        <col width="200"> <!-- 세트상품명 -->
+                                        <col width="80"><!--판매가-->
+                                        <col width="120"><!--상품코드-->
+                                        <col width="100"><!--브랜드명-->
+
+                                        <col width="50"><!--배송소요일-->
+                                        <col width="110"><!--배송가능일-->
+                                        <col width="80"><!--예약배송시작일-->
+                                        <col width="60"><!--잔여배송일-->
+                                        <col width="80"><!--출고지시일-->
+
+                                        <col width="120"><!--택배사-->
+                                        <col width="120"><!--송장번호-->
+                                        <col width="100"><!--수취인연락처1-->
+                                        <col width="100"><!--수취인연락처2-->
+                                        <col width="500"><!--배송지-->
+                                        <col width="200"><!--배송메모-->
+
+                                        <col width="100">			<!--	개인통관부호	//-->
+
+                                        <col width="80"><!--배송비유형-->
+                                        <col width="50"><!--선결제배송료-->
+
+                                        <tr align="center" bgcolor="#e6e6e6" height="30">
+                                            <td colspan="10">주문상품정보</td>
+                                            <td colspan="5">배송 일정</td>
+                                            <td colspan="2">주문처리</td>
+                                            <td colspan="4">배송지 정보</td>
+                                            <td rowspan="2">개인통관부호</td>			<!--	개인통관부호	//-->
+                                            <td colspan="2">배송비 정보</td>
+                                        </tr>
+                                        <tr align="center" bgcolor="#e6e6e6">
+                                            <!--주문상품정보-->
+                                            <td>옵션1</td>
+                                            <td>옵션2</td>
+                                            <td>옵션3</td>
+                                            <td>수량</td>
+                                            <td>상품유형</td>
+                                            <td>세트가</td>
+                                            <td>세트상품명</td>
+                                            <td>판매가</td>
+                                            <td>상품코드</td>
+                                            <td>브랜드명</td>
+                                            <!--주문상품정보-->
+
+                                            <!--배송 일정-->
+                                            <td>소요일</td>
+                                            <td>배송가능일</td>
+                                            <td>예약배송일</td>
+                                            <td>잔여<br>배송일</td>
+                                            <td>출고지시일</td>
+                                            <!--배송 일정-->
+
+                                            <!--주문처리-->
+                                            <td>택배사</td>
+                                            <td>송장번호</td>
+                                            <!--주문처리-->
+
+                                            <!--배송지 정보-->
+                                            <td>수취인연락처1</td>
+                                            <td>수취인연락처2</td>
+                                            <td>배송지</td>
+                                            <td>배송메모</td>
+                                            <!--배송지 정보-->
+
+                                            <!--배송비 정보-->
+                                            <td>배송비유형</td>
+                                            <td>선결제<br>배송비</td>
+                                            <!--배송비 정보-->
+                                        </tr>
+
+                                        <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px;" id="orderitemdetail0"  onmouseover="funcColor2(0, 1);" onmouseout="funcColor2(0, 2);">
+                                            <input type="hidden" name="orderno_0" value="U00111261">
+                                            <input type="hidden" name="orderidxnum_0" value="9552959">
+                                            <input type="hidden" name="shippingidxnum_0" value="8862861">
+                                            <input type="hidden" id="ExpDtchgCnt_0" value="0">
+                                            <!--주문상품정보-->
+                                            <td style="padding-left:5px" title="XL">XL</td><!--옵션1-->
+                                            <td style="padding-left:5px" title=""></td><!--옵션2-->
+                                            <td style="padding-left:5px" title=""></td><!--옵션3-->
+                                            <td align="center">1</td><!--수량-->
+                                            <td align="center">일반상품</td><!--상품유형-->
+
+                                            <td>&nbsp;</td><td>&nbsp;</td>
+
+                                            <td align="right" style="padding-right:5px">55,000</td><!--판매가-->
+                                            <td align="center"><a href="javascript:;" onclick="FuncModProduct('M83985861', '38', '300793052');">3007930522780120</a></td><!--상품코드-->
+                                            <td align="center">GOALSTUDIO</td><!--브랜드명-->
+                                            <!--주문상품정보-->
+
+                                            <!--배송 일정-->
+                                            <td align="center">2일</td><!--배송소요일-->
+                                            <td align="center">
+                                                <input type="text" name="expectshipdate_0" class="input" value="2020-01-21" onclick="event.cancelBubble = true;FuncSetShipdate('0_0',this);" style=";vertical-align:bottom;height:20px;width:70px" readOnly align="absmiddle"><img src="http://image.wconcept.co.kr/images/admin/btn_modify_1.gif" align="absbottom" style="cursor:pointer;" onclick="event.cancelBubble = true;updateExpectShipdateUpdate( 9552959, 8862861, expectshipdate_0.value, 0, '2020-01-21');" hspace="1">
+                                                <input type="hidden" name="nowshipdates_0" value="2020-01-21">
+                                            </td><!--배송가능일-->
+                                            <td align="center"></td><!--예약배송시작일-->
+                                            <td align="center">1</td><!--잔여배송일-->
+                                            <td align="center">2020-01-20</td><!--출고지시일-->
+                                            <!--배송 일정-->
+
+                                            <!--주문처리-->
+                                            <td align="center">
+                                                <select name="transcode_0" >
+                                                    <option value="">=택배사선택=</option>
+
+                                                    <option value="9">대한통운</option>
+
+                                                    <option value="2">방문수령</option>
+
+                                                    <option value="1">자체배송</option>
+
+                                                    <option value="21">퀵배송</option>
+
+                                                </select>
+                                            </td><!--택배사-->
+                                            <td align="center"><input type="text" name="invoiceno_0" size="15" class="input" value="" onBlur="funcChkInvoiceNO(this);" ></td><!--송장번호-->
+                                            <!--주문처리-->
+
+                                            <!--배송지 정보-->
+                                            <td align="center">010-0-0000</td><!--수취인연락처1-->
+                                            <td align="center">0-0000</td><!--수취인연락처2-->
+                                            <td style="padding-left:5px" title="[61682] 광주광역시 남구 용대로 90-1 (봉선동, 무등파크3차1단지아파트) 303-507">
+
+                                                <span style="#000000">[61682] 광주광역시 남구 용대로 90-1 (봉선동, 무등파크3차1단지아파트) 303-507</span>
+                                            </td><!--배송지-->
+                                            <td align="center" title="부재 시 경비실에 맡겨주세요.">부재 시 경비실에 맡겨주세요...</td><!--배송메모-->
+                                            <!--배송지 정보-->
+
+                                            <td align="center"></td>	<!--	개인통관부호	//-->
+
+                                            <!--배송비 정보-->
+                                            <td align="center">배송비없음</td><!--배송비유형-->
+                                            <td align="center">0</td><!--선결제배송료-->
+                                            <!--배송비 정보-->
+
+                                            <input type="hidden" name="claimmaintypecd_0" value="03">
+                                            <input type="hidden" name="claimtypecd_0" value="05">
+                                            <!--<td align="center">
+
+                                                            <select name="claimtypecd_0">
+                                              <option value="">=취소사유=</option>
+
+                                                <option value="05">품절
+                                            </select>
+                                            </td>--><!--취소사유-->
+                                        </tr>
+
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+                <script language="javascript">
+                    window.onload = function() {
+                        fnresize();
+                    }
+
+                    function fnresize(){
+                        var wsize = document.body.clientWidth;
+                        var rwidth = parseInt(wsize) - 800;
+                        $("#TreeInxDiv04").css('width', rwidth);
+                    }
+
+                    window.onresize = function(event) {
+                        fnresize();
+                    };
+                </script>
+                <form id="frmexpectdate" name="frmexpectdate" method="post" action="iFrameBizShippingExpectDateUpdate.asp" target="iframeinput">
+                    <input type="hidden" name="orderidxnum" value="">
+                    <input type="hidden" name="shippingidxnum" value="">
+                    <input type="hidden" name="expectshipdate" value="">
+                    <input type="hidden" name="vendorcd" value="">
+                </form>
+                <form id="frmexcel" name="frmexcel" method="post" action="/excel/Exl_LstShippingOrderReadyDownLoad.asp" target="iframeinput"> <!--iframeinput -->
+                    <input type="hidden" name="branchcd" value="" />
+                    <input type="hidden" name="strfrom" value="2019-10-20" />
+                    <input type="hidden" name="strto" value="2020-01-20" />
+                    <input type="hidden" name="orderno" value="" />
+                    <input type="hidden" name="vendorcd" value="3004012" />
+                    <input type="hidden" name="sel1" value="" />
+                    <input type="hidden" name="searchword" value="" />
+                    <input type="hidden" name="page" value="1" />
+                    <input type="hidden" name="dealtypecd" value="01" />
+                    <input type="hidden" name="orderroute" value="" />
+                    <input type="hidden" name="orderpathidxnum" value="" />
+                </form>
+                <iframe name="iframeinput" frameborder="0" width="0" height="0" src=""></iframe>
+
+            </div>
+        </td>
+    </tr>
+</table>
+</BODY>
+</HTML>

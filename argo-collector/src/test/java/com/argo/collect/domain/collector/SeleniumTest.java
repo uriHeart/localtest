@@ -44,7 +44,7 @@ public class SeleniumTest {
 
         //iframe 내부에서 pw 필드 탐색
         WebElement pwElement = driver.findElement(By.id("pw"));
-        String pass ="wagti2019!";
+        String pass ="wagti2019!@";
         pwElement.sendKeys(pass);
 
         //로그인 버튼 클릭

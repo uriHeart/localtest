@@ -1,1897 +1,639 @@
+<!--
 
-<HTML>
-<HEAD>
-    <meta http-equiv=Content-type content="text/html; charset=euc-kr">
-    <meta http-equiv="X-UA-Compatible">
-    <TITLE>WCONCEPT SCM 에 오신걸 환영합니다</TITLE>
-    <META HTTP-EQUIV="imagetoolbar" CONTENT="no">
-    <meta http-equiv="X-UA-Compatible" content="IE=5">
-    <link rel="stylesheet" href="/include/css/admin.css" type="text/css">
-    <script language="javascript" src="/include/js/Common.js"></script>
-    <script language="javascript" src="/include/js/ajax.js"></script>
-</HEAD>
-<body topmargin="0" leftmargin="0" text="#000000"  bgcolor="#ffffff" width=100%>
+Request URL: http://pin.wconcept.co.kr/ShippingPin/iFrameLstShippingOrderCompleteVendorBottom_NEW.asp
 
-<script language="javascript" src="/include/js/Common.js"></script>
+flag: submit
+strfrom: 2020-01-01
+strto: 2020-01-20
+datetypecd: 01
+orderstatuscd: 00
+branchcd:
+orderno:
+sel1:
+searchword:
+vendorcd: 3004012
+dealtypecd: 01
+typecd:
+orderroute:
+orderpathidxnum:
+page:
+
+
+-->
+
 <script language="javascript">
-
-    //날짜 세팅
-    function FuncSetResult() {
-        var chknum = contents1;
-        var chkdate = "";
-        var p_num = "";
-        var p_subnum = "";
-        TmpeValue = chknum.split("_");
-        p_num = TmpeValue[0];
-        p_subnum = TmpeValue[1];
-        chkdate = contents2 + "-" + contents3 + "-" + contents4;
-
-        //eval("frminput.expectshipdate_" + p_num + "_" + p_subnum).value = chkdate;
-
-        for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
-            if (ii == parseInt(p_num)) {
-                for (ss = 0; ss < parseInt(eval("frminput.itemcnt_" + ii).value); ss++) {
-                    if (ss >= parseInt(p_subnum)) {
-                        eval("frminput.expectshipdate_" + ii + "_" + ss).value = chkdate;
-                    }
-                }
-            } else {
-                for (ss = 0; ss < parseInt(eval("frminput.itemcnt_" + ii).value); ss++) {
-                    eval("frminput.expectshipdate_" + ii + "_" + ss).value = chkdate;
-                }
-            }
-        }
-    }
-
-    // 페이지 이동
-    function FuncGoPage(p_num) {
-        frmtype.page.value = p_num;
-        frmtype.submit();
-    }
-
-    // 전체선택
-    function FuncCheckAll(){
-        if (frminput.chkAll.value == "N") {
-            for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
-                eval("frminput.chk_" + ii).checked = true;
-
-                for (jj = 0; jj < parseInt(eval("frminput.itemcnt_" + ii).value) ; jj++ ){
-                    eval("frminput.chk_item_" + ii + "_" + jj).checked = true;
-                }
-            }
-
-            frminput.chknum.value = frminput.totnum.value;
-            frminput.chkAll.value = "Y";
-        } else {
-            for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
-                eval("frminput.chk_" + ii).checked = false;
-
-                for (jj = 0; jj < parseInt(eval("frminput.itemcnt_" + ii).value) ; jj++ ){
-                    eval("frminput.chk_item_" + ii + "_" + jj).checked = false;
-                }
-            }
-
-            frminput.chknum.value = 0;
-            frminput.chkAll.value = "N";
-        }
-    }
-
-    // 개별선택
-    function FuncCheckSelf(p_num) {
-        if (eval("frminput.chk_" + p_num).checked == true) {
-            frminput.chknum.value = parseInt(frminput.chknum.value) + 1;
-            for (jj = 0; jj < parseInt(eval("frminput.itemcnt_" + p_num).value) ; jj++ ){
-                eval("frminput.chk_item_" + p_num + "_" + jj).checked = true;
-            }
-        } else {
-            frminput.chknum.value = parseInt(frminput.chknum.value) - 1;
-            for (jj = 0; jj < parseInt(eval("frminput.itemcnt_" + p_num).value) ; jj++ ){
-                eval("frminput.chk_item_" + p_num + "_" + jj).checked = false;
-            }
-        }
-    }
-
-    // 상품 개별선택
-    function FuncCheckSelfItem(p_num, p_subnum, CssClassID) {
-        if (CssClassID.length > 0) {
-            if ($("input:checkbox[name='chk_item_" + p_num + "_" + p_subnum + "']").is(":checked") == true) {
-                $("." + CssClassID).prop("checked", true);
-            }
-            else {
-                $("." + CssClassID).prop("checked", false);
-            }
-        }
-
-        if (eval("frminput.chk_item_" + p_num + "_" + p_subnum).checked == true) {
-            if (eval("frminput.chk_" + p_num).checked == false) {
-                eval("frminput.chk_" + p_num).checked = true;
-                frminput.chknum.value = parseInt(frminput.chknum.value) + 1;
-            }
-        } else {
-            findchk = 0;
-            for (ii = 0; ii < parseInt(eval("frminput.itemcnt_" + p_num).value); ii++) {
-                if (eval("frminput.chk_item_" + p_num + "_" + ii).checked == true) {
-                    findchk = 1;
-                }
-            }
-
-            if (findchk == 0) {
-                eval("frminput.chk_" + p_num).checked = false;
-                frminput.chknum.value = parseInt(frminput.chknum.value) - 1;
-            }
-        }
-    }
-
-    function FuncCheckForm(p_frm, p_type) {
-        if (parseInt(p_frm.chknum.value) == 0) {
-            alert("처리하실 주문을 선택하세요.");
-            return;
-        }
-
-        if(p_type == "01"){
-            for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
-                if (eval("frminput.chk_" + ii).checked == true){
-                    var itemcnt = 0;
-                    for (jj = 0; jj < parseInt(eval("frminput.itemcnt_" + ii).value) ; jj++ ){
-                        if(eval("frminput.chk_item_" + ii + "_" + jj).checked == true){
-                            if(eval("frminput.transcode_" + ii + "_" + jj).value == ""){
-                                alert("택배사를 선택해 주십시오.");
-                                eval("frminput.transcode_" + ii + "_" + jj).focus();
-                                return;
-                            }
-
-                            if(eval("frminput.invoiceno_" + ii + "_" + jj).value == ""){
-                                alert("송장번호를 입력해 주십시오.");
-                                eval("frminput.invoiceno_" + ii + "_" + jj).focus();
-                                return;
-                            }
-
-                            itemcnt++;
-                        }
-                    }
-
-                    if(itemcnt == 0){
-                        alert("선택한 주문의 상품을 선택해 주십시오.");
-                        return;
-                    }
-                }
-            }
-
-            if (!confirm("[ " + p_frm.chknum.value + " ] 건에 대해 배송완료 처리하시겠습니까?")){
-                return;
-            }
-        }else if(p_type == "02"){
-            for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
-                if (eval("frminput.chk_" + ii).checked == true){
-                    var itemcnt = 0;
-                    for (jj = 0; jj < parseInt(eval("frminput.itemcnt_" + ii).value) ; jj++ ){
-                        if(eval("frminput.chk_item_" + ii + "_" + jj).checked == true){
-                            if(eval("frminput.transcode_" + ii + "_" + jj).value == ""){
-                                alert("택배사를 선택해 주십시오.");
-                                eval("frminput.transcode_" + ii + "_" + jj).focus();
-                                return;
-                            }
-
-                            if(eval("frminput.invoiceno_" + ii + "_" + jj).value == ""){
-                                alert("송장번호를 입력해 주십시오.");
-                                eval("frminput.invoiceno_" + ii + "_" + jj).focus();
-                                return;
-                            }
-
-                            itemcnt++;
-                        }
-                    }
-
-                    if(itemcnt == 0){
-                        alert("선택한 주문의 상품을 선택해 주십시오.");
-                        return;
-                    }
-                }
-            }
-
-            if (!confirm("[ " + p_frm.chknum.value + " ] 건에 대해 송장정보를 수정하시겠습니까?")){
-                return;
-            }
-        }else{
-            alert("처리구분 누락");
-            return;
-        }
-
-        p_frm.strtype.value = p_type;
-        p_frm.submit();
-    }
-
-    //상품정보 수정팝업
-    function FuncModProduct(p_mediumcd, p_categorycd, p_itemcd) {
-        window.open('/Product/PopModProductFrame.asp?mediumcd=' + p_mediumcd + '&categorycd=' + p_categorycd + '&itemcd=' + p_itemcd);
-        //showModalDialog('PopModProductFrame.asp?branchcd=&mediumcd=' + p_mediumcd + '&categorycd=' + p_categorycd + '&itemcd=' + p_itemcd, window, 'resizable: no; help: no; status: no; scroll: no; ');
-    }
-
-    function funcChkInvoiceNO(p_frm, p_invoice){
-        if(!FuncString(p_frm.value)){
-            //alert("특수문자를 제외하고 입력해주세요");
-            //p_frm.value = p_invoice;
-            p_frm.value = p_frm.value.replace(/[^0-9]/gi,"");
-            p_frm.focus();
-        }
-    }
-
-    function SetChangedValue(CssClassID, val) {
-        $("." + CssClassID).val(val);
+    function FuncViewShippingTrans(p_url) {
+        window.open(p_url, 'winordermaster', 'toolbars=no,scrollbars=yes,status=no,width=1100px,height=650px,top=1,left=1');
     }
 </script>
-<table border="0" cellpadding="0" cellspacing="0" bgcolor="#c3c4c4" style="height:100%; width: 100%">
+<table border="0" cellpadding="0" cellspacing="0" bgcolor="#c3c4c4" style="height:754; width: 100%">
     <tr >
         <td style="vertical-align:top;">
-            <div id="TreeInxDiv02" style="color:#FFFFFF; height: 754px;  background-color: #FFFFFF; ">
+            <div id="TreeInxDiv02" style="color:#FFFFFF; width:100%;height: 754; overflow-x: no; overflow-y: no; background-color: #ffffff; ">
 
-                <form name="frmtype" method="post" action="/ShippingPin/iFrameLstShippingOrderProcessingVendorBottom.asp">
-                    <input type="hidden" name="flag" value="submit" />
-                    <input type="hidden" name="branchcd" value="" />
-                    <input type="hidden" name="strfrom" value="2019-12-16" />
-                    <input type="hidden" name="strto" value="2020-01-16" />
-                    <input type="hidden" name="vendorcd" value="3004012" />
-                    <input type="hidden" name="sel1" value="" />
-                    <input type="hidden" name="searchword" value="" />
-                    <input type="hidden" name="page" value="1" />
-                    <input type="hidden" name="dealtypecd" value="01" />
-                    <input type="hidden" name="orderroute" value="R00000001" />
-                    <input type="hidden" name="orderpathidxnum" value="" />
-                    <input type="hidden" name="isdelay" value="">
-                </form>
-                <form name="frminput" method="post" action="iFrameBizLstShippingOrderProcessingVendorBottom.asp" target="iframeinput">
-                    <input type="hidden" name="strtype" value="01">
-                    <input type="hidden" name="totnum" value="17">
-                    <input type="hidden" name="chkAll" value="N" />
-                    <input type="hidden" name="chknum" value="0" />
-                    <table border="0" width="100%" cellpadding="0" cellspacing="1" bgcolor="#dddddd">
+                <table border="0" width="100%" cellpadding="0" cellspacing="1" bgcolor="#dddddd">
+                    <tr>
+                        <td align="left">
+                            <table border="0" cellpadding="0" cellspacing="1" width="100%" bgcolor="#ffffff">
+                                <tr height="30">
+                                    <td style="padding-left:10"><b>검색결과:&nbsp;&nbsp;392건 / <font color="blue">상품배송</font> : 373개 / 45,086,900원 / <font color="green">교환배송</font> : 19개 / 2,221,850원(주문수량, 금액)</b></td>
+                                    <td align="center"><b>1</b> / 20 page&nbsp;&nbsp;&nbsp;&nbsp;<font color=gray>처음</font>&nbsp;&nbsp;<img src='http://image.wconcept.co.kr/images/common/btn_prew.gif' align='absmiddle' border='0' width='13' height='13'>&nbsp;&nbsp;&nbsp;<font color='red'><b>1</b></font>&nbsp;&nbsp;<A href='javascript:FuncGoPage(2)' class='list_ca'><font color=black>2</font></a>&nbsp;&nbsp;<A href='javascript:FuncGoPage(3)' class='list_ca'><font color=black>3</font></a>&nbsp;&nbsp;<A href='javascript:FuncGoPage(4)' class='list_ca'><font color=black>4</font></a>&nbsp;&nbsp;<A href='javascript:FuncGoPage(5)' class='list_ca'><font color=black>5</font></a>&nbsp;&nbsp;<A href='javascript:FuncGoPage(6)' class='list_ca'><font color=black>6</font></a>&nbsp;&nbsp;<A href='javascript:FuncGoPage(7)' class='list_ca'><font color=black>7</font></a>&nbsp;&nbsp;<A href='javascript:FuncGoPage(8)' class='list_ca'><font color=black>8</font></a>&nbsp;&nbsp;<A href='javascript:FuncGoPage(9)' class='list_ca'><font color=black>9</font></a>&nbsp;&nbsp;<A href='javascript:FuncGoPage(10)' class='list_ca'><font color=black>10</font></a>&nbsp;&nbsp;<A href='javascript:FuncGoPage(11)' class='list_ca'><font color=black>11</font></a>&nbsp;&nbsp;<A href='javascript:FuncGoPage(12)' class='list_ca'><font color=black>12</font></a>&nbsp;&nbsp;<A href='javascript:FuncGoPage(13)' class='list_ca'><font color=black>13</font></a>&nbsp;&nbsp;<A href='javascript:FuncGoPage(14)' class='list_ca'><font color=black>14</font></a>&nbsp;&nbsp;<A href='javascript:FuncGoPage(15)' class='list_ca'><font color=black>15</font></a>&nbsp;&nbsp;<A href='javascript:FuncGoPage(16)' class='list_ca'><font color=black>16</font></a>&nbsp;&nbsp;<A href='javascript:FuncGoPage(17)' class='list_ca'><font color=black>17</font></a>&nbsp;&nbsp;<A href='javascript:FuncGoPage(18)' class='list_ca'><font color=black>18</font></a>&nbsp;&nbsp;<A href='javascript:FuncGoPage(19)' class='list_ca'><font color=black>19</font></a>&nbsp;&nbsp;<A href='javascript:FuncGoPage(20)' class='list_ca'><font color=black>20</font></a>&nbsp;&nbsp;<a href='javascript:FuncGoPage(2)'><img src='http://image.wconcept.co.kr/images/common/btn_next.gif' align='absmiddle' border='0' width='13' height='13'></a>&nbsp;<a href='javascript:FuncGoPage(20)' class='list_ca'><font color=black>끝</font></a></td>
+                                </tr>
+                                <tr height="30">
+                                    <td>
+                                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                            <col width="30">
+                                            <col>
+                                            <tr>
+                                                <td style="color:blue; padding-left:3px;">Tip : </td>
+                                                <td style="color:blue;">택배사 집하자료가 없는 송장의 경우 정산 내역에 포함되지 않으니 꼭 실제 출고된 주문만 출고처리 해주시기 바랍니다.</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>  <!--width:640; -->
+                <div id="TreeInxDiv03" style="color:#FFFFFF;width:100%; height:689; overflow-x: auto; overflow-y: auto; background-color: #ffffff; ">
+                    <table cellspacing="0" cellpadding="0"  border="0" width="99%">
+                        <col width="65">
+                        <col width="65">
+                        <col width="65">
+                        <col width="65">
+                        <col width="65">
+                        <col width="65">
+                        <col width="100">
+                        <col width="80">
+                        <col >
+                        <col width="200">
+                        <col width="120">
+                        <col width="40">
+                        <col width="50"> <!-- 세트가 -->
+                        <col width="200"> <!-- 세트상품명 -->
+                        <col width="50">  <!--옵션3 -->
+                        <col width="50">
+                        <tr align="middle" valign="center">
+                            <td class="t_01">주문일자</td>
+                            <td class="t_01">배송완료</td>
+                            <td class="t_01">주문번호</td>
+                            <td class="t_01">배송구분</td>
+                            <td class="t_01">주문상태</td>
+                            <td class="t_01">주문자</td>
+                            <td class="t_01">배송정보</td>
+                            <td class="t_01">전화번호</td>
+                            <td class="t_01">주소</td>
+                            <td class="t_01">상품명</td>
+                            <td class="t_01">옵션</td>
+                            <td class="t_01">수량</td>
+                            <td class="t_01">세트가</td>
+                            <td class="t_01">세트상품명</td>
+                            <td class="t_01">판매가</td>
+                            <td class="t_01">배송비</td>
+
+
                         <tr>
-                            <td>
-                                <table border="0" cellpadding="0" cellspacing="1" width="100%" bgcolor="#ffffff">
-                                    <tr height="30">
-                                        <td style="padding-left:10"><b>검색결과:&nbsp;&nbsp;18건 / 18개 / 2,494,500원 / (주문상품건수합계 / 수량합계 / 주문금액합계)</b></td>
-                                        <td align="center"><b>1</b> / 1 page&nbsp;&nbsp;&nbsp;&nbsp;<font color=gray>처음</font>&nbsp;&nbsp;<img src='http://image.wconcept.co.kr/images/common/btn_prew.gif' align='absmiddle' border='0' width='13' height='13'>&nbsp;&nbsp;&nbsp;<font color='red'><b>1</b></font>&nbsp;&nbsp;<img src='http://image.wconcept.co.kr/images/common/btn_next.gif' align='absmiddle' border='0' width='13' height='13'>&nbsp;<font color=gray>끝</font></td>
-                                    </tr>
-                                    <tr height="30">
-                                        <td>
-                                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
-                                                <col width="30">
-                                                <col>
-                                                <tr>
-                                                    <td style="color:blue; padding-left:3px;">Tip : </td>
-                                                    <td style="color:blue;">택배사 집하자료가 없는 송장의 경우 정산 내역에 포함되지 않으니 꼭 실제 출고된 주문만 출고처리 해주시기 바랍니다.</td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                        <td align="right" style="padding-right:5px;">
-                                            <!--input type="button" name="btn_save" class="box80" value="배송완료" onclick="FuncCheckForm(frminput,'01');"-->
+                            <td class="t_0k" title="주문일자">2020-01-17</td>
+                            <td class="t_0k" title="배송완료일">2020-01-18</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00106582</td>
+                            <td class="t_0k" title="배송구분">
 
-                                            <input type="button" name="btn_save" class="box80" value="송장수정" onclick="FuncCheckForm(frminput,'02');">
-
-                                        </td>
-                                    </tr>
-                                </table>
+                                <font color="blue">
+                                    상품배송
+                                </font>
                             </td>
+                            <td class="t_0k" title="주문상태">배송완료</td>
+                            <td class="t_0k" title="주문자">김예솔</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357514002871')" style="color:#0000ff;cursor:pointer">357514002871</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">경기도 파주시 창곡동길  ** ***** ***** ***** ****</td>
+                            <td class="t_0k_left" title="상품명">COLOR BLOCK ANORAK - DARK NAVY</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:L
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">103,200</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">0</td>
                         </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-17</td>
+                            <td class="t_0k" title="배송완료일">2020-01-18</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00106399</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">배송완료</td>
+                            <td class="t_0k" title="주문자">송유진</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357514002624')" style="color:#0000ff;cursor:pointer">357514002624</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">대구광역시 달성군 옥포면  *** **** *** ****** *******</td>
+                            <td class="t_0k_left" title="상품명">REVERSIBLE DOWN PARKA - GRAY/BLACK</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:XL
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">239,250</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">2,500</td>
+                        </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-17</td>
+                            <td class="t_0k" title="배송완료일">2020-01-18</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00106399</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">반품처리중</td>
+                            <td class="t_0k" title="주문자">송유진</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357514002624')" style="color:#0000ff;cursor:pointer">357514002624</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">대구광역시 달성군 옥포면  *** **** *** ****** *******</td>
+                            <td class="t_0k_left" title="상품명">LIVE THE GOAL - TUESDAY TEE - WHITE</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:XL
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">42,250</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">2,500</td>
+                        </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-17</td>
+                            <td class="t_0k" title="배송완료일">2020-01-18</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00106120</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">배송완료</td>
+                            <td class="t_0k" title="주문자">소셜유저</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357514002683')" style="color:#0000ff;cursor:pointer">357514002683</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">충청남도 당진시 원당로  ***** ***** ********* **** ****</td>
+                            <td class="t_0k_left" title="상품명">REVERSIBLE DOWN PARKA - ORANGE/GRAY</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:M
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">239,250</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">0</td>
+                        </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-17</td>
+                            <td class="t_0k" title="배송완료일">2020-01-18</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00105286</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">배송완료</td>
+                            <td class="t_0k" title="주문자">소셜유저</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357512632341')" style="color:#0000ff;cursor:pointer">357512632341</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">충남 계룡시 엄사면  ***** ** ***** ****** *** *****</td>
+                            <td class="t_0k_left" title="상품명">COLOR BLOCK ANORAK - DARK NAVY</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:L
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">103,200</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">0</td>
+                        </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-17</td>
+                            <td class="t_0k" title="배송완료일">2020-01-18</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00105242</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">배송완료</td>
+                            <td class="t_0k" title="주문자">오태일</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357512631556')" style="color:#0000ff;cursor:pointer">357512631556</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">경상남도 양산시 양주로  *** ***** ************** ********</td>
+                            <td class="t_0k_left" title="상품명">GOAL GLOVE - LIME</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:FREE
+                            </td>
+                            <td class="t_0k" title="수량">2</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">24,000</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">0</td>
+                        </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-17</td>
+                            <td class="t_0k" title="배송완료일">2020-01-18</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00104479</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">배송완료</td>
+                            <td class="t_0k" title="주문자">김소연</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357512632400')" style="color:#0000ff;cursor:pointer">357512632400</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">울산광역시 북구 명촌10길  ** ***** ********** *************</td>
+                            <td class="t_0k_left" title="상품명">COLOR BLOCK ANORAK - DARK NAVY</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:L
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">103,200</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">0</td>
+                        </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-16</td>
+                            <td class="t_0k" title="배송완료일">2020-01-20</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00104228</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">배송완료</td>
+                            <td class="t_0k" title="주문자">김지혜</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357512631350')" style="color:#0000ff;cursor:pointer">357512631350</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">경상남도 사천시 용현면  *** ** *** ****</td>
+                            <td class="t_0k_left" title="상품명">GOAL HEAVYWEIGHT SWEAT SHIRTS-BLACK</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:M
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">45,000</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">0</td>
+                        </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-16</td>
+                            <td class="t_0k" title="배송완료일">2020-01-20</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00104228</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">배송완료</td>
+                            <td class="t_0k" title="주문자">김지혜</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357512631350')" style="color:#0000ff;cursor:pointer">357512631350</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">경상남도 사천시 용현면  *** ** *** ****</td>
+                            <td class="t_0k_left" title="상품명">BIG LOGO HOODIE - GREY</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:M
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">51,350</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">0</td>
+                        </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-16</td>
+                            <td class="t_0k" title="배송완료일">2020-01-20</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00103747</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">배송완료</td>
+                            <td class="t_0k" title="주문자">김지혜</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357512631350')" style="color:#0000ff;cursor:pointer">357512631350</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">경상남도 사천시 용현면  *** ** *** ****</td>
+                            <td class="t_0k_left" title="상품명">REVERSIBLE DOWN PARKA - ORANGE/GRAY</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:M
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">239,250</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">0</td>
+                        </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-16</td>
+                            <td class="t_0k" title="배송완료일">2020-01-18</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00103589</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">배송완료</td>
+                            <td class="t_0k" title="주문자">김일호</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357512632562')" style="color:#0000ff;cursor:pointer">357512632562</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">서울특별시 강남구 테헤란로4길  * ***** *****</td>
+                            <td class="t_0k_left" title="상품명">CARGO JOGGER PANTS - KHAKI</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:2XL
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">71,200</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">0</td>
+                        </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-16</td>
+                            <td class="t_0k" title="배송완료일">2020-01-18</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00103343</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">배송완료</td>
+                            <td class="t_0k" title="주문자">소미라</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357512631276')" style="color:#0000ff;cursor:pointer">357512631276</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">충청북도 영동군 영동읍  **** **** ****</td>
+                            <td class="t_0k_left" title="상품명">BACK LOGO SWEATSHIRT - GRAY</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:L
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">55,200</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">0</td>
+                        </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-16</td>
+                            <td class="t_0k" title="배송완료일">2020-01-18</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00103343</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">배송완료</td>
+                            <td class="t_0k" title="주문자">소미라</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357512631276')" style="color:#0000ff;cursor:pointer">357512631276</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">충청북도 영동군 영동읍  **** **** ****</td>
+                            <td class="t_0k_left" title="상품명">SMALL LOGO TEE - GRAY</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:L
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">29,250</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">0</td>
+                        </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-16</td>
+                            <td class="t_0k" title="배송완료일">2020-01-18</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00103343</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">배송완료</td>
+                            <td class="t_0k" title="주문자">소미라</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357512631276')" style="color:#0000ff;cursor:pointer">357512631276</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">충청북도 영동군 영동읍  **** **** ****</td>
+                            <td class="t_0k_left" title="상품명">ARC LOGO SWEATSHIRT - GREY</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:L
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">57,850</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">0</td>
+                        </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-16</td>
+                            <td class="t_0k" title="배송완료일">2020-01-18</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00103303</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">배송완료</td>
+                            <td class="t_0k" title="주문자">정경아</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357512632820')" style="color:#0000ff;cursor:pointer">357512632820</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">부산광역시 사하구 을숙도대로709번길  ** ***** ********** ****************</td>
+                            <td class="t_0k_left" title="상품명">GOAL HEAVYWEIGHT HOODIE-BLACK</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:XL
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">55,000</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">0</td>
+                        </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-16</td>
+                            <td class="t_0k" title="배송완료일">2020-01-18</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00103129</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">배송완료</td>
+                            <td class="t_0k" title="주문자">진이솜</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357512631965')" style="color:#0000ff;cursor:pointer">357512631965</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">경상북도 경산시 삼성현로  *** ***** ****** ********</td>
+                            <td class="t_0k_left" title="상품명">REVERSIBLE DOWN PARKA - GRAY/BLACK</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:XL
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">239,250</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">0</td>
+                        </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-16</td>
+                            <td class="t_0k" title="배송완료일">2020-01-18</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00102292</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">배송완료</td>
+                            <td class="t_0k" title="주문자">강은정</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357512632702')" style="color:#0000ff;cursor:pointer">357512632702</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">충청북도 청주시 청원구  *** ***** ******* ********</td>
+                            <td class="t_0k_left" title="상품명">GOAL HEAVYWEIGHT SWEAT SHIRTS-BLACK</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:XL
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">45,000</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">0</td>
+                        </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-16</td>
+                            <td class="t_0k" title="배송완료일">2020-01-18</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00102206</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">반품처리중</td>
+                            <td class="t_0k" title="주문자">김연희</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357512632886')" style="color:#0000ff;cursor:pointer">357512632886</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">경기도 화성시 동탄순환대로22길  ** ***** ***** ***** ***** *****</td>
+                            <td class="t_0k_left" title="상품명">GOAL HEAVYWEIGHT HOODIE-BLACK</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:L
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">55,000</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">5,000</td>
+                        </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-16</td>
+                            <td class="t_0k" title="배송완료일">2020-01-17</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00100562</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">배송완료</td>
+                            <td class="t_0k" title="주문자">임미경</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357511667380')" style="color:#0000ff;cursor:pointer">357511667380</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">서울특별시 중랑구 동일로169길  ** **** ******** ********</td>
+                            <td class="t_0k_left" title="상품명">REVERSIBLE DOWN PARKA - GRAY/BLACK</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:L
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">239,250</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">0</td>
+                        </tr>
+
+                        <tr>
+                            <td class="t_0k" title="주문일자">2020-01-16</td>
+                            <td class="t_0k" title="배송완료일">2020-01-17</td>
+                            <td class="t_0k" title="주문번호" style="mso-number-format:\@;" >U00100439</td>
+                            <td class="t_0k" title="배송구분">
+
+                                <font color="blue">
+                                    상품배송
+                                </font>
+                            </td>
+                            <td class="t_0k" title="주문상태">배송완료</td>
+                            <td class="t_0k" title="주문자">나연준</td>
+                            <td class="t_0k" title="택배사">CJGLS택배<br><span onClick="FuncViewShippingTrans('http://nexs.cjgls.com/web/detailform.jsp?slipno=357511668065')" style="color:#0000ff;cursor:pointer">357511668065</span></td>
+                            <td class="t_0k" title="수취인연락처1" style="mso-number-format:\@;">-<br></td>
+                            <td class="t_0k_left" title="배송지">서울특별시 강남구 언주로67길  ** ***** ***** ****</td>
+                            <td class="t_0k_left" title="상품명">GOAL HEAVYWEIGHT HOODIE-BLACK</td>
+                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;">
+                                <nobr>옵션1:L
+                            </td>
+                            <td class="t_0k" title="수량">1</td>
+                            <td class='t_0k na'>&nbsp;</td>
+                            <td class='t_0k'>&nbsp;</td>
+
+                            <td class="t_0k na" style="padding-right:5px" title="판매가">55,000</td>
+                            <td class="t_0k na" style="padding-right:5px" title="배송비">0</td>
+                        </tr>
+
                     </table>
-                    <div id="TreeInxDiv03" style="color:#FFFFFF; width:100%; height:689px; overflow-x: scroll; overflow-y: scroll; overflow-x: auto; overflow-y: auto; background-color: #ffffff; ">
-                        <table cellspacing="0" cellpadding="0" width="1650" border="0">
-                            <col width="40">
-                            <col width="60">
-                            <col width="80">
-                            <col width="80">
-                            <col width="80">
-                            <col width="80">
-                            <col width="80">
-                            <col width="80">
-                            <col width="80">
-                            <col width="50">
-                            <col width="50"> <!-- 수량 -->
-
-                            <col width="70"> <!-- 세트가 -->
-                            <col width="200"> <!-- 세트상품명 -->
-
-                            <col width="60">
-                            <col width="70">
-                            <col width="80">
-                            <col width="90">
-                            <col width="80">
-                            <col width="80">
-                            <col width="80">
-                            <tr align="middle" valign="center">
-                                <td rowspan="3" class="t_01"><img src="http://image.wconcept.co.kr/images/admin/btn_all_on.gif" style="cursor:pointer" onclick="FuncCheckAll()" /></td>
-                                <td rowspan="3" class="t_01">주문일자</td>
-                                <td rowspan="2" class="t_01">주문번호</td>
-                                <td rowspan="2" class="t_01">주문자</td>
-                                <td rowspan="2" class="t_01">수취인</td>
-                                <td rowspan="2" class="t_01">수취인연락처1</td>
-                                <td rowspan="2" class="t_01">수취인연락처2</td>
-                                <td colspan="13" class="t_01">배송지</td>
-                            </tr>
-                            <tr align="middle" valign="center">
-                                <td colspan="13" class="t_01">배송메모 / 개인통관부호</td>
-                            </tr>
-                            <tr align="middle" valign="center">
-                                <td class="t_01">요청유형</td>
-                                <td class="t_01">묶음</td>
-                                <td class="t_01">아이템코드</td>
-                                <td colspan="2" class="t_01">상품명</td>
-                                <td class="t_01">옵션1</td>
-                                <td class="t_01">옵션2</td>
-                                <td class="t_01">옵션3</td>
-                                <td class="t_01">수량</td>
-
-                                <td class="t_01">세트가</td>
-                                <td class="t_01">세트상품명</td>
-
-                                <td class="t_01">납품가</td>
-                                <td class="t_01">배송가능일</td>
-                                <td class="t_01">출고일자</td>
-                                <td class="t_01">택배사</td>
-                                <td class="t_01">송장번호</td>
-                                <td class="t_01">배송료유무</td>
-                                <td class="t_01">선결제배송료</td>
-                            </tr>
-
-                            <tr>
-                                <input type="hidden" name="idx_0" value="1">
-                                <input type="hidden" name="orderno_0" value="U00100562">
-                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_0" value="Y" onclick="FuncCheckSelf(0);"></td>
-                                <td class="t_0k" title="주문일자">2020-01-16</td>
-                                <td colspan="18">
-                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" style="table-layout:fixed;">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="50">
-                                        <col width="50"> <!-- 수량 -->
-                                        <col width="70"> <!-- 세트가 -->
-                                        <col width="200"> <!-- 세트상품명 -->
-                                        <col width="60">
-                                        <col width="70">
-                                        <col width="80">
-                                        <col width="90">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <tr align="middle" valign="center">
-                                            <td rowspan="2" class="t_0k" title="주문번호">U00100562</td>
-                                            <td rowspan="2" class="t_0k" title="주문자">임미경</td>
-                                            <td rowspan="2" class="t_0k" title="수취인">임미경</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처1">010-3253-1680</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처2">010-3253-1680</td>
-                                            <td colspan="13" class="t_0k_left" title="배송지">서울특별시 중랑구 동일로169길 41 (묵동, 동구햇살아파트)&nbsp;101동405호</td>
-                                        </tr>
-                                        <tr align="middle" valign="center">
-                                            <td colspan="11" class="t_0k_left" title="배송메모">부재 시, 전화 또는 문자 주세요.&nbsp;</td>
-                                            <td colspan="2" class="t_0k" title="개인통관부호">&nbsp;</td>
-                                        </tr>
-
-                                        <tr align="middle" valign="center">
-                                            <input type="hidden" name="orderno_0_0" value="U00100562">
-                                            <input type="hidden" name="orderidxnum_0_0" value="9541063">
-                                            <input type="hidden" name="shippingidxnum_0_0" value="8849228">
-                                            <td class="t_0k" title="요청유형">
-
-                                                <font color="blue">
-                                                    상품배송
-                                                </font>
-                                            </td>
-                                            <td class="t_0k" title="묶음"><input type="checkbox" name="chk_item_0_0" value="Y" onclick="FuncCheckSelfItem(0, 0, '');" ></td>
-                                            <td class="t_0k" title="상품코드" style="cursor:pointer;" onclick="FuncModProduct('M83985861', '31', '300756853');">3007568532600077</td>
-                                            <td colspan="2" class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title="REVERSIBLE DOWN PARKA - GRAY/BLACK"><nobr><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=31&itemcd=300756853" target="_blank">REVERSIBLE DOWN PARKA - GRAY/BLACK</a></td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=
-                                                    "L"><nobr>L&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td> <!--옵션3-->
-                                            <td class="t_0k" title="수량">1</td>
-                                            <td class='t_0k' title='세트가'>&nbsp;</td>
-                                            <td class='t_0k' title='세트상품명'>&nbsp;</td>
-
-                                            <td class="t_0k" title="납품가">239,250</td>
-                                            <td class="t_0k" title="배송가능일">2020-01-20&nbsp;</td>
-                                            <td class="t_0k" title="출고일자">2020-01-16</td>
-                                            <td class="t_0k" title="택배사">
-                                                <select name="transcode_0_0" >
-                                                    <option value="">==택배사선택==</option>
-
-                                                    <option value="9" >대한통운</option>
-
-                                                    <option value="2" >방문수령</option>
-
-                                                    <option value="1" >자체배송</option>
-
-                                                    <option value="21" >퀵배송</option>
-
-                                                    <option value="18" >편의점택배</option>
-
-                                                </select>
-                                            </td>
-                                            <td class="t_0k" title="송장번호"><input type="text" name="invoiceno_0_0" size="15" class="input " value="357511667380" onBlur="funcChkInvoiceNO(this, '357511667380');" ></td>
-                                            <td class="t_0k" title="배송료유무">배송비없음</td>
-                                            <td class="t_0k" title="선결제베송료">0</td>
-                                        </tr>
-
-                                        <input type="hidden" name="itemcnt_0" value="1">
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <input type="hidden" name="idx_1" value="2">
-                                <input type="hidden" name="orderno_1" value="U00100439">
-                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_1" value="Y" onclick="FuncCheckSelf(1);"></td>
-                                <td class="t_0k" title="주문일자">2020-01-16</td>
-                                <td colspan="18">
-                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" style="table-layout:fixed;">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="50">
-                                        <col width="50"> <!-- 수량 -->
-                                        <col width="70"> <!-- 세트가 -->
-                                        <col width="200"> <!-- 세트상품명 -->
-                                        <col width="60">
-                                        <col width="70">
-                                        <col width="80">
-                                        <col width="90">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <tr align="middle" valign="center">
-                                            <td rowspan="2" class="t_0k" title="주문번호">U00100439</td>
-                                            <td rowspan="2" class="t_0k" title="주문자">나연준</td>
-                                            <td rowspan="2" class="t_0k" title="수취인">연준</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처1">010-6858-1414</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처2"></td>
-                                            <td colspan="13" class="t_0k_left" title="배송지">서울특별시 강남구 언주로67길 34 (역삼동, 더파인빌)&nbsp;202호</td>
-                                        </tr>
-                                        <tr align="middle" valign="center">
-                                            <td colspan="11" class="t_0k_left" title="배송메모"> /  / &nbsp;</td>
-                                            <td colspan="2" class="t_0k" title="개인통관부호">&nbsp;</td>
-                                        </tr>
-
-                                        <tr align="middle" valign="center">
-                                            <input type="hidden" name="orderno_1_0" value="U00100439">
-                                            <input type="hidden" name="orderidxnum_1_0" value="9540921">
-                                            <input type="hidden" name="shippingidxnum_1_0" value="8849071">
-                                            <td class="t_0k" title="요청유형">
-
-                                                <font color="blue">
-                                                    상품배송
-                                                </font>
-                                            </td>
-                                            <td class="t_0k" title="묶음"><input type="checkbox" name="chk_item_1_0" value="Y" onclick="FuncCheckSelfItem(1, 0, '');" ></td>
-                                            <td class="t_0k" title="상품코드" style="cursor:pointer;" onclick="FuncModProduct('M83985861', '38', '300793052');">3007930522780119</td>
-                                            <td colspan="2" class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title="GOAL HEAVYWEIGHT HOODIE-BLACK"><nobr><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=38&itemcd=300793052" target="_blank">GOAL HEAVYWEIGHT HOODIE-BLACK</a></td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=
-                                                    "L"><nobr>L&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td> <!--옵션3-->
-                                            <td class="t_0k" title="수량">1</td>
-                                            <td class='t_0k' title='세트가'>&nbsp;</td>
-                                            <td class='t_0k' title='세트상품명'>&nbsp;</td>
-
-                                            <td class="t_0k" title="납품가">55,000</td>
-                                            <td class="t_0k" title="배송가능일">2020-01-20&nbsp;</td>
-                                            <td class="t_0k" title="출고일자">2020-01-16</td>
-                                            <td class="t_0k" title="택배사">
-                                                <select name="transcode_1_0" >
-                                                    <option value="">==택배사선택==</option>
-
-                                                    <option value="9" >대한통운</option>
-
-                                                    <option value="2" >방문수령</option>
-
-                                                    <option value="1" >자체배송</option>
-
-                                                    <option value="21" >퀵배송</option>
-
-                                                    <option value="18" >편의점택배</option>
-
-                                                </select>
-                                            </td>
-                                            <td class="t_0k" title="송장번호"><input type="text" name="invoiceno_1_0" size="15" class="input " value="357511668065" onBlur="funcChkInvoiceNO(this, '357511668065');" ></td>
-                                            <td class="t_0k" title="배송료유무">배송비없음</td>
-                                            <td class="t_0k" title="선결제베송료">0</td>
-                                        </tr>
-
-                                        <input type="hidden" name="itemcnt_1" value="1">
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <input type="hidden" name="idx_2" value="3">
-                                <input type="hidden" name="orderno_2" value="U00099379">
-                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_2" value="Y" onclick="FuncCheckSelf(2);"></td>
-                                <td class="t_0k" title="주문일자">2020-01-16</td>
-                                <td colspan="18">
-                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" style="table-layout:fixed;">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="50">
-                                        <col width="50"> <!-- 수량 -->
-                                        <col width="70"> <!-- 세트가 -->
-                                        <col width="200"> <!-- 세트상품명 -->
-                                        <col width="60">
-                                        <col width="70">
-                                        <col width="80">
-                                        <col width="90">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <tr align="middle" valign="center">
-                                            <td rowspan="2" class="t_0k" title="주문번호">U00099379</td>
-                                            <td rowspan="2" class="t_0k" title="주문자">박혜리</td>
-                                            <td rowspan="2" class="t_0k" title="수취인">박혜리</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처1">010-0-0000</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처2">010-5254-8004</td>
-                                            <td colspan="13" class="t_0k_left" title="배송지">전라남도 목포시 영산로609번길 5 (석현동, 우진아트빌)&nbsp;107동 806호</td>
-                                        </tr>
-                                        <tr align="middle" valign="center">
-                                            <td colspan="11" class="t_0k_left" title="배송메모">부재 시, 전화 또는 문자 주세요.&nbsp;</td>
-                                            <td colspan="2" class="t_0k" title="개인통관부호">&nbsp;</td>
-                                        </tr>
-
-                                        <tr align="middle" valign="center">
-                                            <input type="hidden" name="orderno_2_0" value="U00099379">
-                                            <input type="hidden" name="orderidxnum_2_0" value="9539720">
-                                            <input type="hidden" name="shippingidxnum_2_0" value="8847693">
-                                            <td class="t_0k" title="요청유형">
-
-                                                <font color="blue">
-                                                    상품배송
-                                                </font>
-                                            </td>
-                                            <td class="t_0k" title="묶음"><input type="checkbox" name="chk_item_2_0" value="Y" onclick="FuncCheckSelfItem(2, 0, '');" ></td>
-                                            <td class="t_0k" title="상품코드" style="cursor:pointer;" onclick="FuncModProduct('M83985861', '31', '300756867');">3007568672600100</td>
-                                            <td colspan="2" class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title="REVERSIBLE DOWN PARKA - ORANGE/GRAY"><nobr><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=31&itemcd=300756867" target="_blank">REVERSIBLE DOWN PARKA - ORANGE/GRAY</a></td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=
-                                                    "M"><nobr>M&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td> <!--옵션3-->
-                                            <td class="t_0k" title="수량">1</td>
-                                            <td class='t_0k' title='세트가'>&nbsp;</td>
-                                            <td class='t_0k' title='세트상품명'>&nbsp;</td>
-
-                                            <td class="t_0k" title="납품가">239,250</td>
-                                            <td class="t_0k" title="배송가능일">2020-01-20&nbsp;</td>
-                                            <td class="t_0k" title="출고일자">2020-01-16</td>
-                                            <td class="t_0k" title="택배사">
-                                                <select name="transcode_2_0" >
-                                                    <option value="">==택배사선택==</option>
-
-                                                    <option value="9" >대한통운</option>
-
-                                                    <option value="2" >방문수령</option>
-
-                                                    <option value="1" >자체배송</option>
-
-                                                    <option value="21" >퀵배송</option>
-
-                                                    <option value="18" >편의점택배</option>
-
-                                                </select>
-                                            </td>
-                                            <td class="t_0k" title="송장번호"><input type="text" name="invoiceno_2_0" size="15" class="input " value="357510244954" onBlur="funcChkInvoiceNO(this, '357510244954');" ></td>
-                                            <td class="t_0k" title="배송료유무">배송비없음</td>
-                                            <td class="t_0k" title="선결제베송료">0</td>
-                                        </tr>
-
-                                        <tr align="middle" valign="center">
-                                            <input type="hidden" name="orderno_2_1" value="U00099379">
-                                            <input type="hidden" name="orderidxnum_2_1" value="9539721">
-                                            <input type="hidden" name="shippingidxnum_2_1" value="8847692">
-                                            <td class="t_0k" title="요청유형">
-
-                                                <font color="blue">
-                                                    상품배송
-                                                </font>
-                                            </td>
-                                            <td class="t_0k" title="묶음"><input type="checkbox" name="chk_item_2_1" value="Y" onclick="FuncCheckSelfItem(2, 1, '');" ></td>
-                                            <td class="t_0k" title="상품코드" style="cursor:pointer;" onclick="FuncModProduct('M83985861', '31', '300756853');">3007568532600078</td>
-                                            <td colspan="2" class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title="REVERSIBLE DOWN PARKA - GRAY/BLACK"><nobr><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=31&itemcd=300756853" target="_blank">REVERSIBLE DOWN PARKA - GRAY/BLACK</a></td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=
-                                                    "XL"><nobr>XL&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td> <!--옵션3-->
-                                            <td class="t_0k" title="수량">1</td>
-                                            <td class='t_0k' title='세트가'>&nbsp;</td>
-                                            <td class='t_0k' title='세트상품명'>&nbsp;</td>
-
-                                            <td class="t_0k" title="납품가">239,250</td>
-                                            <td class="t_0k" title="배송가능일">2020-01-20&nbsp;</td>
-                                            <td class="t_0k" title="출고일자">2020-01-16</td>
-                                            <td class="t_0k" title="택배사">
-                                                <select name="transcode_2_1" >
-                                                    <option value="">==택배사선택==</option>
-
-                                                    <option value="9" >대한통운</option>
-
-                                                    <option value="2" >방문수령</option>
-
-                                                    <option value="1" >자체배송</option>
-
-                                                    <option value="21" >퀵배송</option>
-
-                                                    <option value="18" >편의점택배</option>
-
-                                                </select>
-                                            </td>
-                                            <td class="t_0k" title="송장번호"><input type="text" name="invoiceno_2_1" size="15" class="input " value="357510244954" onBlur="funcChkInvoiceNO(this, '357510244954');" ></td>
-                                            <td class="t_0k" title="배송료유무">배송비없음</td>
-                                            <td class="t_0k" title="선결제베송료">0</td>
-                                        </tr>
-
-                                        <input type="hidden" name="itemcnt_2" value="2">
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <input type="hidden" name="idx_3" value="4">
-                                <input type="hidden" name="orderno_3" value="U00099171">
-                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_3" value="Y" onclick="FuncCheckSelf(3);"></td>
-                                <td class="t_0k" title="주문일자">2020-01-16</td>
-                                <td colspan="18">
-                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" style="table-layout:fixed;">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="50">
-                                        <col width="50"> <!-- 수량 -->
-                                        <col width="70"> <!-- 세트가 -->
-                                        <col width="200"> <!-- 세트상품명 -->
-                                        <col width="60">
-                                        <col width="70">
-                                        <col width="80">
-                                        <col width="90">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <tr align="middle" valign="center">
-                                            <td rowspan="2" class="t_0k" title="주문번호">U00099171</td>
-                                            <td rowspan="2" class="t_0k" title="주문자">김동용</td>
-                                            <td rowspan="2" class="t_0k" title="수취인">김동용</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처1">010-0-0000</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처2">010-4842-2414</td>
-                                            <td colspan="13" class="t_0k_left" title="배송지">인천광역시 부평구 경인로834번길 6-6 (부평동, 대성 임페리얼 빌라)&nbsp;다동 302호</td>
-                                        </tr>
-                                        <tr align="middle" valign="center">
-                                            <td colspan="11" class="t_0k_left" title="배송메모">빠른 배송 부탁드립니다&nbsp;</td>
-                                            <td colspan="2" class="t_0k" title="개인통관부호">&nbsp;</td>
-                                        </tr>
-
-                                        <tr align="middle" valign="center">
-                                            <input type="hidden" name="orderno_3_0" value="U00099171">
-                                            <input type="hidden" name="orderidxnum_3_0" value="9539480">
-                                            <input type="hidden" name="shippingidxnum_3_0" value="8847445">
-                                            <td class="t_0k" title="요청유형">
-
-                                                <font color="blue">
-                                                    상품배송
-                                                </font>
-                                            </td>
-                                            <td class="t_0k" title="묶음"><input type="checkbox" name="chk_item_3_0" value="Y" onclick="FuncCheckSelfItem(3, 0, '');" ></td>
-                                            <td class="t_0k" title="상품코드" style="cursor:pointer;" onclick="FuncModProduct('M83985861', '31', '300756867');">3007568672600100</td>
-                                            <td colspan="2" class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title="REVERSIBLE DOWN PARKA - ORANGE/GRAY"><nobr><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=31&itemcd=300756867" target="_blank">REVERSIBLE DOWN PARKA - ORANGE/GRAY</a></td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=
-                                                    "M"><nobr>M&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td> <!--옵션3-->
-                                            <td class="t_0k" title="수량">1</td>
-                                            <td class='t_0k' title='세트가'>&nbsp;</td>
-                                            <td class='t_0k' title='세트상품명'>&nbsp;</td>
-
-                                            <td class="t_0k" title="납품가">239,250</td>
-                                            <td class="t_0k" title="배송가능일">2020-01-20&nbsp;</td>
-                                            <td class="t_0k" title="출고일자">2020-01-16</td>
-                                            <td class="t_0k" title="택배사">
-                                                <select name="transcode_3_0" >
-                                                    <option value="">==택배사선택==</option>
-
-                                                    <option value="9" >대한통운</option>
-
-                                                    <option value="2" >방문수령</option>
-
-                                                    <option value="1" >자체배송</option>
-
-                                                    <option value="21" >퀵배송</option>
-
-                                                    <option value="18" >편의점택배</option>
-
-                                                </select>
-                                            </td>
-                                            <td class="t_0k" title="송장번호"><input type="text" name="invoiceno_3_0" size="15" class="input " value="357510245444" onBlur="funcChkInvoiceNO(this, '357510245444');" ></td>
-                                            <td class="t_0k" title="배송료유무">배송비없음</td>
-                                            <td class="t_0k" title="선결제베송료">0</td>
-                                        </tr>
-
-                                        <input type="hidden" name="itemcnt_3" value="1">
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <input type="hidden" name="idx_4" value="5">
-                                <input type="hidden" name="orderno_4" value="U00097799">
-                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_4" value="Y" onclick="FuncCheckSelf(4);"></td>
-                                <td class="t_0k" title="주문일자">2020-01-15</td>
-                                <td colspan="18">
-                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" style="table-layout:fixed;">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="50">
-                                        <col width="50"> <!-- 수량 -->
-                                        <col width="70"> <!-- 세트가 -->
-                                        <col width="200"> <!-- 세트상품명 -->
-                                        <col width="60">
-                                        <col width="70">
-                                        <col width="80">
-                                        <col width="90">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <tr align="middle" valign="center">
-                                            <td rowspan="2" class="t_0k" title="주문번호">U00097799</td>
-                                            <td rowspan="2" class="t_0k" title="주문자">윤경애</td>
-                                            <td rowspan="2" class="t_0k" title="수취인">장길순</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처1">061-723-2101</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처2">010-2612-7087</td>
-                                            <td colspan="13" class="t_0k_left" title="배송지">전라남도 순천시 연향번영길 94 (연향동, 동성아파트)&nbsp;106동 203호</td>
-                                        </tr>
-                                        <tr align="middle" valign="center">
-                                            <td colspan="11" class="t_0k_left" title="배송메모">교환, 반품 아닌 새제품으로 보내주세요. 배송 전에 연락바랍니다&nbsp;</td>
-                                            <td colspan="2" class="t_0k" title="개인통관부호">&nbsp;</td>
-                                        </tr>
-
-                                        <tr align="middle" valign="center">
-                                            <input type="hidden" name="orderno_4_0" value="U00097799">
-                                            <input type="hidden" name="orderidxnum_4_0" value="9538002">
-                                            <input type="hidden" name="shippingidxnum_4_0" value="8845812">
-                                            <td class="t_0k" title="요청유형">
-
-                                                <font color="blue">
-                                                    상품배송
-                                                </font>
-                                            </td>
-                                            <td class="t_0k" title="묶음"><input type="checkbox" name="chk_item_4_0" value="Y" onclick="FuncCheckSelfItem(4, 0, '');" ></td>
-                                            <td class="t_0k" title="상품코드" style="cursor:pointer;" onclick="FuncModProduct('M83985861', '32', '300728731');">3007287312497045</td>
-                                            <td colspan="2" class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title="COLOR BLOCK ANORAK - DARK NAVY"><nobr><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=32&itemcd=300728731" target="_blank">COLOR BLOCK ANORAK - DARK NAVY</a></td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=
-                                                    "L"><nobr>L&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td> <!--옵션3-->
-                                            <td class="t_0k" title="수량">1</td>
-                                            <td class='t_0k' title='세트가'>&nbsp;</td>
-                                            <td class='t_0k' title='세트상품명'>&nbsp;</td>
-
-                                            <td class="t_0k" title="납품가">103,200</td>
-                                            <td class="t_0k" title="배송가능일">2020-01-17&nbsp;</td>
-                                            <td class="t_0k" title="출고일자">2020-01-16</td>
-                                            <td class="t_0k" title="택배사">
-                                                <select name="transcode_4_0" >
-                                                    <option value="">==택배사선택==</option>
-
-                                                    <option value="9" >대한통운</option>
-
-                                                    <option value="2" >방문수령</option>
-
-                                                    <option value="1" >자체배송</option>
-
-                                                    <option value="21" >퀵배송</option>
-
-                                                    <option value="18" >편의점택배</option>
-
-                                                </select>
-                                            </td>
-                                            <td class="t_0k" title="송장번호"><input type="text" name="invoiceno_4_0" size="15" class="input " value="357510248513" onBlur="funcChkInvoiceNO(this, '357510248513');" ></td>
-                                            <td class="t_0k" title="배송료유무">배송비없음</td>
-                                            <td class="t_0k" title="선결제베송료">0</td>
-                                        </tr>
-
-                                        <input type="hidden" name="itemcnt_4" value="1">
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <input type="hidden" name="idx_5" value="6">
-                                <input type="hidden" name="orderno_5" value="U00097480">
-                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_5" value="Y" onclick="FuncCheckSelf(5);"></td>
-                                <td class="t_0k" title="주문일자">2020-01-15</td>
-                                <td colspan="18">
-                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" style="table-layout:fixed;">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="50">
-                                        <col width="50"> <!-- 수량 -->
-                                        <col width="70"> <!-- 세트가 -->
-                                        <col width="200"> <!-- 세트상품명 -->
-                                        <col width="60">
-                                        <col width="70">
-                                        <col width="80">
-                                        <col width="90">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <tr align="middle" valign="center">
-                                            <td rowspan="2" class="t_0k" title="주문번호">U00097480</td>
-                                            <td rowspan="2" class="t_0k" title="주문자">정다운</td>
-                                            <td rowspan="2" class="t_0k" title="수취인">정다운</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처1">010-2995-9658</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처2"></td>
-                                            <td colspan="13" class="t_0k_left" title="배송지">서울특별시 관악구 은천로 110 (봉천동, 더블유에스타워)&nbsp;803호</td>
-                                        </tr>
-                                        <tr align="middle" valign="center">
-                                            <td colspan="11" class="t_0k_left" title="배송메모"> / &nbsp;</td>
-                                            <td colspan="2" class="t_0k" title="개인통관부호">&nbsp;</td>
-                                        </tr>
-
-                                        <tr align="middle" valign="center">
-                                            <input type="hidden" name="orderno_5_0" value="U00097480">
-                                            <input type="hidden" name="orderidxnum_5_0" value="9537654">
-                                            <input type="hidden" name="shippingidxnum_5_0" value="8845390">
-                                            <td class="t_0k" title="요청유형">
-
-                                                <font color="blue">
-                                                    상품배송
-                                                </font>
-                                            </td>
-                                            <td class="t_0k" title="묶음"><input type="checkbox" name="chk_item_5_0" value="Y" onclick="FuncCheckSelfItem(5, 0, '');" ></td>
-                                            <td class="t_0k" title="상품코드" style="cursor:pointer;" onclick="FuncModProduct('M83985861', '32', '300728731');">3007287312497045</td>
-                                            <td colspan="2" class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title="COLOR BLOCK ANORAK - DARK NAVY"><nobr><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=32&itemcd=300728731" target="_blank">COLOR BLOCK ANORAK - DARK NAVY</a></td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=
-                                                    "L"><nobr>L&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td> <!--옵션3-->
-                                            <td class="t_0k" title="수량">1</td>
-                                            <td class='t_0k' title='세트가'>&nbsp;</td>
-                                            <td class='t_0k' title='세트상품명'>&nbsp;</td>
-
-                                            <td class="t_0k" title="납품가">103,200</td>
-                                            <td class="t_0k" title="배송가능일">2020-01-17&nbsp;</td>
-                                            <td class="t_0k" title="출고일자">2020-01-16</td>
-                                            <td class="t_0k" title="택배사">
-                                                <select name="transcode_5_0" >
-                                                    <option value="">==택배사선택==</option>
-
-                                                    <option value="9" >대한통운</option>
-
-                                                    <option value="2" >방문수령</option>
-
-                                                    <option value="1" >자체배송</option>
-
-                                                    <option value="21" >퀵배송</option>
-
-                                                    <option value="18" >편의점택배</option>
-
-                                                </select>
-                                            </td>
-                                            <td class="t_0k" title="송장번호"><input type="text" name="invoiceno_5_0" size="15" class="input " value="357510248605" onBlur="funcChkInvoiceNO(this, '357510248605');" ></td>
-                                            <td class="t_0k" title="배송료유무">배송비없음</td>
-                                            <td class="t_0k" title="선결제베송료">0</td>
-                                        </tr>
-
-                                        <input type="hidden" name="itemcnt_5" value="1">
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <input type="hidden" name="idx_6" value="7">
-                                <input type="hidden" name="orderno_6" value="U00097255">
-                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_6" value="Y" onclick="FuncCheckSelf(6);"></td>
-                                <td class="t_0k" title="주문일자">2020-01-15</td>
-                                <td colspan="18">
-                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" style="table-layout:fixed;">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="50">
-                                        <col width="50"> <!-- 수량 -->
-                                        <col width="70"> <!-- 세트가 -->
-                                        <col width="200"> <!-- 세트상품명 -->
-                                        <col width="60">
-                                        <col width="70">
-                                        <col width="80">
-                                        <col width="90">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <tr align="middle" valign="center">
-                                            <td rowspan="2" class="t_0k" title="주문번호">U00097255</td>
-                                            <td rowspan="2" class="t_0k" title="주문자">김나영</td>
-                                            <td rowspan="2" class="t_0k" title="수취인">김나영</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처1">010-0-0000</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처2">010-9603-4529</td>
-                                            <td colspan="13" class="t_0k_left" title="배송지">경기도 부천시 중동로 301 (중동, 은하마을 주공1단지아파트)&nbsp;525동 1503호</td>
-                                        </tr>
-                                        <tr align="middle" valign="center">
-                                            <td colspan="11" class="t_0k_left" title="배송메모">&nbsp;</td>
-                                            <td colspan="2" class="t_0k" title="개인통관부호">&nbsp;</td>
-                                        </tr>
-
-                                        <tr align="middle" valign="center">
-                                            <input type="hidden" name="orderno_6_0" value="U00097255">
-                                            <input type="hidden" name="orderidxnum_6_0" value="9537397">
-                                            <input type="hidden" name="shippingidxnum_6_0" value="8845089">
-                                            <td class="t_0k" title="요청유형">
-
-                                                <font color="blue">
-                                                    상품배송
-                                                </font>
-                                            </td>
-                                            <td class="t_0k" title="묶음"><input type="checkbox" name="chk_item_6_0" value="Y" onclick="FuncCheckSelfItem(6, 0, '');" ></td>
-                                            <td class="t_0k" title="상품코드" style="cursor:pointer;" onclick="FuncModProduct('M83985861', '32', '300728731');">3007287312497045</td>
-                                            <td colspan="2" class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title="COLOR BLOCK ANORAK - DARK NAVY"><nobr><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=32&itemcd=300728731" target="_blank">COLOR BLOCK ANORAK - DARK NAVY</a></td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=
-                                                    "L"><nobr>L&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td> <!--옵션3-->
-                                            <td class="t_0k" title="수량">1</td>
-                                            <td class='t_0k' title='세트가'>&nbsp;</td>
-                                            <td class='t_0k' title='세트상품명'>&nbsp;</td>
-
-                                            <td class="t_0k" title="납품가">103,200</td>
-                                            <td class="t_0k" title="배송가능일">2020-01-17&nbsp;</td>
-                                            <td class="t_0k" title="출고일자">2020-01-16</td>
-                                            <td class="t_0k" title="택배사">
-                                                <select name="transcode_6_0" >
-                                                    <option value="">==택배사선택==</option>
-
-                                                    <option value="9" >대한통운</option>
-
-                                                    <option value="2" >방문수령</option>
-
-                                                    <option value="1" >자체배송</option>
-
-                                                    <option value="21" >퀵배송</option>
-
-                                                    <option value="18" >편의점택배</option>
-
-                                                </select>
-                                            </td>
-                                            <td class="t_0k" title="송장번호"><input type="text" name="invoiceno_6_0" size="15" class="input " value="357510248723" onBlur="funcChkInvoiceNO(this, '357510248723');" ></td>
-                                            <td class="t_0k" title="배송료유무">배송비없음</td>
-                                            <td class="t_0k" title="선결제베송료">0</td>
-                                        </tr>
-
-                                        <input type="hidden" name="itemcnt_6" value="1">
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <input type="hidden" name="idx_7" value="8">
-                                <input type="hidden" name="orderno_7" value="U00097070">
-                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_7" value="Y" onclick="FuncCheckSelf(7);"></td>
-                                <td class="t_0k" title="주문일자">2020-01-15</td>
-                                <td colspan="18">
-                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" style="table-layout:fixed;">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="50">
-                                        <col width="50"> <!-- 수량 -->
-                                        <col width="70"> <!-- 세트가 -->
-                                        <col width="200"> <!-- 세트상품명 -->
-                                        <col width="60">
-                                        <col width="70">
-                                        <col width="80">
-                                        <col width="90">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <tr align="middle" valign="center">
-                                            <td rowspan="2" class="t_0k" title="주문번호">U00097070</td>
-                                            <td rowspan="2" class="t_0k" title="주문자">강미화</td>
-                                            <td rowspan="2" class="t_0k" title="수취인">강미화</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처1">032-233-2034</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처2">010-9659-4560</td>
-                                            <td colspan="13" class="t_0k_left" title="배송지">경기도 고양시 일산서구 일현로 97-11 (탄현동, 일산 위브더제니스)&nbsp;107-4002호</td>
-                                        </tr>
-                                        <tr align="middle" valign="center">
-                                            <td colspan="11" class="t_0k_left" title="배송메모">(최근)집앞에놓아주세요 &nbsp;</td>
-                                            <td colspan="2" class="t_0k" title="개인통관부호">&nbsp;</td>
-                                        </tr>
-
-                                        <tr align="middle" valign="center">
-                                            <input type="hidden" name="orderno_7_0" value="U00097070">
-                                            <input type="hidden" name="orderidxnum_7_0" value="9537193">
-                                            <input type="hidden" name="shippingidxnum_7_0" value="8844838">
-                                            <td class="t_0k" title="요청유형">
-
-                                                <font color="blue">
-                                                    상품배송
-                                                </font>
-                                            </td>
-                                            <td class="t_0k" title="묶음"><input type="checkbox" name="chk_item_7_0" value="Y" onclick="FuncCheckSelfItem(7, 0, '');" ></td>
-                                            <td class="t_0k" title="상품코드" style="cursor:pointer;" onclick="FuncModProduct('M83985861', '38', '300793052');">3007930522780120</td>
-                                            <td colspan="2" class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title="GOAL HEAVYWEIGHT HOODIE-BLACK"><nobr><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=38&itemcd=300793052" target="_blank">GOAL HEAVYWEIGHT HOODIE-BLACK</a></td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=
-                                                    "XL"><nobr>XL&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td> <!--옵션3-->
-                                            <td class="t_0k" title="수량">1</td>
-                                            <td class='t_0k' title='세트가'>&nbsp;</td>
-                                            <td class='t_0k' title='세트상품명'>&nbsp;</td>
-
-                                            <td class="t_0k" title="납품가">55,000</td>
-                                            <td class="t_0k" title="배송가능일">2020-01-17&nbsp;</td>
-                                            <td class="t_0k" title="출고일자">2020-01-16</td>
-                                            <td class="t_0k" title="택배사">
-                                                <select name="transcode_7_0" >
-                                                    <option value="">==택배사선택==</option>
-
-                                                    <option value="9" >대한통운</option>
-
-                                                    <option value="2" >방문수령</option>
-
-                                                    <option value="1" >자체배송</option>
-
-                                                    <option value="21" >퀵배송</option>
-
-                                                    <option value="18" >편의점택배</option>
-
-                                                </select>
-                                            </td>
-                                            <td class="t_0k" title="송장번호"><input type="text" name="invoiceno_7_0" size="15" class="input " value="357510249762" onBlur="funcChkInvoiceNO(this, '357510249762');" ></td>
-                                            <td class="t_0k" title="배송료유무">배송비없음</td>
-                                            <td class="t_0k" title="선결제베송료">0</td>
-                                        </tr>
-
-                                        <input type="hidden" name="itemcnt_7" value="1">
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <input type="hidden" name="idx_8" value="9">
-                                <input type="hidden" name="orderno_8" value="U00010003">
-                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_8" value="Y" onclick="FuncCheckSelf(8);"></td>
-                                <td class="t_0k" title="주문일자">2020-01-02</td>
-                                <td colspan="18">
-                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" style="table-layout:fixed;">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="50">
-                                        <col width="50"> <!-- 수량 -->
-                                        <col width="70"> <!-- 세트가 -->
-                                        <col width="200"> <!-- 세트상품명 -->
-                                        <col width="60">
-                                        <col width="70">
-                                        <col width="80">
-                                        <col width="90">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <tr align="middle" valign="center">
-                                            <td rowspan="2" class="t_0k" title="주문번호">U00010003</td>
-                                            <td rowspan="2" class="t_0k" title="주문자">김나리</td>
-                                            <td rowspan="2" class="t_0k" title="수취인">김나리</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처1">031-853-5557</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처2">010-6276-6922</td>
-                                            <td colspan="13" class="t_0k_left" title="배송지">경기도 동두천시 장고갯로 116(생연동, 월드메르디앙)&nbsp;103-1403</td>
-                                        </tr>
-                                        <tr align="middle" valign="center">
-                                            <td colspan="11" class="t_0k_left" title="배송메모">현관 앞에 놓아주세요!&nbsp;</td>
-                                            <td colspan="2" class="t_0k" title="개인통관부호">&nbsp;</td>
-                                        </tr>
-
-                                        <tr align="middle" valign="center">
-                                            <input type="hidden" name="orderno_8_0" value="U00010003">
-                                            <input type="hidden" name="orderidxnum_8_0" value="9422272">
-                                            <input type="hidden" name="shippingidxnum_8_0" value="8843973">
-                                            <td class="t_0k" title="요청유형">
-
-                                                <font color="green">
-                                                    교환배송
-                                                </font>
-                                            </td>
-                                            <td class="t_0k" title="묶음"><input type="checkbox" name="chk_item_8_0" value="Y" onclick="FuncCheckSelfItem(8, 0, '');" ></td>
-                                            <td class="t_0k" title="상품코드" style="cursor:pointer;" onclick="FuncModProduct('M83985861', '51', '300740689');">3007406892540193</td>
-                                            <td colspan="2" class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title="CARGO JOGGER PANTS - BLACK"><nobr><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=51&itemcd=300740689" target="_blank">CARGO JOGGER PANTS - BLACK</a></td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=
-                                                    "L"><nobr>L&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td> <!--옵션3-->
-                                            <td class="t_0k" title="수량">1</td>
-                                            <td class='t_0k' title='세트가'>&nbsp;</td>
-                                            <td class='t_0k' title='세트상품명'>&nbsp;</td>
-
-                                            <td class="t_0k" title="납품가">71,200</td>
-                                            <td class="t_0k" title="배송가능일">2020-01-17&nbsp;</td>
-                                            <td class="t_0k" title="출고일자">2020-01-16</td>
-                                            <td class="t_0k" title="택배사">
-                                                <select name="transcode_8_0" >
-                                                    <option value="">==택배사선택==</option>
-
-                                                    <option value="9" selected style="color:blue;" >대한통운</option>
-
-                                                    <option value="2" >방문수령</option>
-
-                                                    <option value="1" >자체배송</option>
-
-                                                    <option value="21" >퀵배송</option>
-
-                                                    <option value="18" >편의점택배</option>
-
-                                                </select>
-                                            </td>
-                                            <td class="t_0k" title="송장번호"><input type="text" name="invoiceno_8_0" size="15" class="input " value="357510249014" onBlur="funcChkInvoiceNO(this, '357510249014');" ></td>
-                                            <td class="t_0k" title="배송료유무">배송비없음</td>
-                                            <td class="t_0k" title="선결제베송료">0</td>
-                                        </tr>
-
-                                        <input type="hidden" name="itemcnt_8" value="1">
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <input type="hidden" name="idx_9" value="10">
-                                <input type="hidden" name="orderno_9" value="U00096158">
-                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_9" value="Y" onclick="FuncCheckSelf(9);"></td>
-                                <td class="t_0k" title="주문일자">2020-01-15</td>
-                                <td colspan="18">
-                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" style="table-layout:fixed;">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="50">
-                                        <col width="50"> <!-- 수량 -->
-                                        <col width="70"> <!-- 세트가 -->
-                                        <col width="200"> <!-- 세트상품명 -->
-                                        <col width="60">
-                                        <col width="70">
-                                        <col width="80">
-                                        <col width="90">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <tr align="middle" valign="center">
-                                            <td rowspan="2" class="t_0k" title="주문번호">U00096158</td>
-                                            <td rowspan="2" class="t_0k" title="주문자">이상호</td>
-                                            <td rowspan="2" class="t_0k" title="수취인">이상호</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처1">010-0-0000</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처2">010-2228-7763</td>
-                                            <td colspan="13" class="t_0k_left" title="배송지">전라북도 익산시 무왕로31길 188 (부송동)&nbsp;하나리움 102동 205호</td>
-                                        </tr>
-                                        <tr align="middle" valign="center">
-                                            <td colspan="11" class="t_0k_left" title="배송메모">&nbsp;</td>
-                                            <td colspan="2" class="t_0k" title="개인통관부호">&nbsp;</td>
-                                        </tr>
-
-                                        <tr align="middle" valign="center">
-                                            <input type="hidden" name="orderno_9_0" value="U00096158">
-                                            <input type="hidden" name="orderidxnum_9_0" value="9536229">
-                                            <input type="hidden" name="shippingidxnum_9_0" value="8843721">
-                                            <td class="t_0k" title="요청유형">
-
-                                                <font color="blue">
-                                                    상품배송
-                                                </font>
-                                            </td>
-                                            <td class="t_0k" title="묶음"><input type="checkbox" name="chk_item_9_0" value="Y" onclick="FuncCheckSelfItem(9, 0, '');" ></td>
-                                            <td class="t_0k" title="상품코드" style="cursor:pointer;" onclick="FuncModProduct('M83985861', '89', '300754702');">3007547022592698</td>
-                                            <td colspan="2" class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title="FREESTYLE SLINGBAG - BLACK"><nobr><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=89&itemcd=300754702" target="_blank">FREESTYLE SLINGBAG - BLACK</a></td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=
-                                                    "FREE"><nobr>FREE&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td> <!--옵션3-->
-                                            <td class="t_0k" title="수량">1</td>
-                                            <td class='t_0k' title='세트가'>&nbsp;</td>
-                                            <td class='t_0k' title='세트상품명'>&nbsp;</td>
-
-                                            <td class="t_0k" title="납품가">39,200</td>
-                                            <td class="t_0k" title="배송가능일">2020-01-17&nbsp;</td>
-                                            <td class="t_0k" title="출고일자">2020-01-16</td>
-                                            <td class="t_0k" title="택배사">
-                                                <select name="transcode_9_0" >
-                                                    <option value="">==택배사선택==</option>
-
-                                                    <option value="9" >대한통운</option>
-
-                                                    <option value="2" >방문수령</option>
-
-                                                    <option value="1" >자체배송</option>
-
-                                                    <option value="21" >퀵배송</option>
-
-                                                    <option value="18" >편의점택배</option>
-
-                                                </select>
-                                            </td>
-                                            <td class="t_0k" title="송장번호"><input type="text" name="invoiceno_9_0" size="15" class="input " value="357510248130" onBlur="funcChkInvoiceNO(this, '357510248130');" ></td>
-                                            <td class="t_0k" title="배송료유무">배송비없음</td>
-                                            <td class="t_0k" title="선결제베송료">0</td>
-                                        </tr>
-
-                                        <input type="hidden" name="itemcnt_9" value="1">
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <input type="hidden" name="idx_10" value="11">
-                                <input type="hidden" name="orderno_10" value="U00095958">
-                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_10" value="Y" onclick="FuncCheckSelf(10);"></td>
-                                <td class="t_0k" title="주문일자">2020-01-15</td>
-                                <td colspan="18">
-                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" style="table-layout:fixed;">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="50">
-                                        <col width="50"> <!-- 수량 -->
-                                        <col width="70"> <!-- 세트가 -->
-                                        <col width="200"> <!-- 세트상품명 -->
-                                        <col width="60">
-                                        <col width="70">
-                                        <col width="80">
-                                        <col width="90">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <tr align="middle" valign="center">
-                                            <td rowspan="2" class="t_0k" title="주문번호">U00095958</td>
-                                            <td rowspan="2" class="t_0k" title="주문자">임태주</td>
-                                            <td rowspan="2" class="t_0k" title="수취인">임태주</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처1">010-0-0000</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처2">010-5590-8959</td>
-                                            <td colspan="13" class="t_0k_left" title="배송지">서울특별시 강서구 우장산동&nbsp;95-77 더라온 403호</td>
-                                        </tr>
-                                        <tr align="middle" valign="center">
-                                            <td colspan="11" class="t_0k_left" title="배송메모">&nbsp;</td>
-                                            <td colspan="2" class="t_0k" title="개인통관부호">&nbsp;</td>
-                                        </tr>
-
-                                        <tr align="middle" valign="center">
-                                            <input type="hidden" name="orderno_10_0" value="U00095958">
-                                            <input type="hidden" name="orderidxnum_10_0" value="9536006">
-                                            <input type="hidden" name="shippingidxnum_10_0" value="8843471">
-                                            <td class="t_0k" title="요청유형">
-
-                                                <font color="blue">
-                                                    상품배송
-                                                </font>
-                                            </td>
-                                            <td class="t_0k" title="묶음"><input type="checkbox" name="chk_item_10_0" value="Y" onclick="FuncCheckSelfItem(10, 0, '');" ></td>
-                                            <td class="t_0k" title="상품코드" style="cursor:pointer;" onclick="FuncModProduct('M83985861', '31', '300756867');">3007568672600100</td>
-                                            <td colspan="2" class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title="REVERSIBLE DOWN PARKA - ORANGE/GRAY"><nobr><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=31&itemcd=300756867" target="_blank">REVERSIBLE DOWN PARKA - ORANGE/GRAY</a></td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=
-                                                    "M"><nobr>M&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td> <!--옵션3-->
-                                            <td class="t_0k" title="수량">1</td>
-                                            <td class='t_0k' title='세트가'>&nbsp;</td>
-                                            <td class='t_0k' title='세트상품명'>&nbsp;</td>
-
-                                            <td class="t_0k" title="납품가">239,250</td>
-                                            <td class="t_0k" title="배송가능일">2020-01-17&nbsp;</td>
-                                            <td class="t_0k" title="출고일자">2020-01-16</td>
-                                            <td class="t_0k" title="택배사">
-                                                <select name="transcode_10_0" >
-                                                    <option value="">==택배사선택==</option>
-
-                                                    <option value="9" >대한통운</option>
-
-                                                    <option value="2" >방문수령</option>
-
-                                                    <option value="1" >자체배송</option>
-
-                                                    <option value="21" >퀵배송</option>
-
-                                                    <option value="18" >편의점택배</option>
-
-                                                </select>
-                                            </td>
-                                            <td class="t_0k" title="송장번호"><input type="text" name="invoiceno_10_0" size="15" class="input " value="357510245551" onBlur="funcChkInvoiceNO(this, '357510245551');" ></td>
-                                            <td class="t_0k" title="배송료유무">배송비없음</td>
-                                            <td class="t_0k" title="선결제베송료">0</td>
-                                        </tr>
-
-                                        <input type="hidden" name="itemcnt_10" value="1">
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <input type="hidden" name="idx_11" value="12">
-                                <input type="hidden" name="orderno_11" value="U00095697">
-                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_11" value="Y" onclick="FuncCheckSelf(11);"></td>
-                                <td class="t_0k" title="주문일자">2020-01-15</td>
-                                <td colspan="18">
-                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" style="table-layout:fixed;">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="50">
-                                        <col width="50"> <!-- 수량 -->
-                                        <col width="70"> <!-- 세트가 -->
-                                        <col width="200"> <!-- 세트상품명 -->
-                                        <col width="60">
-                                        <col width="70">
-                                        <col width="80">
-                                        <col width="90">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <tr align="middle" valign="center">
-                                            <td rowspan="2" class="t_0k" title="주문번호">U00095697</td>
-                                            <td rowspan="2" class="t_0k" title="주문자">최성은</td>
-                                            <td rowspan="2" class="t_0k" title="수취인">임기수</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처1">010-7166-0270</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처2">010-7166-0270</td>
-                                            <td colspan="13" class="t_0k_left" title="배송지">전라남도 무안군 삼향읍 남악5로72번길 81-30 (제일풍경채 리버파크)&nbsp;106동 1401호</td>
-                                        </tr>
-                                        <tr align="middle" valign="center">
-                                            <td colspan="11" class="t_0k_left" title="배송메모">&nbsp;</td>
-                                            <td colspan="2" class="t_0k" title="개인통관부호">&nbsp;</td>
-                                        </tr>
-
-                                        <tr align="middle" valign="center">
-                                            <input type="hidden" name="orderno_11_0" value="U00095697">
-                                            <input type="hidden" name="orderidxnum_11_0" value="9535749">
-                                            <input type="hidden" name="shippingidxnum_11_0" value="8843170">
-                                            <td class="t_0k" title="요청유형">
-
-                                                <font color="blue">
-                                                    상품배송
-                                                </font>
-                                            </td>
-                                            <td class="t_0k" title="묶음"><input type="checkbox" name="chk_item_11_0" value="Y" onclick="FuncCheckSelfItem(11, 0, '');" ></td>
-                                            <td class="t_0k" title="상품코드" style="cursor:pointer;" onclick="FuncModProduct('M83985861', '31', '300756853');">3007568532600077</td>
-                                            <td colspan="2" class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title="REVERSIBLE DOWN PARKA - GRAY/BLACK"><nobr><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=31&itemcd=300756853" target="_blank">REVERSIBLE DOWN PARKA - GRAY/BLACK</a></td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=
-                                                    "L"><nobr>L&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td> <!--옵션3-->
-                                            <td class="t_0k" title="수량">1</td>
-                                            <td class='t_0k' title='세트가'>&nbsp;</td>
-                                            <td class='t_0k' title='세트상품명'>&nbsp;</td>
-
-                                            <td class="t_0k" title="납품가">239,250</td>
-                                            <td class="t_0k" title="배송가능일">2020-01-17&nbsp;</td>
-                                            <td class="t_0k" title="출고일자">2020-01-16</td>
-                                            <td class="t_0k" title="택배사">
-                                                <select name="transcode_11_0" >
-                                                    <option value="">==택배사선택==</option>
-
-                                                    <option value="9" >대한통운</option>
-
-                                                    <option value="2" >방문수령</option>
-
-                                                    <option value="1" >자체배송</option>
-
-                                                    <option value="21" >퀵배송</option>
-
-                                                    <option value="18" >편의점택배</option>
-
-                                                </select>
-                                            </td>
-                                            <td class="t_0k" title="송장번호"><input type="text" name="invoiceno_11_0" size="15" class="input " value="357510246015" onBlur="funcChkInvoiceNO(this, '357510246015');" ></td>
-                                            <td class="t_0k" title="배송료유무">배송비없음</td>
-                                            <td class="t_0k" title="선결제베송료">0</td>
-                                        </tr>
-
-                                        <input type="hidden" name="itemcnt_11" value="1">
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <input type="hidden" name="idx_12" value="13">
-                                <input type="hidden" name="orderno_12" value="U00095531">
-                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_12" value="Y" onclick="FuncCheckSelf(12);"></td>
-                                <td class="t_0k" title="주문일자">2020-01-15</td>
-                                <td colspan="18">
-                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" style="table-layout:fixed;">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="50">
-                                        <col width="50"> <!-- 수량 -->
-                                        <col width="70"> <!-- 세트가 -->
-                                        <col width="200"> <!-- 세트상품명 -->
-                                        <col width="60">
-                                        <col width="70">
-                                        <col width="80">
-                                        <col width="90">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <tr align="middle" valign="center">
-                                            <td rowspan="2" class="t_0k" title="주문번호">U00095531</td>
-                                            <td rowspan="2" class="t_0k" title="주문자">김정훈</td>
-                                            <td rowspan="2" class="t_0k" title="수취인">김정훈</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처1">010-4333-7738</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처2">010-4333-7738</td>
-                                            <td colspan="13" class="t_0k_left" title="배송지">서울특별시 강동구 구천면로 144 (천호동, 현진리버파크)&nbsp;601호</td>
-                                        </tr>
-                                        <tr align="middle" valign="center">
-                                            <td colspan="11" class="t_0k_left" title="배송메모">&nbsp;</td>
-                                            <td colspan="2" class="t_0k" title="개인통관부호">&nbsp;</td>
-                                        </tr>
-
-                                        <tr align="middle" valign="center">
-                                            <input type="hidden" name="orderno_12_0" value="U00095531">
-                                            <input type="hidden" name="orderidxnum_12_0" value="9535565">
-                                            <input type="hidden" name="shippingidxnum_12_0" value="8842954">
-                                            <td class="t_0k" title="요청유형">
-
-                                                <font color="blue">
-                                                    상품배송
-                                                </font>
-                                            </td>
-                                            <td class="t_0k" title="묶음"><input type="checkbox" name="chk_item_12_0" value="Y" onclick="FuncCheckSelfItem(12, 0, '');" ></td>
-                                            <td class="t_0k" title="상품코드" style="cursor:pointer;" onclick="FuncModProduct('M83985861', '34', '300831269');">3008312692938128</td>
-                                            <td colspan="2" class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title="FRONT BIG LOGO TEE ( LOOSE FIT) - BLACK"><nobr><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=34&itemcd=300831269" target="_blank">FRONT BIG LOGO TEE ( LOOSE FIT) - BLACK</a></td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=
-                                                    "XL"><nobr>XL&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td> <!--옵션3-->
-                                            <td class="t_0k" title="수량">1</td>
-                                            <td class='t_0k' title='세트가'>&nbsp;</td>
-                                            <td class='t_0k' title='세트상품명'>&nbsp;</td>
-
-                                            <td class="t_0k" title="납품가">38,350</td>
-                                            <td class="t_0k" title="배송가능일">2020-01-17&nbsp;</td>
-                                            <td class="t_0k" title="출고일자">2020-01-16</td>
-                                            <td class="t_0k" title="택배사">
-                                                <select name="transcode_12_0" >
-                                                    <option value="">==택배사선택==</option>
-
-                                                    <option value="9" >대한통운</option>
-
-                                                    <option value="2" >방문수령</option>
-
-                                                    <option value="1" >자체배송</option>
-
-                                                    <option value="21" >퀵배송</option>
-
-                                                    <option value="18" >편의점택배</option>
-
-                                                </select>
-                                            </td>
-                                            <td class="t_0k" title="송장번호"><input type="text" name="invoiceno_12_0" size="15" class="input " value="357510247894" onBlur="funcChkInvoiceNO(this, '357510247894');" ></td>
-                                            <td class="t_0k" title="배송료유무">배송비없음</td>
-                                            <td class="t_0k" title="선결제베송료">0</td>
-                                        </tr>
-
-                                        <input type="hidden" name="itemcnt_12" value="1">
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <input type="hidden" name="idx_13" value="14">
-                                <input type="hidden" name="orderno_13" value="U00094558">
-                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_13" value="Y" onclick="FuncCheckSelf(13);"></td>
-                                <td class="t_0k" title="주문일자">2020-01-15</td>
-                                <td colspan="18">
-                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" style="table-layout:fixed;">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="50">
-                                        <col width="50"> <!-- 수량 -->
-                                        <col width="70"> <!-- 세트가 -->
-                                        <col width="200"> <!-- 세트상품명 -->
-                                        <col width="60">
-                                        <col width="70">
-                                        <col width="80">
-                                        <col width="90">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <tr align="middle" valign="center">
-                                            <td rowspan="2" class="t_0k" title="주문번호">U00094558</td>
-                                            <td rowspan="2" class="t_0k" title="주문자">강수철</td>
-                                            <td rowspan="2" class="t_0k" title="수취인">강수철</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처1">010-0-0000</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처2">010-4600-5913</td>
-                                            <td colspan="13" class="t_0k_left" title="배송지">강원도 태백시 보드미길 12 (장성동)&nbsp;매화동504호 </td>
-                                        </tr>
-                                        <tr align="middle" valign="center">
-                                            <td colspan="11" class="t_0k_left" title="배송메모">&nbsp;</td>
-                                            <td colspan="2" class="t_0k" title="개인통관부호">&nbsp;</td>
-                                        </tr>
-
-                                        <tr align="middle" valign="center">
-                                            <input type="hidden" name="orderno_13_0" value="U00094558">
-                                            <input type="hidden" name="orderidxnum_13_0" value="9534429">
-                                            <input type="hidden" name="shippingidxnum_13_0" value="8841639">
-                                            <td class="t_0k" title="요청유형">
-
-                                                <font color="blue">
-                                                    상품배송
-                                                </font>
-                                            </td>
-                                            <td class="t_0k" title="묶음"><input type="checkbox" name="chk_item_13_0" value="Y" onclick="FuncCheckSelfItem(13, 0, '');" ></td>
-                                            <td class="t_0k" title="상품코드" style="cursor:pointer;" onclick="FuncModProduct('M83985861', '32', '300728731');">3007287312497045</td>
-                                            <td colspan="2" class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title="COLOR BLOCK ANORAK - DARK NAVY"><nobr><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=32&itemcd=300728731" target="_blank">COLOR BLOCK ANORAK - DARK NAVY</a></td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=
-                                                    "L"><nobr>L&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td> <!--옵션3-->
-                                            <td class="t_0k" title="수량">1</td>
-                                            <td class='t_0k' title='세트가'>&nbsp;</td>
-                                            <td class='t_0k' title='세트상품명'>&nbsp;</td>
-
-                                            <td class="t_0k" title="납품가">103,200</td>
-                                            <td class="t_0k" title="배송가능일">2020-01-17&nbsp;</td>
-                                            <td class="t_0k" title="출고일자">2020-01-15</td>
-                                            <td class="t_0k" title="택배사">
-                                                <select name="transcode_13_0" >
-                                                    <option value="">==택배사선택==</option>
-
-                                                    <option value="9" >대한통운</option>
-
-                                                    <option value="2" >방문수령</option>
-
-                                                    <option value="1" >자체배송</option>
-
-                                                    <option value="21" >퀵배송</option>
-
-                                                    <option value="18" >편의점택배</option>
-
-                                                </select>
-                                            </td>
-                                            <td class="t_0k" title="송장번호"><input type="text" name="invoiceno_13_0" size="15" class="input " value="357509173383" onBlur="funcChkInvoiceNO(this, '357509173383');" ></td>
-                                            <td class="t_0k" title="배송료유무">배송비없음</td>
-                                            <td class="t_0k" title="선결제베송료">0</td>
-                                        </tr>
-
-                                        <input type="hidden" name="itemcnt_13" value="1">
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <input type="hidden" name="idx_14" value="15">
-                                <input type="hidden" name="orderno_14" value="U00092566">
-                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_14" value="Y" onclick="FuncCheckSelf(14);"></td>
-                                <td class="t_0k" title="주문일자">2020-01-15</td>
-                                <td colspan="18">
-                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" style="table-layout:fixed;">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="50">
-                                        <col width="50"> <!-- 수량 -->
-                                        <col width="70"> <!-- 세트가 -->
-                                        <col width="200"> <!-- 세트상품명 -->
-                                        <col width="60">
-                                        <col width="70">
-                                        <col width="80">
-                                        <col width="90">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <tr align="middle" valign="center">
-                                            <td rowspan="2" class="t_0k" title="주문번호">U00092566</td>
-                                            <td rowspan="2" class="t_0k" title="주문자">서성일</td>
-                                            <td rowspan="2" class="t_0k" title="수취인">서성일</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처1">010-0-0000</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처2">010-4553-3991</td>
-                                            <td colspan="13" class="t_0k_left" title="배송지">경기도 의정부시 용민로 55 (용현동, 애디안주상복합)&nbsp;1402호</td>
-                                        </tr>
-                                        <tr align="middle" valign="center">
-                                            <td colspan="11" class="t_0k_left" title="배송메모">&nbsp;</td>
-                                            <td colspan="2" class="t_0k" title="개인통관부호">&nbsp;</td>
-                                        </tr>
-
-                                        <tr align="middle" valign="center">
-                                            <input type="hidden" name="orderno_14_0" value="U00092566">
-                                            <input type="hidden" name="orderidxnum_14_0" value="9532233">
-                                            <input type="hidden" name="shippingidxnum_14_0" value="8839171">
-                                            <td class="t_0k" title="요청유형">
-
-                                                <font color="blue">
-                                                    상품배송
-                                                </font>
-                                            </td>
-                                            <td class="t_0k" title="묶음"><input type="checkbox" name="chk_item_14_0" value="Y" onclick="FuncCheckSelfItem(14, 0, '');" ></td>
-                                            <td class="t_0k" title="상품코드" style="cursor:pointer;" onclick="FuncModProduct('M83985861', '38', '300788719');">3007887192745777</td>
-                                            <td colspan="2" class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title="SHOOTING MICKEY HOODIE - BLACK"><nobr><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=38&itemcd=300788719" target="_blank">SHOOTING MICKEY HOODIE - BLACK</a></td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=
-                                                    "L"><nobr>L&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td> <!--옵션3-->
-                                            <td class="t_0k" title="수량">1</td>
-                                            <td class='t_0k' title='세트가'>&nbsp;</td>
-                                            <td class='t_0k' title='세트상품명'>&nbsp;</td>
-
-                                            <td class="t_0k" title="납품가">103,200</td>
-                                            <td class="t_0k" title="배송가능일">2020-01-20&nbsp;</td>
-                                            <td class="t_0k" title="출고일자">2020-01-15</td>
-                                            <td class="t_0k" title="택배사">
-                                                <select name="transcode_14_0" >
-                                                    <option value="">==택배사선택==</option>
-
-                                                    <option value="9" >대한통운</option>
-
-                                                    <option value="2" >방문수령</option>
-
-                                                    <option value="1" >자체배송</option>
-
-                                                    <option value="21" >퀵배송</option>
-
-                                                    <option value="18" >편의점택배</option>
-
-                                                </select>
-                                            </td>
-                                            <td class="t_0k" title="송장번호"><input type="text" name="invoiceno_14_0" size="15" class="input " value="357507883762" onBlur="funcChkInvoiceNO(this, '357507883762');" ></td>
-                                            <td class="t_0k" title="배송료유무">배송비없음</td>
-                                            <td class="t_0k" title="선결제베송료">0</td>
-                                        </tr>
-
-                                        <input type="hidden" name="itemcnt_14" value="1">
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <input type="hidden" name="idx_15" value="16">
-                                <input type="hidden" name="orderno_15" value="U00090931">
-                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_15" value="Y" onclick="FuncCheckSelf(15);"></td>
-                                <td class="t_0k" title="주문일자">2020-01-14</td>
-                                <td colspan="18">
-                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" style="table-layout:fixed;">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="50">
-                                        <col width="50"> <!-- 수량 -->
-                                        <col width="70"> <!-- 세트가 -->
-                                        <col width="200"> <!-- 세트상품명 -->
-                                        <col width="60">
-                                        <col width="70">
-                                        <col width="80">
-                                        <col width="90">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <tr align="middle" valign="center">
-                                            <td rowspan="2" class="t_0k" title="주문번호">U00090931</td>
-                                            <td rowspan="2" class="t_0k" title="주문자">주원</td>
-                                            <td rowspan="2" class="t_0k" title="수취인">주원</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처1">010-0-0000</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처2">010-7320-1215</td>
-                                            <td colspan="13" class="t_0k_left" title="배송지">경기도 하남시 아리수로 499 (망월동, 미사강변 루나리움)&nbsp;502-701</td>
-                                        </tr>
-                                        <tr align="middle" valign="center">
-                                            <td colspan="11" class="t_0k_left" title="배송메모">&nbsp;</td>
-                                            <td colspan="2" class="t_0k" title="개인통관부호">&nbsp;</td>
-                                        </tr>
-
-                                        <tr align="middle" valign="center">
-                                            <input type="hidden" name="orderno_15_0" value="U00090931">
-                                            <input type="hidden" name="orderidxnum_15_0" value="9530207">
-                                            <input type="hidden" name="shippingidxnum_15_0" value="8837026">
-                                            <td class="t_0k" title="요청유형">
-
-                                                <font color="blue">
-                                                    상품배송
-                                                </font>
-                                            </td>
-                                            <td class="t_0k" title="묶음"><input type="checkbox" name="chk_item_15_0" value="Y" onclick="FuncCheckSelfItem(15, 0, '');" ></td>
-                                            <td class="t_0k" title="상품코드" style="cursor:pointer;" onclick="FuncModProduct('M83985861', '35', '300793059');">3007930592780137</td>
-                                            <td colspan="2" class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title="GOAL HEAVYWEIGHT SWEAT SHIRTS-BLACK"><nobr><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=35&itemcd=300793059" target="_blank">GOAL HEAVYWEIGHT SWEAT SHIRTS-BLACK</a></td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=
-                                                    "L"><nobr>L&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td> <!--옵션3-->
-                                            <td class="t_0k" title="수량">1</td>
-                                            <td class='t_0k' title='세트가'>&nbsp;</td>
-                                            <td class='t_0k' title='세트상품명'>&nbsp;</td>
-
-                                            <td class="t_0k" title="납품가">45,000</td>
-                                            <td class="t_0k" title="배송가능일">2020-01-16&nbsp;</td>
-                                            <td class="t_0k" title="출고일자">2020-01-15</td>
-                                            <td class="t_0k" title="택배사">
-                                                <select name="transcode_15_0" >
-                                                    <option value="">==택배사선택==</option>
-
-                                                    <option value="9" >대한통운</option>
-
-                                                    <option value="2" >방문수령</option>
-
-                                                    <option value="1" >자체배송</option>
-
-                                                    <option value="21" >퀵배송</option>
-
-                                                    <option value="18" >편의점택배</option>
-
-                                                </select>
-                                            </td>
-                                            <td class="t_0k" title="송장번호"><input type="text" name="invoiceno_15_0" size="15" class="input " value="357507885346" onBlur="funcChkInvoiceNO(this, '357507885346');" ></td>
-                                            <td class="t_0k" title="배송료유무">배송비없음</td>
-                                            <td class="t_0k" title="선결제베송료">0</td>
-                                        </tr>
-
-                                        <input type="hidden" name="itemcnt_15" value="1">
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <input type="hidden" name="idx_16" value="17">
-                                <input type="hidden" name="orderno_16" value="U00089552">
-                                <td class="t_0k" title="선택"><input type="checkbox" name="chk_16" value="Y" onclick="FuncCheckSelf(16);"></td>
-                                <td class="t_0k" title="주문일자">2020-01-14</td>
-                                <td colspan="18">
-                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" style="table-layout:fixed;">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="50">
-                                        <col width="50"> <!-- 수량 -->
-                                        <col width="70"> <!-- 세트가 -->
-                                        <col width="200"> <!-- 세트상품명 -->
-                                        <col width="60">
-                                        <col width="70">
-                                        <col width="80">
-                                        <col width="90">
-                                        <col width="80">
-                                        <col width="80">
-                                        <col width="80">
-                                        <tr align="middle" valign="center">
-                                            <td rowspan="2" class="t_0k" title="주문번호">U00089552</td>
-                                            <td rowspan="2" class="t_0k" title="주문자">ㅈㅇ</td>
-                                            <td rowspan="2" class="t_0k" title="수취인">허지원</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처1">010-8977-8301</td>
-                                            <td rowspan="2" class="t_0k" title="수취인연락처2">010-8977-8301</td>
-                                            <td colspan="13" class="t_0k_left" title="배송지">서울특별시 강서구 화곡로53나길 29 (화곡동, 성주빌라)&nbsp;성주빌라101호</td>
-                                        </tr>
-                                        <tr align="middle" valign="center">
-                                            <td colspan="11" class="t_0k_left" title="배송메모">&nbsp;</td>
-                                            <td colspan="2" class="t_0k" title="개인통관부호">&nbsp;</td>
-                                        </tr>
-
-                                        <tr align="middle" valign="center">
-                                            <input type="hidden" name="orderno_16_0" value="U00089552">
-                                            <input type="hidden" name="orderidxnum_16_0" value="9528415">
-                                            <input type="hidden" name="shippingidxnum_16_0" value="8835036">
-                                            <td class="t_0k" title="요청유형">
-
-                                                <font color="blue">
-                                                    상품배송
-                                                </font>
-                                            </td>
-                                            <td class="t_0k" title="묶음"><input type="checkbox" name="chk_item_16_0" value="Y" onclick="FuncCheckSelfItem(16, 0, '');" ></td>
-                                            <td class="t_0k" title="상품코드" style="cursor:pointer;" onclick="FuncModProduct('M83985861', '31', '300756853');">3007568532600077</td>
-                                            <td colspan="2" class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title="REVERSIBLE DOWN PARKA - GRAY/BLACK"><nobr><a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?mcd=M83985861&ca=31&itemcd=300756853" target="_blank">REVERSIBLE DOWN PARKA - GRAY/BLACK</a></td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=
-                                                    "L"><nobr>L&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td>
-                                            <td class="t_0k_left" style="white-space: nowrap; text-overflow:ellipsis; overflow:hidden;" title=""><nobr>&nbsp;</td> <!--옵션3-->
-                                            <td class="t_0k" title="수량">1</td>
-                                            <td class='t_0k' title='세트가'>&nbsp;</td>
-                                            <td class='t_0k' title='세트상품명'>&nbsp;</td>
-
-                                            <td class="t_0k" title="납품가">239,250</td>
-                                            <td class="t_0k" title="배송가능일">2020-01-16&nbsp;</td>
-                                            <td class="t_0k" title="출고일자">2020-01-15</td>
-                                            <td class="t_0k" title="택배사">
-                                                <select name="transcode_16_0" >
-                                                    <option value="">==택배사선택==</option>
-
-                                                    <option value="9" >대한통운</option>
-
-                                                    <option value="2" >방문수령</option>
-
-                                                    <option value="1" >자체배송</option>
-
-                                                    <option value="21" >퀵배송</option>
-
-                                                    <option value="18" >편의점택배</option>
-
-                                                </select>
-                                            </td>
-                                            <td class="t_0k" title="송장번호"><input type="text" name="invoiceno_16_0" size="15" class="input " value="357507884436" onBlur="funcChkInvoiceNO(this, '357507884436');" ></td>
-                                            <td class="t_0k" title="배송료유무">배송비없음</td>
-                                            <td class="t_0k" title="선결제베송료">0</td>
-                                        </tr>
-
-                                        <input type="hidden" name="itemcnt_16" value="1">
-                                    </table>
-                                </td>
-                            </tr>
-
-                        </table>
-                </form>
-                <script language="javascript" src="/include/js/jquery-1.7.2.min.js"></script>
-                <script language="javascript">
-                    window.onload = function() {
-                        fnresize();
-                    }
-
-                    function fnresize(){
-                        var wsize = parseInt(document.body.clientWidth);
-                        $("#TreeInxDiv03").css('width', wsize);
-                    }
-
-                    window.onresize = function(event) {
-                        fnresize();
-                    };
-                </script>
-                <iframe name="iframeinput" frameborder="0" width="0" height="0" src=""></iframe>
+                </div>
             </div>
 
             </div>
