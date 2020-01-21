@@ -21,7 +21,7 @@ ex_date_yn:
 <HEAD>
     <meta http-equiv=Content-type content="text/html; charset=euc-kr">
     <meta http-equiv="X-UA-Compatible">
-    <TITLE>WCONCEPT SCM ì— ì˜¤ì‹ ê±¸ í™˜ì˜í•©ë‹ˆë‹¤</TITLE>
+    <TITLE>WCONCEPT SCM ¿¡ ¿À½Å°É È¯¿µÇÕ´Ï´Ù</TITLE>
     <META HTTP-EQUIV="imagetoolbar" CONTENT="no">
     <meta http-equiv="X-UA-Compatible" content="IE=5">
     <link rel="stylesheet" href="/include/css/admin.css" type="text/css">
@@ -44,7 +44,7 @@ ex_date_yn:
 <script language="javascript" src="/include/js/Common.js"></script>
 <script language="javascript">
 
-    // ë°°ì†¡ê°€ëŠ¥ì¼ ë‚ ì§œ ì„¤ì •
+    // ¹è¼Û°¡´ÉÀÏ ³¯Â¥ ¼³Á¤
     function FuncSetShipdate(p_num, p_obj) {
 
         showModalDialog('/include/popup/CalendarFrame.asp?num=' + p_num + '&setdate=' + p_obj.value, window, 'resizable: no; help: no; status: no; scroll: no; ');
@@ -63,7 +63,7 @@ ex_date_yn:
         }
     }
 
-    //ë‚ ì§œ ì„¸íŒ…
+    //³¯Â¥ ¼¼ÆÃ
     function FuncSetResult() {
 
 
@@ -81,7 +81,7 @@ ex_date_yn:
         today = now.getYear()+'-'+fncLPAD((now.getMonth()+1))+'-'+ (String(now.getDate()).length == 1 ? 0 + String(now.getDate()) : String(now.getDate())) ;
 
         if (chkdate < today) {
-            alert( "ë°°ì†¡ê°€ëŠ¥ì¼ì´ í˜„ìž¬ ë‚ ìžë³´ë‹¤ ì´ì „ ì¼ìžë¡œ ì§€ì •í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤." );
+            alert( "¹è¼Û°¡´ÉÀÏÀÌ ÇöÀç ³¯ÀÚº¸´Ù ÀÌÀü ÀÏÀÚ·Î ÁöÁ¤ÇÒ ¼ö ¾ø½À´Ï´Ù." );
             return;
         }
 
@@ -99,7 +99,7 @@ ex_date_yn:
         }
     }
 
-    // íŽ˜ì´ì§€ ì´ë™
+    // ÆäÀÌÁö ÀÌµ¿
     function FuncGoPage(p_num) {
         frmtype.page.value = p_num;
         frmtype.submit();
@@ -128,7 +128,7 @@ ex_date_yn:
         }
     }
 
-    // ì „ì²´ì„ íƒ
+    // ÀüÃ¼¼±ÅÃ
     function FuncCheckAll(){
         if (frminput.chkAll.value == "N")
         {
@@ -174,7 +174,7 @@ ex_date_yn:
         }
     }
 
-    // ê°œë³„ì„ íƒ
+    // °³º°¼±ÅÃ
     function FuncCheckSelf(p_num, CssClassID) {
         if (CssClassID.length > 0) {
             if ($("input:checkbox[name='chk_" + p_num + "']").is(":checked") == true) {
@@ -213,7 +213,7 @@ ex_date_yn:
         frminput.chknum.value = chkcnt;
     }
 
-    //íŠ¸ë¦¼ê³µë°±ì œê±°
+    //Æ®¸²°ø¹éÁ¦°Å
     String.prototype.trim = function()
     {
         return this.replace(/(^[ \\f\\n\\r\\t]*)|([ \\f\\n\\r\\t]*$)/g, "");
@@ -221,7 +221,7 @@ ex_date_yn:
 
     function FuncCheckForm(p_frm, p_type) {
         if (parseInt(p_frm.chknum.value) == 0) {
-            alert("ì²˜ë¦¬í•˜ì‹¤ ì£¼ë¬¸ì„ ì„ íƒí•˜ì„¸ìš”.");
+            alert("Ã³¸®ÇÏ½Ç ÁÖ¹®À» ¼±ÅÃÇÏ¼¼¿ä.");
             return;
         }
 
@@ -229,53 +229,53 @@ ex_date_yn:
             for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
                 if (eval("frminput.chk_" + ii).checked == true){
                     if(eval("frminput.transcode_" + ii).value == ""){
-                        alert("íƒë°°ì‚¬ë¥¼ ì„ íƒí•´ ì£¼ì‹­ì‹œì˜¤.");
+                        alert("ÅÃ¹è»ç¸¦ ¼±ÅÃÇØ ÁÖ½Ê½Ã¿À.");
                         eval("frminput.transcode_" + ii).focus();
                         return;
                     }
 
-                    // .trim() ê³µë°±ì œê±° ì ìš© by sun-hee,kim [2013-07-23]
+                    // .trim() °ø¹éÁ¦°Å Àû¿ë by sun-hee,kim [2013-07-23]
                     if(eval("frminput.invoiceno_" + ii).value.trim() == ""){
-                        alert("ì†¡ìž¥ë²ˆí˜¸ë¥¼ ìž…ë ¥í•´ ì£¼ì‹­ì‹œì˜¤.");
+                        alert("¼ÛÀå¹øÈ£¸¦ ÀÔ·ÂÇØ ÁÖ½Ê½Ã¿À.");
                         eval("frminput.invoiceno_" + ii).focus();
                         return;
                     }
                 }
             }
-            if (!confirm("[ " + p_frm.chknum.value + " ] ê±´ì— ëŒ€í•´ ì†¡ìž¥ë“±ë¡ ì²˜ë¦¬ë¥¼ í•˜ì‹œê² ìŠµë‹ˆê¹Œ?")){
+            if (!confirm("[ " + p_frm.chknum.value + " ] °Ç¿¡ ´ëÇØ ¼ÛÀåµî·Ï Ã³¸®¸¦ ÇÏ½Ã°Ú½À´Ï±î?")){
                 return;
             }
-        }else if(p_type == "05"){		// í’ˆì ˆì·¨ì†Œ
+        }else if(p_type == "05"){		// Ç°ÀýÃë¼Ò
             for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
                 if (eval("frminput.chk_" + ii).checked == true){
                     if(eval("frminput.claimtypecd_" + ii).value == ""){
-                        alert("ì·¨ì†Œì‚¬ìœ ë¥¼ ì„ íƒí•´ ì£¼ì‹­ì‹œì˜¤.");
+                        alert("Ãë¼Ò»çÀ¯¸¦ ¼±ÅÃÇØ ÁÖ½Ê½Ã¿À.");
                         eval("frminput.claimtypecd_" + ii).focus();
                         return;
                     }
                 }
             }
 
-            //if (!confirm("[ " + p_frm.chknum.value + " ] ê±´ì— ëŒ€í•´ í’ˆì ˆì·¨ì†Œ ì²˜ë¦¬ë¥¼ í•˜ì‹œê² ìŠµë‹ˆê¹Œ?")){
-            if (!confirm("ë°°ì†¡ë‚´ì—­ ë° ìž¬ê³  í™•ì¸ ëª¨ë‘ ì™„ë£Œí•˜ì…¨ìŠµë‹ˆê¹Œ?\ní™•ì¸ ì²˜ë¦¬ í›„ì—ëŠ” ë³€ê²½ì´ ë¶ˆê°€í•©ë‹ˆë‹¤")){
+            //if (!confirm("[ " + p_frm.chknum.value + " ] °Ç¿¡ ´ëÇØ Ç°ÀýÃë¼Ò Ã³¸®¸¦ ÇÏ½Ã°Ú½À´Ï±î?")){
+            if (!confirm("¹è¼Û³»¿ª ¹× Àç°í È®ÀÎ ¸ðµÎ ¿Ï·áÇÏ¼Ì½À´Ï±î?\nÈ®ÀÎ Ã³¸® ÈÄ¿¡´Â º¯°æÀÌ ºÒ°¡ÇÕ´Ï´Ù")){
                 return;
             }
-        }else if(p_type == "03"){		// í’ˆì ˆì·¨ì†Œ / í’ˆì ˆì²˜ë¦¬
+        }else if(p_type == "03"){		// Ç°ÀýÃë¼Ò / Ç°ÀýÃ³¸®
             for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
                 if (eval("frminput.chk_" + ii).checked == true){
                     if(eval("frminput.claimtypecd_" + ii).value == ""){
-                        alert("ì·¨ì†Œì‚¬ìœ ë¥¼ ì„ íƒí•´ ì£¼ì‹­ì‹œì˜¤.");
+                        alert("Ãë¼Ò»çÀ¯¸¦ ¼±ÅÃÇØ ÁÖ½Ê½Ã¿À.");
                         eval("frminput.claimtypecd_" + ii).focus();
                         return;
                     }
                 }
             }
 
-            if (!confirm("[ " + p_frm.chknum.value + " ] ê±´ì— ëŒ€í•´ í’ˆì ˆì·¨ì†Œ ë° í’ˆì ˆì²˜ë¦¬ë¥¼ í•˜ì‹œê² ìŠµë‹ˆê¹Œ?")){
+            if (!confirm("[ " + p_frm.chknum.value + " ] °Ç¿¡ ´ëÇØ Ç°ÀýÃë¼Ò ¹× Ç°ÀýÃ³¸®¸¦ ÇÏ½Ã°Ú½À´Ï±î?")){
                 return;
             }
         }else{
-            alert("ì²˜ë¦¬êµ¬ë¶„ ëˆ„ë½");
+            alert("Ã³¸®±¸ºÐ ´©¶ô");
             return;
         }
 
@@ -283,14 +283,14 @@ ex_date_yn:
         p_frm.submit();
     }
 
-    // ë°°ì†¡ê°€ëŠ¥ì¼ ìˆ˜ì •
+    // ¹è¼Û°¡´ÉÀÏ ¼öÁ¤
     function UpdateExpectDate(p_frm, p_orderidxnum, p_shippingidxnum, p_num, p_subnum){
         if(eval("p_frm.expectshipdate_" + p_num + "_" + p_subnum).value == ""){
-            alert("ë°°ì†¡ê°€ëŠ¥ì¼ì„ ì„ íƒí•´ ì£¼ì‹­ì‹œì˜¤.");
+            alert("¹è¼Û°¡´ÉÀÏÀ» ¼±ÅÃÇØ ÁÖ½Ê½Ã¿À.");
             return;
         }
 
-        if(!confirm("ë°°ì†¡ê°€ëŠ¥ì¼ì„ ìˆ˜ì •í•˜ì‹œê² ìŠµë‹ˆê¹Œ?")){
+        if(!confirm("¹è¼Û°¡´ÉÀÏÀ» ¼öÁ¤ÇÏ½Ã°Ú½À´Ï±î?")){
             return;
         }
 
@@ -302,54 +302,54 @@ ex_date_yn:
 
     }
 
-    // ì†¡ìž¥ì—…ë¡œë“œìš© ì—‘ì…€ë‹¤ìš´ë¡œë“œ
+    // ¼ÛÀå¾÷·Îµå¿ë ¿¢¼¿´Ù¿î·Îµå
     function FuncExcelDownLoad(){
-        if(!confirm("ë‹¤ìš´ë¡œë“œ ë˜ëŠ” ì—‘ì…€íŒŒì¼ì„ ì´ìš©í•˜ì—¬ ë°°ì†¡ì²˜ë¦¬ë¥¼ í•˜ì‹œë ¤ëŠ” ê²½ìš°ì—ëŠ” \n\në°˜ë“œì‹œ\n\nì†¡ìž¥ì •ë³´ë¥¼ ìž…ë ¥í•˜ì‹  í›„ [íŒŒì¼]-[ë‹¤ë¥¸ì´ë¦„ìœ¼ë¡œ ì €ìž¥] ë©”ë‰´ë¥¼ ì´ìš©í•˜ì—¬ \n\n[Microsoft Excel í†µí•©ë¬¸ì„œ (.xls)] í˜•íƒœë¡œ ì €ìž¥í•˜ì…”ì•¼ ì‚¬ìš©ì´ ê°€ëŠ¥í•©ë‹ˆë‹¤.\n\nì—‘ì…€íŒŒì¼ì„ ë‹¤ìš´ë¡œë“œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?")){
+        if(!confirm("´Ù¿î·Îµå µÇ´Â ¿¢¼¿ÆÄÀÏÀ» ÀÌ¿ëÇÏ¿© ¹è¼ÛÃ³¸®¸¦ ÇÏ½Ã·Á´Â °æ¿ì¿¡´Â \n\n¹Ýµå½Ã\n\n¼ÛÀåÁ¤º¸¸¦ ÀÔ·ÂÇÏ½Å ÈÄ [ÆÄÀÏ]-[´Ù¸¥ÀÌ¸§À¸·Î ÀúÀå] ¸Þ´º¸¦ ÀÌ¿ëÇÏ¿© \n\n[Microsoft Excel ÅëÇÕ¹®¼­ (.xls)] ÇüÅÂ·Î ÀúÀåÇÏ¼Å¾ß »ç¿ëÀÌ °¡´ÉÇÕ´Ï´Ù.\n\n¿¢¼¿ÆÄÀÏÀ» ´Ù¿î·ÎµåÇÏ½Ã°Ú½À´Ï±î?")){
             return;
         }
         frmexcel.submit();
     }
 
-    // ì†¡ìž¥ì—‘ì…€ ì—…ë¡œë“œ
+    // ¼ÛÀå¿¢¼¿ ¾÷·Îµå
     function FuncExcelUpload(){
         showModalDialog("PopExcelUploadShippingOrderReadyFrame.asp", window, "dialogWidth: 1200px; dialogHeight: 700px; resizable: no; help: no; status: no; scroll: no;");
     }
 
-    // ì†¡ìž¥ì—…ë¡œë“œìš© ì—‘ì…€ë‹¤ìš´ë¡œë“œ_NEW
+    // ¼ÛÀå¾÷·Îµå¿ë ¿¢¼¿´Ù¿î·Îµå_NEW
     function FuncExcelDownLoad_NEW(){
         frmexcel.target = "_blank";
         frmexcel.action = "/excel/Exl_LstShippingOrderReadyDownLoad_NEW.asp";
-        if(!confirm("í•´ë‹¹ ì—‘ì…€íŒŒì¼ì„ ì´ìš©í•˜ì—¬ ë°°ì†¡ì²˜ë¦¬ í•˜ì‹œëŠ” ê²½ìš°ì—ëŠ”\nì†¡ìž¥ì •ë³´ ìž…ë ¥ í›„ \'Excel 97 - 2003  í†µí•©ë¬¸ì„œ\' í˜•ì‹ìœ¼ë¡œ ì €ìž¥í•˜ì…”ì•¼\nì¼ê´„ ì—…ë¡œë“œì—ì„œ íŒŒì¼ë“±ë¡ì´ ë˜ì˜¤ë‹ˆ ì°¸ê³ ë¶€íƒë“œë¦½ë‹ˆë‹¤.\n\nì—‘ì…€íŒŒì¼ì„ ë‹¤ìš´ë¡œë“œ í•˜ì‹œê² ìŠµë‹ˆê¹Œ?")){
+        if(!confirm("ÇØ´ç ¿¢¼¿ÆÄÀÏÀ» ÀÌ¿ëÇÏ¿© ¹è¼ÛÃ³¸® ÇÏ½Ã´Â °æ¿ì¿¡´Â\n¼ÛÀåÁ¤º¸ ÀÔ·Â ÈÄ \'Excel 97 - 2003  ÅëÇÕ¹®¼­\' Çü½ÄÀ¸·Î ÀúÀåÇÏ¼Å¾ß\nÀÏ°ý ¾÷·Îµå¿¡¼­ ÆÄÀÏµî·ÏÀÌ µÇ¿À´Ï Âü°íºÎÅ¹µå¸³´Ï´Ù.\n\n¿¢¼¿ÆÄÀÏÀ» ´Ù¿î·Îµå ÇÏ½Ã°Ú½À´Ï±î?")){
             return;
         }
         frmexcel.submit();
     }
 
-    // ì†¡ìž¥ì—‘ì…€ ì—…ë¡œë“œ_NEW
+    // ¼ÛÀå¿¢¼¿ ¾÷·Îµå_NEW
     function FuncExcelUpload_NEW(){
         showModalDialog("PopExcelUploadShippingOrderReadyVendorFrame_NEW.asp", window, "dialogWidth: 1200px; dialogHeight: 700px; resizable: no; help: no; status: no; scroll: no;");
     }
 
-    // ì—…ë¡œë“œë°©ë²•ë§¤ë‰´ì–¼íŒì—…_NEW
+    // ¾÷·Îµå¹æ¹ý¸Å´º¾óÆË¾÷_NEW
     function FuncExcelUploadmenual_NEW(){
-        window.open("http://pin.wconcept.co.kr/include/Popup/IframeBizFileDown.asp?typenum=3&filename=ì†¡ìž¥ì¼ê´„ë“±ë¡ë„ì›€ë§ 2016.01.pdf", "menual", "");
+        window.open("http://pin.wconcept.co.kr/include/Popup/IframeBizFileDown.asp?typenum=3&filename=¼ÛÀåÀÏ°ýµî·Ïµµ¿ò¸» 2016.01.pdf", "menual", "");
     }
 
-    // ì—‘ì…€ì—…ë¡œë“œ ì²˜ë¦¬í›„
+    // ¿¢¼¿¾÷·Îµå Ã³¸®ÈÄ
     function FuncReload(){
         top.FuncSearch();
     }
 
-    //ìƒí’ˆì •ë³´ ìˆ˜ì •íŒì—…
+    //»óÇ°Á¤º¸ ¼öÁ¤ÆË¾÷
     function FuncModProduct(p_mediumcd, p_categorycd, p_itemcd) {
         window.open('/Product/PopModProductFrame.asp?mediumcd=' + p_mediumcd + '&categorycd=' + p_categorycd + '&itemcd=' + p_itemcd);
         //showModalDialog('PopModProductFrame.asp?branchcd=&mediumcd=' + p_mediumcd + '&categorycd=' + p_categorycd + '&itemcd=' + p_itemcd, window, 'resizable: no; help: no; status: no; scroll: no; ');
     }
 
-    //ë°°ì†¡ê°€ëŠ¥ì¼ ì¼ê´„ì§€ì • by ywkwon 2012.06.28
+    //¹è¼Û°¡´ÉÀÏ ÀÏ°ýÁöÁ¤ by ywkwon 2012.06.28
     function setExpectShipdateChecked() {
         /*if ( setdate == "" ) {
-            alert( "ì¼ê´„ ì„¤ì •í•  ë°°ì†¡ê°€ëŠ¥ì¼ì„ ì„ íƒí•´ì£¼ì‹­ì‹œì˜¤." );
+            alert( "ÀÏ°ý ¼³Á¤ÇÒ ¹è¼Û°¡´ÉÀÏÀ» ¼±ÅÃÇØÁÖ½Ê½Ã¿À." );
             return;
         }*/
 
@@ -357,7 +357,7 @@ ex_date_yn:
 
         if (setdate == "")
         {
-            alert( "ì¼ê´„ ì„¤ì •í•  í•­ëª©ì„ ìž…ë ¥í•´ì£¼ì„¸ìš”." );
+            alert( "ÀÏ°ý ¼³Á¤ÇÒ Ç×¸ñÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä." );
             return false;
         }
 
@@ -369,7 +369,7 @@ ex_date_yn:
         }
 
         if( parseInt(chkcnt) == 0 ) {
-            alert( "ì„ íƒëœ ë‚´ì—­ì´ ì—†ìŠµë‹ˆë‹¤." );
+            alert( "¼±ÅÃµÈ ³»¿ªÀÌ ¾ø½À´Ï´Ù." );
             return false;
         }
 
@@ -380,15 +380,15 @@ ex_date_yn:
                 }
             }
         }
-        //alert( "ì„ íƒ í•­ëª©ì´ ì¼ê´„ ì„¤ì •ë˜ì—ˆìŠµë‹ˆë‹¤.\n[ì¼ê´„ ìˆ˜ì •] ë²„íŠ¼ì„ í´ë¦­í•˜ì…”ì•¼ ì‹¤ì œë¡œ ìˆ˜ì •ì´ë©ë‹ˆë‹¤." );
+        //alert( "¼±ÅÃ Ç×¸ñÀÌ ÀÏ°ý ¼³Á¤µÇ¾ú½À´Ï´Ù.\n[ÀÏ°ý ¼öÁ¤] ¹öÆ°À» Å¬¸¯ÇÏ¼Å¾ß ½ÇÁ¦·Î ¼öÁ¤ÀÌµË´Ï´Ù." );
     }
 
-    // ë°°ì†¡ê°€ëŠ¥ì¼ ì¼ê´„ìˆ˜ì • by ywkwon 2012.06.29
+    // ¹è¼Û°¡´ÉÀÏ ÀÏ°ý¼öÁ¤ by ywkwon 2012.06.29
     function updateExpectShipdateChecked( setexpectshipdate, inum, vendorcd ) {
 
         /*if (vendorcd == "")
         {
-            alert("ì¼ê´„ìˆ˜ì •ì¼ ê²½ìš° ê³µê¸‰ì‚¬ ê²€ìƒ‰ì€ í•„ìˆ˜ì‚¬í•­ìž…ë‹ˆë‹¤.");
+            alert("ÀÏ°ý¼öÁ¤ÀÏ °æ¿ì °ø±Þ»ç °Ë»öÀº ÇÊ¼ö»çÇ×ÀÔ´Ï´Ù.");
             return;
         }*/
 
@@ -408,11 +408,11 @@ ex_date_yn:
 
         if (setchk < 1)
         {
-            alert( "ì„ íƒëœ ë‚´ì—­ì´ ì—†ìŠµë‹ˆë‹¤." );
+            alert( "¼±ÅÃµÈ ³»¿ªÀÌ ¾ø½À´Ï´Ù." );
             return;
         }
 
-        if(!confirm("ë°°ì†¡ê°€ëŠ¥ì¼ì„ ì¼ê´„ìˆ˜ì •í•˜ì‹œê² ìŠµë‹ˆê¹Œ?")){
+        if(!confirm("¹è¼Û°¡´ÉÀÏÀ» ÀÏ°ý¼öÁ¤ÇÏ½Ã°Ú½À´Ï±î?")){
             return;
         }
 
@@ -441,7 +441,7 @@ ex_date_yn:
 
         if (succCnt > 0){
             if(failCnt > 0){
-                if (confirm("ë°°ì†¡ê°€ëŠ¥ì¼ ë³€ê²½ íšŸìˆ˜ ì´ˆê³¼ (2íšŒ) ë‚´ì—­ì„ ì œì™¸í•˜ê³  ë³€ê²½ì²˜ë¦¬ë©ë‹ˆë‹¤.\nì¶”ê°€ ë³€ê²½ì„ ì›í•˜ì‹œë©´ ìš´ì˜íŒ€ìœ¼ë¡œ ë¬¸ì˜ ë°”ëžë‹ˆë‹¤.")){
+                if (confirm("¹è¼Û°¡´ÉÀÏ º¯°æ È½¼ö ÃÊ°ú (2È¸) ³»¿ªÀ» Á¦¿ÜÇÏ°í º¯°æÃ³¸®µË´Ï´Ù.\nÃß°¡ º¯°æÀ» ¿øÇÏ½Ã¸é ¿î¿µÆÀÀ¸·Î ¹®ÀÇ ¹Ù¶ø´Ï´Ù.")){
                     UpdateBatchAll(orderidxnumlist, shippingidxnumlist, expectdatelist, nowshipdatelist);
                 }
             }else{
@@ -449,7 +449,7 @@ ex_date_yn:
             }
 
         }else{
-            alert("ë°°ì†¡ê°€ëŠ¥ì¼ ë³€ê²½ íšŸìˆ˜ ì´ˆê³¼ (2íšŒ)\nì¶”ê°€ ë³€ê²½ì„ ì›í•˜ì‹œë©´ ìš´ì˜íŒ€ìœ¼ë¡œ ë¬¸ì˜ë°”ëžë‹ˆë‹¤.");
+            alert("¹è¼Û°¡´ÉÀÏ º¯°æ È½¼ö ÃÊ°ú (2È¸)\nÃß°¡ º¯°æÀ» ¿øÇÏ½Ã¸é ¿î¿µÆÀÀ¸·Î ¹®ÀÇ¹Ù¶ø´Ï´Ù.");
             return;
         }
 
@@ -463,11 +463,11 @@ ex_date_yn:
 
     }
 
-    // ë°°ì†¡ê°€ëŠ¥ì¼ ì—¬ëŸ¬ê°œ ìˆ˜ì •
+    // ¹è¼Û°¡´ÉÀÏ ¿©·¯°³ ¼öÁ¤
     function UpdateExpectDateMulti(p_orderidxnum, p_shippingidxnum, p_vendorcd){
 
 
-        if(!confirm("ë°°ì†¡ê°€ëŠ¥ì¼ì„ ìˆ˜ì •í•˜ì‹œê² ìŠµë‹ˆê¹Œ?")){
+        if(!confirm("¹è¼Û°¡´ÉÀÏÀ» ¼öÁ¤ÇÏ½Ã°Ú½À´Ï±î?")){
             return;
         }
 
@@ -483,7 +483,7 @@ ex_date_yn:
         */
     }
 
-    // ì†¡ìž¥ ì—‘ì…€ë“±ë¡ íŒì—…
+    // ¼ÛÀå ¿¢¼¿µî·Ï ÆË¾÷
     function FuncUploadExcel( ctype ) {
         var gourl = "";
         if ( parseInt(ctype) == 1 ) {
@@ -496,7 +496,7 @@ ex_date_yn:
 
     function funcChkInvoiceNO(p_frm){
         if(!FuncString(p_frm.value)){
-            alert("íŠ¹ìˆ˜ë¬¸ìžë¥¼ ì œì™¸í•˜ê³  ìž…ë ¥í•´ì£¼ì„¸ìš”");
+            alert("Æ¯¼ö¹®ÀÚ¸¦ Á¦¿ÜÇÏ°í ÀÔ·ÂÇØÁÖ¼¼¿ä");
             p_frm.value = "";
             p_frm.focus();
         }
@@ -513,7 +513,7 @@ ex_date_yn:
         TreeInxDiv03.scrollTop = TreeInxDiv04.scrollTop;
     }
 
-    // ì£¼ë¬¸ë‚´ì—­ ë§ˆìš°ìŠ¤ì•¡ì…˜
+    // ÁÖ¹®³»¿ª ¸¶¿ì½º¾×¼Ç
     function funcColor2(p_rownum,p_num){
         if(p_num == "1"){
             if ($("#orderitem" +p_rownum + " td").eq(0).css("background-color") == "#ffffff") {
@@ -560,11 +560,11 @@ ex_date_yn:
         var chgCnt = $('#ExpDtchgCnt_' + iRow).val();
         if (chgCnt >= 2)
         {
-            alert("ë°°ì†¡ê°€ëŠ¥ì¼ ë³€ê²½ íšŸìˆ˜ ì´ˆê³¼ (2íšŒ)\n ì¶”ê°€ ë³€ê²½ì„ ì›í•˜ì‹œë©´ ìš´ì˜íŒ€ìœ¼ë¡œ ë¬¸ì˜ë°”ëžë‹ˆë‹¤.");
+            alert("¹è¼Û°¡´ÉÀÏ º¯°æ È½¼ö ÃÊ°ú (2È¸)\n Ãß°¡ º¯°æÀ» ¿øÇÏ½Ã¸é ¿î¿µÆÀÀ¸·Î ¹®ÀÇ¹Ù¶ø´Ï´Ù.");
             return;
         }
 
-        if(!confirm("ë°°ì†¡ê°€ëŠ¥ì¼ì„ ìˆ˜ì •í•˜ì‹œê² ìŠµë‹ˆê¹Œ?")){
+        if(!confirm("¹è¼Û°¡´ÉÀÏÀ» ¼öÁ¤ÇÏ½Ã°Ú½À´Ï±î?")){
             return;
         }
 
@@ -577,10 +577,10 @@ ex_date_yn:
                 if(result == "0")
                 {
                     $('#ExpDtchgCnt_'+iRow).val(parseInt($('#ExpDtchgCnt_'+iRow).val()) + 1);
-                    alert("ìˆ˜ì •ë˜ì—ˆìŠµë‹ˆë‹¤");
+                    alert("¼öÁ¤µÇ¾ú½À´Ï´Ù");
                     //parent.FuncSearch();
                 }else{
-                    alert("ìž˜ëª»ëœ ì ‘ê·¼ìž…ë‹ˆë‹¤.");
+                    alert("Àß¸øµÈ Á¢±ÙÀÔ´Ï´Ù.");
                     //parent.location.href= "/logout.asp";
                 }
             }
@@ -588,7 +588,7 @@ ex_date_yn:
     }
     /*
         function updateExpectShipdateUpdate(ordidxs, shipidxs, edates){
-          if(!confirm("ë°°ì†¡ê°€ëŠ¥ì¼ì„ ìˆ˜ì •í•˜ì‹œê² ìŠµë‹ˆê¹Œ?")){
+          if(!confirm("¹è¼Û°¡´ÉÀÏÀ» ¼öÁ¤ÇÏ½Ã°Ú½À´Ï±î?")){
             return;
           }
 
@@ -600,10 +600,10 @@ ex_date_yn:
             success: function(result) {
               if(result == "0")
               {
-                alert("ìˆ˜ì •ë˜ì—ˆìŠµë‹ˆë‹¤");
+                alert("¼öÁ¤µÇ¾ú½À´Ï´Ù");
                 //parent.FuncSearch();
               }else{
-                alert("ìž˜ëª»ëœ ì ‘ê·¼ìž…ë‹ˆë‹¤.");
+                alert("Àß¸øµÈ Á¢±ÙÀÔ´Ï´Ù.");
                 //parent.location.href= "/logout.asp";
               }
             }
@@ -626,10 +626,10 @@ ex_date_yn:
             success: function(result) {
                 if(result == "0")
                 {
-                    alert("ìˆ˜ì •ë˜ì—ˆìŠµë‹ˆë‹¤");
+                    alert("¼öÁ¤µÇ¾ú½À´Ï´Ù");
                     top.FuncSearch();
                 }else{
-                    alert("ìž˜ëª»ëœ ì ‘ê·¼ìž…ë‹ˆë‹¤.");
+                    alert("Àß¸øµÈ Á¢±ÙÀÔ´Ï´Ù.");
                     top.location.href= "/logout.asp";
                 }
             }
@@ -673,8 +673,8 @@ ex_date_yn:
                             <td>
                                 <table border="0" cellpadding="0" cellspacing="1" width="100%" bgcolor="#ffffff">
                                     <tr height="30">
-                                        <td style="padding-left:10"><b>ê²€ìƒ‰ê²°ê³¼:&nbsp;&nbsp;1ê±´ / 1ê°œ / 55,000ì› / (ì£¼ë¬¸ìƒí’ˆê±´ìˆ˜í•©ê³„ / ìˆ˜ëŸ‰í•©ê³„ / ì£¼ë¬¸ê¸ˆì•¡í•©ê³„)</b></td>
-                                        <td align="center"><b>1</b> / 1 page&nbsp;&nbsp;&nbsp;&nbsp;<font color=gray>ì²˜ìŒ</font>&nbsp;&nbsp;<img src='http://image.wconcept.co.kr/images/common/btn_prew.gif' align='absmiddle' border='0' width='13' height='13'>&nbsp;&nbsp;&nbsp;<font color='red'><b>1</b></font>&nbsp;&nbsp;<img src='http://image.wconcept.co.kr/images/common/btn_next.gif' align='absmiddle' border='0' width='13' height='13'>&nbsp;<font color=gray>ë</font></td>
+                                        <td style="padding-left:10"><b>°Ë»ö°á°ú:&nbsp;&nbsp;1°Ç / 1°³ / 55,000¿ø / (ÁÖ¹®»óÇ°°Ç¼öÇÕ°è / ¼ö·®ÇÕ°è / ÁÖ¹®±Ý¾×ÇÕ°è)</b></td>
+                                        <td align="center"><b>1</b> / 1 page&nbsp;&nbsp;&nbsp;&nbsp;<font color=gray>Ã³À½</font>&nbsp;&nbsp;<img src='http://image.wconcept.co.kr/images/common/btn_prew.gif' align='absmiddle' border='0' width='13' height='13'>&nbsp;&nbsp;&nbsp;<font color='red'><b>1</b></font>&nbsp;&nbsp;<img src='http://image.wconcept.co.kr/images/common/btn_next.gif' align='absmiddle' border='0' width='13' height='13'>&nbsp;<font color=gray>³¡</font></td>
                                     </tr>
                                     <tr height="30">
                                         <td colspan="2" width="100%">
@@ -683,34 +683,34 @@ ex_date_yn:
                                                 <col>
                                                 <!-- <tr>
                                                     <td style="color:blue;vertical-align:top">Tip : </td>
-                                                    <td style="color:blue;">â–¶ ë°°ì†¡ê°€ëŠ¥ì¼ ì§€ì •ì‹œ ê³ ê°ì—ê²Œ SMSê°€ ë°œì†¡ë˜ë‹ˆ ì •í™•í•œ ë°°ì†¡ì¼ìžë¥¼ ì§€ì •í•´ì£¼ì„¸ìš”.<br>â–¶ ë°°ì†¡ê°€ëŠ¥ì¼ì€ 2íšŒë§Œ ë³€ê²½ ê°€ëŠ¥í•˜ê³ , ê·¸ ì™¸ ë³€ê²½ì‹œì—ëŠ” ìš´ì˜íŒ€ì„ í†µí•´ ë³€ê²½ì„ ìš”ì²­í•´ì£¼ì‹œê¸° ë°”ëžë‹ˆë‹¤.</td>
+                                                    <td style="color:blue;">¢º ¹è¼Û°¡´ÉÀÏ ÁöÁ¤½Ã °í°´¿¡°Ô SMS°¡ ¹ß¼ÛµÇ´Ï Á¤È®ÇÑ ¹è¼ÛÀÏÀÚ¸¦ ÁöÁ¤ÇØÁÖ¼¼¿ä.<br>¢º ¹è¼Û°¡´ÉÀÏÀº 2È¸¸¸ º¯°æ °¡´ÉÇÏ°í, ±× ¿Ü º¯°æ½Ã¿¡´Â ¿î¿µÆÀÀ» ÅëÇØ º¯°æÀ» ¿äÃ»ÇØÁÖ½Ã±â ¹Ù¶ø´Ï´Ù.</td>
                                                 </tr> -->
                                                 <tr>
                                                     <td style="color:blue;vertical-align:top;">Tip : </td>
-                                                    <td><span style="color:blue;">ë°°ì†¡ê°€ëŠ¥ì¼ì€ 2íšŒê¹Œì§€ ë³€ê²½ ê°€ëŠ¥í•˜ê³ , SMSë¡œ ë°°ì†¡ì¼ì‹œê°€ ì•ˆë‚´ë˜ì˜¤ë‹ˆ ì •í™•í•œ ë°°ì†¡ì¼ìžë¥¼ ìž…ë ¥í•´ ì£¼ì„¸ìš”. ì§€ì—°ì´ ë°œìƒë˜ë©´ ë°˜ë“œì‹œ ê³ ê°ì—ê²Œ ì‚¬ì „ì•ˆë‚´ë¥¼ í•˜ì‹œê¸° ë°”ëžë‹ˆë‹¤.<br>ë³€ê²½íšŒìˆ˜ë¥¼ ì´ˆê³¼í•œ ê±´ì— ëŒ€í•´ ë°°ì†¡ê°€ëŠ¥ì¼ ì¶”ê°€ ë³€ê²½ì„ ì›í•˜ì‹œë©´, ìš´ì˜íŒ€ì— ìš”ì²­ë°”ëžë‹ˆë‹¤.</span><!-- &nbsp;<span style="color:red;">(* ê´€ë¦¬ìž PRSëŠ” íšŒìˆ˜ì œí•œ ì—†ìŒ, SMSë°œì†¡ì—†ìŒ)</span> --></td>
+                                                    <td><span style="color:blue;">¹è¼Û°¡´ÉÀÏÀº 2È¸±îÁö º¯°æ °¡´ÉÇÏ°í, SMS·Î ¹è¼ÛÀÏ½Ã°¡ ¾È³»µÇ¿À´Ï Á¤È®ÇÑ ¹è¼ÛÀÏÀÚ¸¦ ÀÔ·ÂÇØ ÁÖ¼¼¿ä. Áö¿¬ÀÌ ¹ß»ýµÇ¸é ¹Ýµå½Ã °í°´¿¡°Ô »çÀü¾È³»¸¦ ÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.<br>º¯°æÈ¸¼ö¸¦ ÃÊ°úÇÑ °Ç¿¡ ´ëÇØ ¹è¼Û°¡´ÉÀÏ Ãß°¡ º¯°æÀ» ¿øÇÏ½Ã¸é, ¿î¿µÆÀ¿¡ ¿äÃ»¹Ù¶ø´Ï´Ù.</span><!-- &nbsp;<span style="color:red;">(* °ü¸®ÀÚ PRS´Â È¸¼öÁ¦ÇÑ ¾øÀ½, SMS¹ß¼Û¾øÀ½)</span> --></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="color:blue;">&nbsp;</td>
-                                                    <td style="color:blue;">ì†¡ìž¥ì¼ê´„ì—…ë¡œë“œ ê°€ëŠ¥í•œ ìµœëŒ€ê±´ìˆ˜ëŠ”  200ê°œì´ë©° ì—…ë¡œë“œ ì‹œ ì£¼ì˜ë¶€íƒë“œë¦½ë‹ˆë‹¤. </td>
+                                                    <td style="color:blue;">¼ÛÀåÀÏ°ý¾÷·Îµå °¡´ÉÇÑ ÃÖ´ë°Ç¼ö´Â  200°³ÀÌ¸ç ¾÷·Îµå ½Ã ÁÖÀÇºÎÅ¹µå¸³´Ï´Ù. </td>
                                                 </tr>
                                                 <tr>
                                                     <td>&nbsp;</td>
                                                     <td style="border-top:solid 1px #f0f0f0;padding-top:5px;padding-bottom:5px;">
 
-                                                        ë°°ì†¡ê°€ëŠ¥ì¼ : <input type=text size=10 class="input" name="setdate" readOnly >
+                                                        ¹è¼Û°¡´ÉÀÏ : <input type=text size=10 class="input" name="setdate" readOnly >
                                                         <img src="/images/admin/calendar.gif" border=0 style="cursor:pointer;" align="absmiddle" onclick="FuncSetShipdate(1,frminput.setdate);" >
 
-                                                        <input type="button" onclick="updateExpectShipdateChecked( '1', '0', '3004012');" value="ì¼ê´„ ìˆ˜ì •" class="box80" >
+                                                        <input type="button" onclick="updateExpectShipdateChecked( '1', '0', '3004012');" value="ÀÏ°ý ¼öÁ¤" class="box80" >
                                                         </span>
-                                                        <input type="button" name="btn_save" class="box100" value="ì†¡ìž¥ë²ˆí˜¸ ì €ìž¥" onclick="FuncCheckForm(frminput,'04');" >
+                                                        <input type="button" name="btn_save" class="box100" value="¼ÛÀå¹øÈ£ ÀúÀå" onclick="FuncCheckForm(frminput,'04');" >
                                                     </td>
                                                     <td>
-                                                        <input type="button" name="btn_exceldown"  class="box120" style="background:#FFA500" value="ì†¡ìž¥ë“±ë¡ ì—‘ì…€ë‹¤ìš´" onclick="FuncExcelDownLoad_NEW();">
-                                                        <input type="button" name="btn_excelupload" class="box120" style="background:#FFA500" value="ì†¡ìž¥ ì¼ê´„ ì—…ë¡œë“œ" onclick="FuncExcelUpload_NEW();"  >
-                                                        <input type="button" name="btn_exceldown"  class="box130" style="background:#2F9D27" value="ì†¡ìž¥ ì¼ê´„ë“±ë¡ ë„ì›€ë§" onclick="FuncExcelUploadmenual_NEW();"  >
+                                                        <input type="button" name="btn_exceldown"  class="box120" style="background:#FFA500" value="¼ÛÀåµî·Ï ¿¢¼¿´Ù¿î" onclick="FuncExcelDownLoad_NEW();">
+                                                        <input type="button" name="btn_excelupload" class="box120" style="background:#FFA500" value="¼ÛÀå ÀÏ°ý ¾÷·Îµå" onclick="FuncExcelUpload_NEW();"  >
+                                                        <input type="button" name="btn_exceldown"  class="box130" style="background:#2F9D27" value="¼ÛÀå ÀÏ°ýµî·Ï µµ¿ò¸»" onclick="FuncExcelUploadmenual_NEW();"  >
                                                     </td>
                                                     <td align="right" style="padding-right:15px">
-                                                        <input type="button" name="btn_cancel" class="box80" value="í’ˆì ˆì·¨ì†Œ" onclick="FuncCheckForm(frminput,'05');"  >
+                                                        <input type="button" name="btn_cancel" class="box80" value="Ç°ÀýÃë¼Ò" onclick="FuncCheckForm(frminput,'05');"  >
                                                     </td>
                                                 </tr>
                                             </table>
@@ -726,24 +726,24 @@ ex_date_yn:
                             <td width="800" valign="_top">
                                 <div class="tableContainer" id="TreeInxDiv03" style="color:#FFFFFF; width:800px; height:145px; overflow-x: scroll; overflow-y: hidden; background-color:#FFFFFF; " onScroll="dataOnScroll()">
                                     <table border="0" cellpadding="0" cellspacing="1" width="100%"  bgcolor="#c3c4c4" height="85">
-                                        <col width="40"><!--ì „ì²´ì„ íƒ-->
-                                        <col width="90"><!--ê²°ì œì¼ìž-->
-                                        <col width="60"><!--ì£¼ë¬¸ë²ˆí˜¸-->
-                                        <col width="90"><!--ì£¼ë¬¸ìž-->
-                                        <col width="90"><!--ìˆ˜ì·¨ì¸-->
-                                        <col width="80"><!--ìš”ì²­ìœ í˜•-->
-                                        <col width="350"><!--ìƒí’ˆëª…-->
+                                        <col width="40"><!--ÀüÃ¼¼±ÅÃ-->
+                                        <col width="90"><!--°áÁ¦ÀÏÀÚ-->
+                                        <col width="60"><!--ÁÖ¹®¹øÈ£-->
+                                        <col width="90"><!--ÁÖ¹®ÀÚ-->
+                                        <col width="90"><!--¼öÃëÀÎ-->
+                                        <col width="80"><!--¿äÃ»À¯Çü-->
+                                        <col width="350"><!--»óÇ°¸í-->
                                         <tr align="center" bgcolor="#e6e6e6" height="30">
                                             <td rowspan="2"><img src="http://image.wconcept.co.kr/images/admin/btn_all_on.gif" style="cursor:pointer" onclick="FuncCheckAll()" /></td>
-                                            <td colspan="6">ì£¼ë¬¸ ê¸°ë³¸ì •ë³´</td>
+                                            <td colspan="6">ÁÖ¹® ±âº»Á¤º¸</td>
                                         </tr>
                                         <tr align="center" bgcolor="#e6e6e6">
-                                            <td>ê²°ì œì¼ìž<br>(êµí™˜ì¶œê³ ì§€ì‹œ)</td>
-                                            <td>ì£¼ë¬¸ë²ˆí˜¸</td>
-                                            <td>ì£¼ë¬¸ìž</td>
-                                            <td>ìˆ˜ì·¨ì¸</td>
-                                            <td>ìš”ì²­ìœ í˜•</td>
-                                            <td>ìƒí’ˆëª…</td>
+                                            <td>°áÁ¦ÀÏÀÚ<br>(±³È¯Ãâ°íÁö½Ã)</td>
+                                            <td>ÁÖ¹®¹øÈ£</td>
+                                            <td>ÁÖ¹®ÀÚ</td>
+                                            <td>¼öÃëÀÎ</td>
+                                            <td>¿äÃ»À¯Çü</td>
+                                            <td>»óÇ°¸í</td>
                                         </tr>
 
                                         <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px" onmouseover="javascript:funcColor2(0, 1);" onmouseout="javascript:funcColor2(0, 2);">
@@ -753,13 +753,13 @@ ex_date_yn:
                                             <td align="center">
                                                 U00111261
                                             </td>
-                                            <td align="center">ë¥˜ë¯¸ì• </td>
-                                            <td align="center">ë¥˜ë¯¸ì• </td>
+                                            <td align="center">·ù¹Ì¾Ö</td>
+                                            <td align="center">·ù¹Ì¾Ö</td>
 
                                             <td align="center" id="orderitem_2_0">
 
                                                 <font color="blue">
-                                                    ìƒí’ˆë°°ì†¡</font>
+                                                    »óÇ°¹è¼Û</font>
                                             </td>
                                             <td style="padding-left:5px" title="GOAL HEAVYWEIGHT HOODIE-BLACK" id="orderitem_3_0">
 
@@ -767,88 +767,108 @@ ex_date_yn:
                                                 <a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?itemcd=300793052" target="_blank">GOAL HEAVYWEIGHT HOODIE-BLACK</a>
                                             </td>
                                         </tr>
+                                        <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px" onmouseover="javascript:funcColor2(0, 1);" onmouseout="javascript:funcColor2(0, 2);">
+                                            <td align="center"><input type="checkbox" name="chk_0" value="Y" onclick="FuncCheckSelf(0, '_5_0');" ></td>
 
+                                            <td align="center">2020-01-18 11:12:23</td>
+                                            <td align="center">
+                                                U00111261
+                                            </td>
+                                            <td align="center">·ù¹Ì¾Ö2</td>
+                                            <td align="center">·ù¹Ì¾Ö2</td>
+
+                                            <td align="center" id="orderitem_2_0">
+
+                                                <font color="blue">
+                                                    »óÇ°¹è¼Û</font>
+                                            </td>
+                                            <td style="padding-left:5px" title="GOAL HEAVYWEIGHT HOODIE-BLACK" id="orderitem_3_0">
+
+                                                <input type="hidden" id="itemnm_0" value="GOAL HEAVYWEIGHT HOODIE-BLACK">
+                                                <a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?itemcd=300793052" target="_blank">GOAL HEAVYWEIGHT HOODIE-BLACK</a>
+                                            </td>
+                                        </tr>
                                     </table>
                                 </div>
                             </td>
                             <td style="padding-left:3px;">
                                 <div class="tableContainer" id="TreeInxDiv04" style="color:#FFFFFF; width:100%; height:145px; overflow-x: scroll; overflow-y: scroll; background-color:#FFFFFF; " onScroll="dataOnScroll()">
                                     <table border="0" cellpadding="0" cellspacing="1" width="2780"  bgcolor="#c3c4c4" height="85">
-                                        <col width="140"><!--ì˜µì…˜1-->
-                                        <col width="100"><!--ì˜µì…˜2-->
-                                        <col width="100"><!--ì˜µì…˜3-->
-                                        <col width="40"><!--ìˆ˜ëŸ‰-->
-                                        <col width="80"><!--ìƒí’ˆìœ í˜•-->
-                                        <col width="80"> <!-- ì„¸íŠ¸ê°€ -->
-                                        <col width="200"> <!-- ì„¸íŠ¸ìƒí’ˆëª… -->
-                                        <col width="80"><!--íŒë§¤ê°€-->
-                                        <col width="120"><!--ìƒí’ˆì½”ë“œ-->
-                                        <col width="100"><!--ë¸Œëžœë“œëª…-->
+                                        <col width="140"><!--¿É¼Ç1-->
+                                        <col width="100"><!--¿É¼Ç2-->
+                                        <col width="100"><!--¿É¼Ç3-->
+                                        <col width="40"><!--¼ö·®-->
+                                        <col width="80"><!--»óÇ°À¯Çü-->
+                                        <col width="80"> <!-- ¼¼Æ®°¡ -->
+                                        <col width="200"> <!-- ¼¼Æ®»óÇ°¸í -->
+                                        <col width="80"><!--ÆÇ¸Å°¡-->
+                                        <col width="120"><!--»óÇ°ÄÚµå-->
+                                        <col width="100"><!--ºê·£µå¸í-->
 
-                                        <col width="50"><!--ë°°ì†¡ì†Œìš”ì¼-->
-                                        <col width="110"><!--ë°°ì†¡ê°€ëŠ¥ì¼-->
-                                        <col width="80"><!--ì˜ˆì•½ë°°ì†¡ì‹œìž‘ì¼-->
-                                        <col width="60"><!--ìž”ì—¬ë°°ì†¡ì¼-->
-                                        <col width="80"><!--ì¶œê³ ì§€ì‹œì¼-->
+                                        <col width="50"><!--¹è¼Û¼Ò¿äÀÏ-->
+                                        <col width="110"><!--¹è¼Û°¡´ÉÀÏ-->
+                                        <col width="80"><!--¿¹¾à¹è¼Û½ÃÀÛÀÏ-->
+                                        <col width="60"><!--ÀÜ¿©¹è¼ÛÀÏ-->
+                                        <col width="80"><!--Ãâ°íÁö½ÃÀÏ-->
 
-                                        <col width="120"><!--íƒë°°ì‚¬-->
-                                        <col width="120"><!--ì†¡ìž¥ë²ˆí˜¸-->
-                                        <col width="100"><!--ìˆ˜ì·¨ì¸ì—°ë½ì²˜1-->
-                                        <col width="100"><!--ìˆ˜ì·¨ì¸ì—°ë½ì²˜2-->
-                                        <col width="500"><!--ë°°ì†¡ì§€-->
-                                        <col width="200"><!--ë°°ì†¡ë©”ëª¨-->
+                                        <col width="120"><!--ÅÃ¹è»ç-->
+                                        <col width="120"><!--¼ÛÀå¹øÈ£-->
+                                        <col width="100"><!--¼öÃëÀÎ¿¬¶ôÃ³1-->
+                                        <col width="100"><!--¼öÃëÀÎ¿¬¶ôÃ³2-->
+                                        <col width="500"><!--¹è¼ÛÁö-->
+                                        <col width="200"><!--¹è¼Û¸Þ¸ð-->
 
-                                        <col width="100">			<!--	ê°œì¸í†µê´€ë¶€í˜¸	//-->
+                                        <col width="100">			<!--	°³ÀÎÅë°üºÎÈ£	//-->
 
-                                        <col width="80"><!--ë°°ì†¡ë¹„ìœ í˜•-->
-                                        <col width="50"><!--ì„ ê²°ì œë°°ì†¡ë£Œ-->
+                                        <col width="80"><!--¹è¼ÛºñÀ¯Çü-->
+                                        <col width="50"><!--¼±°áÁ¦¹è¼Û·á-->
 
                                         <tr align="center" bgcolor="#e6e6e6" height="30">
-                                            <td colspan="10">ì£¼ë¬¸ìƒí’ˆì •ë³´</td>
-                                            <td colspan="5">ë°°ì†¡ ì¼ì •</td>
-                                            <td colspan="2">ì£¼ë¬¸ì²˜ë¦¬</td>
-                                            <td colspan="4">ë°°ì†¡ì§€ ì •ë³´</td>
-                                            <td rowspan="2">ê°œì¸í†µê´€ë¶€í˜¸</td>			<!--	ê°œì¸í†µê´€ë¶€í˜¸	//-->
-                                            <td colspan="2">ë°°ì†¡ë¹„ ì •ë³´</td>
+                                            <td colspan="10">ÁÖ¹®»óÇ°Á¤º¸</td>
+                                            <td colspan="5">¹è¼Û ÀÏÁ¤</td>
+                                            <td colspan="2">ÁÖ¹®Ã³¸®</td>
+                                            <td colspan="4">¹è¼ÛÁö Á¤º¸</td>
+                                            <td rowspan="2">°³ÀÎÅë°üºÎÈ£</td>			<!--	°³ÀÎÅë°üºÎÈ£	//-->
+                                            <td colspan="2">¹è¼Ûºñ Á¤º¸</td>
                                         </tr>
                                         <tr align="center" bgcolor="#e6e6e6">
-                                            <!--ì£¼ë¬¸ìƒí’ˆì •ë³´-->
-                                            <td>ì˜µì…˜1</td>
-                                            <td>ì˜µì…˜2</td>
-                                            <td>ì˜µì…˜3</td>
-                                            <td>ìˆ˜ëŸ‰</td>
-                                            <td>ìƒí’ˆìœ í˜•</td>
-                                            <td>ì„¸íŠ¸ê°€</td>
-                                            <td>ì„¸íŠ¸ìƒí’ˆëª…</td>
-                                            <td>íŒë§¤ê°€</td>
-                                            <td>ìƒí’ˆì½”ë“œ</td>
-                                            <td>ë¸Œëžœë“œëª…</td>
-                                            <!--ì£¼ë¬¸ìƒí’ˆì •ë³´-->
+                                            <!--ÁÖ¹®»óÇ°Á¤º¸-->
+                                            <td>¿É¼Ç1</td>
+                                            <td>¿É¼Ç2</td>
+                                            <td>¿É¼Ç3</td>
+                                            <td>¼ö·®</td>
+                                            <td>»óÇ°À¯Çü</td>
+                                            <td>¼¼Æ®°¡</td>
+                                            <td>¼¼Æ®»óÇ°¸í</td>
+                                            <td>ÆÇ¸Å°¡</td>
+                                            <td>»óÇ°ÄÚµå</td>
+                                            <td>ºê·£µå¸í</td>
+                                            <!--ÁÖ¹®»óÇ°Á¤º¸-->
 
-                                            <!--ë°°ì†¡ ì¼ì •-->
-                                            <td>ì†Œìš”ì¼</td>
-                                            <td>ë°°ì†¡ê°€ëŠ¥ì¼</td>
-                                            <td>ì˜ˆì•½ë°°ì†¡ì¼</td>
-                                            <td>ìž”ì—¬<br>ë°°ì†¡ì¼</td>
-                                            <td>ì¶œê³ ì§€ì‹œì¼</td>
-                                            <!--ë°°ì†¡ ì¼ì •-->
+                                            <!--¹è¼Û ÀÏÁ¤-->
+                                            <td>¼Ò¿äÀÏ</td>
+                                            <td>¹è¼Û°¡´ÉÀÏ</td>
+                                            <td>¿¹¾à¹è¼ÛÀÏ</td>
+                                            <td>ÀÜ¿©<br>¹è¼ÛÀÏ</td>
+                                            <td>Ãâ°íÁö½ÃÀÏ</td>
+                                            <!--¹è¼Û ÀÏÁ¤-->
 
-                                            <!--ì£¼ë¬¸ì²˜ë¦¬-->
-                                            <td>íƒë°°ì‚¬</td>
-                                            <td>ì†¡ìž¥ë²ˆí˜¸</td>
-                                            <!--ì£¼ë¬¸ì²˜ë¦¬-->
+                                            <!--ÁÖ¹®Ã³¸®-->
+                                            <td>ÅÃ¹è»ç</td>
+                                            <td>¼ÛÀå¹øÈ£</td>
+                                            <!--ÁÖ¹®Ã³¸®-->
 
-                                            <!--ë°°ì†¡ì§€ ì •ë³´-->
-                                            <td>ìˆ˜ì·¨ì¸ì—°ë½ì²˜1</td>
-                                            <td>ìˆ˜ì·¨ì¸ì—°ë½ì²˜2</td>
-                                            <td>ë°°ì†¡ì§€</td>
-                                            <td>ë°°ì†¡ë©”ëª¨</td>
-                                            <!--ë°°ì†¡ì§€ ì •ë³´-->
+                                            <!--¹è¼ÛÁö Á¤º¸-->
+                                            <td>¼öÃëÀÎ¿¬¶ôÃ³1</td>
+                                            <td>¼öÃëÀÎ¿¬¶ôÃ³2</td>
+                                            <td>¹è¼ÛÁö</td>
+                                            <td>¹è¼Û¸Þ¸ð</td>
+                                            <!--¹è¼ÛÁö Á¤º¸-->
 
-                                            <!--ë°°ì†¡ë¹„ ì •ë³´-->
-                                            <td>ë°°ì†¡ë¹„ìœ í˜•</td>
-                                            <td>ì„ ê²°ì œ<br>ë°°ì†¡ë¹„</td>
-                                            <!--ë°°ì†¡ë¹„ ì •ë³´-->
+                                            <!--¹è¼Ûºñ Á¤º¸-->
+                                            <td>¹è¼ÛºñÀ¯Çü</td>
+                                            <td>¼±°áÁ¦<br>¹è¼Ûºñ</td>
+                                            <!--¹è¼Ûºñ Á¤º¸-->
                                         </tr>
 
                                         <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px;" id="orderitemdetail0"  onmouseover="funcColor2(0, 1);" onmouseout="funcColor2(0, 2);">
@@ -856,78 +876,153 @@ ex_date_yn:
                                             <input type="hidden" name="orderidxnum_0" value="9552959">
                                             <input type="hidden" name="shippingidxnum_0" value="8862861">
                                             <input type="hidden" id="ExpDtchgCnt_0" value="0">
-                                            <!--ì£¼ë¬¸ìƒí’ˆì •ë³´-->
-                                            <td style="padding-left:5px" title="XL">XL</td><!--ì˜µì…˜1-->
-                                            <td style="padding-left:5px" title=""></td><!--ì˜µì…˜2-->
-                                            <td style="padding-left:5px" title=""></td><!--ì˜µì…˜3-->
-                                            <td align="center">1</td><!--ìˆ˜ëŸ‰-->
-                                            <td align="center">ì¼ë°˜ìƒí’ˆ</td><!--ìƒí’ˆìœ í˜•-->
+                                            <!--ÁÖ¹®»óÇ°Á¤º¸-->
+                                            <td style="padding-left:5px" title="XL">XL</td><!--¿É¼Ç1-->
+                                            <td style="padding-left:5px" title=""></td><!--¿É¼Ç2-->
+                                            <td style="padding-left:5px" title=""></td><!--¿É¼Ç3-->
+                                            <td align="center">1</td><!--¼ö·®-->
+                                            <td align="center">ÀÏ¹Ý»óÇ°</td><!--»óÇ°À¯Çü-->
 
                                             <td>&nbsp;</td><td>&nbsp;</td>
 
-                                            <td align="right" style="padding-right:5px">55,000</td><!--íŒë§¤ê°€-->
-                                            <td align="center"><a href="javascript:;" onclick="FuncModProduct('M83985861', '38', '300793052');">3007930522780120</a></td><!--ìƒí’ˆì½”ë“œ-->
-                                            <td align="center">GOALSTUDIO</td><!--ë¸Œëžœë“œëª…-->
-                                            <!--ì£¼ë¬¸ìƒí’ˆì •ë³´-->
+                                            <td align="right" style="padding-right:5px">55,000</td><!--ÆÇ¸Å°¡-->
+                                            <td align="center"><a href="javascript:;" onclick="FuncModProduct('M83985861', '38', '300793052');">3007930522780120</a></td><!--»óÇ°ÄÚµå-->
+                                            <td align="center">GOALSTUDIO</td><!--ºê·£µå¸í-->
+                                            <!--ÁÖ¹®»óÇ°Á¤º¸-->
 
-                                            <!--ë°°ì†¡ ì¼ì •-->
-                                            <td align="center">2ì¼</td><!--ë°°ì†¡ì†Œìš”ì¼-->
+                                            <!--¹è¼Û ÀÏÁ¤-->
+                                            <td align="center">2ÀÏ</td><!--¹è¼Û¼Ò¿äÀÏ-->
                                             <td align="center">
                                                 <input type="text" name="expectshipdate_0" class="input" value="2020-01-21" onclick="event.cancelBubble = true;FuncSetShipdate('0_0',this);" style=";vertical-align:bottom;height:20px;width:70px" readOnly align="absmiddle"><img src="http://image.wconcept.co.kr/images/admin/btn_modify_1.gif" align="absbottom" style="cursor:pointer;" onclick="event.cancelBubble = true;updateExpectShipdateUpdate( 9552959, 8862861, expectshipdate_0.value, 0, '2020-01-21');" hspace="1">
                                                 <input type="hidden" name="nowshipdates_0" value="2020-01-21">
-                                            </td><!--ë°°ì†¡ê°€ëŠ¥ì¼-->
-                                            <td align="center"></td><!--ì˜ˆì•½ë°°ì†¡ì‹œìž‘ì¼-->
-                                            <td align="center">1</td><!--ìž”ì—¬ë°°ì†¡ì¼-->
-                                            <td align="center">2020-01-20</td><!--ì¶œê³ ì§€ì‹œì¼-->
-                                            <!--ë°°ì†¡ ì¼ì •-->
+                                            </td><!--¹è¼Û°¡´ÉÀÏ-->
+                                            <td align="center"></td><!--¿¹¾à¹è¼Û½ÃÀÛÀÏ-->
+                                            <td align="center">1</td><!--ÀÜ¿©¹è¼ÛÀÏ-->
+                                            <td align="center">2020-01-20</td><!--Ãâ°íÁö½ÃÀÏ-->
+                                            <!--¹è¼Û ÀÏÁ¤-->
 
-                                            <!--ì£¼ë¬¸ì²˜ë¦¬-->
+                                            <!--ÁÖ¹®Ã³¸®-->
                                             <td align="center">
                                                 <select name="transcode_0" >
-                                                    <option value="">=íƒë°°ì‚¬ì„ íƒ=</option>
+                                                    <option value="">=ÅÃ¹è»ç¼±ÅÃ=</option>
 
-                                                    <option value="9">ëŒ€í•œí†µìš´</option>
+                                                    <option value="9">´ëÇÑÅë¿î</option>
 
-                                                    <option value="2">ë°©ë¬¸ìˆ˜ë ¹</option>
+                                                    <option value="2">¹æ¹®¼ö·É</option>
 
-                                                    <option value="1">ìžì²´ë°°ì†¡</option>
+                                                    <option value="1">ÀÚÃ¼¹è¼Û</option>
 
-                                                    <option value="21">í€µë°°ì†¡</option>
+                                                    <option value="21">Äü¹è¼Û</option>
 
                                                 </select>
-                                            </td><!--íƒë°°ì‚¬-->
-                                            <td align="center"><input type="text" name="invoiceno_0" size="15" class="input" value="" onBlur="funcChkInvoiceNO(this);" ></td><!--ì†¡ìž¥ë²ˆí˜¸-->
-                                            <!--ì£¼ë¬¸ì²˜ë¦¬-->
+                                            </td><!--ÅÃ¹è»ç-->
+                                            <td align="center"><input type="text" name="invoiceno_0" size="15" class="input" value="" onBlur="funcChkInvoiceNO(this);" ></td><!--¼ÛÀå¹øÈ£-->
+                                            <!--ÁÖ¹®Ã³¸®-->
 
-                                            <!--ë°°ì†¡ì§€ ì •ë³´-->
-                                            <td align="center">010-0-0000</td><!--ìˆ˜ì·¨ì¸ì—°ë½ì²˜1-->
-                                            <td align="center">0-0000</td><!--ìˆ˜ì·¨ì¸ì—°ë½ì²˜2-->
-                                            <td style="padding-left:5px" title="[61682] ê´‘ì£¼ê´‘ì—­ì‹œ ë‚¨êµ¬ ìš©ëŒ€ë¡œ 90-1 (ë´‰ì„ ë™, ë¬´ë“±íŒŒí¬3ì°¨1ë‹¨ì§€ì•„íŒŒíŠ¸) 303-507">
+                                            <!--¹è¼ÛÁö Á¤º¸-->
+                                            <td align="center">010-0-0000</td><!--¼öÃëÀÎ¿¬¶ôÃ³1-->
+                                            <td align="center">0-0000</td><!--¼öÃëÀÎ¿¬¶ôÃ³2-->
+                                            <td style="padding-left:5px" title="[61682] ±¤ÁÖ±¤¿ª½Ã ³²±¸ ¿ë´ë·Î 90-1 (ºÀ¼±µ¿, ¹«µîÆÄÅ©3Â÷1´ÜÁö¾ÆÆÄÆ®) 303-507">
 
-                                                <span style="#000000">[61682] ê´‘ì£¼ê´‘ì—­ì‹œ ë‚¨êµ¬ ìš©ëŒ€ë¡œ 90-1 (ë´‰ì„ ë™, ë¬´ë“±íŒŒí¬3ì°¨1ë‹¨ì§€ì•„íŒŒíŠ¸) 303-507</span>
-                                            </td><!--ë°°ì†¡ì§€-->
-                                            <td align="center" title="ë¶€ìž¬ ì‹œ ê²½ë¹„ì‹¤ì— ë§¡ê²¨ì£¼ì„¸ìš”.">ë¶€ìž¬ ì‹œ ê²½ë¹„ì‹¤ì— ë§¡ê²¨ì£¼ì„¸ìš”...</td><!--ë°°ì†¡ë©”ëª¨-->
-                                            <!--ë°°ì†¡ì§€ ì •ë³´-->
+                                                <span style="#000000">[61682] ±¤ÁÖ±¤¿ª½Ã ³²±¸ ¿ë´ë·Î 90-1 (ºÀ¼±µ¿, ¹«µîÆÄÅ©3Â÷1´ÜÁö¾ÆÆÄÆ®) 303-507</span>
+                                            </td><!--¹è¼ÛÁö-->
+                                            <td align="center" title="ºÎÀç ½Ã °æºñ½Ç¿¡ ¸Ã°ÜÁÖ¼¼¿ä.">ºÎÀç ½Ã °æºñ½Ç¿¡ ¸Ã°ÜÁÖ¼¼¿ä...</td><!--¹è¼Û¸Þ¸ð-->
+                                            <!--¹è¼ÛÁö Á¤º¸-->
 
-                                            <td align="center"></td>	<!--	ê°œì¸í†µê´€ë¶€í˜¸	//-->
+                                            <td align="center"></td>	<!--	°³ÀÎÅë°üºÎÈ£	//-->
 
-                                            <!--ë°°ì†¡ë¹„ ì •ë³´-->
-                                            <td align="center">ë°°ì†¡ë¹„ì—†ìŒ</td><!--ë°°ì†¡ë¹„ìœ í˜•-->
-                                            <td align="center">0</td><!--ì„ ê²°ì œë°°ì†¡ë£Œ-->
-                                            <!--ë°°ì†¡ë¹„ ì •ë³´-->
+                                            <!--¹è¼Ûºñ Á¤º¸-->
+                                            <td align="center">¹è¼Ûºñ¾øÀ½</td><!--¹è¼ÛºñÀ¯Çü-->
+                                            <td align="center">0</td><!--¼±°áÁ¦¹è¼Û·á-->
+                                            <!--¹è¼Ûºñ Á¤º¸-->
 
                                             <input type="hidden" name="claimmaintypecd_0" value="03">
                                             <input type="hidden" name="claimtypecd_0" value="05">
                                             <!--<td align="center">
 
                                                             <select name="claimtypecd_0">
-                                              <option value="">=ì·¨ì†Œì‚¬ìœ =</option>
+                                              <option value="">=Ãë¼Ò»çÀ¯=</option>
 
-                                                <option value="05">í’ˆì ˆ
+                                                <option value="05">Ç°Àý
                                             </select>
-                                            </td>--><!--ì·¨ì†Œì‚¬ìœ -->
+                                            </td>--><!--Ãë¼Ò»çÀ¯-->
                                         </tr>
+                                        <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px;" id="orderitemdetail0"  onmouseover="funcColor2(0, 1);" onmouseout="funcColor2(0, 2);">
+                                            <input type="hidden" name="orderno_0" value="U00111261">
+                                            <input type="hidden" name="orderidxnum_0" value="9552959">
+                                            <input type="hidden" name="shippingidxnum_0" value="8862861">
+                                            <input type="hidden" id="ExpDtchgCnt_0" value="0">
+                                            <!--ÁÖ¹®»óÇ°Á¤º¸-->
+                                            <td style="padding-left:5px" title="XL">XL</td><!--¿É¼Ç1-->
+                                            <td style="padding-left:5px" title=""></td><!--¿É¼Ç2-->
+                                            <td style="padding-left:5px" title=""></td><!--¿É¼Ç3-->
+                                            <td align="center">1</td><!--¼ö·®-->
+                                            <td align="center">ÀÏ¹Ý»óÇ°</td><!--»óÇ°À¯Çü-->
 
+                                            <td>&nbsp;</td><td>&nbsp;</td>
+
+                                            <td align="right" style="padding-right:5px">55,000</td><!--ÆÇ¸Å°¡-->
+                                            <td align="center"><a href="javascript:;" onclick="FuncModProduct('M83985861', '38', '300793052');">3007930522780120</a></td><!--»óÇ°ÄÚµå-->
+                                            <td align="center">GOALSTUDIO</td><!--ºê·£µå¸í-->
+                                            <!--ÁÖ¹®»óÇ°Á¤º¸-->
+
+                                            <!--¹è¼Û ÀÏÁ¤-->
+                                            <td align="center">2ÀÏ</td><!--¹è¼Û¼Ò¿äÀÏ-->
+                                            <td align="center">
+                                                <input type="text" name="expectshipdate_0" class="input" value="2020-01-21" onclick="event.cancelBubble = true;FuncSetShipdate('0_0',this);" style=";vertical-align:bottom;height:20px;width:70px" readOnly align="absmiddle"><img src="http://image.wconcept.co.kr/images/admin/btn_modify_1.gif" align="absbottom" style="cursor:pointer;" onclick="event.cancelBubble = true;updateExpectShipdateUpdate( 9552959, 8862861, expectshipdate_0.value, 0, '2020-01-21');" hspace="1">
+                                                <input type="hidden" name="nowshipdates_0" value="2020-01-21">
+                                            </td><!--¹è¼Û°¡´ÉÀÏ-->
+                                            <td align="center"></td><!--¿¹¾à¹è¼Û½ÃÀÛÀÏ-->
+                                            <td align="center">1</td><!--ÀÜ¿©¹è¼ÛÀÏ-->
+                                            <td align="center">2020-01-20</td><!--Ãâ°íÁö½ÃÀÏ-->
+                                            <!--¹è¼Û ÀÏÁ¤-->
+
+                                            <!--ÁÖ¹®Ã³¸®-->
+                                            <td align="center">
+                                                <select name="transcode_0" >
+                                                    <option value="">=ÅÃ¹è»ç¼±ÅÃ=</option>
+
+                                                    <option value="9">´ëÇÑÅë¿î</option>
+
+                                                    <option value="2">¹æ¹®¼ö·É</option>
+
+                                                    <option value="1">ÀÚÃ¼¹è¼Û</option>
+
+                                                    <option value="21">Äü¹è¼Û</option>
+
+                                                </select>
+                                            </td><!--ÅÃ¹è»ç-->
+                                            <td align="center"><input type="text" name="invoiceno_0" size="15" class="input" value="" onBlur="funcChkInvoiceNO(this);" ></td><!--¼ÛÀå¹øÈ£-->
+                                            <!--ÁÖ¹®Ã³¸®-->
+
+                                            <!--¹è¼ÛÁö Á¤º¸-->
+                                            <td align="center">010-0-0000</td><!--¼öÃëÀÎ¿¬¶ôÃ³1-->
+                                            <td align="center">0-0000</td><!--¼öÃëÀÎ¿¬¶ôÃ³2-->
+                                            <td style="padding-left:5px" title="[61682] ±¤ÁÖ±¤¿ª½Ã ³²±¸ ¿ë´ë·Î 90-1 (ºÀ¼±µ¿, ¹«µîÆÄÅ©3Â÷1´ÜÁö¾ÆÆÄÆ®) 303-507">
+
+                                                <span style="#000000">[61682] ±¤ÁÖ±¤¿ª½Ã ³²±¸ ¿ë´ë·Î 90-1 (ºÀ¼±µ¿, ¹«µîÆÄÅ©3Â÷1´ÜÁö¾ÆÆÄÆ®) 303-507</span>
+                                            </td><!--¹è¼ÛÁö-->
+                                            <td align="center" title="ºÎÀç ½Ã °æºñ½Ç¿¡ ¸Ã°ÜÁÖ¼¼¿ä.">ºÎÀç ½Ã °æºñ½Ç¿¡ ¸Ã°ÜÁÖ¼¼¿ä...</td><!--¹è¼Û¸Þ¸ð-->
+                                            <!--¹è¼ÛÁö Á¤º¸-->
+
+                                            <td align="center"></td>	<!--	°³ÀÎÅë°üºÎÈ£	//-->
+
+                                            <!--¹è¼Ûºñ Á¤º¸-->
+                                            <td align="center">¹è¼Ûºñ¾øÀ½</td><!--¹è¼ÛºñÀ¯Çü-->
+                                            <td align="center">0</td><!--¼±°áÁ¦¹è¼Û·á-->
+                                            <!--¹è¼Ûºñ Á¤º¸-->
+
+                                            <input type="hidden" name="claimmaintypecd_0" value="03">
+                                            <input type="hidden" name="claimtypecd_0" value="05">
+                                            <!--<td align="center">
+
+                                                            <select name="claimtypecd_0">
+                                              <option value="">=Ãë¼Ò»çÀ¯=</option>
+
+                                                <option value="05">Ç°Àý
+                                            </select>
+                                            </td>--><!--Ãë¼Ò»çÀ¯-->
+                                        </tr>
                                     </table>
                                 </div>
                             </td>

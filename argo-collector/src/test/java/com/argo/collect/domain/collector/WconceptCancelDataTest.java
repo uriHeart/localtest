@@ -14,14 +14,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class WconceptDeliveryCompleteDataTest {
+public class WconceptCancelDataTest {
 
     @Test
     public void run(){
-        File TargetHtml = new File("C:\\project\\argo_server_dev\\argo-collector\\src\\test\\java\\com\\argo\\collect\\domain\\data\\wconceptDeliveryComplete.html");
+        File TargetHtml = new File("C:\\project\\argo_server_dev\\argo-collector\\src\\test\\java\\com\\argo\\collect\\domain\\data\\wconceptCancel.html");
         Document doc = null;
         try {
-            doc = Jsoup.parse(TargetHtml,"euc-kr");
+            doc = Jsoup.parse(TargetHtml,"UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
         }

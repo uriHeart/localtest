@@ -16,7 +16,7 @@ public class WconceptDeliveryDataTest {
 
     @Test
     public void run(){
-        File TargetHtml = new File("C:\\project\\argo_server_dev2\\argo-collector\\src\\test\\java\\com\\argo\\collect\\domain\\data\\wconceptDelivery.html");
+        File TargetHtml = new File("C:\\project\\argo_server_dev\\argo-collector\\src\\test\\java\\com\\argo\\collect\\domain\\data\\wconceptDelivery.html");
         Document doc = null;
         try {
             doc = Jsoup.parse(TargetHtml,"UTF-8");

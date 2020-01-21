@@ -5,6 +5,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.junit.Test;
+import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 import reactor.util.function.Tuple2;
 
@@ -14,14 +15,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class WconceptDeliveryCompleteDataTest {
+public class WconceptReturningAndExchangingDataTest {
 
     @Test
     public void run(){
-        File TargetHtml = new File("C:\\project\\argo_server_dev\\argo-collector\\src\\test\\java\\com\\argo\\collect\\domain\\data\\wconceptDeliveryComplete.html");
+        File TargetHtml = new File("C:\\project\\argo_server_dev\\argo-collector\\src\\test\\java\\com\\argo\\collect\\domain\\data\\wconceptReturn.html");
         Document doc = null;
         try {
-            doc = Jsoup.parse(TargetHtml,"euc-kr");
+            doc = Jsoup.parse(TargetHtml,"UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,6 +58,14 @@ public class WconceptDeliveryCompleteDataTest {
                     ;
 
 
+
+        bodyString.forEach(row ->{
+            String[] options = row.get("옵션1").split(" ");
+            if(!StringUtils.isEmpty(options) && options.length>1){
+                row.put("교환전옵션",options[0]);
+                row.put("교환후옵션",options[1]);
+            }
+        });
         bodyString.get(0);
     }
 }
