@@ -1,6 +1,8 @@
 package com.argo.common.configuration;
 
-public class ArgoBizException extends RuntimeException {
+import java.util.function.Supplier;
+
+public class ArgoBizException extends RuntimeException implements Supplier<RuntimeException> {
     public ArgoBizException() {
         super();
     }
@@ -11,5 +13,10 @@ public class ArgoBizException extends RuntimeException {
 
     public ArgoBizException(String message, Throwable e) {
         super(message, e);
+    }
+
+    @Override
+    public RuntimeException get() {
+        return this;
     }
 }
