@@ -135,13 +135,19 @@ public class MusinsaOrderCollector extends AbstractOrderCollector {
 
         });
 
-        eventList.addAll(claimList);
-
         this.eventConvert(eventList,channel);
 
         HashMap<String, RawEventParam> mergedOrder = this.mergeRawEvent(eventList);
 
         this.saveRawData(mergedOrder, channel);
+
+        //환불이 배송완료가 늦게 저장되어 order_doc 인덱스가 배송완료 상태의 데이터로 생성되는것을 방지하기위해 클레임을 뒤에 저장함.
+        this.eventConvert(claimList,channel);
+
+        HashMap<String, RawEventParam> mergedClaimOrder = this.mergeRawEvent(claimList);
+
+        this.saveRawData(mergedClaimOrder, channel);
+
 
     }
 

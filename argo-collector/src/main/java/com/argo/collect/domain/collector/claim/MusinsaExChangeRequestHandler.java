@@ -12,11 +12,11 @@ import java.util.Map;
  * 교환완료 갯수 -1
  */
 @Component
-public class MusinsaExChangeHandler implements MusinsaClaimHandler{
+public class MusinsaExChangeRequestHandler implements MusinsaClaimHandler{
     @Override
     public boolean isClaim(Map rowData) {
         String claimState = String.valueOf(rowData.get("CLM_STATE_NM"));
-        return "교환완료".equals(claimState) || "교환요청".equals(claimState);
+        return "교환요청".equals(claimState);
     }
 
 

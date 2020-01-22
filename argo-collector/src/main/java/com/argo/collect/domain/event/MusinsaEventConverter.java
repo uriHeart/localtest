@@ -22,7 +22,7 @@ public class MusinsaEventConverter implements EventConverter {
         if("교환요청".equals(clmState)) return EventType.EXCHANGE_REQUEST;
         if("환불요청".equals(clmState)) return EventType.RETURN_REQUEST;
         if("교환처리".equals(clmState)) return EventType.EXCHANGE_PROCESS;
-        if("환불처리".equals(clmState)) return EventType.RETURN_PROCESS;
+        if("환불처리중".equals(clmState)) return EventType.RETURN_PROCESS;
         if("교환완료".equals(clmState)) return EventType.EXCHANGE;
         if("환불완료".equals(clmState)) return EventType.RETURN;
         if("입금예정".equals(ordState)) return EventType.ORDER;

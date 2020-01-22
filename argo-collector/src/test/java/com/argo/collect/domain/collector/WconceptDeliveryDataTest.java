@@ -89,7 +89,7 @@ public class WconceptDeliveryDataTest {
                         .collect(Collectors.toMap(s->s.split(";")[0],s -> s.split(";")[1]))
                         ;
 
-        List<Map> result = new ArrayList<>();
+        List<Map<String,String>> result = new ArrayList<>();
 
         System.out.printf(datas.toString());
 

@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.lang.String.*;
+
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -61,6 +63,9 @@ public class WconceptOrderCollectorTest extends AbstractOrderCollector {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private List<OrderDetailCollector> orderCollectors;
+
     @Override
     public boolean isSupport(SalesChannel channel) {
         return "W_CONCEPT".equals(channel.getCode());
@@ -79,25 +84,18 @@ public class WconceptOrderCollectorTest extends AbstractOrderCollector {
         params.put("strto","2020-01-20");
 
 
-        Document document =null;
-        try {
-             document = Jsoup.connect("http://pin.wconcept.co.kr/ShippingPin/iFrameLstShippingOrderVendorBottom.asp")
-                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36")
-                    .header("Accept", "text/html, */*; q=0.01")
-                    .header("Accept-Encoding", "gzip, deflate")
-                    .header("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7,ja;q=0.6")
-                    .header("Host", "pin.wconcept.co.kr")
-                    .cookies(cookieMap) // 로그인 Cookies 세팅
-                    .ignoreContentType(true)
-                    .data(params)
-                    .post()
-                     ;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        HashMap<String, RawEventParam> saveOrderList = new HashMap<>();
 
-        Element body = document.body();
+        orderCollectors.stream()
+                .forEach( collector ->{
+                    List<Map<String,String>> orderList = collector.getCollectDetailData(super.getCollectInfoList(channel),cookieMap);
+                    OrderMergeInfo mergeInfo = collector.makeMergeKeyInfo();
+                    this.convertEventType(orderList,channel);
+                    saveOrderList.putAll(this.mergeRawEvent(orderList,mergeInfo));
+                }
+        );
 
+        this.saveRawData(saveOrderList,channel);
 
     }
 
@@ -140,13 +138,13 @@ public class WconceptOrderCollectorTest extends AbstractOrderCollector {
         return cookieMap;
     }
 
-    public HashMap<String, RawEventParam> mergeRawEvent(List<Map> orderList, String eventOrderId, String eventPublishedAt){
+    public HashMap<String, RawEventParam> mergeRawEvent(List<Map<String,String>> orderList, OrderMergeInfo mergeInfo){
 
         HashMap<String, RawEventParam> mergedOrder = new HashMap<>();
         orderList.forEach(event -> {
-            String orderId = String.valueOf(event.get(eventOrderId));
-            String publishedAt = String.valueOf(event.get(eventPublishedAt));
-            String eventType = String.valueOf(event.get("event_type"));
+            String orderId = event.get(mergeInfo.getOrderIdFieldKey());
+            String publishedAt = event.get(mergeInfo.getPublishedAtFieldKey());
+            String eventType = event.get("event_type");
 
             String mergeKey = HashUtil.sha256(orderId+publishedAt);
 
@@ -198,7 +196,7 @@ public class WconceptOrderCollectorTest extends AbstractOrderCollector {
     }
 
 
-    public List<Map> convertEventType(List<Map> orderList, VendorChannel channel){
+    public List<Map<String,String>> convertEventType(List<Map<String,String>> orderList, VendorChannel channel){
         return orderList.stream()
                 .map(order->{
                     order.put("event_type",
@@ -207,6 +205,7 @@ public class WconceptOrderCollectorTest extends AbstractOrderCollector {
                                     .map(converter ->converter.getEventType(order))
                                     .findFirst()
                                     .orElse(EventType.OTHER)
+                                    .name()
                     );
                     return order;
                 })

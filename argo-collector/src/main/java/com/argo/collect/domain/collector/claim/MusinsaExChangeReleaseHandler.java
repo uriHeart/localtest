@@ -30,5 +30,7 @@ public class MusinsaExChangeReleaseHandler implements MusinsaClaimHandler{
     public void modifyOriginalData(Map rowData) {
         //P_ORD_NO 가 있으면 0원처리
         rowData.put("price","0");
+        rowData.put("ord_state","교환요청");
+
     }
 }

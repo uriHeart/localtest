@@ -100,9 +100,15 @@ public class MusinsaArgoOrderConversionTemplate {
                 .targetField("paymentType")
                 .build());
 
+
+        Map<String, String> calculateParam = Maps.newLinkedHashMap();
+        calculateParam .put("price", "java.lang.String");
+        calculateParam .put("qty", "java.lang.String");
         list.add(ConversionRule.builder()
-                .conversionType(ConversionType.AGGREGATE)
-                .sourceField("price")
+                .conversionType(ConversionType.OPERATION)
+                .operatorClass("amountCalculateService")
+                .operatorMethod("getSumPrice")
+                .operatorParams(calculateParam)
                 .targetField("totalAmount")
                 .build());
 

@@ -43,6 +43,9 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private List<WconceptOrderCollector> orderCollectors;
+
     @Override
     public boolean isSupport(SalesChannel channel) {
         return "W_CONCEPT".equals(channel.getCode());
@@ -55,6 +58,8 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
         String[] loginInfo = authorization.split(":");
         String wconceptId = loginInfo[0];
         String wconceptPw = loginInfo[1];
+
+        super.getCollectInfoList(channel);
 
         String baseUrl = channel.getSalesChannel().getBaseUrl();
 
@@ -161,7 +166,7 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
 
         //prodList.get(0).get("결제일자\n(교환출고지시)");
         //prodList.get(0).get("주문번호")
-        this.convertEventType(prodList,channel);
+//        this.convertEventType(prodList,channel);
         HashMap<String, RawEventParam> mergedOrder = this.mergeRawEvent(prodList,"주문번호","결제일자\n(교환출고지시)");
 
         this.saveRawData(mergedOrder,channel);
@@ -213,7 +218,7 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
 
         });
 
-        this.convertEventType(orderList,channel);
+//        this.convertEventType(orderList,channel);
         HashMap<String, RawEventParam> mergedAllOrder = this.mergeRawEvent(orderList,"주문번호","주문일자");
         this.saveRawData(mergedAllOrder,channel);
 
@@ -277,7 +282,7 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
     }
 
 
-    public List<Map> convertEventType(List<Map> orderList,VendorChannel channel){
+    public List<Map<String,String>> convertEventType(List<Map<String,String>> orderList,VendorChannel channel){
         return orderList.stream()
                 .map(order->{
                     order.put("event_type",
@@ -286,6 +291,7 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
                                     .map(converter ->converter.getEventType(order))
                                     .findFirst()
                                     .orElse(EventType.OTHER)
+                                    .name()
                     );
                     return order;
                 })

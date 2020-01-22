@@ -39,7 +39,6 @@ public class WconceptCancelDataTest {
                         .collect(Collectors.toList()))
                         ;
 
-
         List<Map<String,String>> bodyString =
                 tbody.getElementsByTag("tr")
                     .stream()
