@@ -36,18 +36,18 @@ public class WconceptOrderMetadataConversionTemplate {
                 .targetField("totalQuantity")
                 .build());
 
-        Map<String, String> refundAmtParam = Maps.newLinkedHashMap();
-        refundAmtParam .put("금액", "java.lang.String");
+        Map<String, String> amtParam = Maps.newLinkedHashMap();
+        amtParam .put("판매가", "java.lang.String");
         list.add(ConversionRule.builder()
                         .conversionType(ConversionType.OPERATION)
                         .operatorClass("amountFormatConversionService")
                         .operatorMethod("replaceComa")
-                        .operatorParams(refundAmtParam)
+                        .operatorParams(amtParam)
                         .targetField("totalPrice")
                         .build());
 
         Map<String, String> dateFormatParam = Maps.newLinkedHashMap();
-        dateFormatParam .put("주민일자", "java.lang.String");
+        dateFormatParam .put("주문일자", "java.lang.String");
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.OPERATION)
                 .operatorClass("dateFormatConversionService")

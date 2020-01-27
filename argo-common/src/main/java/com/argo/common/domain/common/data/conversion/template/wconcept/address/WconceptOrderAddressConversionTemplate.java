@@ -13,7 +13,7 @@ public class WconceptOrderAddressConversionTemplate {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("8")
+                .sourceId("6")
                 .targetId("com.argo.common.domain.order.OrderAddress")
                 .rules(getConversionRuleForOrderAddress())
                 .build();
@@ -55,28 +55,28 @@ public class WconceptOrderAddressConversionTemplate {
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.CONVERSION_TEMPLATE)
                 .targetField("originalAddress")
-                .conversionTemplateSourceId("8-OriginalAddress")
+                .conversionTemplateSourceId("6-OriginalAddress")
                 .conversionTemplateTargetId("com.argo.common.domain.order.OriginalAddress")
                 .build());
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.CONVERSION_TEMPLATE)
                 .targetField("orderer")
-                .conversionTemplateSourceId("8-Orderer")
+                .conversionTemplateSourceId("6-Orderer")
                 .conversionTemplateTargetId("com.argo.common.domain.order.Orderer")
                 .build());
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.CONVERSION_TEMPLATE)
                 .targetField("recipient")
-                .conversionTemplateSourceId("8-Recipient")
+                .conversionTemplateSourceId("6-Recipient")
                 .conversionTemplateTargetId("com.argo.common.domain.order.Recipient")
                 .build());
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.CONVERSION_TEMPLATE)
                 .targetField("deliveryRequest")
-                .conversionTemplateSourceId("8-DeliveryRequest")
+                .conversionTemplateSourceId("6-DeliveryRequest")
                 .conversionTemplateTargetId("com.argo.common.domain.order.DeliveryRequest")
                 .build());
 

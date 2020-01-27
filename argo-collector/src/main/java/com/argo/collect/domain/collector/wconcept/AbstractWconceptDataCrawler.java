@@ -8,6 +8,7 @@ import reactor.core.publisher.Flux;
 import reactor.util.function.Tuple2;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -37,6 +38,7 @@ public abstract class AbstractWconceptDataCrawler implements OrderCollectInfoMap
     }
 
     List<Map<String,String>> basicDataCollect(Element body,String collectDiv){
+        if(body.getElementById(collectDiv)==null) return Arrays.asList();
         Element tbody = body.getElementById(collectDiv).getElementsByTag("tbody").get(0);
 
         Flux<String> headerString =

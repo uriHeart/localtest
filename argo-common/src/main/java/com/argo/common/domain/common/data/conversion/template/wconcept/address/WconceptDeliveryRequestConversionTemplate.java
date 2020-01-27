@@ -13,7 +13,7 @@ public class WconceptDeliveryRequestConversionTemplate {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("8-DeliveryRequest")
+                .sourceId("6-DeliveryRequest")
                 .targetId("com.argo.common.domain.order.DeliveryRequest")
                 .rules(getConversionRuleForDeliveryRequest())
                 .build();

@@ -37,8 +37,11 @@ import com.argo.common.domain.common.data.conversion.template.player.order.Playe
 import com.argo.common.domain.common.data.conversion.template.player.order.PlayerOrderMetadataConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.player.vendorItem.PlayerOrderVendorItemLifecycleConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.player.vendorItem.PlayerOrderVendorItemMetadataConversionTemplate;
+import com.argo.common.domain.common.data.conversion.template.wconcept.address.*;
 import com.argo.common.domain.common.data.conversion.template.wconcept.order.WconceptArgoOrderConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.wconcept.order.WconceptOrderMetadataConversionTemplate;
+import com.argo.common.domain.common.data.conversion.template.wconcept.vendoritem.WconceptOrderVendorItemLifecycleConversionTemplate;
+import com.argo.common.domain.common.data.conversion.template.wconcept.vendoritem.WconceptOrderVendorItemMetadataConversionTemplate;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -167,6 +170,20 @@ public class ConversionTemplateService {
                 return getWconceptArgoOrderTemplate();
             case "6-OrderMetadata-com.argo.common.domain.order.OrderMetadata":
                 return getWconceptArgoOrderMetadataTemplate();
+            case "6-com.argo.common.domain.order.OrderAddress":
+                return getWconceptOrderAddressTemplate();
+            case "6-OriginalAddress-com.argo.common.domain.order.OriginalAddress":
+                return getWconceptOriginalAddressTemplate();
+            case "6-Orderer-com.argo.common.domain.order.Orderer":
+                return getWconceptOrdererTemplate();
+            case "6-Recipient-com.argo.common.domain.order.Recipient":
+                return getWconceptRecipientTemplate();
+            case "6-DeliveryRequest-com.argo.common.domain.order.DeliveryRequest":
+                return getWconceptDeliveryRequestTemplate();
+            case "6-com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle":
+                return getWconceptOrderVendorItemLifecycleTemplate();
+            case "6-OrderVendorItemMetadata-com.argo.common.domain.order.vendoritem.OrderVendorItemMetadata":
+                return getWconceptOrderVendorItemMetadataTemplate();
 
             //musinsa
             case "8-com.argo.common.domain.order.ArgoOrder":
@@ -288,6 +305,13 @@ public class ConversionTemplateService {
     //Wconcept
     public ConversionTemplate getWconceptArgoOrderTemplate(){return WconceptArgoOrderConversionTemplate.getArgoOrderTemplate();}
     public ConversionTemplate getWconceptArgoOrderMetadataTemplate(){return WconceptOrderMetadataConversionTemplate.getOrderMetadataTemplate();}
+    public ConversionTemplate getWconceptOrderVendorItemLifecycleTemplate(){ return WconceptOrderVendorItemLifecycleConversionTemplate.getOrderVendorItemLifecycleTemplate(); }
+    public ConversionTemplate getWconceptOrderVendorItemMetadataTemplate(){ return WconceptOrderVendorItemMetadataConversionTemplate.getOrderVendorItemMetadataTemplate(); }
+    public ConversionTemplate getWconceptOrderAddressTemplate() { return WconceptOrderAddressConversionTemplate.getOrderAddressTemplate(); }
+    public ConversionTemplate getWconceptOriginalAddressTemplate() { return WconceptOriginalAddressConversionTemplate.getOriginalAddressTemplate(); }
+    public ConversionTemplate getWconceptOrdererTemplate() { return WconceptOrdererConversionTemplate.getOrdererTemplate(); }
+    public ConversionTemplate getWconceptRecipientTemplate() { return WconceptRecipientConversionTemplate.getRecipientTemplate(); }
+    public ConversionTemplate getWconceptDeliveryRequestTemplate() { return WconceptDeliveryRequestConversionTemplate.getDeliveryRequestTemplate(); }
 
     //MUSINSA Templates
     public ConversionTemplate getMusinsaArgoOrderTemplate(){return MusinsaArgoOrderConversionTemplate.getArgoOrderTemplate();}
@@ -377,8 +401,6 @@ public class ConversionTemplateService {
             case "6-CANCEL":
             case "6-PAYMENT_COMPLETE":
             case "6-RELEASE_REQUEST":
-            case "6-RELEASE":
-            case "6-DELIVERY":
             case "6-DELIVERY_COMPLETE":
             case "6-EXCHANGE_REQUEST":
             case "6-EXCHANGE_PROCESS":
@@ -388,8 +410,21 @@ public class ConversionTemplateService {
             case "6-RETURN_PROCESS":
             case "6-CLAIM_CANCEL":
             case "6-OTHER":
-                argoOrderTemplate = getMusinsaArgoOrderTemplate();
+                argoOrderTemplate = getWconceptArgoOrderTemplate();
+                vendorItemLifecycleTemplate = getWconceptOrderVendorItemLifecycleTemplate();
+                templateMap.put(vendorItemLifecycleTemplate.getTargetId(), vendorItemLifecycleTemplate);
                 templateMap.put(argoOrderTemplate.getTargetId(), argoOrderTemplate);
+                break;
+
+            case "6-RELEASE":
+            case "6-DELIVERY":
+                argoOrderTemplate = getWconceptArgoOrderTemplate();
+                vendorItemLifecycleTemplate = getWconceptOrderVendorItemLifecycleTemplate();
+                orderAddressTemplate = getWconceptOrderAddressTemplate();
+                templateMap.put(vendorItemLifecycleTemplate.getTargetId(), vendorItemLifecycleTemplate);
+                templateMap.put(argoOrderTemplate.getTargetId(), argoOrderTemplate);
+                templateMap.put(orderAddressTemplate.getTargetId(), orderAddressTemplate);
+
                 break;
 
 

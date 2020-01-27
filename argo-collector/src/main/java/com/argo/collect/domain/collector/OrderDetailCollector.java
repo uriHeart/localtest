@@ -10,4 +10,6 @@ public interface OrderDetailCollector {
 
     OrderMergeInfo makeMergeKeyInfo();
 
+    List<Map<String, String>> modifyOriginalData(List<Map<String, String>> dataRows);
+
 }

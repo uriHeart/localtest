@@ -13,7 +13,7 @@ public class WconceptOrdererConversionTemplate {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("8-Orderer")
+                .sourceId("6-Orderer")
                 .targetId("com.argo.common.domain.order.Orderer")
                 .rules(getConversionRuleForOrderer())
                 .build();

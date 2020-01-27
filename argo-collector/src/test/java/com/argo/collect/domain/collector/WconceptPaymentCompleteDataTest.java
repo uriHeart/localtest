@@ -4,25 +4,22 @@ import com.argo.common.configuration.ArgoBizException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.junit.Test;
-import org.openqa.selenium.ElementNotInteractableException;
 import reactor.core.publisher.Flux;
 import reactor.util.function.Tuple2;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Observable;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class WconceptPaymentCompleteDataTest {
 
     @Test
     public void run(){
-        File TargetHtml = new File("C:\\project\\argo_server_dev\\argo-collector\\src\\test\\java\\com\\argo\\collect\\domain\\data\\wconceptPaymentComplete.html");
+        File TargetHtml = new File("C:\\project\\arog-server-dev\\argo-collector\\src\\test\\java\\com\\argo\\collect\\domain\\data\\wconceptPaymentComplete.html");
         Document doc = null;
         try {
             doc = Jsoup.parse(TargetHtml,"euc-kr");
@@ -43,16 +40,51 @@ public class WconceptPaymentCompleteDataTest {
                         .collect(Collectors.toList()))
                         ;
 
+        List<List<String>> bodyRows = new ArrayList<>();
 
-        List<Map<String,String>> bodyString =
-                tbody.getElementsByTag("tr")
+        Stack<List<String>> spanData = new Stack<>();
+        tbody.getElementsByTag("tr")
+                .stream()
+                .skip(1L)
+                .forEach(tr ->{
+                    List<String> rowSpan = new ArrayList<>();
+                    AtomicInteger rowSpanSize = new AtomicInteger();
+
+                    Elements tdList = tr.getElementsByTag("td");
+
+                    tdList.stream()
+                        .forEach(td ->{
+                            if(td.getElementsByAttribute("rowSpan").size()>0) {
+                                rowSpanSize.set(Integer.parseInt(td.attr("rowspan")));
+                                rowSpan.add(td.text());
+                            }
+                        });
+
+                    for(int i=0; i <rowSpanSize.get(); i++){
+                        spanData.push(rowSpan);
+                    }
+
+                    List<String> tdDataList =
+                            tdList.stream()
+                            .map(td -> td.text())
+                            .collect(Collectors.toList())
+                            ;
+
+                    if(tr.getElementsByTag("td").size() < 19){
+                        tdDataList.addAll(0,spanData.pop());
+                    }
+
+                    bodyRows.add(tdDataList);
+        });
+
+        List<Map<String,String>> bodyData =
+                bodyRows
                     .stream()
-                    .skip(1)
-                    .map(element ->
+                    .map(tdList ->
                             Flux.fromStream(
-                                    element.getElementsByTag("td")
+                                    tdList
                             .stream()
-                            .map(td -> td.text()))
+                            )
                             .zipWith(headerString)
                             .collectMap(Tuple2::getT2,Tuple2::getT1)
                             .block()
@@ -61,6 +93,6 @@ public class WconceptPaymentCompleteDataTest {
                     ;
 
 
-        bodyString.get(0);
+        bodyData.get(0);
     }
 }

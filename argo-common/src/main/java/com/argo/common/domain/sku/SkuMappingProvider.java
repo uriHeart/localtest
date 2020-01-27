@@ -39,7 +39,7 @@ public class SkuMappingProvider {
     private Map<Long, List<SkuMapping>> skuMappings;
     private Map<Long, SkuData> skuData;
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
         skuMappings = Maps.newHashMap();
         skuData = Maps.newHashMap();

@@ -15,7 +15,7 @@ public class WconceptOrderVendorItemLifecycleConversionTemplate {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("8")
+                .sourceId("6")
                 .targetId("com.argo.common.domain.order.vendoritem.OrderVendorItemLifecycle")
                 .listReference("dataRows")
                 .rules(getConversionRuleForOrderVendorItemLifecycle())
@@ -59,7 +59,7 @@ public class WconceptOrderVendorItemLifecycleConversionTemplate {
         Map<String, String> skuMappingParams = Maps.newLinkedHashMap();
         skuMappingParams.put("channelId", "java.lang.Long");
         skuMappingParams.put("vendorId", "java.lang.Long");
-        skuMappingParams.put("goods_no", "java.lang.String");
+        skuMappingParams.put("아이템코드", "java.lang.String");
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.OPERATION)
                 .operatorClass("skuMappingProvider")
@@ -96,7 +96,7 @@ public class WconceptOrderVendorItemLifecycleConversionTemplate {
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.CONVERSION_TEMPLATE)
                 .targetField("metadata")
-                .conversionTemplateSourceId("8-OrderVendorItemMetadata")
+                .conversionTemplateSourceId("6-OrderVendorItemMetadata")
                 .conversionTemplateTargetId("com.argo.common.domain.order.vendoritem.OrderVendorItemMetadata")
                 .build());
 

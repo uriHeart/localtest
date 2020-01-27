@@ -1,6 +1,7 @@
 package com.argo.collect.domain.collector;
 
 import com.argo.collect.domain.auth.AuthorityManager;
+import com.argo.collect.domain.collector.wconcept.OrderCollectInfoMapper;
 import com.argo.collect.domain.event.EventConverter;
 import com.argo.common.domain.channel.SalesChannel;
 import com.argo.common.domain.common.jpa.EventType;
@@ -13,6 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -44,7 +46,7 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
     private ObjectMapper objectMapper;
 
     @Autowired
-    private List<WconceptOrderCollector> orderCollectors;
+    private List<OrderDetailCollector> orderCollectors;
 
     @Override
     public boolean isSupport(SalesChannel channel) {
@@ -53,13 +55,31 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
 
     @Override
     public void collect(VendorChannel channel) {
+        Map<String,String> cookieMap = this.getCookieMap(channel);
+
+        HashMap<String, RawEventParam> saveOrderList = new HashMap<>();
+
+        orderCollectors.stream()
+                .forEach( collector ->{
+                            List<Map<String,String>> orderList = collector.getCollectDetailData(super.getCollectInfoList(channel),cookieMap);
+                            OrderMergeInfo mergeInfo = collector.makeMergeKeyInfo();
+                            if(orderList!=null) {
+                                this.convertEventType(orderList, channel);
+                                saveOrderList.putAll(this.mergeRawEvent(orderList, mergeInfo));
+                            }
+                        }
+                );
+
+        this.saveRawData(saveOrderList,channel);
+
+    }
+
+    public Map<String,String> getCookieMap(VendorChannel channel){
         AuthorityManager authorityManager = super.getAuth(channel.getSalesChannel().getCode());
         String authorization = authorityManager.requestAuth(channel);
         String[] loginInfo = authorization.split(":");
         String wconceptId = loginInfo[0];
         String wconceptPw = loginInfo[1];
-
-        super.getCollectInfoList(channel);
 
         String baseUrl = channel.getSalesChannel().getBaseUrl();
 
@@ -83,154 +103,31 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
 
         //로그인 버튼 클릭
         driver.findElement(By.className("inputNo")).click();
-        try {
-            //비밀번호변경확인
-            Thread.sleep(2000);
-            driver.findElement(By.className("close_btn")).click();
-        }catch (Exception e){
-            System.out.println("팝업창 없음으로 패스함");
-        }
-        try {
-            //공지사항
-            driver.findElement(By.className("close_btn")).click();
-        }catch (Exception e){
-            System.out.println("팝업창 없음으로 패스함");
-        }
-        driver.findElement(By.id("title_2")).click();
-        //상품준비중
-        //배송관리 클릭
-        driver.findElement(By.xpath("//*[@id=\"Layermenu_2\"]/table/tbody/tr[1]/td[3]")).click();
-        //상품준비중 클릭
-        driver.findElement(By.xpath("//*[@id=\"middle_9\"]/tbody/tr[3]/td[3]")).click();
 
-        //데이터 조회 대기
         try {
-            Thread.sleep(3000);
+            Thread.sleep(2L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        driver.switchTo().frame("iframebottom");
-        int prodTrSize = driver.findElements(By.xpath("//*[@id=\"TreeInxDiv03\"]/table/tbody/tr")).size();
 
-        List<Map> prodList = new ArrayList<>();
-        List<String> prodHeaderData = new ArrayList<>();
+        Set<Cookie> cookies = driver.manage().getCookies();
 
-        List<WebElement> prodHeaderList = driver.findElements(By.xpath("//*[@id=\"TreeInxDiv03\"]/table/tbody/tr[2]/td"));
-
-        prodHeaderList.forEach(header -> {
-            prodHeaderData.add(header.getText());
-        });
-
-
-        for(int i=3; i <= prodTrSize; i++ ){
-            List<WebElement> tdList = driver.findElements(By.xpath("//*[@id=\"TreeInxDiv03\"]/table/tbody/tr["+i+"]/td"));
-            Map<String,String> rowData = new HashMap<>();
-            AtomicInteger headerCount = new AtomicInteger();
-            tdList.stream().skip(1).forEach( td ->{
-                rowData.put(prodHeaderData.get(headerCount.get()),td.getText());
-                headerCount.getAndIncrement();
-            });
-            prodList.add(rowData);
+        Map<String, String> cookieMap = cookies.stream().collect(Collectors.toMap(Cookie::getName, Cookie::getValue));
+        for (Map.Entry<String, String> entry : cookieMap.entrySet()) {
+            System.out.println("key: " + entry.getKey() + ", value : " + entry.getValue());
         }
 
 
-        int addrTrSize = driver.findElements(By.xpath("//*[@id=\"TreeInxDiv04\"]/table/tbody/tr")).size();
-
-        List<Map> addrList = new ArrayList<>();
-        List<String> addrHeaderData = new ArrayList<>();
-
-        List<WebElement> addrHeaderList = driver.findElements(By.xpath("//*[@id=\"TreeInxDiv04\"]/table/tbody/tr[2]/td"));
-
-        addrHeaderList.forEach(header -> {
-            addrHeaderData.add(header.getText());
-        });
-
-        if(!addrHeaderData.isEmpty()) addrHeaderData.add(21,"개인통관부호");
-
-        for(int i=3; i <= addrTrSize; i++ ){
-            List<WebElement> tdList = driver.findElements(By.xpath("//*[@id=\"TreeInxDiv04\"]/table/tbody/tr["+i+"]/td"));
-            Map<String,String> rowData = new HashMap<>();
-            AtomicInteger headerCount = new AtomicInteger();
-            tdList.forEach( td ->{
-                rowData.put(addrHeaderData.get(headerCount.get()),td.getText());
-                headerCount.getAndIncrement();
-            });
-            rowData.put("주문상태","상품준비중");
-            addrList.add(rowData);
-        }
-
-        for(int i=0; i < prodList.size(); i++){
-            prodList.get(i).putAll(addrList.get(i));
-        }
-
-
-        //prodList.get(0).get("결제일자\n(교환출고지시)");
-        //prodList.get(0).get("주문번호")
-//        this.convertEventType(prodList,channel);
-        HashMap<String, RawEventParam> mergedOrder = this.mergeRawEvent(prodList,"주문번호","결제일자\n(교환출고지시)");
-
-        this.saveRawData(mergedOrder,channel);
-
-
-        driver.switchTo().parentFrame();
-        //*[@id="Layermenu_2"]/table/tbody/tr[5]/td[3]
-        //전체주문 //*[@id="Layermenu_2"]/table/tbody/tr[5]/td[3]
-        driver.findElement(By.xpath("//*[@id=\"Layermenu_2\"]/table/tbody/tr[5]/td[3]/a")).click();
-
-        //데이터 조회 대기
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        driver.switchTo().frame("iframebottom");
-
-        //데이터 조회 테이블
-        List<WebElement> trList = driver.findElements(By.xpath("//*[@id=\"TreeInxDiv03\"]/table/tbody")).get(0).findElements(By.tagName("tr"));
-
-        List<String> headerData = new ArrayList<>();
-        List<Map> orderList = new ArrayList<>();
-
-        trList
-                .stream()
-                .findFirst()
-                .map(tr -> {
-                    List<WebElement> dtList = tr.findElements(By.tagName("td"));
-                    dtList.forEach(td->{
-                        headerData.add(td.getText());
-                        System.out.println(td.getText());
-                    });
-                    return tr;
-                })
-        ;
-
-        trList.stream().skip(1).forEach(tr -> {
-
-            List<WebElement> dtList = tr.findElements(By.tagName("td"));
-
-            Map<String,String> rowData = new HashMap<>();
-            AtomicInteger headerCount = new AtomicInteger();
-            dtList.forEach( td ->{
-                rowData.put(headerData.get(headerCount.get()),td.getText());
-                headerCount.getAndIncrement();
-            });
-            orderList.add(rowData);
-
-        });
-
-//        this.convertEventType(orderList,channel);
-        HashMap<String, RawEventParam> mergedAllOrder = this.mergeRawEvent(orderList,"주문번호","주문일자");
-        this.saveRawData(mergedAllOrder,channel);
-
+        return cookieMap;
     }
 
-    public HashMap<String, RawEventParam> mergeRawEvent(List<Map> orderList,String eventOrderId,String eventPublishedAt){
+    public HashMap<String, RawEventParam> mergeRawEvent(List<Map<String,String>> orderList, OrderMergeInfo mergeInfo){
 
         HashMap<String, RawEventParam> mergedOrder = new HashMap<>();
         orderList.forEach(event -> {
-            String orderId = String.valueOf(event.get(eventOrderId));
-            String publishedAt = String.valueOf(event.get(eventPublishedAt));
-            String eventType = String.valueOf(event.get("event_type"));
+            String orderId = event.get(mergeInfo.getOrderIdFieldKey());
+            String publishedAt = event.get(mergeInfo.getPublishedAtFieldKey());
+            String eventType = event.get("event_type");
 
             String mergeKey = HashUtil.sha256(orderId+publishedAt);
 
@@ -262,10 +159,6 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
 
             String publishedAt = event.getPublishedAt().replaceAll("\\.", "-");
 
-            if(publishedAt.split(" ").length==1){
-                publishedAt += " 00:00:00";
-            }
-
             RawEvent rawEvent = RawEvent.builder()
                     .vendorId(channel.getVendor().getVendorId())
                     .channelId(channel.getSalesChannel().getSalesChannelId())
@@ -282,7 +175,7 @@ public class WconceptOrderCollector extends AbstractOrderCollector{
     }
 
 
-    public List<Map<String,String>> convertEventType(List<Map<String,String>> orderList,VendorChannel channel){
+    public List<Map<String,String>> convertEventType(List<Map<String,String>> orderList, VendorChannel channel){
         return orderList.stream()
                 .map(order->{
                     order.put("event_type",

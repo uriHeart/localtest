@@ -1,5 +1,6 @@
 package com.argo.common.domain.common.data;
 
+import ch.qos.logback.core.boolex.EvaluationException;
 import com.argo.common.domain.common.data.conversion.template.ConversionRule;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplate;
 import com.argo.common.domain.common.data.conversion.template.ConversionTemplateService;
@@ -144,7 +145,13 @@ public class DataConversionService implements ApplicationContextAware {
                 break;
             case OPERATION:
                 List<String> values = Lists.newArrayList(conversionRule.getOperatorParams().keySet())
-                        .stream().map(value -> jsonNode.findValue(value).asText()).collect(Collectors.toList());
+                        .stream().map(value -> {
+                            if(jsonNode.findValue(value)==null){
+                                log.error("node data not found. value:"+ value);
+                            }
+                           return jsonNode.findValue(value).asText();
+                        })
+                        .collect(Collectors.toList());
                 Class[] paramClasses = conversionRule.getOperatorParamsAsClasses();
                 Object[] paramValues = ConversionUtil.getOperatorParamsValues(paramClasses, values.toArray(new String[0]));
                 targetValue = getTargetValueByInvocation(conversionRule.getOperatorClass(), conversionRule.getOperatorMethod(), paramClasses, paramValues);

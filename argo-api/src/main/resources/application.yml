@@ -42,7 +42,7 @@ spring:
       port: 9042
       schema-action: CREATE_IF_NOT_EXISTS
       consistency-level: one
-      contact-points: 15.164.111.122
+      contact-points: localhost
       keyspace-name: argo
       username: argo
       password: argo2020
@@ -67,7 +67,7 @@ file:
     index: excel_upload
 
 elasticsearch:
-  hosts: http://15.164.111.122:9200
+  hosts: http://localhost:9200
 
 registration:
   url:

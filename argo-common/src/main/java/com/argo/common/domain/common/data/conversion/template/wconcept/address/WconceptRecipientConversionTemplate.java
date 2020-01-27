@@ -13,7 +13,7 @@ public class WconceptRecipientConversionTemplate {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("8-Recipient")
+                .sourceId("6-Recipient")
                 .targetId("com.argo.common.domain.order.Recipient")
                 .rules(getConversionRuleForRecipient())
                 .build();

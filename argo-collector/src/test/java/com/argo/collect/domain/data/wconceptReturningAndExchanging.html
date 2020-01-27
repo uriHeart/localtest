@@ -11,11 +11,12 @@ sel1:
 searchword:
 -->
 
+
 <HTML>
 <HEAD>
     <meta http-equiv=Content-type content="text/html; charset=euc-kr">
     <meta http-equiv="X-UA-Compatible">
-    <TITLE>WCONCEPT SCM Ïóê Ïò§Ïã†Í±∏ ÌôòÏòÅÌï©ÎãàÎã§</TITLE>
+    <TITLE>WCONCEPT SCM ø° ø¿Ω≈∞… »Øøµ«’¥œ¥Ÿ</TITLE>
     <META HTTP-EQUIV="imagetoolbar" CONTENT="no">
     <meta http-equiv="X-UA-Compatible" content="IE=5">
     <link rel="stylesheet" href="/include/css/admin.css" type="text/css">
@@ -24,772 +25,831 @@ searchword:
 </HEAD>
 <body topmargin="0" leftmargin="0" text="#000000"  bgcolor="#ffffff" width=100%>
 
-<script language="javascript" src="/include/js/Common.js"></script>
+
+
+<style type="text/css">
+    .tableContainer {
+        scrollbar-face-color: #FFFFFF;
+        scrollbar-highlight-color:#FFFFFF;
+        scrollbar-3dlight-color:#666666;
+        scrollbar-shadow-color:#666666;
+        scrollbar-darkshadow-color: #FFFFFF;
+        scrollbar-track-color: #FFFFFF;
+        scrollbar-arrow-color:#333333;
+    }
+</style>
+
+<script language="javascript" src="/include/js/jquery-1.11.1.min.js"></script>
 <script language="javascript">
+    // ∆‰¿Ã¡ˆ ¿Ãµø
     function FuncGoPage(p_num) {
+        //waiting.style.visibility='visible';
         frmtype.page.value = p_num;
         frmtype.submit();
     }
-</script>
 
-<form name="frmtype" method="post" action="/OrderPrs/iFrameLstOrderExchangeCompleteBottom.asp">
-    <input type="hidden" name="flag" value="submit" />
-    <input type="hidden" name="branchcd" value="" />
-    <input type="hidden" name="strfrom" value="2020-01-01" />
-    <input type="hidden" name="strto" value="2020-01-20" />
-    <input type="hidden" name="ispayconfirm" value="" />
-    <input type="hidden" name="shippingcd" value="" />
-    <input type="hidden" name="ordercd" value="" />
-    <input type="hidden" name="mediumcd" value="" />
-    <input type="hidden" name="categorycd" value="" />
-    <input type="hidden" name="vendorcd" value="3004012" />
-    <input type="hidden" name="sel1" value="" />
-    <input type="hidden" name="searchword" value="" />
-    <input type="hidden" name="ordertype" value="02" />
-    <input type="hidden" name="page" value="1" />
-    <input type="hidden" name="paytypecd" value="" />
-    <input type="hidden" name="ispayreturn" value="" />
-    <input type="hidden" name="dealtypecd" value="01" />
-    <input type="hidden" name="orderroute" value="" />
-    <input type="hidden" name="orderpathidxnum" value="" />
-    <input type="hidden" name="claimtypecd" value="" />
-    <input type="hidden" name="orderstatuscd" value="28" />
-</form>
-<form name="frminput" method="post" action="iFrameBizLstOrderExchangeBottom.asp" target="iframeinput">
-    <input type="hidden" name="totnum" value="18">
-    <input type="hidden" name="chkAll" value="N" />
-    <input type="hidden" name="chknum" value="0" />
-    <table border="0" width="100%" cellpadding="0" cellspacing="1" bgcolor="#dddddd">
-        <tr>
-            <td>
-                <table border="0" cellpadding="3" cellspacing="1" width="100%" bgcolor="#ffffff">
-                    <tr height="30">
-                        <td style="padding-left:10"><b>Í≤ÄÏÉâÍ≤∞Í≥º:&nbsp;&nbsp;18Í±¥ / 18Í∞ú / 1,982,600Ïõê / (Ï£ºÎ¨∏ÏÉÅÌíàÍ±¥ÏàòÌï©Í≥Ñ / ÏàòÎüâÌï©Í≥Ñ / Ï£ºÎ¨∏Í∏àÏï°Ìï©Í≥Ñ)</b></td>
-                        <td><b>1</b> / 1 page&nbsp;&nbsp;&nbsp;&nbsp;<font color=gray>Ï≤òÏùå</font>&nbsp;&nbsp;<img src='http://image.wconcept.co.kr/images/common/btn_prew.gif' align='absmiddle' border='0' width='13' height='13'>&nbsp;&nbsp;&nbsp;<font color='red'><b>1</b></font>&nbsp;&nbsp;<img src='http://image.wconcept.co.kr/images/common/btn_next.gif' align='absmiddle' border='0' width='13' height='13'>&nbsp;<font color=gray>ÎÅù</font></td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-    <div id="TreeInxDiv03" style="color:#FFFFFF; width:100%; height:676; overflow-x: auto; overflow-y: auto; background-color: #ffffff; ">
-        <table cellspacing="0" cellpadding="0" width="2230" border="0">
-            <col width="30"  >
-            <col width="80"  >
-            <col width="80" >
-            <col width="80"  >
-            <col width="80"  >
-            <col width="80" >
-            <!--<col width="120"  >-->
-            <col width="100" >
-            <col width="100" >
-            <col width="100" >
-            <col width="80" >
-            <col width="60" >
-            <col width="80" >
-            <col >
-            <col width="100" >
-            <col width="100"> <!-- ÏòµÏÖò3 -->
-            <col width="100" >
-            <col width="50"  > <!-- ÏàòÎüâ -->
-            <col width="80"  > <!-- ÏÑ∏Ìä∏Í∞Ä -->
-            <col width="150"  > <!-- ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö -->
-            <col width="80"  >
-            <col width="70"  >
-            <col width="200">
-            <tr align="middle" valign="center">
-                <td class="t_01">Î≤àÌò∏</td>
-                <td class="t_01">Ï£ºÎ¨∏ÏùºÏûê</td>
-                <td class="t_01">ÏöîÏ≤≠ÏùºÏûê</td>
-                <td class="t_01">Ï£ºÎ¨∏Î≤àÌò∏</td>
-                <td class="t_01">Ï£ºÎ¨∏ÏÉÅÌÉú</td>
-                <td class="t_01">Ï£ºÎ¨∏Ïûê</td>
-                <!--<td class="t_01">ÏïÑÏù¥ÌÖúÏΩîÎìú</td>-->
-                <td class="t_01">ÌöåÏàòÎ∞©Î≤ï</td>
-                <td class="t_01">ÌÉùÎ∞∞ÏÇ¨</td>
-                <td class="t_01">Î∞òÏÜ°Ïû•Ï†ïÎ≥¥</td>
-                <td class="t_01">Î∞òÌíàÎπÑÏ†ïÎ≥¥</td>
-                <td class="t_01">Î∞òÏÜ°ÎπÑÏö©</td>
-                <td class="t_01">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº</td>
-                <td class="t_01">ÏÉÅÌíàÎ™Ö</td>
-                <td class="t_01">ÏòµÏÖò1</td>
-                <td class="t_01">ÏòµÏÖò2</td>
-                <td class="t_01">ÏòµÏÖò3</td>
-                <td class="t_01">ÏàòÎüâ</td>
-                <td class="t_01">ÏÑ∏Ìä∏Í∞Ä</td>
-                <td class="t_01">ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö</td>
-                <td class="t_01">ÌåêÎß§Í∞Ä</td>
-                <td class="t_01">Î∞∞ÏÜ°ÎπÑÌï©Í≥Ñ</td>
-                <td class="t_01">ÍµêÌôòÏÇ¨Ïú†</td>
-            </tr>
+    // ¿¸√ºº±≈√
+    function FuncCheckAll(){
+        if (frminput.chkAll.value == "N") {
+            for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
+                eval("frminput.chk_" + ii).checked = true;
 
-            <tr>
-                <input type="hidden" name="orderno_0" value="U00037521">
-                <input type="hidden" name="orderidxnum_0" value="9462239">
-                <td class="t_0k">1</td><!--Î≤àÌò∏-->
-                <td class="t_0k">2020-01-07&nbsp;</td><!--Ï£ºÎ¨∏ÏùºÏûê-->
-                <td class="t_0k">2020-01-08</td><!--ÏöîÏ≤≠ÏùºÏûê-->
-                <td class="t_0k">U00037521</td><!--Ï£ºÎ¨∏Î≤àÌò∏-->
-                <td class="t_0k">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£å</td><!--Ï£ºÎ¨∏ÏÉÅÌÉú-->
-                <td class="t_0k">Ïù¥Ïö∞ÏßÑ</td><!--Ï£ºÎ¨∏Ïûê-->
-                <!--<td class="t_0k">3007568672600100</td>--><!--ÏïÑÏù¥ÌÖúÏΩîÎìú-->
-                <td class="t_0k">ÏûêÎèôÌöåÏàò[WCK]&nbsp;</td><!--ÌöåÏàòÎ∞©Î≤ï-->
-                <td class="t_0k">Ïö∞Ï≤¥Íµ≠ÌÉùÎ∞∞&nbsp;</td><!--ÌÉùÎ∞∞ÏÇ¨-->
-                <td class="t_0k">7095701246662&nbsp;</td><!--Î∞òÏÜ°Ïû•Ï†ïÎ≥¥-->
-                <td class="t_0k">Í≥†Í∞ùÎ∂ÄÎã¥&nbsp;</td><!--Î∞òÌíàÎπÑÏ†ïÎ≥¥-->
-                <td class="t_0k">5,000&nbsp;</td><!--Î∞òÏÜ°ÎπÑÏö©-->
-                <td class="t_0k">2020-01-15&nbsp;</td><!--ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº-->
-                <td class="t_0k_left">REVERSIBLE DOWN PARKA - ORANGE/GRAY</td><!--ÏÉÅÌíàÎ™Ö-->
-                <td class="t_0k_left">
-                    <strike>L</strike><br>M&nbsp;
-                </td><!--ÏòµÏÖò1-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò2-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò3-->
-                <td class="t_0k">1</td><!--ÏàòÎüâ-->
+                $("#orderitem" + ii).css("background-color","#FFFFD2");
+                $("#orderitemdetail" + ii).css("background-color","#FFFFD2");
+            }
 
-                <td class="t_0k">&nbsp;</td><!--ÏÑ∏Ìä∏Í∞Ä-->
-                <td class="t_0k_left">&nbsp;</td><!--ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö-->
+            frminput.chknum.value = frminput.totnum.value;
+            frminput.chkAll.value = "Y";
+        } else {
+            for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
+                eval("frminput.chk_" + ii).checked = false;
 
-                <td class="t_0k">239,250</td><!--ÌåêÎß§Í∞Ä-->
-                <td class="t_0k">2,500</td><!--Î∞∞ÏÜ°ÎπÑ-->
-                <td class="t_0k_left">ÏÇ¨Ïù¥Ï¶àÎ∂àÎßåÏ°± : </td><!--ÍµêÌôòÏÇ¨Ïú†-->
-            </tr>
+                $("#orderitem" + ii).css("background-color","#FFFFFF");
+                $("#orderitemdetail" + ii).css("background-color","#FFFFFF");
+            }
 
-            <tr>
-                <input type="hidden" name="orderno_1" value="U00032542">
-                <input type="hidden" name="orderidxnum_1" value="9454572">
-                <td class="t_0k">2</td><!--Î≤àÌò∏-->
-                <td class="t_0k">2020-01-06&nbsp;</td><!--Ï£ºÎ¨∏ÏùºÏûê-->
-                <td class="t_0k">2020-01-08</td><!--ÏöîÏ≤≠ÏùºÏûê-->
-                <td class="t_0k">U00032542</td><!--Ï£ºÎ¨∏Î≤àÌò∏-->
-                <td class="t_0k">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£å</td><!--Ï£ºÎ¨∏ÏÉÅÌÉú-->
-                <td class="t_0k">Î∞ïÏùµÏ∞¨</td><!--Ï£ºÎ¨∏Ïûê-->
-                <!--<td class="t_0k">3007930522780119</td>--><!--ÏïÑÏù¥ÌÖúÏΩîÎìú-->
-                <td class="t_0k">ÏûêÎèôÌöåÏàò[WCK]&nbsp;</td><!--ÌöåÏàòÎ∞©Î≤ï-->
-                <td class="t_0k">Ïö∞Ï≤¥Íµ≠ÌÉùÎ∞∞&nbsp;</td><!--ÌÉùÎ∞∞ÏÇ¨-->
-                <td class="t_0k">7095701246682&nbsp;</td><!--Î∞òÏÜ°Ïû•Ï†ïÎ≥¥-->
-                <td class="t_0k">ÏóÖÏ≤¥Î∂ÄÎã¥&nbsp;</td><!--Î∞òÌíàÎπÑÏ†ïÎ≥¥-->
-                <td class="t_0k">0&nbsp;</td><!--Î∞òÏÜ°ÎπÑÏö©-->
-                <td class="t_0k">2020-01-15&nbsp;</td><!--ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº-->
-                <td class="t_0k_left">GOAL HEAVYWEIGHT HOODIE-BLACK</td><!--ÏÉÅÌíàÎ™Ö-->
-                <td class="t_0k_left">
-                    L&nbsp;
-                </td><!--ÏòµÏÖò1-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò2-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò3-->
-                <td class="t_0k">1</td><!--ÏàòÎüâ-->
-
-                <td class="t_0k">&nbsp;</td><!--ÏÑ∏Ìä∏Í∞Ä-->
-                <td class="t_0k_left">&nbsp;</td><!--ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö-->
-
-                <td class="t_0k">55,000</td><!--ÌåêÎß§Í∞Ä-->
-                <td class="t_0k">2,500</td><!--Î∞∞ÏÜ°ÎπÑ-->
-                <td class="t_0k_left">ÏÉÅÌíàÎ∂àÎüâ : </td><!--ÍµêÌôòÏÇ¨Ïú†-->
-            </tr>
-
-            <tr>
-                <input type="hidden" name="orderno_2" value="U00025139">
-                <input type="hidden" name="orderidxnum_2" value="9443118">
-                <td class="t_0k">3</td><!--Î≤àÌò∏-->
-                <td class="t_0k">2020-01-05&nbsp;</td><!--Ï£ºÎ¨∏ÏùºÏûê-->
-                <td class="t_0k">2020-01-07</td><!--ÏöîÏ≤≠ÏùºÏûê-->
-                <td class="t_0k">U00025139</td><!--Ï£ºÎ¨∏Î≤àÌò∏-->
-                <td class="t_0k">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£å</td><!--Ï£ºÎ¨∏ÏÉÅÌÉú-->
-                <td class="t_0k">ÏÜåÏÖúÏú†Ï†Ä</td><!--Ï£ºÎ¨∏Ïûê-->
-                <!--<td class="t_0k">3007284812496275</td>--><!--ÏïÑÏù¥ÌÖúÏΩîÎìú-->
-                <td class="t_0k">ÏûêÎèôÌöåÏàò[WCK]&nbsp;</td><!--ÌöåÏàòÎ∞©Î≤ï-->
-                <td class="t_0k">Ïö∞Ï≤¥Íµ≠ÌÉùÎ∞∞&nbsp;</td><!--ÌÉùÎ∞∞ÏÇ¨-->
-                <td class="t_0k">7095701246675&nbsp;</td><!--Î∞òÏÜ°Ïû•Ï†ïÎ≥¥-->
-                <td class="t_0k">Í≥†Í∞ùÎ∂ÄÎã¥&nbsp;</td><!--Î∞òÌíàÎπÑÏ†ïÎ≥¥-->
-                <td class="t_0k">5,000&nbsp;</td><!--Î∞òÏÜ°ÎπÑÏö©-->
-                <td class="t_0k">2020-01-15&nbsp;</td><!--ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº-->
-                <td class="t_0k_left">BACK LOGO SWEATSHIRT - BLACK</td><!--ÏÉÅÌíàÎ™Ö-->
-                <td class="t_0k_left">
-                    <strike>M</strike><br>XS&nbsp;
-                </td><!--ÏòµÏÖò1-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò2-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò3-->
-                <td class="t_0k">1</td><!--ÏàòÎüâ-->
-
-                <td class="t_0k">&nbsp;</td><!--ÏÑ∏Ìä∏Í∞Ä-->
-                <td class="t_0k_left">&nbsp;</td><!--ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö-->
-
-                <td class="t_0k">55,200</td><!--ÌåêÎß§Í∞Ä-->
-                <td class="t_0k">2,500</td><!--Î∞∞ÏÜ°ÎπÑ-->
-                <td class="t_0k_left">ÏÇ¨Ïù¥Ï¶àÎ∂àÎßåÏ°± : </td><!--ÍµêÌôòÏÇ¨Ïú†-->
-            </tr>
-
-            <tr>
-                <input type="hidden" name="orderno_3" value="U00028907">
-                <input type="hidden" name="orderidxnum_3" value="9448653">
-                <td class="t_0k">4</td><!--Î≤àÌò∏-->
-                <td class="t_0k">2020-01-05&nbsp;</td><!--Ï£ºÎ¨∏ÏùºÏûê-->
-                <td class="t_0k">2020-01-07</td><!--ÏöîÏ≤≠ÏùºÏûê-->
-                <td class="t_0k">U00028907</td><!--Ï£ºÎ¨∏Î≤àÌò∏-->
-                <td class="t_0k">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£å</td><!--Ï£ºÎ¨∏ÏÉÅÌÉú-->
-                <td class="t_0k">Ïù¥Ïö©Ìõà</td><!--Ï£ºÎ¨∏Ïûê-->
-                <!--<td class="t_0k">3007568532600077</td>--><!--ÏïÑÏù¥ÌÖúÏΩîÎìú-->
-                <td class="t_0k">ÏûêÎèôÌöåÏàò[WCK]&nbsp;</td><!--ÌöåÏàòÎ∞©Î≤ï-->
-                <td class="t_0k">Ïö∞Ï≤¥Íµ≠ÌÉùÎ∞∞&nbsp;</td><!--ÌÉùÎ∞∞ÏÇ¨-->
-                <td class="t_0k">7095701240605&nbsp;</td><!--Î∞òÏÜ°Ïû•Ï†ïÎ≥¥-->
-                <td class="t_0k">Í≥†Í∞ùÎ∂ÄÎã¥&nbsp;</td><!--Î∞òÌíàÎπÑÏ†ïÎ≥¥-->
-                <td class="t_0k">5,000&nbsp;</td><!--Î∞òÏÜ°ÎπÑÏö©-->
-                <td class="t_0k">2020-01-15&nbsp;</td><!--ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº-->
-                <td class="t_0k_left">REVERSIBLE DOWN PARKA - GRAY/BLACK</td><!--ÏÉÅÌíàÎ™Ö-->
-                <td class="t_0k_left">
-                    <strike>XL</strike><br>L&nbsp;
-                </td><!--ÏòµÏÖò1-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò2-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò3-->
-                <td class="t_0k">1</td><!--ÏàòÎüâ-->
-
-                <td class="t_0k">&nbsp;</td><!--ÏÑ∏Ìä∏Í∞Ä-->
-                <td class="t_0k_left">&nbsp;</td><!--ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö-->
-
-                <td class="t_0k">239,250</td><!--ÌåêÎß§Í∞Ä-->
-                <td class="t_0k">2,500</td><!--Î∞∞ÏÜ°ÎπÑ-->
-                <td class="t_0k_left">ÏÇ¨Ïù¥Ï¶àÎ∂àÎßåÏ°± : </td><!--ÍµêÌôòÏÇ¨Ïú†-->
-            </tr>
-
-            <tr>
-                <input type="hidden" name="orderno_4" value="U00012230">
-                <input type="hidden" name="orderidxnum_4" value="9424823">
-                <td class="t_0k">5</td><!--Î≤àÌò∏-->
-                <td class="t_0k">2020-01-02&nbsp;</td><!--Ï£ºÎ¨∏ÏùºÏûê-->
-                <td class="t_0k">2020-01-06</td><!--ÏöîÏ≤≠ÏùºÏûê-->
-                <td class="t_0k">U00012230</td><!--Ï£ºÎ¨∏Î≤àÌò∏-->
-                <td class="t_0k">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£å</td><!--Ï£ºÎ¨∏ÏÉÅÌÉú-->
-                <td class="t_0k">ÌïúÎèôÏ£º</td><!--Ï£ºÎ¨∏Ïûê-->
-                <!--<td class="t_0k">3007568532600077</td>--><!--ÏïÑÏù¥ÌÖúÏΩîÎìú-->
-                <td class="t_0k">ÏûêÎèôÌöåÏàò[WCK]&nbsp;</td><!--ÌöåÏàòÎ∞©Î≤ï-->
-                <td class="t_0k">Ïö∞Ï≤¥Íµ≠ÌÉùÎ∞∞&nbsp;</td><!--ÌÉùÎ∞∞ÏÇ¨-->
-                <td class="t_0k">7095701240604&nbsp;</td><!--Î∞òÏÜ°Ïû•Ï†ïÎ≥¥-->
-                <td class="t_0k">Í≥†Í∞ùÎ∂ÄÎã¥&nbsp;</td><!--Î∞òÌíàÎπÑÏ†ïÎ≥¥-->
-                <td class="t_0k">5,000&nbsp;</td><!--Î∞òÏÜ°ÎπÑÏö©-->
-                <td class="t_0k">2020-01-15&nbsp;</td><!--ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº-->
-                <td class="t_0k_left">REVERSIBLE DOWN PARKA - GRAY/BLACK</td><!--ÏÉÅÌíàÎ™Ö-->
-                <td class="t_0k_left">
-                    <strike>XL</strike><br>L&nbsp;
-                </td><!--ÏòµÏÖò1-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò2-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò3-->
-                <td class="t_0k">1</td><!--ÏàòÎüâ-->
-
-                <td class="t_0k">&nbsp;</td><!--ÏÑ∏Ìä∏Í∞Ä-->
-                <td class="t_0k_left">&nbsp;</td><!--ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö-->
-
-                <td class="t_0k">239,250</td><!--ÌåêÎß§Í∞Ä-->
-                <td class="t_0k">2,500</td><!--Î∞∞ÏÜ°ÎπÑ-->
-                <td class="t_0k_left">ÏÇ¨Ïù¥Ï¶àÎ∂àÎßåÏ°± : </td><!--ÍµêÌôòÏÇ¨Ïú†-->
-            </tr>
-
-            <tr>
-                <input type="hidden" name="orderno_5" value="T02596202">
-                <input type="hidden" name="orderidxnum_5" value="9394113">
-                <td class="t_0k">6</td><!--Î≤àÌò∏-->
-                <td class="t_0k">2019-12-29&nbsp;</td><!--Ï£ºÎ¨∏ÏùºÏûê-->
-                <td class="t_0k">2020-01-04</td><!--ÏöîÏ≤≠ÏùºÏûê-->
-                <td class="t_0k">T02596202</td><!--Ï£ºÎ¨∏Î≤àÌò∏-->
-                <td class="t_0k">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£å</td><!--Ï£ºÎ¨∏ÏÉÅÌÉú-->
-                <td class="t_0k">ÏÜåÏÖúÏú†Ï†Ä</td><!--Ï£ºÎ¨∏Ïûê-->
-                <!--<td class="t_0k">3008319012940486</td>--><!--ÏïÑÏù¥ÌÖúÏΩîÎìú-->
-                <td class="t_0k">ÏûêÎèôÌöåÏàò[WCK]&nbsp;</td><!--ÌöåÏàòÎ∞©Î≤ï-->
-                <td class="t_0k">Ïö∞Ï≤¥Íµ≠ÌÉùÎ∞∞&nbsp;</td><!--ÌÉùÎ∞∞ÏÇ¨-->
-                <td class="t_0k">7095701229901&nbsp;</td><!--Î∞òÏÜ°Ïû•Ï†ïÎ≥¥-->
-                <td class="t_0k">Í≥†Í∞ùÎ∂ÄÎã¥&nbsp;</td><!--Î∞òÌíàÎπÑÏ†ïÎ≥¥-->
-                <td class="t_0k">5,000&nbsp;</td><!--Î∞òÏÜ°ÎπÑÏö©-->
-                <td class="t_0k">2020-01-13&nbsp;</td><!--ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº-->
-                <td class="t_0k_left">LOGO WIND PULLOVER - NAVY/WHITE</td><!--ÏÉÅÌíàÎ™Ö-->
-                <td class="t_0k_left">
-                    <strike>L</strike><br>M&nbsp;
-                </td><!--ÏòµÏÖò1-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò2-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò3-->
-                <td class="t_0k">1</td><!--ÏàòÎüâ-->
-
-                <td class="t_0k">&nbsp;</td><!--ÏÑ∏Ìä∏Í∞Ä-->
-                <td class="t_0k_left">&nbsp;</td><!--ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö-->
-
-                <td class="t_0k">70,850</td><!--ÌåêÎß§Í∞Ä-->
-                <td class="t_0k">2,500</td><!--Î∞∞ÏÜ°ÎπÑ-->
-                <td class="t_0k_left">ÏÇ¨Ïù¥Ï¶àÎ∂àÎßåÏ°± : </td><!--ÍµêÌôòÏÇ¨Ïú†-->
-            </tr>
-
-            <tr>
-                <input type="hidden" name="orderno_6" value="U00010003">
-                <input type="hidden" name="orderidxnum_6" value="9422272">
-                <td class="t_0k">7</td><!--Î≤àÌò∏-->
-                <td class="t_0k">2020-01-02&nbsp;</td><!--Ï£ºÎ¨∏ÏùºÏûê-->
-                <td class="t_0k">2020-01-04</td><!--ÏöîÏ≤≠ÏùºÏûê-->
-                <td class="t_0k">U00010003</td><!--Ï£ºÎ¨∏Î≤àÌò∏-->
-                <td class="t_0k">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£å</td><!--Ï£ºÎ¨∏ÏÉÅÌÉú-->
-                <td class="t_0k">ÍπÄÎÇòÎ¶¨</td><!--Ï£ºÎ¨∏Ïûê-->
-                <!--<td class="t_0k">3007406892540193</td>--><!--ÏïÑÏù¥ÌÖúÏΩîÎìú-->
-                <td class="t_0k">ÏûêÎèôÌöåÏàò[WCK]&nbsp;</td><!--ÌöåÏàòÎ∞©Î≤ï-->
-                <td class="t_0k">&nbsp;</td><!--ÌÉùÎ∞∞ÏÇ¨-->
-                <td class="t_0k">&nbsp;</td><!--Î∞òÏÜ°Ïû•Ï†ïÎ≥¥-->
-                <td class="t_0k">Í≥†Í∞ùÎ∂ÄÎã¥&nbsp;</td><!--Î∞òÌíàÎπÑÏ†ïÎ≥¥-->
-                <td class="t_0k">5,000&nbsp;</td><!--Î∞òÏÜ°ÎπÑÏö©-->
-                <td class="t_0k">2020-01-17&nbsp;</td><!--ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº-->
-                <td class="t_0k_left">CARGO JOGGER PANTS - BLACK</td><!--ÏÉÅÌíàÎ™Ö-->
-                <td class="t_0k_left">
-                    <strike>XL</strike><br>L&nbsp;
-                </td><!--ÏòµÏÖò1-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò2-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò3-->
-                <td class="t_0k">1</td><!--ÏàòÎüâ-->
-
-                <td class="t_0k">&nbsp;</td><!--ÏÑ∏Ìä∏Í∞Ä-->
-                <td class="t_0k_left">&nbsp;</td><!--ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö-->
-
-                <td class="t_0k">71,200</td><!--ÌåêÎß§Í∞Ä-->
-                <td class="t_0k">2,500</td><!--Î∞∞ÏÜ°ÎπÑ-->
-                <td class="t_0k_left">ÏÇ¨Ïù¥Ï¶àÎ∂àÎßåÏ°± : </td><!--ÍµêÌôòÏÇ¨Ïú†-->
-            </tr>
-
-            <tr>
-                <input type="hidden" name="orderno_7" value="T02566228">
-                <input type="hidden" name="orderidxnum_7" value="9358534">
-                <td class="t_0k">8</td><!--Î≤àÌò∏-->
-                <td class="t_0k">2019-12-25&nbsp;</td><!--Ï£ºÎ¨∏ÏùºÏûê-->
-                <td class="t_0k">2020-01-03</td><!--ÏöîÏ≤≠ÏùºÏûê-->
-                <td class="t_0k">T02566228</td><!--Ï£ºÎ¨∏Î≤àÌò∏-->
-                <td class="t_0k">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£å</td><!--Ï£ºÎ¨∏ÏÉÅÌÉú-->
-                <td class="t_0k">ÍπÄÏ†ïÏï†</td><!--Ï£ºÎ¨∏Ïûê-->
-                <!--<td class="t_0k">3007568532600077</td>--><!--ÏïÑÏù¥ÌÖúÏΩîÎìú-->
-                <td class="t_0k">ÏûêÎèôÌöåÏàò[WCK]&nbsp;</td><!--ÌöåÏàòÎ∞©Î≤ï-->
-                <td class="t_0k">Ïö∞Ï≤¥Íµ≠ÌÉùÎ∞∞&nbsp;</td><!--ÌÉùÎ∞∞ÏÇ¨-->
-                <td class="t_0k">7095701225768&nbsp;</td><!--Î∞òÏÜ°Ïû•Ï†ïÎ≥¥-->
-                <td class="t_0k">Í≥†Í∞ùÎ∂ÄÎã¥&nbsp;</td><!--Î∞òÌíàÎπÑÏ†ïÎ≥¥-->
-                <td class="t_0k">5,000&nbsp;</td><!--Î∞òÏÜ°ÎπÑÏö©-->
-                <td class="t_0k">2020-01-10&nbsp;</td><!--ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº-->
-                <td class="t_0k_left">REVERSIBLE DOWN PARKA - GRAY/BLACK</td><!--ÏÉÅÌíàÎ™Ö-->
-                <td class="t_0k_left">
-                    <strike>XL</strike><br>L&nbsp;
-                </td><!--ÏòµÏÖò1-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò2-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò3-->
-                <td class="t_0k">1</td><!--ÏàòÎüâ-->
-
-                <td class="t_0k">&nbsp;</td><!--ÏÑ∏Ìä∏Í∞Ä-->
-                <td class="t_0k_left">&nbsp;</td><!--ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö-->
-
-                <td class="t_0k">255,200</td><!--ÌåêÎß§Í∞Ä-->
-                <td class="t_0k">2,500</td><!--Î∞∞ÏÜ°ÎπÑ-->
-                <td class="t_0k_left">ÏÇ¨Ïù¥Ï¶àÎ∂àÎßåÏ°± : </td><!--ÍµêÌôòÏÇ¨Ïú†-->
-            </tr>
-
-            <tr>
-                <input type="hidden" name="orderno_8" value="T02554799">
-                <input type="hidden" name="orderidxnum_8" value="9344758">
-                <td class="t_0k">9</td><!--Î≤àÌò∏-->
-                <td class="t_0k">2019-12-23&nbsp;</td><!--Ï£ºÎ¨∏ÏùºÏûê-->
-                <td class="t_0k">2020-01-02</td><!--ÏöîÏ≤≠ÏùºÏûê-->
-                <td class="t_0k">T02554799</td><!--Ï£ºÎ¨∏Î≤àÌò∏-->
-                <td class="t_0k">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£å</td><!--Ï£ºÎ¨∏ÏÉÅÌÉú-->
-                <td class="t_0k">Ïù¥Ìò∏ÏÑ±</td><!--Ï£ºÎ¨∏Ïûê-->
-                <!--<td class="t_0k">3007406892924019</td>--><!--ÏïÑÏù¥ÌÖúÏΩîÎìú-->
-                <td class="t_0k">ÏûêÎèôÌöåÏàò[WCK]&nbsp;</td><!--ÌöåÏàòÎ∞©Î≤ï-->
-                <td class="t_0k">Ïö∞Ï≤¥Íµ≠ÌÉùÎ∞∞&nbsp;</td><!--ÌÉùÎ∞∞ÏÇ¨-->
-                <td class="t_0k">7095701225761&nbsp;</td><!--Î∞òÏÜ°Ïû•Ï†ïÎ≥¥-->
-                <td class="t_0k">Í≥†Í∞ùÎ∂ÄÎã¥&nbsp;</td><!--Î∞òÌíàÎπÑÏ†ïÎ≥¥-->
-                <td class="t_0k">5,000&nbsp;</td><!--Î∞òÏÜ°ÎπÑÏö©-->
-                <td class="t_0k">2020-01-10&nbsp;</td><!--ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº-->
-                <td class="t_0k_left">CARGO JOGGER PANTS - BLACK</td><!--ÏÉÅÌíàÎ™Ö-->
-                <td class="t_0k_left">
-                    <strike>M</strike><br>S&nbsp;
-                </td><!--ÏòµÏÖò1-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò2-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò3-->
-                <td class="t_0k">1</td><!--ÏàòÎüâ-->
-
-                <td class="t_0k">&nbsp;</td><!--ÏÑ∏Ìä∏Í∞Ä-->
-                <td class="t_0k_left">&nbsp;</td><!--ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö-->
-
-                <td class="t_0k">71,200</td><!--ÌåêÎß§Í∞Ä-->
-                <td class="t_0k">2,500</td><!--Î∞∞ÏÜ°ÎπÑ-->
-                <td class="t_0k_left">ÏÇ¨Ïù¥Ï¶àÎ∂àÎßåÏ°± : </td><!--ÍµêÌôòÏÇ¨Ïú†-->
-            </tr>
-
-            <tr>
-                <input type="hidden" name="orderno_9" value="T02542589">
-                <input type="hidden" name="orderidxnum_9" value="9329972">
-                <td class="t_0k">10</td><!--Î≤àÌò∏-->
-                <td class="t_0k">2019-12-21&nbsp;</td><!--Ï£ºÎ¨∏ÏùºÏûê-->
-                <td class="t_0k">2019-12-27</td><!--ÏöîÏ≤≠ÏùºÏûê-->
-                <td class="t_0k">T02542589</td><!--Ï£ºÎ¨∏Î≤àÌò∏-->
-                <td class="t_0k">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£å</td><!--Ï£ºÎ¨∏ÏÉÅÌÉú-->
-                <td class="t_0k">Ïù¥ÏàòÎ≤î</td><!--Ï£ºÎ¨∏Ïûê-->
-                <!--<td class="t_0k">3007609152611342</td>--><!--ÏïÑÏù¥ÌÖúÏΩîÎìú-->
-                <td class="t_0k">ÏûêÎèôÌöåÏàò[WCK]&nbsp;</td><!--ÌöåÏàòÎ∞©Î≤ï-->
-                <td class="t_0k">Ïö∞Ï≤¥Íµ≠ÌÉùÎ∞∞&nbsp;</td><!--ÌÉùÎ∞∞ÏÇ¨-->
-                <td class="t_0k">7095701204845&nbsp;</td><!--Î∞òÏÜ°Ïû•Ï†ïÎ≥¥-->
-                <td class="t_0k">ÏóÖÏ≤¥Î∂ÄÎã¥&nbsp;</td><!--Î∞òÌíàÎπÑÏ†ïÎ≥¥-->
-                <td class="t_0k">0&nbsp;</td><!--Î∞òÏÜ°ÎπÑÏö©-->
-                <td class="t_0k">2020-01-10&nbsp;</td><!--ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº-->
-                <td class="t_0k_left">RESPECT LABEL BEANIE - BLACK</td><!--ÏÉÅÌíàÎ™Ö-->
-                <td class="t_0k_left">
-                    F&nbsp;
-                </td><!--ÏòµÏÖò1-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò2-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò3-->
-                <td class="t_0k">1</td><!--ÏàòÎüâ-->
-
-                <td class="t_0k">&nbsp;</td><!--ÏÑ∏Ìä∏Í∞Ä-->
-                <td class="t_0k_left">&nbsp;</td><!--ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö-->
-
-                <td class="t_0k">20,000</td><!--ÌåêÎß§Í∞Ä-->
-                <td class="t_0k">2,500</td><!--Î∞∞ÏÜ°ÎπÑ-->
-                <td class="t_0k_left">ÏÉÅÌíàÎ∂àÎüâ : </td><!--ÍµêÌôòÏÇ¨Ïú†-->
-            </tr>
-
-            <tr>
-                <input type="hidden" name="orderno_10" value="T02542589">
-                <input type="hidden" name="orderidxnum_10" value="9329973">
-                <td class="t_0k">11</td><!--Î≤àÌò∏-->
-                <td class="t_0k">2019-12-21&nbsp;</td><!--Ï£ºÎ¨∏ÏùºÏûê-->
-                <td class="t_0k">2019-12-27</td><!--ÏöîÏ≤≠ÏùºÏûê-->
-                <td class="t_0k">T02542589</td><!--Ï£ºÎ¨∏Î≤àÌò∏-->
-                <td class="t_0k">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£å</td><!--Ï£ºÎ¨∏ÏÉÅÌÉú-->
-                <td class="t_0k">Ïù¥ÏàòÎ≤î</td><!--Ï£ºÎ¨∏Ïûê-->
-                <!--<td class="t_0k">3007406892540192</td>--><!--ÏïÑÏù¥ÌÖúÏΩîÎìú-->
-                <td class="t_0k">ÏûêÎèôÌöåÏàò[WCK]&nbsp;</td><!--ÌöåÏàòÎ∞©Î≤ï-->
-                <td class="t_0k">Ïö∞Ï≤¥Íµ≠ÌÉùÎ∞∞&nbsp;</td><!--ÌÉùÎ∞∞ÏÇ¨-->
-                <td class="t_0k">7095701204845&nbsp;</td><!--Î∞òÏÜ°Ïû•Ï†ïÎ≥¥-->
-                <td class="t_0k">ÏóÖÏ≤¥Î∂ÄÎã¥&nbsp;</td><!--Î∞òÌíàÎπÑÏ†ïÎ≥¥-->
-                <td class="t_0k">0&nbsp;</td><!--Î∞òÏÜ°ÎπÑÏö©-->
-                <td class="t_0k">2020-01-10&nbsp;</td><!--ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº-->
-                <td class="t_0k_left">CARGO JOGGER PANTS - BLACK</td><!--ÏÉÅÌíàÎ™Ö-->
-                <td class="t_0k_left">
-                    <strike>L</strike><br>M&nbsp;
-                </td><!--ÏòµÏÖò1-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò2-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò3-->
-                <td class="t_0k">1</td><!--ÏàòÎüâ-->
-
-                <td class="t_0k">&nbsp;</td><!--ÏÑ∏Ìä∏Í∞Ä-->
-                <td class="t_0k_left">&nbsp;</td><!--ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö-->
-
-                <td class="t_0k">71,200</td><!--ÌåêÎß§Í∞Ä-->
-                <td class="t_0k">2,500</td><!--Î∞∞ÏÜ°ÎπÑ-->
-                <td class="t_0k_left">ÏÇ¨Ïù¥Ï¶àÎ∂àÎßåÏ°± : </td><!--ÍµêÌôòÏÇ¨Ïú†-->
-            </tr>
-
-            <tr>
-                <input type="hidden" name="orderno_11" value="T02563022">
-                <input type="hidden" name="orderidxnum_11" value="9354811">
-                <td class="t_0k">12</td><!--Î≤àÌò∏-->
-                <td class="t_0k">2019-12-24&nbsp;</td><!--Ï£ºÎ¨∏ÏùºÏûê-->
-                <td class="t_0k">2019-12-27</td><!--ÏöîÏ≤≠ÏùºÏûê-->
-                <td class="t_0k">T02563022</td><!--Ï£ºÎ¨∏Î≤àÌò∏-->
-                <td class="t_0k">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£å</td><!--Ï£ºÎ¨∏ÏÉÅÌÉú-->
-                <td class="t_0k">ÏÜåÏÖúÏú†Ï†Ä</td><!--Ï£ºÎ¨∏Ïûê-->
-                <!--<td class="t_0k">3007930372780082</td>--><!--ÏïÑÏù¥ÌÖúÏΩîÎìú-->
-                <td class="t_0k">ÏûêÎèôÌöåÏàò[WCK]&nbsp;</td><!--ÌöåÏàòÎ∞©Î≤ï-->
-                <td class="t_0k">Ïö∞Ï≤¥Íµ≠ÌÉùÎ∞∞&nbsp;</td><!--ÌÉùÎ∞∞ÏÇ¨-->
-                <td class="t_0k">7095701200431&nbsp;</td><!--Î∞òÏÜ°Ïû•Ï†ïÎ≥¥-->
-                <td class="t_0k">Í≥†Í∞ùÎ∂ÄÎã¥&nbsp;</td><!--Î∞òÌíàÎπÑÏ†ïÎ≥¥-->
-                <td class="t_0k">5,000&nbsp;</td><!--Î∞òÏÜ°ÎπÑÏö©-->
-                <td class="t_0k">2020-01-10&nbsp;</td><!--ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº-->
-                <td class="t_0k_left">MINI FIELD HOODIE - NAVY</td><!--ÏÉÅÌíàÎ™Ö-->
-                <td class="t_0k_left">
-                    <strike>L</strike><br>XL&nbsp;
-                </td><!--ÏòµÏÖò1-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò2-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò3-->
-                <td class="t_0k">1</td><!--ÏàòÎüâ-->
-
-                <td class="t_0k">&nbsp;</td><!--ÏÑ∏Ìä∏Í∞Ä-->
-                <td class="t_0k_left">&nbsp;</td><!--ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö-->
-
-                <td class="t_0k">64,350</td><!--ÌåêÎß§Í∞Ä-->
-                <td class="t_0k">2,500</td><!--Î∞∞ÏÜ°ÎπÑ-->
-                <td class="t_0k_left">ÏÇ¨Ïù¥Ï¶àÎ∂àÎßåÏ°± : </td><!--ÍµêÌôòÏÇ¨Ïú†-->
-            </tr>
-
-            <tr>
-                <input type="hidden" name="orderno_12" value="T02543723">
-                <input type="hidden" name="orderidxnum_12" value="9331417">
-                <td class="t_0k">13</td><!--Î≤àÌò∏-->
-                <td class="t_0k">2019-12-21&nbsp;</td><!--Ï£ºÎ¨∏ÏùºÏûê-->
-                <td class="t_0k">2019-12-27</td><!--ÏöîÏ≤≠ÏùºÏûê-->
-                <td class="t_0k">T02543723</td><!--Ï£ºÎ¨∏Î≤àÌò∏-->
-                <td class="t_0k">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£å</td><!--Ï£ºÎ¨∏ÏÉÅÌÉú-->
-                <td class="t_0k">ÍπÄÏßÄ</td><!--Ï£ºÎ¨∏Ïûê-->
-                <!--<td class="t_0k">3007930522780119</td>--><!--ÏïÑÏù¥ÌÖúÏΩîÎìú-->
-                <td class="t_0k">ÏûêÎèôÌöåÏàò[WCK]&nbsp;</td><!--ÌöåÏàòÎ∞©Î≤ï-->
-                <td class="t_0k">Ïö∞Ï≤¥Íµ≠ÌÉùÎ∞∞&nbsp;</td><!--ÌÉùÎ∞∞ÏÇ¨-->
-                <td class="t_0k">7095701200462&nbsp;</td><!--Î∞òÏÜ°Ïû•Ï†ïÎ≥¥-->
-                <td class="t_0k">Í≥†Í∞ùÎ∂ÄÎã¥&nbsp;</td><!--Î∞òÌíàÎπÑÏ†ïÎ≥¥-->
-                <td class="t_0k">5,000&nbsp;</td><!--Î∞òÏÜ°ÎπÑÏö©-->
-                <td class="t_0k">2020-01-10&nbsp;</td><!--ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº-->
-                <td class="t_0k_left">GOAL HEAVYWEIGHT HOODIE-BLACK</td><!--ÏÉÅÌíàÎ™Ö-->
-                <td class="t_0k_left">
-                    <strike>XL</strike><br>L&nbsp;
-                </td><!--ÏòµÏÖò1-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò2-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò3-->
-                <td class="t_0k">1</td><!--ÏàòÎüâ-->
-
-                <td class="t_0k">&nbsp;</td><!--ÏÑ∏Ìä∏Í∞Ä-->
-                <td class="t_0k_left">&nbsp;</td><!--ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö-->
-
-                <td class="t_0k">55,000</td><!--ÌåêÎß§Í∞Ä-->
-                <td class="t_0k">2,500</td><!--Î∞∞ÏÜ°ÎπÑ-->
-                <td class="t_0k_left">ÏÇ¨Ïù¥Ï¶àÎ∂àÎßåÏ°± : </td><!--ÍµêÌôòÏÇ¨Ïú†-->
-            </tr>
-
-            <tr>
-                <input type="hidden" name="orderno_13" value="T02559150">
-                <input type="hidden" name="orderidxnum_13" value="9350134">
-                <td class="t_0k">14</td><!--Î≤àÌò∏-->
-                <td class="t_0k">2019-12-23&nbsp;</td><!--Ï£ºÎ¨∏ÏùºÏûê-->
-                <td class="t_0k">2019-12-26</td><!--ÏöîÏ≤≠ÏùºÏûê-->
-                <td class="t_0k">T02559150</td><!--Ï£ºÎ¨∏Î≤àÌò∏-->
-                <td class="t_0k">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£å</td><!--Ï£ºÎ¨∏ÏÉÅÌÉú-->
-                <td class="t_0k">Ïú§Í∑úÌù¨</td><!--Ï£ºÎ¨∏Ïûê-->
-                <!--<td class="t_0k">3007283862495919</td>--><!--ÏïÑÏù¥ÌÖúÏΩîÎìú-->
-                <td class="t_0k">ÏûêÎèôÌöåÏàò[WCK]&nbsp;</td><!--ÌöåÏàòÎ∞©Î≤ï-->
-                <td class="t_0k">Ïö∞Ï≤¥Íµ≠ÌÉùÎ∞∞&nbsp;</td><!--ÌÉùÎ∞∞ÏÇ¨-->
-                <td class="t_0k">7095701195108&nbsp;</td><!--Î∞òÏÜ°Ïû•Ï†ïÎ≥¥-->
-                <td class="t_0k">Í≥†Í∞ùÎ∂ÄÎã¥&nbsp;</td><!--Î∞òÌíàÎπÑÏ†ïÎ≥¥-->
-                <td class="t_0k">5,000&nbsp;</td><!--Î∞òÏÜ°ÎπÑÏö©-->
-                <td class="t_0k">2020-01-10&nbsp;</td><!--ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº-->
-                <td class="t_0k_left">RESPECT LONG SLEEVE - BLACK</td><!--ÏÉÅÌíàÎ™Ö-->
-                <td class="t_0k_left">
-                    <strike>L</strike><br>M&nbsp;
-                </td><!--ÏòµÏÖò1-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò2-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò3-->
-                <td class="t_0k">1</td><!--ÏàòÎüâ-->
-
-                <td class="t_0k">&nbsp;</td><!--ÏÑ∏Ìä∏Í∞Ä-->
-                <td class="t_0k_left">&nbsp;</td><!--ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö-->
-
-                <td class="t_0k">55,200</td><!--ÌåêÎß§Í∞Ä-->
-                <td class="t_0k">2,500</td><!--Î∞∞ÏÜ°ÎπÑ-->
-                <td class="t_0k_left">ÏÇ¨Ïù¥Ï¶àÎ∂àÎßåÏ°± : </td><!--ÍµêÌôòÏÇ¨Ïú†-->
-            </tr>
-
-            <tr>
-                <input type="hidden" name="orderno_14" value="T02544097">
-                <input type="hidden" name="orderidxnum_14" value="9331864">
-                <td class="t_0k">15</td><!--Î≤àÌò∏-->
-                <td class="t_0k">2019-12-21&nbsp;</td><!--Ï£ºÎ¨∏ÏùºÏûê-->
-                <td class="t_0k">2019-12-26</td><!--ÏöîÏ≤≠ÏùºÏûê-->
-                <td class="t_0k">T02544097</td><!--Ï£ºÎ¨∏Î≤àÌò∏-->
-                <td class="t_0k">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£å</td><!--Ï£ºÎ¨∏ÏÉÅÌÉú-->
-                <td class="t_0k">ÏµúÌôçÍ∏∞</td><!--Ï£ºÎ¨∏Ïûê-->
-                <!--<td class="t_0k">3007406892540193</td>--><!--ÏïÑÏù¥ÌÖúÏΩîÎìú-->
-                <td class="t_0k">ÏûêÎèôÌöåÏàò[WCK]&nbsp;</td><!--ÌöåÏàòÎ∞©Î≤ï-->
-                <td class="t_0k">Ïö∞Ï≤¥Íµ≠ÌÉùÎ∞∞&nbsp;</td><!--ÌÉùÎ∞∞ÏÇ¨-->
-                <td class="t_0k">7095701195100&nbsp;</td><!--Î∞òÏÜ°Ïû•Ï†ïÎ≥¥-->
-                <td class="t_0k">Í≥†Í∞ùÎ∂ÄÎã¥&nbsp;</td><!--Î∞òÌíàÎπÑÏ†ïÎ≥¥-->
-                <td class="t_0k">5,000&nbsp;</td><!--Î∞òÏÜ°ÎπÑÏö©-->
-                <td class="t_0k">2020-01-10&nbsp;</td><!--ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº-->
-                <td class="t_0k_left">CARGO JOGGER PANTS - BLACK</td><!--ÏÉÅÌíàÎ™Ö-->
-                <td class="t_0k_left">
-                    <strike>XL</strike><br>L&nbsp;
-                </td><!--ÏòµÏÖò1-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò2-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò3-->
-                <td class="t_0k">1</td><!--ÏàòÎüâ-->
-
-                <td class="t_0k">&nbsp;</td><!--ÏÑ∏Ìä∏Í∞Ä-->
-                <td class="t_0k_left">&nbsp;</td><!--ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö-->
-
-                <td class="t_0k">71,200</td><!--ÌåêÎß§Í∞Ä-->
-                <td class="t_0k">2,500</td><!--Î∞∞ÏÜ°ÎπÑ-->
-                <td class="t_0k_left">ÏÇ¨Ïù¥Ï¶àÎ∂àÎßåÏ°± : </td><!--ÍµêÌôòÏÇ¨Ïú†-->
-            </tr>
-
-            <tr>
-                <input type="hidden" name="orderno_15" value="T02542942">
-                <input type="hidden" name="orderidxnum_15" value="9330435">
-                <td class="t_0k">16</td><!--Î≤àÌò∏-->
-                <td class="t_0k">2019-12-21&nbsp;</td><!--Ï£ºÎ¨∏ÏùºÏûê-->
-                <td class="t_0k">2019-12-26</td><!--ÏöîÏ≤≠ÏùºÏûê-->
-                <td class="t_0k">T02542942</td><!--Ï£ºÎ¨∏Î≤àÌò∏-->
-                <td class="t_0k">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£å</td><!--Ï£ºÎ¨∏ÏÉÅÌÉú-->
-                <td class="t_0k">ÍπÄÎåÄÏãù</td><!--Ï£ºÎ¨∏Ïûê-->
-                <!--<td class="t_0k">3007568672600100</td>--><!--ÏïÑÏù¥ÌÖúÏΩîÎìú-->
-                <td class="t_0k">ÏûêÎèôÌöåÏàò[WCK]&nbsp;</td><!--ÌöåÏàòÎ∞©Î≤ï-->
-                <td class="t_0k">Ïö∞Ï≤¥Íµ≠ÌÉùÎ∞∞&nbsp;</td><!--ÌÉùÎ∞∞ÏÇ¨-->
-                <td class="t_0k">7095701195127&nbsp;</td><!--Î∞òÏÜ°Ïû•Ï†ïÎ≥¥-->
-                <td class="t_0k">ÏóÖÏ≤¥Î∂ÄÎã¥&nbsp;</td><!--Î∞òÌíàÎπÑÏ†ïÎ≥¥-->
-                <td class="t_0k">0&nbsp;</td><!--Î∞òÏÜ°ÎπÑÏö©-->
-                <td class="t_0k">2020-01-10&nbsp;</td><!--ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº-->
-                <td class="t_0k_left">REVERSIBLE DOWN PARKA - ORANGE/GRAY</td><!--ÏÉÅÌíàÎ™Ö-->
-                <td class="t_0k_left">
-                    <strike>L</strike><br>M&nbsp;
-                </td><!--ÏòµÏÖò1-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò2-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò3-->
-                <td class="t_0k">1</td><!--ÏàòÎüâ-->
-
-                <td class="t_0k">&nbsp;</td><!--ÏÑ∏Ìä∏Í∞Ä-->
-                <td class="t_0k_left">&nbsp;</td><!--ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö-->
-
-                <td class="t_0k">239,250</td><!--ÌåêÎß§Í∞Ä-->
-                <td class="t_0k">2,500</td><!--Î∞∞ÏÜ°ÎπÑ-->
-                <td class="t_0k_left">ÏÇ¨Ïù¥Ï¶àÎ∂àÎßåÏ°± : </td><!--ÍµêÌôòÏÇ¨Ïú†-->
-            </tr>
-
-            <tr>
-                <input type="hidden" name="orderno_16" value="T02549674">
-                <input type="hidden" name="orderidxnum_16" value="9338574">
-                <td class="t_0k">17</td><!--Î≤àÌò∏-->
-                <td class="t_0k">2019-12-22&nbsp;</td><!--Ï£ºÎ¨∏ÏùºÏûê-->
-                <td class="t_0k">2019-12-25</td><!--ÏöîÏ≤≠ÏùºÏûê-->
-                <td class="t_0k">T02549674</td><!--Ï£ºÎ¨∏Î≤àÌò∏-->
-                <td class="t_0k">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£å</td><!--Ï£ºÎ¨∏ÏÉÅÌÉú-->
-                <td class="t_0k">Í∂åÏàúÏÑ±</td><!--Ï£ºÎ¨∏Ïûê-->
-                <!--<td class="t_0k">3007930522780120</td>--><!--ÏïÑÏù¥ÌÖúÏΩîÎìú-->
-                <td class="t_0k">ÏûêÎèôÌöåÏàò[WCK]&nbsp;</td><!--ÌöåÏàòÎ∞©Î≤ï-->
-                <td class="t_0k">Ïö∞Ï≤¥Íµ≠ÌÉùÎ∞∞&nbsp;</td><!--ÌÉùÎ∞∞ÏÇ¨-->
-                <td class="t_0k">7095701190021&nbsp;</td><!--Î∞òÏÜ°Ïû•Ï†ïÎ≥¥-->
-                <td class="t_0k">Í≥†Í∞ùÎ∂ÄÎã¥&nbsp;</td><!--Î∞òÌíàÎπÑÏ†ïÎ≥¥-->
-                <td class="t_0k">5,000&nbsp;</td><!--Î∞òÏÜ°ÎπÑÏö©-->
-                <td class="t_0k">2020-01-10&nbsp;</td><!--ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº-->
-                <td class="t_0k_left">GOAL HEAVYWEIGHT HOODIE-BLACK</td><!--ÏÉÅÌíàÎ™Ö-->
-                <td class="t_0k_left">
-                    <strike>2XL</strike><br>XL&nbsp;
-                </td><!--ÏòµÏÖò1-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò2-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò3-->
-                <td class="t_0k">1</td><!--ÏàòÎüâ-->
-
-                <td class="t_0k">&nbsp;</td><!--ÏÑ∏Ìä∏Í∞Ä-->
-                <td class="t_0k_left">&nbsp;</td><!--ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö-->
-
-                <td class="t_0k">55,000</td><!--ÌåêÎß§Í∞Ä-->
-                <td class="t_0k">2,500</td><!--Î∞∞ÏÜ°ÎπÑ-->
-                <td class="t_0k_left">ÏÇ¨Ïù¥Ï¶àÎ∂àÎßåÏ°± : </td><!--ÍµêÌôòÏÇ¨Ïú†-->
-            </tr>
-
-            <tr>
-                <input type="hidden" name="orderno_17" value="T02551033">
-                <input type="hidden" name="orderidxnum_17" value="9340222">
-                <td class="t_0k">18</td><!--Î≤àÌò∏-->
-                <td class="t_0k">2019-12-22&nbsp;</td><!--Ï£ºÎ¨∏ÏùºÏûê-->
-                <td class="t_0k">2019-12-25</td><!--ÏöîÏ≤≠ÏùºÏûê-->
-                <td class="t_0k">T02551033</td><!--Ï£ºÎ¨∏Î≤àÌò∏-->
-                <td class="t_0k">ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£å</td><!--Ï£ºÎ¨∏ÏÉÅÌÉú-->
-                <td class="t_0k">Í≥ΩÏßÄÏï†</td><!--Ï£ºÎ¨∏Ïûê-->
-                <!--<td class="t_0k">3007930522780120</td>--><!--ÏïÑÏù¥ÌÖúÏΩîÎìú-->
-                <td class="t_0k">ÏûêÎèôÌöåÏàò[WCK]&nbsp;</td><!--ÌöåÏàòÎ∞©Î≤ï-->
-                <td class="t_0k">Ïö∞Ï≤¥Íµ≠ÌÉùÎ∞∞&nbsp;</td><!--ÌÉùÎ∞∞ÏÇ¨-->
-                <td class="t_0k">7095701190043&nbsp;</td><!--Î∞òÏÜ°Ïû•Ï†ïÎ≥¥-->
-                <td class="t_0k">Í≥†Í∞ùÎ∂ÄÎã¥&nbsp;</td><!--Î∞òÌíàÎπÑÏ†ïÎ≥¥-->
-                <td class="t_0k">5,000&nbsp;</td><!--Î∞òÏÜ°ÎπÑÏö©-->
-                <td class="t_0k">2020-01-10&nbsp;</td><!--ÍµêÌôòÎ∞∞ÏÜ°ÏôÑÎ£åÏùº-->
-                <td class="t_0k_left">GOAL HEAVYWEIGHT HOODIE-BLACK</td><!--ÏÉÅÌíàÎ™Ö-->
-                <td class="t_0k_left">
-                    <strike>2XL</strike><br>XL&nbsp;
-                </td><!--ÏòµÏÖò1-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò2-->
-                <td class="t_0k_left">
-                    &nbsp;
-                </td><!--ÏòµÏÖò3-->
-                <td class="t_0k">1</td><!--ÏàòÎüâ-->
-
-                <td class="t_0k">&nbsp;</td><!--ÏÑ∏Ìä∏Í∞Ä-->
-                <td class="t_0k_left">&nbsp;</td><!--ÏÑ∏Ìä∏ÏÉÅÌíàÎ™Ö-->
-
-                <td class="t_0k">55,000</td><!--ÌåêÎß§Í∞Ä-->
-                <td class="t_0k">2,500</td><!--Î∞∞ÏÜ°ÎπÑ-->
-                <td class="t_0k_left">ÏÇ¨Ïù¥Ï¶àÎ∂àÎßåÏ°± : </td><!--ÍµêÌôòÏÇ¨Ïú†-->
-            </tr>
-
-        </table>
-</form>
-</div>
-<script language="javascript" src="/include/js/jquery-1.7.2.min.js"></script>
-<script language="javascript">
-    window.onload = function() {
-        fnresize();
+            frminput.chknum.value = 0;
+            frminput.chkAll.value = "N";
+        }
     }
 
-    function fnresize(){
-        var wsize = parseInt(document.body.clientWidth);
-        $("#TreeInxDiv03").css('width', wsize);
+    // ∞≥∫∞º±≈√
+    function FuncCheckSelf(p_num) {
+        if (eval("frminput.chk_" + p_num).checked == true) {
+            $("#orderitem" + p_num).css("background-color","#FFFFD2");
+            $("#orderitemdetail" + p_num).css("background-color","#FFFFD2");
+        } else {
+            $("#orderitem" + p_num).css("background-color","#FFFFFF");
+            $("#orderitemdetail" + p_num).css("background-color","#FFFFFF");
+        }
+
+        var chkcnt = 0;
+        for (ii = 0; ii < parseInt(frminput.totnum.value); ii++) {
+            if(eval("frminput.chk_" + ii).checked == true){
+                chkcnt++;
+            }
+        }
+
+        frminput.chknum.value = chkcnt;
     }
 
-    window.onresize = function(event) {
-        fnresize();
-    };
+    function FuncCheckForm(p_frm, p_type) {
+        if (parseInt(p_frm.chknum.value) == 0) {
+            alert("√≥∏Æ«œΩ« ¡÷πÆ¿ª º±≈√«œººø‰.");
+            return;
+        }
+
+        //if (!confirm("[ " + p_frm.chknum.value + " ] ∞«ø° ¥Î«ÿ »∏ºˆøœ∑·√≥∏Æ∏¶ «œΩ√∞⁄Ω¿¥œ±Ó?")){
+        if (!confirm("ªÛ«∞π›¿‘ π◊ π›«∞∫Ò ¿‘±›/µø∫¿ ø©∫Œ ∏µŒ »Æ¿Œ «œºÃΩ¿¥œ±Ó?\n»∏ºˆøœ∑· »ƒø°¥¬ ªÛ≈¬∏¶ ø¯∫π «“ ºˆ æ¯¿∏¥œ ¡÷¿««ÿ¡÷ººø‰.")){
+            return;
+        }
+
+        p_frm.submit();
+    }
+
+    function dataOnScroll() {
+        TreeInxDiv03.scrollTop = TreeInxDiv04.scrollTop;
+    }
+
+    // ¡÷πÆ≥ªø™ ∏∂øÏΩ∫æ◊º«
+    function funcColor2(p_rownum,p_num){
+        if(p_num == "1"){
+            if($("#orderitem" +p_rownum).css("background-color") == "#ffffff"){
+                $("#orderitem" +p_rownum).css("background-color", "#b2ebf4");
+                $("#orderitemdetail" +p_rownum).css("background-color", "#b2ebf4");
+            }
+        }else{
+            if($("#orderitem" +p_rownum).css("background-color") == "#b2ebf4"){
+                $("#orderitem" +p_rownum).css("background-color", "#ffffff");
+                $("#orderitemdetail" +p_rownum).css("background-color", "#ffffff");
+            }
+        }
+    }
+
+    function updateManageShipNoticeUpdate(ordidxs, shipidxs, notice){
+        if(!confirm("»∏ºˆ∞¸∏Æ∏ﬁ∏∏¶ ºˆ¡§«œΩ√∞⁄Ω¿¥œ±Ó?")){
+            return;
+        }
+
+        var str_notice = notice.replace(/,/gi, "&#44");
+        str_notice = str_notice + ",";
+
+        $.ajax({
+            type: 'POST',
+            url: 'Ajax_BizShippingManageShipDateUpdate.asp',
+            data: {'orderidxnums': ordidxs, 'shippingidxnums': shipidxs, 'manageNotices': escape(str_notice)},
+            contentType: 'application/x-www-form-urlencoded; charset=euc-kr;',
+            success: function(result) {
+                if(result == "0")
+                {
+                    alert("ºˆ¡§µ«æ˙Ω¿¥œ¥Ÿ");
+                    //parent.FuncSearch();
+                }else{
+                    alert("¿ﬂ∏¯µ» ¡¢±Ÿ¿‘¥œ¥Ÿ.");
+                    //parent.location.href= "/logout.asp";
+                }
+            }
+        });
+    }
+
+
+    // π›«∞/±≥»Ø ≈√πË∫Ò »Æ¿Œ«œ±‚
+    function Pop_QnaInfo() {
+        window.open("http://image.wconcept.co.kr/images/admin/20170817_185242.png", "deliveryInfo", "status=no,scrollbars=yes,menubars=no,width=1150px,height=620px");
+    }
+
 </script>
 
+<table border="0" cellpadding="0" cellspacing="0" bgcolor="#c3c4c4" style="height:751; width: 100%; table-layout:fixed;">
+    <tr >
+        <td style="vertical-align:top;">
+            <div id="TreeInxDiv02" style="color:#FFFFFF; height: 869;  background-color: #ffffff; "><!--hidden -->
 
-<iframe name="iframeinput" frameborder="0" width="0" height="0" src=""></iframe>
+                <form name="frmtype" method="post" action="/ShippingPin/iFrameLstOrderReturnManageShippingVendorBottom.asp">
+                    <input type="hidden" name="flag" value="submit" />
+                    <input type="hidden" name="datetypecd" value="01" />
+                    <input type="hidden" name="strfrom" value="2019-12-26" />
+                    <input type="hidden" name="strto" value="2020-01-26" />
+                    <input type="hidden" name="orderno" value="" />
+                    <input type="hidden" name="vendorcd" value="3004012" />
+                    <input type="hidden" name="sel1" value="" />
+                    <input type="hidden" name="searchword" value="" />
+                    <input type="hidden" name="page" value="1" />
+                    <input type="hidden" name="dealtypecd" value="" />
+                    <input type="hidden" name="orderroute" value="" />
+                    <input type="hidden" name="orderpathidxnum" value="" />
+                    <input type="hidden" name="ShippingNotice" value="" />
+                    <input type="hidden" name="claimMainTypecd" value="" />
+                    <input type="hidden" name="claimTypecd" value="" />
+                    <input type="hidden" name="returnType" value="" />
+                    <input type="hidden" name="isReturnArrived" value="" />
+                </form>
+                <form name="frminput" method="post" action="/OrderPin/iFrameBizLstOrderReturnVendorBottom.asp" ><!-- iframeinput -->
+                    <input type="hidden" name="strtype" value="01">
+                    <input type="hidden" name="totnum" value="7">
+                    <input type="hidden" name="chkAll" value="N" />
+                    <input type="hidden" name="chknum" value="0" />
+                    <table border="0" width="100%" cellpadding="0" cellspacing="0" bgcolor="#dddddd">
+                        <tr>
+                            <td>
+                                <table border="0" cellpadding="0" cellspacing="1" width="100%" bgcolor="#ffffff">
+                                    <tr height="25">
+                                        <td colspan=3>
+                                            <span style="color:#ff0000">¢∫ ±≥»Ø¡÷πÆ¿∫ »∏ºˆøœ∑· √≥∏Æ Ω√ ¿⁄µø¿∏∑Œ ±≥»Ø√‚∞Ì¡ˆΩ√ √≥∏Æµ«¥œ [ªÛ«∞¡ÿ∫Ò¡ﬂ]∏ﬁ¥∫ø°º≠ √‚∞Ì¡¯«‡πŸ∂¯¥œ¥Ÿ.</span>&nbsp;&nbsp;
+                                            <span onclick="Pop_QnaInfo();" style="cursor:pointer;background-color:#c0c0c0;">π›«∞/±≥»Ø ≈√πË∫Ò »Æ¿Œ«œ±‚</span><br>
+                                            <span style="color:#ff0000">
+									¢∫ π›¿‘µ» ªÛ«∞ø° ¥Î«— √≥∏Æ∫∏∑˘∞° « ø‰«— ∞«¿∫ π›µÂΩ√ »∏ºˆ∞¸∏Æ∏ﬁ∏∏¶ ¿ÃøÎ«ÿ ∏Ì»Æ«— ªÁ¿Ø∏¶ ¿‘∑¬πŸ∂¯¥œ¥Ÿ(ex : π›«∞∑· πÃµø∫¿, πÃ¿‘±›, ªÛ«∞¿ÃªÛ µÓµÓ) <br>
+									¢∫ ªÛ«∞π›¿‘¿œ∑Œ∫Œ≈Õ 2øµæ˜¿œ ¿Ã≥ªø° π›µÂΩ√ »∏ºˆøœ∑·«œø© ¡÷ººø‰, √≥∏Æ¡ˆø¨¿Ã πﬂª˝«œ¡ˆ æ µµ∑œ ∞¢∫∞»˜ ¡÷¿« πŸ∂¯¥œ¥Ÿ. <br>
+									¢∫ π›«∞∫Ò¡§∫∏ «◊∏Ò¿∫ ≈¨∑π¿” ¡¢ºˆ Ω√ ±Õ√•ªÁ¿Øø° µ˚∂Û ≈√πË∫Ò∫Œ¥„¡÷√º∞° º≥¡§µÀ¥œ¥Ÿ. <br>
+									¢∫ π›º€∫Ò«◊∏Ò¿∫ ≈¨∑π¿” ¡¢ºˆ∞« ∫∞  π›«∞≈√πË∫Ò(√ µµπËº€∫Ò+ »∏ºˆ≈√πË∫Ò) / ±≥»Ø≈√πË∫Ò(»∏ºˆ≈√πË∫Ò+¿ÁπËº€∫Ò) ¿‘¥œ¥Ÿ. <br>
+									¢∫ ∞Ì∞¥¡˜¡¢π›º€¿∫ »∏ºˆ≈√πË∫Ò∞° '0ø¯'¿∏∑Œ ∞ËªÍµ«ø¿¥œ ¬¸∞Ì«œø© ≈√πË∫Ò »Æ¿Œ∫Œ≈πµÂ∏≥¥œ¥Ÿ.
+									</span>
+                                        </td>
+                                    </tr>
+                                    <tr height="30">
+                                        <td style="padding-left:10"><b>∞Àªˆ∞·∞˙:&nbsp;&nbsp;7∞«</b></td>
+                                        <td align="center"><b>1</b> / 1 page&nbsp;&nbsp;&nbsp;&nbsp;<font color=gray>√≥¿Ω</font>&nbsp;&nbsp;<img src='http://image.wconcept.co.kr/images/common/btn_prew.gif' align='absmiddle' border='0' width='13' height='13'>&nbsp;&nbsp;&nbsp;<font color='red'><b>1</b></font>&nbsp;&nbsp;<img src='http://image.wconcept.co.kr/images/common/btn_next.gif' align='absmiddle' border='0' width='13' height='13'>&nbsp;<font color=gray>≥°</font></td>
+                                    </tr>
+                                    <tr height="30">
+                                        <td></td>
+                                        <td align="right" style="padding-right:5px">
+                                            <input type="button" name="btn_save" class="box80" value="»∏ºˆøœ∑·" onclick="FuncCheckForm(frminput);"  >
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td width="800" valign="_top">
+                                <div class="tableContainer" id="TreeInxDiv03" style="color:#FFFFFF; width:600px; height:355px; overflow-x: scroll; overflow-y: hidden; background-color:#FFFFFF; " onScroll="dataOnScroll()">
+                                    <table border="0" cellpadding="0" cellspacing="1" width="100%"  bgcolor="#c3c4c4" height="295">
+                                        <col width="40"><!--¿¸√ºº±≈√-->
+                                        <col width="90"><!--∞·¡¶¿œ¿⁄-->
+                                        <col width="90"><!--ø‰√ª¿œ¿⁄-->
+                                        <col width="80"><!--¡÷πÆπ¯»£-->
+                                        <col width="100"><!--¡÷πÆªÛ≈¬-->
+                                        <col width="100"><!--¡÷πÆ¿⁄-->
+                                        <col width="100"><!--ºˆ√Î¿Œ-->
+                                        <tr align="center" bgcolor="#e6e6e6" height="25">
+                                            <td rowspan="2"><img src="http://image.wconcept.co.kr/images/admin/btn_all_on.gif" style="cursor:pointer" onclick="FuncCheckAll()" /></td>
+                                            <td colspan="6">¡÷πÆ ±‚∫ª¡§∫∏</td>
+                                        </tr>
+                                        <tr align="center" bgcolor="#e6e6e6" height="25">
+                                            <td>∞·¡¶¿œ¿⁄</td>
+                                            <td>ø‰√ª¿œ¿⁄</td>
+                                            <td>¡÷πÆπ¯»£</td>
+                                            <td>¡÷πÆªÛ≈¬</td>
+                                            <td>¡÷πÆ¿⁄</td>
+                                            <td>ºˆ√Î¿Œ</td>
+                                        </tr>
+
+                                        <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px" id="orderitem0" onmouseover="javascript:funcColor2(0, 1);" onmouseout="javascript:funcColor2(0, 2);">
+                                            <td align="center"><input type="checkbox" name="chk_0" value="Y" onclick="FuncCheckSelf(0);"></td>
+                                            <td align="center">2020-01-17</td>
+                                            <td align="center">2020-01-22</td>
+                                            <td align="center">U00108159</td>
+                                            <td align="center">π›«∞√≥∏Æ¡ﬂ</td>
+                                            <td align="center">¿Á«ˆ</td>
+                                            <td align="center">±Ë¿Á«ˆ</td>
+                                        </tr>
+
+                                        <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px" id="orderitem1" onmouseover="javascript:funcColor2(1, 1);" onmouseout="javascript:funcColor2(1, 2);">
+                                            <td align="center"><input type="checkbox" name="chk_1" value="Y" onclick="FuncCheckSelf(1);"></td>
+                                            <td align="center">2020-01-17</td>
+                                            <td align="center">2020-01-22</td>
+                                            <td align="center">U00109083</td>
+                                            <td align="center">π›«∞√≥∏Æ¡ﬂ</td>
+                                            <td align="center">±Ë¿Á«ˆ</td>
+                                            <td align="center">±Ë¿Á«ˆ</td>
+                                        </tr>
+
+                                        <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px" id="orderitem2" onmouseover="javascript:funcColor2(2, 1);" onmouseout="javascript:funcColor2(2, 2);">
+                                            <td align="center"><input type="checkbox" name="chk_2" value="Y" onclick="FuncCheckSelf(2);"></td>
+                                            <td align="center">2020-01-17</td>
+                                            <td align="center">2020-01-22</td>
+                                            <td align="center">U00109140</td>
+                                            <td align="center">π›«∞√≥∏Æ¡ﬂ</td>
+                                            <td align="center">±Ë¿Á«ˆ</td>
+                                            <td align="center">±Ë¿Á«ˆ</td>
+                                        </tr>
+
+                                        <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px" id="orderitem3" onmouseover="javascript:funcColor2(3, 1);" onmouseout="javascript:funcColor2(3, 2);">
+                                            <td align="center"><input type="checkbox" name="chk_3" value="Y" onclick="FuncCheckSelf(3);"></td>
+                                            <td align="center">2020-01-12</td>
+                                            <td align="center">2020-01-20</td>
+                                            <td align="center">U00072362</td>
+                                            <td align="center">π›«∞√≥∏Æ¡ﬂ</td>
+                                            <td align="center">∞≠¿Œø¡</td>
+                                            <td align="center">∞≠¿Œø¡</td>
+                                        </tr>
+
+                                        <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px" id="orderitem4" onmouseover="javascript:funcColor2(4, 1);" onmouseout="javascript:funcColor2(4, 2);">
+                                            <td align="center"><input type="checkbox" name="chk_4" value="Y" onclick="FuncCheckSelf(4);"></td>
+                                            <td align="center">2020-01-17</td>
+                                            <td align="center">2020-01-18</td>
+                                            <td align="center">U00106399</td>
+                                            <td align="center">π›«∞√≥∏Æ¡ﬂ</td>
+                                            <td align="center">º€¿Ø¡¯</td>
+                                            <td align="center">º€¿Ø¡¯</td>
+                                        </tr>
+
+                                        <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px" id="orderitem5" onmouseover="javascript:funcColor2(5, 1);" onmouseout="javascript:funcColor2(5, 2);">
+                                            <td align="center"><input type="checkbox" name="chk_5" value="Y" onclick="FuncCheckSelf(5);"></td>
+                                            <td align="center">2020-01-08</td>
+                                            <td align="center">2020-01-13</td>
+                                            <td align="center">U00050147</td>
+                                            <td align="center">π›«∞√≥∏Æ¡ﬂ</td>
+                                            <td align="center">πË±‚«ˆ</td>
+                                            <td align="center">¿¸πŒ»Ò</td>
+                                        </tr>
+
+                                        <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px" id="orderitem6" onmouseover="javascript:funcColor2(6, 1);" onmouseout="javascript:funcColor2(6, 2);">
+                                            <td align="center"><input type="checkbox" name="chk_6" value="Y" onclick="FuncCheckSelf(6);"></td>
+                                            <td align="center">2020-01-03</td>
+                                            <td align="center">2020-01-08</td>
+                                            <td align="center">U00018540</td>
+                                            <td align="center">π›«∞√≥∏Æ¡ﬂ</td>
+                                            <td align="center">Min</td>
+                                            <td align="center">Min</td>
+                                        </tr>
+
+                                    </table>
+                                </div>
+                            </td>
+                            <td style="padding-left:3px;">
+                                <div class="tableContainer" id="TreeInxDiv04" style="color:#FFFFFF; width:100%; height:355px; overflow-x: scroll; overflow-y: hidden; background-color:#FFFFFF; " onScroll="dataOnScroll()">
+                                    <table border="0" cellpadding="0" cellspacing="1" width="2600"  bgcolor="#c3c4c4" height="295">
+                                        <col width="100"><!--»∏ºˆπÊπ˝-->
+                                        <col width="90"><!--π›¿‘øœ∑·¿œ-->
+                                        <col width="100"><!--≈√πËªÁ-->
+                                        <col width="120"><!--π›º€¿Â¡§∫∏-->
+                                        <col width="80"><!--π›«∞∫Ò¡§∫∏-->
+                                        <col width="60"><!--π›º€∫Ò-->
+
+                                        <col width="200"><!--»∏ºˆ∞¸∏Æ∏ﬁ∏-->
+                                        <col width="130"><!--π›«∞ªÁ¿Ø-->
+                                        <col width="230"><!--π›«∞≥ªøÎ-->
+                                        <col width="100"><!--√∑∫Œ∆ƒ¿œ-->
+
+                                        <col width="350"><!--ªÛ«∞∏Ì-->
+                                        <col width="150"><!--ø…º«1-->
+                                        <col width="100"><!--ø…º«2-->
+                                        <col width="100"><!--ø…º«3-->
+                                        <col width="50"><!--ºˆ∑Æ-->
+                                        <col width="60"><!--ºº∆Æ∞°-->
+                                        <col width="200"><!--ºº∆ÆªÛ«∞∏Ì-->
+                                        <col width="80"><!--∆«∏≈∞°(«’∞Ë)-->
+                                        <col width="80"><!--πËº€∫Ò«’∞Ë-->
+                                        <col width="100"><!--∫Í∑£µÂ∏Ì-->
+
+                                        <col width="100"><!--ºˆ√Î¿Œø¨∂Ù√≥1-->
+                                        <col width="100"><!--ºˆ√Î¿Œø¨∂Ù√≥2-->
+
+                                        <tr align="center" bgcolor="#e6e6e6" height="25">
+                                            <td colspan="6">»∏ºˆ¡§∫∏ »Æ¿Œ</td>
+                                            <td rowspan="2">»∏ºˆ∞¸∏Æ∏ﬁ∏</td>
+                                            <td rowspan="2">π›«∞ªÁ¿Ø</td>
+                                            <td rowspan="2">π›«∞≥ªøÎ</td>
+                                            <td rowspan="2">√∑∫Œ∆ƒ¿œ</td>
+                                            <td colspan="10">¡÷πÆªÛ«∞¡§∫∏</td>
+                                            <td colspan="2">∞Ì∞¥¡§∫∏</td>
+                                        </tr>
+                                        <tr align="center" bgcolor="#e6e6e6" height="25">
+                                            <!--»∏ºˆ¡§∫∏ »Æ¿Œ-->
+                                            <td>»∏ºˆπÊπ˝</td>
+                                            <td>π›¿‘øœ∑·¿œ</td>
+                                            <td>≈√πËªÁ</td>
+                                            <td>π›º€¿Â¡§∫∏</td>
+                                            <td>π›«∞∫Ò¡§∫∏</td>
+                                            <td>π›º€∫Ò</td>
+                                            <!--»∏ºˆ¡§∫∏ »Æ¿Œ-->
+
+                                            <!--¡÷πÆªÛ«∞¡§∫∏-->
+                                            <td>ªÛ«∞∏Ì</td>
+                                            <td>ø…º«1</td>
+                                            <td>ø…º«2</td>
+                                            <td>ø…º«3</td>
+                                            <td>ºˆ∑Æ</td>
+                                            <td>ºº∆Æ∞°</td>
+                                            <td>ºº∆ÆªÛ«∞∏Ì</td>
+                                            <td>∆«∏≈∞°(«’∞Ë)</td>
+                                            <td>πËº€∫Ò«’∞Ë</td>
+                                            <td>∫Í∑£µÂ∏Ì</td>
+                                            <!--¡÷πÆªÛ«∞¡§∫∏-->
+
+                                            <!--∞Ì∞¥¡§∫∏-->
+                                            <td>ºˆ√Î¿Œø¨∂Ù√≥1</td>
+                                            <td>ºˆ√Î¿Œø¨∂Ù√≥2</td>
+                                            <!--∞Ì∞¥¡§∫∏-->
+                                        </tr>
+
+                                        <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px;" id="orderitemdetail0"  onmouseover="funcColor2(0, 1);" onmouseout="funcColor2(0, 2);">
+                                            <input type="hidden" name="orderno_0" value="U00108159">
+                                            <input type="hidden" name="orderidxnum_0" value="9549372">
+                                            <input type="hidden" name="shippingidxnum_0" value="8890563">
+                                            <input type="hidden" name="transcode_0" value="">
+                                            <input type="hidden" name="invoiceno_0" value="">
+                                            <!--»∏ºˆ¡§∫∏ »Æ¿Œ-->
+                                            <td align="center">∞Ì∞¥¡˜¡¢π›º€</td>
+                                            <td align="center">π›¿‘¡ﬂ</td>
+                                            <td align="center"></td>
+                                            <td align="center">
+
+                                            </td>
+                                            <td align="center">æ˜√º∫Œ¥„</td>
+                                            <td align="right" style="padding-right:5px">0</td>
+                                            <!--»∏ºˆ¡§∫∏ »Æ¿Œ-->
+
+                                            <td align="center">
+                                                <input type="text" name="managenotice_0" class="input" value="" style="vertical-align:bottom;height:20px;width:150px" align="absmiddle">
+                                                <input type="button" value="µÓ∑œ" class="box20_black" onclick="updateManageShipNoticeUpdate( 9549372, 8890563, managenotice_0.value );" />
+                                                <!-- <img src="http://image.wconcept.co.kr/images/admin/btn_modify_1.gif" align="absbottom" style="cursor:pointer;" onclick="updateManageShipNoticeUpdate( 9549372, 8890563, managenotice_0.value );" hspace="1"> -->
+                                            </td><!--»∏ºˆ∞¸∏Æ∏ﬁ∏-->
+                                            <td style="padding-left:5px">¥‹º¯∫ØΩ…</td><!--π›«∞ªÁ¿Ø-->
+                                            <td style="padding-left:5px" title=""></td><!--π›«∞≥ªøÎ-->
+                                            <td style="padding-left:5px">
+
+                                            </td><!--√∑∫Œ∆ƒ¿œ-->
+
+                                            <!--¡÷πÆªÛ«∞¡§∫∏-->
+                                            <td style="padding-left:5px" title="LOGO WIND PULLOVER - NAVY/WHITE">
+
+                                                <a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?itemcd=300831901" target="_blank">LOGO WIND PULLOVER - NAVY/WHITE</a>
+                                            </td>
+                                            <td style="padding-left:5px" title="L">
+                                                <span>L</span>
+                                            </td><!--ø…º«1-->
+                                            <td style="padding-left:5px" title="">
+                                                <span></span>
+                                            </td><!--ø…º«2-->
+                                            <td style="padding-left:5px" title="">
+                                                <span></span>
+                                            </td><!--ø…º«3-->
+                                            <td align="center">1</td><!--ºˆ∑Æ-->
+
+
+                                            <td align="right" style="padding-right:5px">&nbsp;</td><!--ºº∆Æ∞°-->
+                                            <td style="padding-left:5px">&nbsp;</td><!--ºº∆ÆªÛ«∞∏Ì-->
+
+
+                                            <td align="right" style="padding-right:5px">70,850</td><!--∆«∏≈∞°-->
+                                            <td align="right" style="padding-right:5px">0</td><!--πËº€∫Ò-->
+                                            <td align="center">GOALSTUDIO</td><!--∫Í∑£µÂ∏Ì-->
+                                            <!--¡÷πÆªÛ«∞¡§∫∏-->
+
+                                            <!--∞Ì∞¥¡§∫∏-->
+                                            <td align="center">010-0-0000</td><!--ºˆ√Î¿Œø¨∂Ù√≥1-->
+                                            <td align="center">010-9869-3526</td><!--ºˆ√Î¿Œø¨∂Ù√≥2-->
+                                            <!--∞Ì∞¥¡§∫∏-->
+                                        </tr>
+
+                                        <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px;" id="orderitemdetail1"  onmouseover="funcColor2(1, 1);" onmouseout="funcColor2(1, 2);">
+                                            <input type="hidden" name="orderno_1" value="U00109083">
+                                            <input type="hidden" name="orderidxnum_1" value="9550450">
+                                            <input type="hidden" name="shippingidxnum_1" value="8890561">
+                                            <input type="hidden" name="transcode_1" value="">
+                                            <input type="hidden" name="invoiceno_1" value="">
+                                            <!--»∏ºˆ¡§∫∏ »Æ¿Œ-->
+                                            <td align="center">∞Ì∞¥¡˜¡¢π›º€</td>
+                                            <td align="center">π›¿‘¡ﬂ</td>
+                                            <td align="center"></td>
+                                            <td align="center">
+
+                                            </td>
+                                            <td align="center">æ˜√º∫Œ¥„</td>
+                                            <td align="right" style="padding-right:5px">0</td>
+                                            <!--»∏ºˆ¡§∫∏ »Æ¿Œ-->
+
+                                            <td align="center">
+                                                <input type="text" name="managenotice_1" class="input" value="" style="vertical-align:bottom;height:20px;width:150px" align="absmiddle">
+                                                <input type="button" value="µÓ∑œ" class="box20_black" onclick="updateManageShipNoticeUpdate( 9550450, 8890561, managenotice_1.value );" />
+                                                <!-- <img src="http://image.wconcept.co.kr/images/admin/btn_modify_1.gif" align="absbottom" style="cursor:pointer;" onclick="updateManageShipNoticeUpdate( 9550450, 8890561, managenotice_1.value );" hspace="1"> -->
+                                            </td><!--»∏ºˆ∞¸∏Æ∏ﬁ∏-->
+                                            <td style="padding-left:5px">¥‹º¯∫ØΩ…</td><!--π›«∞ªÁ¿Ø-->
+                                            <td style="padding-left:5px" title=""></td><!--π›«∞≥ªøÎ-->
+                                            <td style="padding-left:5px">
+
+                                            </td><!--√∑∫Œ∆ƒ¿œ-->
+
+                                            <!--¡÷πÆªÛ«∞¡§∫∏-->
+                                            <td style="padding-left:5px" title="EMBLEM PLAYER SHORTS - WHITE">
+
+                                                <a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?itemcd=300728720" target="_blank">EMBLEM PLAYER SHORTS - WHITE</a>
+                                            </td>
+                                            <td style="padding-left:5px" title="L">
+                                                <span>L</span>
+                                            </td><!--ø…º«1-->
+                                            <td style="padding-left:5px" title="">
+                                                <span></span>
+                                            </td><!--ø…º«2-->
+                                            <td style="padding-left:5px" title="">
+                                                <span></span>
+                                            </td><!--ø…º«3-->
+                                            <td align="center">1</td><!--ºˆ∑Æ-->
+
+
+                                            <td align="right" style="padding-right:5px">&nbsp;</td><!--ºº∆Æ∞°-->
+                                            <td style="padding-left:5px">&nbsp;</td><!--ºº∆ÆªÛ«∞∏Ì-->
+
+
+                                            <td align="right" style="padding-right:5px">47,200</td><!--∆«∏≈∞°-->
+                                            <td align="right" style="padding-right:5px">0</td><!--πËº€∫Ò-->
+                                            <td align="center">GOALSTUDIO</td><!--∫Í∑£µÂ∏Ì-->
+                                            <!--¡÷πÆªÛ«∞¡§∫∏-->
+
+                                            <!--∞Ì∞¥¡§∫∏-->
+                                            <td align="center">010-0-0000</td><!--ºˆ√Î¿Œø¨∂Ù√≥1-->
+                                            <td align="center">010-9869-3526</td><!--ºˆ√Î¿Œø¨∂Ù√≥2-->
+                                            <!--∞Ì∞¥¡§∫∏-->
+                                        </tr>
+
+                                        <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px;" id="orderitemdetail2"  onmouseover="funcColor2(2, 1);" onmouseout="funcColor2(2, 2);">
+                                            <input type="hidden" name="orderno_2" value="U00109140">
+                                            <input type="hidden" name="orderidxnum_2" value="9550508">
+                                            <input type="hidden" name="shippingidxnum_2" value="8890548">
+                                            <input type="hidden" name="transcode_2" value="4">
+                                            <input type="hidden" name="invoiceno_2" value="7095701303889">
+                                            <!--»∏ºˆ¡§∫∏ »Æ¿Œ-->
+                                            <td align="center">¿⁄µø»∏ºˆ[WCK]</td>
+                                            <td align="center">π›¿‘¡ﬂ</td>
+                                            <td align="center">øÏ√º±π≈√πË</td>
+                                            <td align="center">
+
+                                                <a href="http://b2c.goodsflow.com/wconcept/whereis.asp?unique_cd=R2020012200000016200001" target="_blank">7095701303889</a>
+
+                                            </td>
+                                            <td align="center">∞Ì∞¥∫Œ¥„</td>
+                                            <td align="right" style="padding-right:5px">5,000</td>
+                                            <!--»∏ºˆ¡§∫∏ »Æ¿Œ-->
+
+                                            <td align="center">
+                                                <input type="text" name="managenotice_2" class="input" value="" style="vertical-align:bottom;height:20px;width:150px" align="absmiddle">
+                                                <input type="button" value="µÓ∑œ" class="box20_black" onclick="updateManageShipNoticeUpdate( 9550508, 8890548, managenotice_2.value );" />
+                                                <!-- <img src="http://image.wconcept.co.kr/images/admin/btn_modify_1.gif" align="absbottom" style="cursor:pointer;" onclick="updateManageShipNoticeUpdate( 9550508, 8890548, managenotice_2.value );" hspace="1"> -->
+                                            </td><!--»∏ºˆ∞¸∏Æ∏ﬁ∏-->
+                                            <td style="padding-left:5px">¥‹º¯∫ØΩ…</td><!--π›«∞ªÁ¿Ø-->
+                                            <td style="padding-left:5px" title=""></td><!--π›«∞≥ªøÎ-->
+                                            <td style="padding-left:5px">
+
+                                            </td><!--√∑∫Œ∆ƒ¿œ-->
+
+                                            <!--¡÷πÆªÛ«∞¡§∫∏-->
+                                            <td style="padding-left:5px" title="GOAL GLOVE - BLACK">
+
+                                                <a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?itemcd=300766347" target="_blank">GOAL GLOVE - BLACK</a>
+                                            </td>
+                                            <td style="padding-left:5px" title="FREE">
+                                                <span>FREE</span>
+                                            </td><!--ø…º«1-->
+                                            <td style="padding-left:5px" title="">
+                                                <span></span>
+                                            </td><!--ø…º«2-->
+                                            <td style="padding-left:5px" title="">
+                                                <span></span>
+                                            </td><!--ø…º«3-->
+                                            <td align="center">1</td><!--ºˆ∑Æ-->
+
+
+                                            <td align="right" style="padding-right:5px">&nbsp;</td><!--ºº∆Æ∞°-->
+                                            <td style="padding-left:5px">&nbsp;</td><!--ºº∆ÆªÛ«∞∏Ì-->
+
+
+                                            <td align="right" style="padding-right:5px">12,000</td><!--∆«∏≈∞°-->
+                                            <td align="right" style="padding-right:5px">0</td><!--πËº€∫Ò-->
+                                            <td align="center">GOALSTUDIO</td><!--∫Í∑£µÂ∏Ì-->
+                                            <!--¡÷πÆªÛ«∞¡§∫∏-->
+
+                                            <!--∞Ì∞¥¡§∫∏-->
+                                            <td align="center">010-0-0000</td><!--ºˆ√Î¿Œø¨∂Ù√≥1-->
+                                            <td align="center">010-9869-3526</td><!--ºˆ√Î¿Œø¨∂Ù√≥2-->
+                                            <!--∞Ì∞¥¡§∫∏-->
+                                        </tr>
+
+                                        <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px;" id="orderitemdetail3"  onmouseover="funcColor2(3, 1);" onmouseout="funcColor2(3, 2);">
+                                            <input type="hidden" name="orderno_3" value="U00072362">
+                                            <input type="hidden" name="orderidxnum_3" value="9507847">
+                                            <input type="hidden" name="shippingidxnum_3" value="8875897">
+                                            <input type="hidden" name="transcode_3" value="4">
+                                            <input type="hidden" name="invoiceno_3" value="7095701294816">
+                                            <!--»∏ºˆ¡§∫∏ »Æ¿Œ-->
+                                            <td align="center">¿⁄µø»∏ºˆ[WCK]</td>
+                                            <td align="center">π›¿‘¡ﬂ</td>
+                                            <td align="center">øÏ√º±π≈√πË</td>
+                                            <td align="center">
+
+                                                <a href="http://b2c.goodsflow.com/wconcept/whereis.asp?unique_cd=R2020012000000006800001" target="_blank">7095701294816</a>
+
+                                            </td>
+                                            <td align="center">∞Ì∞¥∫Œ¥„</td>
+                                            <td align="right" style="padding-right:5px">2,500</td>
+                                            <!--»∏ºˆ¡§∫∏ »Æ¿Œ-->
+
+                                            <td align="center">
+                                                <input type="text" name="managenotice_3" class="input" value="" style="vertical-align:bottom;height:20px;width:150px" align="absmiddle">
+                                                <input type="button" value="µÓ∑œ" class="box20_black" onclick="updateManageShipNoticeUpdate( 9507847, 8875897, managenotice_3.value );" />
+                                                <!-- <img src="http://image.wconcept.co.kr/images/admin/btn_modify_1.gif" align="absbottom" style="cursor:pointer;" onclick="updateManageShipNoticeUpdate( 9507847, 8875897, managenotice_3.value );" hspace="1"> -->
+                                            </td><!--»∏ºˆ∞¸∏Æ∏ﬁ∏-->
+                                            <td style="padding-left:5px">¥‹º¯∫ØΩ…</td><!--π›«∞ªÁ¿Ø-->
+                                            <td style="padding-left:5px" title=""></td><!--π›«∞≥ªøÎ-->
+                                            <td style="padding-left:5px">
+
+                                            </td><!--√∑∫Œ∆ƒ¿œ-->
+
+                                            <!--¡÷πÆªÛ«∞¡§∫∏-->
+                                            <td style="padding-left:5px" title="REVERSIBLE DOWN PARKA - ORANGE/GRAY">
+
+                                                <a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?itemcd=300756867" target="_blank">REVERSIBLE DOWN PARKA - ORANGE/GRAY</a>
+                                            </td>
+                                            <td style="padding-left:5px" title="M">
+                                                <span>M</span>
+                                            </td><!--ø…º«1-->
+                                            <td style="padding-left:5px" title="">
+                                                <span></span>
+                                            </td><!--ø…º«2-->
+                                            <td style="padding-left:5px" title="">
+                                                <span></span>
+                                            </td><!--ø…º«3-->
+                                            <td align="center">1</td><!--ºˆ∑Æ-->
+
+
+                                            <td align="right" style="padding-right:5px">&nbsp;</td><!--ºº∆Æ∞°-->
+                                            <td style="padding-left:5px">&nbsp;</td><!--ºº∆ÆªÛ«∞∏Ì-->
+
+
+                                            <td align="right" style="padding-right:5px">239,250</td><!--∆«∏≈∞°-->
+                                            <td align="right" style="padding-right:5px">0</td><!--πËº€∫Ò-->
+                                            <td align="center">GOALSTUDIO</td><!--∫Í∑£µÂ∏Ì-->
+                                            <!--¡÷πÆªÛ«∞¡§∫∏-->
+
+                                            <!--∞Ì∞¥¡§∫∏-->
+                                            <td align="center">010-0-0000</td><!--ºˆ√Î¿Œø¨∂Ù√≥1-->
+                                            <td align="center">010-5713-9200</td><!--ºˆ√Î¿Œø¨∂Ù√≥2-->
+                                            <!--∞Ì∞¥¡§∫∏-->
+                                        </tr>
+
+                                        <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px;" id="orderitemdetail4"  onmouseover="funcColor2(4, 1);" onmouseout="funcColor2(4, 2);">
+                                            <input type="hidden" name="orderno_4" value="U00106399">
+                                            <input type="hidden" name="orderidxnum_4" value="9547533">
+                                            <input type="hidden" name="shippingidxnum_4" value="8864558">
+                                            <input type="hidden" name="transcode_4" value="4">
+                                            <input type="hidden" name="invoiceno_4" value="7095701289449">
+                                            <!--»∏ºˆ¡§∫∏ »Æ¿Œ-->
+                                            <td align="center">¿⁄µø»∏ºˆ[WCK]</td>
+                                            <td align="center">2020-01-22</td>
+                                            <td align="center">øÏ√º±π≈√πË</td>
+                                            <td align="center">
+
+                                                <a href="http://b2c.goodsflow.com/wconcept/whereis.asp?unique_cd=R2020011800000022700001" target="_blank">7095701289449</a>
+
+                                            </td>
+                                            <td align="center">∞Ì∞¥∫Œ¥„</td>
+                                            <td align="right" style="padding-right:5px">2,500</td>
+                                            <!--»∏ºˆ¡§∫∏ »Æ¿Œ-->
+
+                                            <td align="center">
+                                                <input type="text" name="managenotice_4" class="input" value="" style="vertical-align:bottom;height:20px;width:150px" align="absmiddle">
+                                                <input type="button" value="µÓ∑œ" class="box20_black" onclick="updateManageShipNoticeUpdate( 9547533, 8864558, managenotice_4.value );" />
+                                                <!-- <img src="http://image.wconcept.co.kr/images/admin/btn_modify_1.gif" align="absbottom" style="cursor:pointer;" onclick="updateManageShipNoticeUpdate( 9547533, 8864558, managenotice_4.value );" hspace="1"> -->
+                                            </td><!--»∏ºˆ∞¸∏Æ∏ﬁ∏-->
+                                            <td style="padding-left:5px">ªÁ¿Ã¡Ó∫“∏∏¡∑</td><!--π›«∞ªÁ¿Ø-->
+                                            <td style="padding-left:5px" title=""></td><!--π›«∞≥ªøÎ-->
+                                            <td style="padding-left:5px">
+
+                                            </td><!--√∑∫Œ∆ƒ¿œ-->
+
+                                            <!--¡÷πÆªÛ«∞¡§∫∏-->
+                                            <td style="padding-left:5px" title="LIVE THE GOAL - TUESDAY TEE - WHITE">
+
+                                                <a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?itemcd=300831827" target="_blank">LIVE THE GOAL - TUESDAY TEE - WHITE</a>
+                                            </td>
+                                            <td style="padding-left:5px" title="XL">
+                                                <span>XL</span>
+                                            </td><!--ø…º«1-->
+                                            <td style="padding-left:5px" title="">
+                                                <span></span>
+                                            </td><!--ø…º«2-->
+                                            <td style="padding-left:5px" title="">
+                                                <span></span>
+                                            </td><!--ø…º«3-->
+                                            <td align="center">1</td><!--ºˆ∑Æ-->
+
+
+                                            <td align="right" style="padding-right:5px">&nbsp;</td><!--ºº∆Æ∞°-->
+                                            <td style="padding-left:5px">&nbsp;</td><!--ºº∆ÆªÛ«∞∏Ì-->
+
+
+                                            <td align="right" style="padding-right:5px">42,250</td><!--∆«∏≈∞°-->
+                                            <td align="right" style="padding-right:5px">0</td><!--πËº€∫Ò-->
+                                            <td align="center">GOALSTUDIO</td><!--∫Í∑£µÂ∏Ì-->
+                                            <!--¡÷πÆªÛ«∞¡§∫∏-->
+
+                                            <!--∞Ì∞¥¡§∫∏-->
+                                            <td align="center">010-9399-1795</td><!--ºˆ√Î¿Œø¨∂Ù√≥1-->
+                                            <td align="center">010-9399-1795</td><!--ºˆ√Î¿Œø¨∂Ù√≥2-->
+                                            <!--∞Ì∞¥¡§∫∏-->
+                                        </tr>
+
+                                        <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px;" id="orderitemdetail5"  onmouseover="funcColor2(5, 1);" onmouseout="funcColor2(5, 2);">
+                                            <input type="hidden" name="orderno_5" value="U00050147">
+                                            <input type="hidden" name="orderidxnum_5" value="9481919">
+                                            <input type="hidden" name="shippingidxnum_5" value="8823309">
+                                            <input type="hidden" name="transcode_5" value="4">
+                                            <input type="hidden" name="invoiceno_5" value="7095701298760">
+                                            <!--»∏ºˆ¡§∫∏ »Æ¿Œ-->
+                                            <td align="center">¿⁄µø»∏ºˆ[WCK]</td>
+                                            <td align="center">π›¿‘¡ﬂ</td>
+                                            <td align="center">øÏ√º±π≈√πË</td>
+                                            <td align="center">
+
+                                                <a href="http://b2c.goodsflow.com/wconcept/whereis.asp?unique_cd=R2020012199000002900001" target="_blank">7095701298760</a>
+
+                                            </td>
+                                            <td align="center">∞Ì∞¥∫Œ¥„</td>
+                                            <td align="right" style="padding-right:5px">5,000</td>
+                                            <!--»∏ºˆ¡§∫∏ »Æ¿Œ-->
+
+                                            <td align="center">
+                                                <input type="text" name="managenotice_5" class="input" value="" style="vertical-align:bottom;height:20px;width:150px" align="absmiddle">
+                                                <input type="button" value="µÓ∑œ" class="box20_black" onclick="updateManageShipNoticeUpdate( 9481919, 8823309, managenotice_5.value );" />
+                                                <!-- <img src="http://image.wconcept.co.kr/images/admin/btn_modify_1.gif" align="absbottom" style="cursor:pointer;" onclick="updateManageShipNoticeUpdate( 9481919, 8823309, managenotice_5.value );" hspace="1"> -->
+                                            </td><!--»∏ºˆ∞¸∏Æ∏ﬁ∏-->
+                                            <td style="padding-left:5px">ªÁ¿Ã¡Ó∫“∏∏¡∑</td><!--π›«∞ªÁ¿Ø-->
+                                            <td style="padding-left:5px" title=""></td><!--π›«∞≥ªøÎ-->
+                                            <td style="padding-left:5px">
+
+                                            </td><!--√∑∫Œ∆ƒ¿œ-->
+
+                                            <!--¡÷πÆªÛ«∞¡§∫∏-->
+                                            <td style="padding-left:5px" title="BIG LOGO TOTEBAG - BLACK">
+
+                                                <a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?itemcd=300831260" target="_blank">BIG LOGO TOTEBAG - BLACK</a>
+                                            </td>
+                                            <td style="padding-left:5px" title="FREE">
+                                                <span>FREE</span>
+                                            </td><!--ø…º«1-->
+                                            <td style="padding-left:5px" title="">
+                                                <span></span>
+                                            </td><!--ø…º«2-->
+                                            <td style="padding-left:5px" title="">
+                                                <span></span>
+                                            </td><!--ø…º«3-->
+                                            <td align="center">1</td><!--ºˆ∑Æ-->
+
+
+                                            <td align="right" style="padding-right:5px">&nbsp;</td><!--ºº∆Æ∞°-->
+                                            <td style="padding-left:5px">&nbsp;</td><!--ºº∆ÆªÛ«∞∏Ì-->
+
+
+                                            <td align="right" style="padding-right:5px">31,850</td><!--∆«∏≈∞°-->
+                                            <td align="right" style="padding-right:5px">0</td><!--πËº€∫Ò-->
+                                            <td align="center">GOALSTUDIO</td><!--∫Í∑£µÂ∏Ì-->
+                                            <!--¡÷πÆªÛ«∞¡§∫∏-->
+
+                                            <!--∞Ì∞¥¡§∫∏-->
+                                            <td align="center">010-5526-8033</td><!--ºˆ√Î¿Œø¨∂Ù√≥1-->
+                                            <td align="center">010-5526-8033</td><!--ºˆ√Î¿Œø¨∂Ù√≥2-->
+                                            <!--∞Ì∞¥¡§∫∏-->
+                                        </tr>
+
+                                        <tr height="35" class="itemrows" style="background-color:#ffffff;height:35px;" id="orderitemdetail6"  onmouseover="funcColor2(6, 1);" onmouseout="funcColor2(6, 2);">
+                                            <input type="hidden" name="orderno_6" value="U00018540">
+                                            <input type="hidden" name="orderidxnum_6" value="9432388">
+                                            <input type="hidden" name="shippingidxnum_6" value="8780553">
+                                            <input type="hidden" name="transcode_6" value="4">
+                                            <input type="hidden" name="invoiceno_6" value="7095701298761">
+                                            <!--»∏ºˆ¡§∫∏ »Æ¿Œ-->
+                                            <td align="center">¿⁄µø»∏ºˆ[WCK]</td>
+                                            <td align="center">π›¿‘¡ﬂ</td>
+                                            <td align="center">øÏ√º±π≈√πË</td>
+                                            <td align="center">
+
+                                                <a href="http://b2c.goodsflow.com/wconcept/whereis.asp?unique_cd=R2020012199000003600001" target="_blank">7095701298761</a>
+
+                                            </td>
+                                            <td align="center">∞Ì∞¥∫Œ¥„</td>
+                                            <td align="right" style="padding-right:5px">5,000</td>
+                                            <!--»∏ºˆ¡§∫∏ »Æ¿Œ-->
+
+                                            <td align="center">
+                                                <input type="text" name="managenotice_6" class="input" value="" style="vertical-align:bottom;height:20px;width:150px" align="absmiddle">
+                                                <input type="button" value="µÓ∑œ" class="box20_black" onclick="updateManageShipNoticeUpdate( 9432388, 8780553, managenotice_6.value );" />
+                                                <!-- <img src="http://image.wconcept.co.kr/images/admin/btn_modify_1.gif" align="absbottom" style="cursor:pointer;" onclick="updateManageShipNoticeUpdate( 9432388, 8780553, managenotice_6.value );" hspace="1"> -->
+                                            </td><!--»∏ºˆ∞¸∏Æ∏ﬁ∏-->
+                                            <td style="padding-left:5px">¥‹º¯∫ØΩ…</td><!--π›«∞ªÁ¿Ø-->
+                                            <td style="padding-left:5px" title=""></td><!--π›«∞≥ªøÎ-->
+                                            <td style="padding-left:5px">
+
+                                            </td><!--√∑∫Œ∆ƒ¿œ-->
+
+                                            <!--¡÷πÆªÛ«∞¡§∫∏-->
+                                            <td style="padding-left:5px" title="REVERSIBLE DOWN PARKA - GRAY/BLACK">
+
+                                                <a href="http://www.wconcept.co.kr/Shop/ViewProduct.asp?itemcd=300756853" target="_blank">REVERSIBLE DOWN PARKA - GRAY/BLACK</a>
+                                            </td>
+                                            <td style="padding-left:5px" title="L">
+                                                <span>L</span>
+                                            </td><!--ø…º«1-->
+                                            <td style="padding-left:5px" title="">
+                                                <span></span>
+                                            </td><!--ø…º«2-->
+                                            <td style="padding-left:5px" title="">
+                                                <span></span>
+                                            </td><!--ø…º«3-->
+                                            <td align="center">1</td><!--ºˆ∑Æ-->
+
+
+                                            <td align="right" style="padding-right:5px">&nbsp;</td><!--ºº∆Æ∞°-->
+                                            <td style="padding-left:5px">&nbsp;</td><!--ºº∆ÆªÛ«∞∏Ì-->
+
+
+                                            <td align="right" style="padding-right:5px">239,250</td><!--∆«∏≈∞°-->
+                                            <td align="right" style="padding-right:5px">0</td><!--πËº€∫Ò-->
+                                            <td align="center">GOALSTUDIO</td><!--∫Í∑£µÂ∏Ì-->
+                                            <!--¡÷πÆªÛ«∞¡§∫∏-->
+
+                                            <!--∞Ì∞¥¡§∫∏-->
+                                            <td align="center">010-0-0000</td><!--ºˆ√Î¿Œø¨∂Ù√≥1-->
+                                            <td align="center">010-8507-3536</td><!--ºˆ√Î¿Œø¨∂Ù√≥2-->
+                                            <!--∞Ì∞¥¡§∫∏-->
+                                        </tr>
+
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+                <script language="javascript">
+                    window.onload = function() {
+                        fnresize();
+                        //waiting.style.visibility='hidden';
+                    }
+
+                    function fnresize(){
+                        var wsize = document.body.clientWidth;
+                        var rwidth = parseInt(wsize) - 600;
+                        $("#TreeInxDiv04").css('width', rwidth);
+                    }
+
+                    window.onresize = function(event) {
+                        fnresize();
+                    };
+                </script>
+                <iframe name="iframeinput" frameborder="0" width="0" height="0" src=""></iframe>
+
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+    <tr height="25">
+        <td align="right"><font color="#CCCCCC">Load Time : 0.0234375 sec</font></td>
+    </tr>
+</table>
 </BODY>
 </HTML>

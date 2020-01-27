@@ -178,21 +178,21 @@ public class OrderService {
     public Mono<List<OrderDoc>> searchOrders(OrderSearchParam param) {
         BoolQueryBuilder filter = QueryBuilders.boolQuery();
 
-        if (param.getOrderId() != null) {
-            filter.filter(QueryBuilders.matchQuery("orderId", param.getOrderId()));
-        } else {
-            if (param.getFrom() != null) {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                filter.filter(QueryBuilders.rangeQuery("publishedAt")
-                        .gte(formatter.format(param.getFrom())).lte(formatter.format(param.getTo())));
-            }
-
-            filter.filter(QueryBuilders.matchQuery("vendorId", param.getVendorId()));
-
-            if (param.getSalesChannelId() != null) {
+//        if (param.getOrderId() != null) {
+//            filter.filter(QueryBuilders.matchQuery("orderId", param.getOrderId()));
+//        } else {
+//            if (param.getFrom() != null) {
+//                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+//                filter.filter(QueryBuilders.rangeQuery("publishedAt")
+//                        .gte(formatter.format(param.getFrom())).lte(formatter.format(param.getTo())));
+//            }
+//
+//            filter.filter(QueryBuilders.matchQuery("vendorId", param.getVendorId()));
+//
+//            if (param.getSalesChannelId() != null) {
                 filter.filter(QueryBuilders.matchQuery("channelId", param.getSalesChannelId()));
-            }
-        }
+//            }
+//        }
 
         SearchRequest request = new SearchRequest("order_doc");
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();

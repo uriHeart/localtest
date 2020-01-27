@@ -40,7 +40,8 @@ spring:
       port: 9042
       schema-action: CREATE_IF_NOT_EXISTS
       consistency-level: one
-      contact-points: 15.164.111.122
+#      contact-points: 15.164.111.122
+      contact-points: localhost
       keyspace-name: argo
       username: argo
       password: argo2020
@@ -51,7 +52,7 @@ spring:
 
 webdriver:
   chrome:
-    driver: /home/ec2-user/chromedriver
+    driver: C:\project\arog-server-dev\argo-collector\src\main\resources\driver\chrome\chromedriver.exe
   id: webdriver.chrome.driver
 
   profiles:
@@ -67,7 +68,7 @@ file:
     index: excel_upload
 
 elasticsearch:
-  hosts: http://15.164.111.122:9200
+  hosts: http://localhost:9200
 
 registration:
   url:
@@ -83,7 +84,7 @@ goData:
   url: http://apis.data.go.kr/B552015/NpsBplcInfoInqireService/getBassInfoSearch
 
 collect:
-  auth-script-location: /home/ec2-user/js
+  auth-script-location: C:\project\arog-server-dev\argo-collector\src\main\resources\js
 
 passwordreset:
   url:

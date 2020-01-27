@@ -41,7 +41,7 @@ public class VendorService {
     }
 
     public List<VendorChannel> autoCollectingTargets() {
-        return vendorChannelRepository.findAllByAutoCollecting(true);
+        return vendorChannelRepository.findAllByAutoCollecting(false);
     }
 
     public ChannelVendorAccount getChannelVendorAccount(SalesChannel salesChannel, Vendor vendor) {

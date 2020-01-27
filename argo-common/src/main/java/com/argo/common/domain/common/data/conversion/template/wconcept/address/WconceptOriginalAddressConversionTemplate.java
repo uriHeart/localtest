@@ -13,7 +13,7 @@ public class WconceptOriginalAddressConversionTemplate {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("8-OriginalAddress")
+                .sourceId("6-OriginalAddress")
                 .targetId("com.argo.common.domain.order.OriginalAddress")
                 .rules(getConversionRuleForOriginalAddress())
                 .build();

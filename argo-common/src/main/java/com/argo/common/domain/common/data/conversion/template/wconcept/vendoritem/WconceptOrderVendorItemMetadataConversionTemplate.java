@@ -15,7 +15,7 @@ public class WconceptOrderVendorItemMetadataConversionTemplate {
         return ConversionTemplate.builder()
                 .createdAt(new Date())
                 .expiredAt(null)
-                .sourceId("8-OrderVendorItemMetadata")
+                .sourceId("6-OrderVendorItemMetadata")
                 .targetId("com.argo.common.domain.order.vendoritem.OrderVendorItemMetadata")
                 .rules(getConversionRuleForOrderVendorItemMetadata())
                 .build();
@@ -25,7 +25,7 @@ public class WconceptOrderVendorItemMetadataConversionTemplate {
         List<ConversionRule> list = new ArrayList<>();
 
         Map<String, String> amtParam = Maps.newLinkedHashMap();
-        amtParam .put("금액", "java.lang.String");
+        amtParam .put("판매가", "java.lang.String");
 
         list.add(ConversionRule.builder()
                 .conversionType(ConversionType.OPERATION)

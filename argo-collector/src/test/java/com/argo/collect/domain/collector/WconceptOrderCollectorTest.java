@@ -73,16 +73,7 @@ public class WconceptOrderCollectorTest extends AbstractOrderCollector {
 
     @Override
     public void collect(VendorChannel channel) {
-
         Map<String,String> cookieMap = this.getCookieMap(channel);
-
-        Map<String,String> params = new HashMap<>();
-        params.put("flag","submit");
-        params.put("vendorcd","3004012");
-        params.put("dealtypecd","01");
-        params.put("strfrom","2019-12-20");
-        params.put("strto","2020-01-20");
-
 
         HashMap<String, RawEventParam> saveOrderList = new HashMap<>();
 
@@ -90,8 +81,10 @@ public class WconceptOrderCollectorTest extends AbstractOrderCollector {
                 .forEach( collector ->{
                     List<Map<String,String>> orderList = collector.getCollectDetailData(super.getCollectInfoList(channel),cookieMap);
                     OrderMergeInfo mergeInfo = collector.makeMergeKeyInfo();
-                    this.convertEventType(orderList,channel);
-                    saveOrderList.putAll(this.mergeRawEvent(orderList,mergeInfo));
+                    if(orderList!=null) {
+                        this.convertEventType(orderList, channel);
+                        saveOrderList.putAll(this.mergeRawEvent(orderList, mergeInfo));
+                    }
                 }
         );
 
@@ -129,12 +122,20 @@ public class WconceptOrderCollectorTest extends AbstractOrderCollector {
         //로그인 버튼 클릭
         driver.findElement(By.className("inputNo")).click();
 
+        try {
+            Thread.sleep(2L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         Set<Cookie> cookies = driver.manage().getCookies();
 
         Map<String, String> cookieMap = cookies.stream().collect(Collectors.toMap(Cookie::getName, Cookie::getValue));
         for (Map.Entry<String, String> entry : cookieMap.entrySet()) {
             System.out.println("key: " + entry.getKey() + ", value : " + entry.getValue());
         }
+
+
         return cookieMap;
     }
 
@@ -175,10 +176,6 @@ public class WconceptOrderCollectorTest extends AbstractOrderCollector {
             }
 
             String publishedAt = event.getPublishedAt().replaceAll("\\.", "-");
-
-            if(publishedAt.split(" ").length==1){
-                publishedAt += " 00:00:00";
-            }
 
             RawEvent rawEvent = RawEvent.builder()
                     .vendorId(channel.getVendor().getVendorId())
